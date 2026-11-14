@@ -32,3 +32,16 @@ AIRRUN_BASE_PATH=/voxelflygame/ npm run build:static
 Cloudflare Pages의 직접 업로드는 파일 수 때문에 Wrangler CLI를 사용합니다. 공식 제한은 CLI 20,000개/파일당 25MiB이며, 대시보드 드래그 업로드는 1,000개입니다. 빌드 스크립트는 CLI 제한을 검사합니다. 출처: https://developers.cloudflare.com/pages/get-started/direct-upload/
 
 원본 공개 자산과 기존 8.0.1 게임 기능을 보존합니다. 새 주소에서는 브라우저 저장 공간이 달라지므로 기존 게임 설정에서 기록을 내보내고 새 주소에서 가져오면 됩니다.
+
+## configure-pages에서 Not Found가 나올 때
+
+이 오류는 Pages 사이트 설정 조회가 실패했다는 뜻입니다. build 작업이 성공했다면 모델 파일이나 게임 코드의 빌드 오류와 구분해 확인합니다.
+
+- Settings → Pages에서 Source를 GitHub Actions로 선택하고 저장합니다.
+- 비공개 저장소에서 업그레이드 또는 공개 전환 안내가 보이면 계정 플랜의 Pages 지원 조건을 확인합니다. 저장소 공개 전환은 소스 전체의 공개 범위를 바꾸므로 별도 결정이 필요합니다.
+- 이미 설정했다면 해당 설정 상태와 실패 실행을 함께 확인합니다. 연결 앱의 Pages API 403은 그 앱의 접근 권한 문제이며, 사용자 본인의 저장소 관리 권한과는 별개입니다.
+- 공식 configure-pages의 `enablement`는 기본 `GITHUB_TOKEN`으로 사용할 수 없습니다. 별도 GitHub App의 `administration:write`·`pages:write` 권한이나 적절한 개인 토큰이 필요하므로 `enablement: true`만 추가하지 않습니다. 토큰을 코드나 대화에 넣지 마세요.
+
+워크플로는 Node.js 24를 사용하는 공식 액션 버전과 `ubuntu-24.04`를 사용합니다. Pages 조회가 실패하면 실행 Summary에 설정 링크와 위 안내가 표시되며, 게시 성공으로 처리하지 않습니다.
+
+공식 액션 입력 정의: https://github.com/actions/configure-pages/blob/v6.0.0/action.yml

@@ -14,14 +14,15 @@ concurrency:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7.1.0
         with:
           node-version: '24'
+          package-manager-cache: false
       - name: Install locked dependencies
         run: npx --yes pnpm@11.25.0 install --frozen-lockfile
       - name: Check source
@@ -32,14 +33,14 @@ jobs:
         env:
           AIRRUN_BASE_PATH: /${{ github.event.repository.name }}/
         run: npm run build:static
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5.0.0
         with:
           path: dist-static
           retention-days: 1
 
   deploy:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     permissions:
       pages: write
       id-token: write
@@ -47,7 +48,24 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/configure-pages@v5
+      - name: Check Pages configuration
+        id: pages
+        uses: actions/configure-pages@v6.0.0
       - name: Publish game
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5.0.1
+      - name: Explain Pages configuration failure
+        if: ${{ failure() && steps.pages.outcome == 'failure' }}
+        run: |
+          cat >> "$GITHUB_STEP_SUMMARY" <<EOF
+          ## Pages 설정을 확인해 주세요
+
+          게임 소스 검사와 정적 사이트 빌드는 성공했습니다. Pages 사이트 설정 조회가 실패해 게시를 진행하지 않았습니다.
+
+          1. [Settings → Pages](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/settings/pages)를 엽니다.
+          2. Build and deployment의 Source를 **GitHub Actions**로 선택합니다.
+          3. 비공개 저장소에서 업그레이드·공개 전환 안내가 표시되면, 현재 계정 플랜에서 비공개 Pages를 사용할 수 있는지 확인합니다. 이 워크플로는 저장소 공개 범위를 변경하지 않습니다.
+          4. 설정 완료 후 이 실행의 **Re-run failed jobs** 또는 **Run workflow**를 실행합니다.
+
+          이미 Source가 GitHub Actions라면 위 Check Pages configuration 단계의 오류를 확인해 주세요. 자동 활성화 enablement에는 기본 GITHUB_TOKEN 외의 관리·Pages 쓰기 권한 토큰이 필요합니다.
+          EOF
