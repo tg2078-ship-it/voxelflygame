@@ -1,0 +1,16 @@
+{
+  "status": "passed",
+  "models": 403,
+  "visualExports": 1209,
+  "nativeAnimationModels": 203,
+  "nativeClips": 775,
+  "poseComparisons": 10260,
+  "maximumMatrixError": 0,
+  "sourceImagesVerified": 11655,
+  "sharedImagesDecoded": 59,
+  "previewsDecoded": 403,
+  "maximumBoundsErrorM": 0,
+  "envelopeCornersVerified": 3034008,
+  "maximumEnvelopeSampleOutsideM": 4.440892098500626e-16,
+  "gpuRenderedOrVerified": false
+}

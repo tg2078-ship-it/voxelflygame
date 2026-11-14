@@ -1,0 +1,18 @@
+{
+  "fixture": "Completed result and ghost profile from a real 180-second CPU-controlled flight; result presentation is injected, subsequent retry uses native UI. No claim of a 180-second browser completion.",
+  "softwareGPU": true,
+  "status": "passed",
+  "ghost": {
+    "delta": 1.3559381480060066,
+    "score": 15705
+  },
+  "seed": 731,
+  "replaySamples": 361,
+  "completedLayoutViewports": [
+    "1280x800",
+    "360x800",
+    "844x390"
+  ],
+  "nativeRematch": true,
+  "javascriptErrors": []
+}

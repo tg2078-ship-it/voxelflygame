@@ -1,0 +1,4 @@
+
+> voxel-airrun@8.0.0 typecheck
+> tsc --noEmit --incremental false
+

@@ -1,0 +1,10 @@
+{
+  "status": "passed",
+  "models": 400,
+  "visualExports": 1200,
+  "decodedMeshoptViews": 71273,
+  "decodedBytes": 1215345464,
+  "externalImageOccurrences": 11400,
+  "uniqueImages": 49,
+  "gpuRenderedOrVerified": false
+}

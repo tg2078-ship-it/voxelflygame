@@ -1,0 +1,185 @@
+{
+  "version": "4.3",
+  "source": "edition9-retained",
+  "changes": {
+    "defaultQuality": "high",
+    "resolutionScale": 1.25,
+    "adaptiveResolution": false,
+    "resolutionChoices": [
+      1,
+      1.25,
+      1.5
+    ],
+    "msaaRequested": {
+      "balanced": 0,
+      "high": 2,
+      "ultra": 4
+    },
+    "fallback": "SMAA before OutputPass",
+    "residentModelPolicy": "compatible LOD1 for HIGH/ULTRA; compatible LOD2 for BALANCED",
+    "automaticFlightReloadsIntroduced": false
+  },
+  "cpuSceneInventory": {
+    "results": [
+      {
+        "theme": "coast",
+        "nodes": 907,
+        "potentialMainPassDraws": 609,
+        "triangles": 1988816,
+        "geometryMiB": 47.16,
+        "workerFallbacks": [],
+        "operations": {
+          "compile": {
+            "calls": 1807,
+            "totalMs": 3.272720000010395,
+            "maxMs": 0.14248099999986152,
+            "maxArgs": [
+              "container_straddle_carrier",
+              1,
+              false
+            ]
+          },
+          "rebuild": {
+            "calls": 30,
+            "totalMs": 109.50435899999866,
+            "maxMs": 6.186434999999619,
+            "maxArgs": [
+              "simulation",
+              "high"
+            ]
+          },
+          "makeChunk": {
+            "calls": 3,
+            "totalMs": 0.7049529999999322,
+            "maxMs": 0.26751599999988684,
+            "maxArgs": [
+              11,
+              "simulation"
+            ]
+          }
+        },
+        "actors": 12,
+        "compiled": 104,
+        "cachedModels": 140,
+        "cpuMedianMs": 0.14244099999996251,
+        "cpuP95Ms": 3.4015380000000732,
+        "cpuMaxMs": 6.83604699999978
+      },
+      {
+        "theme": "city",
+        "nodes": 767,
+        "potentialMainPassDraws": 549,
+        "triangles": 2161024,
+        "geometryMiB": 50.79,
+        "workerFallbacks": [],
+        "operations": {
+          "compile": {
+            "calls": 1764,
+            "totalMs": 3.534252000026754,
+            "maxMs": 0.13613200000054348,
+            "maxArgs": [
+              "metro_escalator_hall",
+              1,
+              false
+            ]
+          },
+          "rebuild": {
+            "calls": 30,
+            "totalMs": 129.31108999999742,
+            "maxMs": 8.475915999999415,
+            "maxArgs": [
+              "simulation",
+              "high"
+            ]
+          },
+          "makeChunk": {
+            "calls": 3,
+            "totalMs": 0.8933619999997973,
+            "maxMs": 0.35929200000009587,
+            "maxArgs": [
+              11,
+              "simulation"
+            ]
+          }
+        },
+        "actors": 9,
+        "compiled": 100,
+        "cachedModels": 125,
+        "cpuMedianMs": 0.17623100000037084,
+        "cpuP95Ms": 3.450036999999611,
+        "cpuMaxMs": 8.987272999999732
+      },
+      {
+        "theme": "forest",
+        "nodes": 509,
+        "potentialMainPassDraws": 382,
+        "triangles": 2459394,
+        "geometryMiB": 95.09,
+        "workerFallbacks": [],
+        "operations": {
+          "compile": {
+            "calls": 1446,
+            "totalMs": 3.1530660000144053,
+            "maxMs": 0.5635640000000421,
+            "maxArgs": [
+              "forest_log_loader",
+              0
+            ]
+          },
+          "rebuild": {
+            "calls": 30,
+            "totalMs": 80.5778399999972,
+            "maxMs": 4.886763000000428,
+            "maxArgs": [
+              "simulation",
+              "high"
+            ]
+          },
+          "makeChunk": {
+            "calls": 3,
+            "totalMs": 0.5299440000007962,
+            "maxMs": 0.19961500000044907,
+            "maxArgs": [
+              12,
+              "simulation"
+            ]
+          }
+        },
+        "actors": 4,
+        "compiled": 91,
+        "cachedModels": 95,
+        "cpuMedianMs": 0.05215799999950832,
+        "cpuP95Ms": 2.3365689999991446,
+        "cpuMaxMs": 3.568011000000297
+      }
+    ],
+    "gpuVerified": false,
+    "fpsMeasured": false,
+    "terrainTransport": "Node worker; browser transport unverified",
+    "note": "CPU scene inventory; no frustum, shadows or postprocess draw measurement"
+  },
+  "verificationLimits": {
+    "webglRendered": false,
+    "browserLayoutVerified": false,
+    "deviceFPSMeasured": false
+  },
+  "checks": {
+    "fullGameRegression": {
+      "suites": 25,
+      "elapsedSeconds": 367,
+      "gpuVerified": false,
+      "status": "passed"
+    },
+    "visualQuality": {
+      "visualQualityChecks": 2515,
+      "importedModels": 407,
+      "renderBoundaryStubs": true,
+      "gpuVerified": false,
+      "browserLayoutVerified": false,
+      "fpsMeasured": false,
+      "status": "passed"
+    },
+    "typecheck": "passed",
+    "build": "passed"
+  }
+}

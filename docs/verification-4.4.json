@@ -1,0 +1,1410 @@
+{
+  "version": "4.4",
+  "dateUTC": "2026-10-18",
+  "baseSourceCommit": "c0f93eab5aab6ee720ceece2497f168cff1945e9",
+  "regression": {
+    "distinctSuites": 26,
+    "status": "passed",
+    "execution": "14 initial passes, 6 continuation passes, 6 remaining passes; preview-cache and render-data rerun after fixes",
+    "initialFailuresFixed": [
+      "preview-cache: wait for native animation, static geometry and terrain preparation",
+      "upgrade-400: show nearby native motion immediately while optimized geometry prepares"
+    ]
+  },
+  "checks": {
+    "core": {
+      "coreChecks": 2607,
+      "patterns": 168,
+      "quests": 64,
+      "career": 20,
+      "achievements": 40,
+      "status": "passed"
+    },
+    "assets": {
+      "suppliedModels": 403,
+      "supplementaryModels": 4,
+      "exports": 1217,
+      "animationClips": 2385,
+      "trafficPoseChanges": 60,
+      "compressedBytes": 190320645,
+      "status": "passed"
+    },
+    "storage": {
+      "storageChecks": 17,
+      "legacyPlanes": 22,
+      "checkpointRewardOnce": true,
+      "invalidOriginalPreserved": true,
+      "status": "passed"
+    },
+    "progression": {
+      "progressionChecks": 172,
+      "questConditions": 64,
+      "careerConditions": 20,
+      "status": "passed"
+    },
+    "audit-route": {
+      "failures": 0,
+      "examples": [],
+      "models": {}
+    },
+    "audit-course": {
+      "centerSweepErrors": 0,
+      "examples": [],
+      "noInput": {
+        "failedWithin45s": 100,
+        "mean": 4.26533333333332,
+        "latest": 4.266666666666657
+      }
+    },
+    "audit-autopilot": {
+      "earlyFailures": [],
+      "controlledFlights": 66,
+      "minSurvivalSeconds": 240,
+      "maxSurvivalSeconds": 240,
+      "humanFunVerified": false,
+      "status": "passed"
+    },
+    "streaming": {
+      "streamingChecks": 576016,
+      "summary": [
+        {
+          "speed": 40,
+          "minutes": 30,
+          "distance": 72000,
+          "maxEncounters": 3,
+          "maxObstacles": 175,
+          "maxPickups": 103,
+          "cpuMilliseconds": 183
+        },
+        {
+          "speed": 60,
+          "minutes": 30,
+          "distance": 108000,
+          "maxEncounters": 3,
+          "maxObstacles": 189,
+          "maxPickups": 103,
+          "cpuMilliseconds": 199
+        },
+        {
+          "speed": 90,
+          "minutes": 30,
+          "distance": 162000,
+          "maxEncounters": 3,
+          "maxObstacles": 180,
+          "maxPickups": 103,
+          "cpuMilliseconds": 702
+        },
+        {
+          "speed": 120,
+          "minutes": 30,
+          "distance": 216000,
+          "maxEncounters": 3,
+          "maxObstacles": 187,
+          "maxPickups": 103,
+          "cpuMilliseconds": 933
+        },
+        {
+          "speed": 180,
+          "minutes": 30,
+          "distance": 324000,
+          "maxEncounters": 4,
+          "maxObstacles": 207,
+          "maxPickups": 123,
+          "cpuMilliseconds": 1408
+        },
+        {
+          "speed": 250,
+          "minutes": 30,
+          "distance": 450000,
+          "maxEncounters": 5,
+          "maxObstacles": 254,
+          "maxPickups": 152,
+          "cpuMilliseconds": 2001
+        },
+        {
+          "speed": 400,
+          "minutes": 30,
+          "distance": 720000,
+          "maxEncounters": 7,
+          "maxObstacles": 366,
+          "maxPickups": 222,
+          "cpuMilliseconds": 3061
+        },
+        {
+          "speed": 600,
+          "minutes": 30,
+          "distance": 1080000,
+          "maxEncounters": 9,
+          "maxObstacles": 494,
+          "maxPickups": 315,
+          "cpuMilliseconds": 4778
+        }
+      ],
+      "status": "passed"
+    },
+    "continuous-flight": {
+      "checks": 12021,
+      "continuousPhysicsSeconds": 192.00000000004493,
+      "distance": 15247.760997488285,
+      "departureReloads": 0,
+      "maxX": 27.954166666666666,
+      "maxY": 52,
+      "actualGLBFallback": true,
+      "gpuVerified": false,
+      "status": "passed"
+    },
+    "theme-coverage": {
+      "checks": 22265,
+      "cases": [
+        {
+          "theme": "coast",
+          "variant": 0,
+          "seed": 13,
+          "plane": "skyhawk",
+          "total": 71,
+          "placed": 71,
+          "inCameraFrustum": 71,
+          "completeAt": 92
+        },
+        {
+          "theme": "coast",
+          "variant": 0,
+          "seed": 13,
+          "plane": "transport",
+          "total": 71,
+          "placed": 71,
+          "inCameraFrustum": 71,
+          "completeAt": 92
+        },
+        {
+          "theme": "coast",
+          "variant": 0,
+          "seed": 42,
+          "plane": "skyhawk",
+          "total": 71,
+          "placed": 71,
+          "inCameraFrustum": 71,
+          "completeAt": 112
+        },
+        {
+          "theme": "coast",
+          "variant": 0,
+          "seed": 42,
+          "plane": "transport",
+          "total": 71,
+          "placed": 71,
+          "inCameraFrustum": 71,
+          "completeAt": 112
+        },
+        {
+          "theme": "village",
+          "variant": 0,
+          "seed": 13,
+          "plane": "skyhawk",
+          "total": 45,
+          "placed": 45,
+          "inCameraFrustum": 45,
+          "completeAt": 61
+        },
+        {
+          "theme": "village",
+          "variant": 0,
+          "seed": 13,
+          "plane": "transport",
+          "total": 45,
+          "placed": 45,
+          "inCameraFrustum": 45,
+          "completeAt": 61
+        },
+        {
+          "theme": "village",
+          "variant": 0,
+          "seed": 42,
+          "plane": "skyhawk",
+          "total": 45,
+          "placed": 45,
+          "inCameraFrustum": 45,
+          "completeAt": 61
+        },
+        {
+          "theme": "village",
+          "variant": 0,
+          "seed": 42,
+          "plane": "transport",
+          "total": 45,
+          "placed": 45,
+          "inCameraFrustum": 45,
+          "completeAt": 61
+        },
+        {
+          "theme": "city",
+          "variant": 0,
+          "seed": 13,
+          "plane": "skyhawk",
+          "total": 55,
+          "placed": 55,
+          "inCameraFrustum": 55,
+          "completeAt": 71
+        },
+        {
+          "theme": "city",
+          "variant": 0,
+          "seed": 13,
+          "plane": "transport",
+          "total": 55,
+          "placed": 55,
+          "inCameraFrustum": 55,
+          "completeAt": 71
+        },
+        {
+          "theme": "city",
+          "variant": 0,
+          "seed": 42,
+          "plane": "skyhawk",
+          "total": 55,
+          "placed": 55,
+          "inCameraFrustum": 55,
+          "completeAt": 64
+        },
+        {
+          "theme": "city",
+          "variant": 0,
+          "seed": 42,
+          "plane": "transport",
+          "total": 55,
+          "placed": 55,
+          "inCameraFrustum": 55,
+          "completeAt": 64
+        },
+        {
+          "theme": "ice",
+          "variant": 0,
+          "seed": 13,
+          "plane": "skyhawk",
+          "total": 38,
+          "placed": 38,
+          "inCameraFrustum": 38,
+          "completeAt": 42
+        },
+        {
+          "theme": "ice",
+          "variant": 0,
+          "seed": 13,
+          "plane": "transport",
+          "total": 38,
+          "placed": 38,
+          "inCameraFrustum": 38,
+          "completeAt": 42
+        },
+        {
+          "theme": "ice",
+          "variant": 0,
+          "seed": 42,
+          "plane": "skyhawk",
+          "total": 38,
+          "placed": 38,
+          "inCameraFrustum": 38,
+          "completeAt": 49
+        },
+        {
+          "theme": "ice",
+          "variant": 0,
+          "seed": 42,
+          "plane": "transport",
+          "total": 38,
+          "placed": 38,
+          "inCameraFrustum": 38,
+          "completeAt": 49
+        },
+        {
+          "theme": "desert",
+          "variant": 0,
+          "seed": 13,
+          "plane": "skyhawk",
+          "total": 47,
+          "placed": 47,
+          "inCameraFrustum": 47,
+          "completeAt": 63
+        },
+        {
+          "theme": "desert",
+          "variant": 0,
+          "seed": 13,
+          "plane": "transport",
+          "total": 47,
+          "placed": 47,
+          "inCameraFrustum": 47,
+          "completeAt": 63
+        },
+        {
+          "theme": "desert",
+          "variant": 0,
+          "seed": 42,
+          "plane": "skyhawk",
+          "total": 47,
+          "placed": 47,
+          "inCameraFrustum": 47,
+          "completeAt": 55
+        },
+        {
+          "theme": "desert",
+          "variant": 0,
+          "seed": 42,
+          "plane": "transport",
+          "total": 47,
+          "placed": 47,
+          "inCameraFrustum": 47,
+          "completeAt": 55
+        },
+        {
+          "theme": "forest",
+          "variant": 0,
+          "seed": 13,
+          "plane": "skyhawk",
+          "total": 42,
+          "placed": 42,
+          "inCameraFrustum": 42,
+          "completeAt": 66
+        },
+        {
+          "theme": "forest",
+          "variant": 0,
+          "seed": 13,
+          "plane": "transport",
+          "total": 42,
+          "placed": 42,
+          "inCameraFrustum": 42,
+          "completeAt": 66
+        },
+        {
+          "theme": "forest",
+          "variant": 0,
+          "seed": 42,
+          "plane": "skyhawk",
+          "total": 42,
+          "placed": 42,
+          "inCameraFrustum": 42,
+          "completeAt": 49
+        },
+        {
+          "theme": "forest",
+          "variant": 0,
+          "seed": 42,
+          "plane": "transport",
+          "total": 42,
+          "placed": 42,
+          "inCameraFrustum": 42,
+          "completeAt": 49
+        },
+        {
+          "theme": "farm",
+          "variant": 0,
+          "seed": 13,
+          "plane": "skyhawk",
+          "total": 43,
+          "placed": 43,
+          "inCameraFrustum": 43,
+          "completeAt": 66
+        },
+        {
+          "theme": "farm",
+          "variant": 0,
+          "seed": 13,
+          "plane": "transport",
+          "total": 43,
+          "placed": 43,
+          "inCameraFrustum": 43,
+          "completeAt": 66
+        },
+        {
+          "theme": "farm",
+          "variant": 0,
+          "seed": 42,
+          "plane": "skyhawk",
+          "total": 43,
+          "placed": 43,
+          "inCameraFrustum": 43,
+          "completeAt": 62
+        },
+        {
+          "theme": "farm",
+          "variant": 0,
+          "seed": 42,
+          "plane": "transport",
+          "total": 43,
+          "placed": 43,
+          "inCameraFrustum": 43,
+          "completeAt": 62
+        },
+        {
+          "theme": "korea",
+          "variant": 0,
+          "seed": 13,
+          "plane": "skyhawk",
+          "total": 40,
+          "placed": 40,
+          "inCameraFrustum": 40,
+          "completeAt": 63
+        },
+        {
+          "theme": "korea",
+          "variant": 0,
+          "seed": 13,
+          "plane": "transport",
+          "total": 40,
+          "placed": 40,
+          "inCameraFrustum": 40,
+          "completeAt": 63
+        },
+        {
+          "theme": "korea",
+          "variant": 0,
+          "seed": 42,
+          "plane": "skyhawk",
+          "total": 40,
+          "placed": 40,
+          "inCameraFrustum": 40,
+          "completeAt": 55
+        },
+        {
+          "theme": "korea",
+          "variant": 0,
+          "seed": 42,
+          "plane": "transport",
+          "total": 40,
+          "placed": 40,
+          "inCameraFrustum": 40,
+          "completeAt": 55
+        },
+        {
+          "theme": "korea",
+          "variant": 1,
+          "seed": 13,
+          "plane": "skyhawk",
+          "total": 40,
+          "placed": 40,
+          "inCameraFrustum": 40,
+          "completeAt": 47
+        },
+        {
+          "theme": "korea",
+          "variant": 1,
+          "seed": 13,
+          "plane": "transport",
+          "total": 40,
+          "placed": 40,
+          "inCameraFrustum": 40,
+          "completeAt": 47
+        },
+        {
+          "theme": "korea",
+          "variant": 1,
+          "seed": 42,
+          "plane": "skyhawk",
+          "total": 40,
+          "placed": 40,
+          "inCameraFrustum": 40,
+          "completeAt": 43
+        },
+        {
+          "theme": "korea",
+          "variant": 1,
+          "seed": 42,
+          "plane": "transport",
+          "total": 40,
+          "placed": 40,
+          "inCameraFrustum": 40,
+          "completeAt": 43
+        },
+        {
+          "theme": "korea",
+          "variant": 2,
+          "seed": 13,
+          "plane": "skyhawk",
+          "total": 40,
+          "placed": 40,
+          "inCameraFrustum": 40,
+          "completeAt": 62
+        },
+        {
+          "theme": "korea",
+          "variant": 2,
+          "seed": 13,
+          "plane": "transport",
+          "total": 40,
+          "placed": 40,
+          "inCameraFrustum": 40,
+          "completeAt": 62
+        },
+        {
+          "theme": "korea",
+          "variant": 2,
+          "seed": 42,
+          "plane": "skyhawk",
+          "total": 40,
+          "placed": 40,
+          "inCameraFrustum": 40,
+          "completeAt": 55
+        },
+        {
+          "theme": "korea",
+          "variant": 2,
+          "seed": 42,
+          "plane": "transport",
+          "total": 40,
+          "placed": 40,
+          "inCameraFrustum": 40,
+          "completeAt": 55
+        },
+        {
+          "theme": "korea",
+          "variant": 3,
+          "seed": 13,
+          "plane": "skyhawk",
+          "total": 40,
+          "placed": 40,
+          "inCameraFrustum": 40,
+          "completeAt": 66
+        },
+        {
+          "theme": "korea",
+          "variant": 3,
+          "seed": 13,
+          "plane": "transport",
+          "total": 40,
+          "placed": 40,
+          "inCameraFrustum": 40,
+          "completeAt": 66
+        },
+        {
+          "theme": "korea",
+          "variant": 3,
+          "seed": 42,
+          "plane": "skyhawk",
+          "total": 40,
+          "placed": 40,
+          "inCameraFrustum": 40,
+          "completeAt": 55
+        },
+        {
+          "theme": "korea",
+          "variant": 3,
+          "seed": 42,
+          "plane": "transport",
+          "total": 40,
+          "placed": 40,
+          "inCameraFrustum": 40,
+          "completeAt": 55
+        }
+      ],
+      "method": "CPU generation, source bounds and chase-camera frustum; no GPU visibility or human enjoyment claim",
+      "gpuVerified": false,
+      "status": "passed"
+    },
+    "render-data": {
+      "renderDataChecks": 2890,
+      "simulatedMinutes": 30,
+      "maxChunks": 12,
+      "maxCached": 232,
+      "maxCompiled": 37,
+      "maxBatches": 37,
+      "maxAnimated": 14,
+      "gpuVerified": false,
+      "status": "passed"
+    },
+    "audit-trick": {
+      "cases": 352,
+      "failures": [],
+      "maxPlanMilliseconds": 3642,
+      "meanPlanMilliseconds": 189.39204545454547,
+      "elapsed": 80707.562509
+    },
+    "audit-trick-stress": {
+      "candidates": 216,
+      "activated": 216,
+      "rejectedWithoutSpending": 0,
+      "startsInsideGeometry": 0,
+      "failures": []
+    },
+    "surface-audit": {
+      "surfaceChecks": 14,
+      "upperVerticesPreserved": 99972,
+      "preservedSignals": 8,
+      "contrastReports": [
+        {
+          "id": "rocky_arch",
+          "lod": 1,
+          "before": 1.38,
+          "after": 1.38
+        },
+        {
+          "id": "rocky_arch",
+          "lod": 2,
+          "before": 1.53,
+          "after": 1.53
+        },
+        {
+          "id": "sea_stacks",
+          "lod": 1,
+          "before": 1.34,
+          "after": 1.34
+        },
+        {
+          "id": "sea_stacks",
+          "lod": 2,
+          "before": 1.37,
+          "after": 1.37
+        },
+        {
+          "id": "mountain_peak",
+          "lod": 1,
+          "before": 1.51,
+          "after": 1.51
+        },
+        {
+          "id": "mountain_peak",
+          "lod": 2,
+          "before": 1.51,
+          "after": 1.51
+        },
+        {
+          "id": "rocky_ridge",
+          "lod": 1,
+          "before": 1.51,
+          "after": 1.51
+        },
+        {
+          "id": "rocky_ridge",
+          "lod": 2,
+          "before": 1.51,
+          "after": 1.51
+        },
+        {
+          "id": "waterfall_cliff",
+          "lod": 1,
+          "before": 1.38,
+          "after": 1.38
+        },
+        {
+          "id": "waterfall_cliff",
+          "lod": 2,
+          "before": 1.43,
+          "after": 1.43
+        }
+      ],
+      "geometryPreserved": true,
+      "aircraftPalettesPreserved": true,
+      "gpuVerified": false,
+      "status": "passed"
+    },
+    "preview-cache": {
+      "jpegCacheChecks": "passed",
+      "nativeAircraftPreparation": true,
+      "nativeThemePreparation": true,
+      "themeMeshes": 562,
+      "releasedReferences": true,
+      "nonLobbyCaptureBlocked": true,
+      "gpuRenderedOrVerified": false
+    },
+    "revision": {
+      "revisionChecks": 10767145,
+      "aircraftOrbitCases": 2640,
+      "maxRadius": 31.5,
+      "unlimitedBoost": true,
+      "settingsValidated": true,
+      "gpuVerified": false,
+      "status": "passed"
+    },
+    "world-revision": {
+      "worldRevisionChecks": 44453,
+      "anchoredModels": 17501,
+      "districtModels": 6987,
+      "gpuVerified": false,
+      "status": "passed"
+    },
+    "interface": {
+      "interfaceContracts": 17,
+      "browserOrLayoutVerified": false,
+      "gpuVerified": false,
+      "status": "passed"
+    },
+    "visual-quality": {
+      "visualQualityChecks": 2515,
+      "importedModels": 407,
+      "renderBoundaryStubs": true,
+      "gpuVerified": false,
+      "browserLayoutVerified": false,
+      "fpsMeasured": false,
+      "status": "passed"
+    },
+    "scene-quality": {
+      "sceneQualityChecks": 523576,
+      "animatedModelLODs": 202,
+      "sampledVertices": 90960,
+      "maxPositionError": 6.455439144187099e-07,
+      "maxNormalError": 2.6558106654375157e-08,
+      "sourceDraws": 6080,
+      "preparedDraws": 4790,
+      "costs": [
+        {
+          "id": "harbor_working_container_crane",
+          "lod": 0,
+          "original": 29,
+          "prepared": 29
+        },
+        {
+          "id": "harbor_working_container_crane",
+          "lod": 1,
+          "original": 19,
+          "prepared": 19
+        },
+        {
+          "id": "harbor_working_container_crane",
+          "lod": 2,
+          "original": 16,
+          "prepared": 16
+        },
+        {
+          "id": "village_windmill_miller",
+          "lod": 0,
+          "original": 16,
+          "prepared": 16
+        },
+        {
+          "id": "village_windmill_miller",
+          "lod": 1,
+          "original": 18,
+          "prepared": 18
+        },
+        {
+          "id": "village_windmill_miller",
+          "lod": 2,
+          "original": 15,
+          "prepared": 15
+        },
+        {
+          "id": "tower_rooftop_ventilation",
+          "lod": 0,
+          "original": 17,
+          "prepared": 15
+        },
+        {
+          "id": "tower_rooftop_ventilation",
+          "lod": 1,
+          "original": 13,
+          "prepared": 12
+        },
+        {
+          "id": "tower_rooftop_ventilation",
+          "lod": 2,
+          "original": 12,
+          "prepared": 11
+        },
+        {
+          "id": "ski_resort_cable_gondola",
+          "lod": 0,
+          "original": 22,
+          "prepared": 22
+        },
+        {
+          "id": "ski_resort_cable_gondola",
+          "lod": 1,
+          "original": 17,
+          "prepared": 17
+        },
+        {
+          "id": "ski_resort_cable_gondola",
+          "lod": 2,
+          "original": 14,
+          "prepared": 14
+        },
+        {
+          "id": "bucket_wheel_excavator",
+          "lod": 0,
+          "original": 269,
+          "prepared": 160
+        },
+        {
+          "id": "bucket_wheel_excavator",
+          "lod": 1,
+          "original": 182,
+          "prepared": 121
+        },
+        {
+          "id": "bucket_wheel_excavator",
+          "lod": 2,
+          "original": 180,
+          "prepared": 125
+        },
+        {
+          "id": "oil_pumpjack",
+          "lod": 0,
+          "original": 14,
+          "prepared": 14
+        },
+        {
+          "id": "oil_pumpjack",
+          "lod": 1,
+          "original": 13,
+          "prepared": 13
+        },
+        {
+          "id": "oil_pumpjack",
+          "lod": 2,
+          "original": 14,
+          "prepared": 14
+        },
+        {
+          "id": "forest_log_loader",
+          "lod": 0,
+          "original": 272,
+          "prepared": 161
+        },
+        {
+          "id": "forest_log_loader",
+          "lod": 1,
+          "original": 183,
+          "prepared": 120
+        },
+        {
+          "id": "forest_log_loader",
+          "lod": 2,
+          "original": 180,
+          "prepared": 123
+        },
+        {
+          "id": "working_crop_harvester",
+          "lod": 0,
+          "original": 37,
+          "prepared": 17
+        },
+        {
+          "id": "working_crop_harvester",
+          "lod": 1,
+          "original": 31,
+          "prepared": 15
+        },
+        {
+          "id": "working_crop_harvester",
+          "lod": 2,
+          "original": 26,
+          "prepared": 12
+        },
+        {
+          "id": "korean_astronomical_waterclock",
+          "lod": 0,
+          "original": 13,
+          "prepared": 13
+        },
+        {
+          "id": "korean_astronomical_waterclock",
+          "lod": 1,
+          "original": 13,
+          "prepared": 13
+        },
+        {
+          "id": "korean_astronomical_waterclock",
+          "lod": 2,
+          "original": 12,
+          "prepared": 12
+        }
+      ],
+      "cloudInventory": [
+        {
+          "budget": 650,
+          "cells": 645,
+          "formations": 32
+        },
+        {
+          "budget": 900,
+          "cells": 886,
+          "formations": 32
+        },
+        {
+          "budget": 2600,
+          "cells": 2578,
+          "formations": 32
+        },
+        {
+          "budget": 5200,
+          "cells": 5170,
+          "formations": 32
+        }
+      ],
+      "scenery": {
+        "coast:0:balanced": 42,
+        "coast:0:high": 60,
+        "coast:0:ultra": 84,
+        "village:0:balanced": 42,
+        "village:0:high": 60,
+        "village:0:ultra": 84,
+        "city:0:balanced": 42,
+        "city:0:high": 60,
+        "city:0:ultra": 84,
+        "ice:0:balanced": 42,
+        "ice:0:high": 60,
+        "ice:0:ultra": 84,
+        "desert:0:balanced": 42,
+        "desert:0:high": 60,
+        "desert:0:ultra": 84,
+        "forest:0:balanced": 42,
+        "forest:0:high": 60,
+        "forest:0:ultra": 84,
+        "farm:0:balanced": 42,
+        "farm:0:high": 60,
+        "farm:0:ultra": 84,
+        "korea:0:balanced": 42,
+        "korea:0:high": 60,
+        "korea:0:ultra": 84,
+        "korea:1:balanced": 42,
+        "korea:1:high": 60,
+        "korea:1:ultra": 84,
+        "korea:2:balanced": 42,
+        "korea:2:high": 60,
+        "korea:2:ultra": 84,
+        "korea:3:balanced": 42,
+        "korea:3:high": 60,
+        "korea:3:ultra": 84,
+        "river:0:balanced": 42,
+        "river:0:high": 60,
+        "river:0:ultra": 84,
+        "landmark:0:balanced": 42,
+        "landmark:0:high": 60,
+        "landmark:0:ultra": 84,
+        "aurora:0:balanced": 42,
+        "aurora:0:high": 60,
+        "aurora:0:ultra": 84,
+        "volcano:0:balanced": 42,
+        "volcano:0:high": 60,
+        "volcano:0:ultra": 84,
+        "waterfall:0:balanced": 42,
+        "waterfall:0:high": 60,
+        "waterfall:0:ultra": 84
+      },
+      "gpuVerified": false,
+      "fpsMeasured": false,
+      "status": "passed"
+    },
+    "upgrade-400": {
+      "upgrade400Checks": 395,
+      "nativeRigMatrices": 168,
+      "maxPoseError": 8.215650382226158e-15,
+      "gpuVerified": false,
+      "status": "passed"
+    },
+    "trick-worker": {
+      "workerChecks": 19,
+      "realWorkerCases": 3,
+      "gpuVerified": false,
+      "status": "passed"
+    },
+    "expedition": {
+      "expeditionChecks": 8170,
+      "fullCoverageCases": [
+        {
+          "theme": "coast",
+          "seed": 13,
+          "span": 11,
+          "total": 71,
+          "encounters": 4
+        },
+        {
+          "theme": "coast",
+          "seed": 13,
+          "span": 30.976,
+          "total": 71,
+          "encounters": 4
+        },
+        {
+          "theme": "coast",
+          "seed": 42,
+          "span": 11,
+          "total": 71,
+          "encounters": 4
+        },
+        {
+          "theme": "coast",
+          "seed": 42,
+          "span": 30.976,
+          "total": 71,
+          "encounters": 4
+        },
+        {
+          "theme": "village",
+          "seed": 13,
+          "span": 11,
+          "total": 45,
+          "encounters": 3
+        },
+        {
+          "theme": "village",
+          "seed": 13,
+          "span": 30.976,
+          "total": 45,
+          "encounters": 3
+        },
+        {
+          "theme": "village",
+          "seed": 42,
+          "span": 11,
+          "total": 45,
+          "encounters": 3
+        },
+        {
+          "theme": "village",
+          "seed": 42,
+          "span": 30.976,
+          "total": 45,
+          "encounters": 3
+        },
+        {
+          "theme": "city",
+          "seed": 13,
+          "span": 11,
+          "total": 55,
+          "encounters": 3
+        },
+        {
+          "theme": "city",
+          "seed": 13,
+          "span": 30.976,
+          "total": 55,
+          "encounters": 5
+        },
+        {
+          "theme": "city",
+          "seed": 42,
+          "span": 11,
+          "total": 55,
+          "encounters": 3
+        },
+        {
+          "theme": "city",
+          "seed": 42,
+          "span": 30.976,
+          "total": 55,
+          "encounters": 3
+        },
+        {
+          "theme": "ice",
+          "seed": 13,
+          "span": 11,
+          "total": 38,
+          "encounters": 3
+        },
+        {
+          "theme": "ice",
+          "seed": 13,
+          "span": 30.976,
+          "total": 38,
+          "encounters": 3
+        },
+        {
+          "theme": "ice",
+          "seed": 42,
+          "span": 11,
+          "total": 38,
+          "encounters": 3
+        },
+        {
+          "theme": "ice",
+          "seed": 42,
+          "span": 30.976,
+          "total": 38,
+          "encounters": 3
+        },
+        {
+          "theme": "desert",
+          "seed": 13,
+          "span": 11,
+          "total": 47,
+          "encounters": 3
+        },
+        {
+          "theme": "desert",
+          "seed": 13,
+          "span": 30.976,
+          "total": 47,
+          "encounters": 3
+        },
+        {
+          "theme": "desert",
+          "seed": 42,
+          "span": 11,
+          "total": 47,
+          "encounters": 3
+        },
+        {
+          "theme": "desert",
+          "seed": 42,
+          "span": 30.976,
+          "total": 47,
+          "encounters": 3
+        },
+        {
+          "theme": "forest",
+          "seed": 13,
+          "span": 11,
+          "total": 42,
+          "encounters": 2
+        },
+        {
+          "theme": "forest",
+          "seed": 13,
+          "span": 30.976,
+          "total": 42,
+          "encounters": 2
+        },
+        {
+          "theme": "forest",
+          "seed": 42,
+          "span": 11,
+          "total": 42,
+          "encounters": 3
+        },
+        {
+          "theme": "forest",
+          "seed": 42,
+          "span": 30.976,
+          "total": 42,
+          "encounters": 3
+        },
+        {
+          "theme": "farm",
+          "seed": 13,
+          "span": 11,
+          "total": 43,
+          "encounters": 3
+        },
+        {
+          "theme": "farm",
+          "seed": 13,
+          "span": 30.976,
+          "total": 43,
+          "encounters": 3
+        },
+        {
+          "theme": "farm",
+          "seed": 42,
+          "span": 11,
+          "total": 43,
+          "encounters": 3
+        },
+        {
+          "theme": "farm",
+          "seed": 42,
+          "span": 30.976,
+          "total": 43,
+          "encounters": 3
+        },
+        {
+          "theme": "korea",
+          "seed": 13,
+          "span": 11,
+          "total": 40,
+          "encounters": 3
+        },
+        {
+          "theme": "korea",
+          "seed": 13,
+          "span": 30.976,
+          "total": 40,
+          "encounters": 3
+        },
+        {
+          "theme": "korea",
+          "seed": 42,
+          "span": 11,
+          "total": 40,
+          "encounters": 3
+        },
+        {
+          "theme": "korea",
+          "seed": 42,
+          "span": 30.976,
+          "total": 40,
+          "encounters": 3
+        }
+      ],
+      "chasePoses": 132,
+      "maximumChaseExtent": 0.8494310025282971,
+      "sourceModels": 403,
+      "animatedModels": 203,
+      "gpuVerified": false,
+      "status": "passed"
+    },
+    "performance-revision": {
+      "performanceRevisionChecks": 5859,
+      "silhouetteFallbacks": 94,
+      "courseModelVariety": {
+        "coast": 15,
+        "village": 11,
+        "city": 10,
+        "ice": 12,
+        "desert": 11,
+        "forest": 11,
+        "farm": 11,
+        "korea": 9
+      },
+      "animatedVertexComparisons": 1305040,
+      "staticVertexComparisons": 223877,
+      "maxStaticError": 2.488175278171769e-06,
+      "partialCompilePasses": 23,
+      "maxPositionError": 2.337173619142942e-07,
+      "maxNormalError": 4.991179410480384e-08,
+      "actorCosts": [
+        {
+          "id": "airport_flipdot_arrivals",
+          "lod": 0,
+          "savedDraws": 188
+        },
+        {
+          "id": "airport_flipdot_arrivals",
+          "lod": 1,
+          "savedDraws": 93
+        },
+        {
+          "id": "airport_flipdot_arrivals",
+          "lod": 2,
+          "savedDraws": 101
+        },
+        {
+          "id": "forest_log_loader",
+          "lod": 0,
+          "savedDraws": 109
+        },
+        {
+          "id": "forest_log_loader",
+          "lod": 1,
+          "savedDraws": 61
+        },
+        {
+          "id": "forest_log_loader",
+          "lod": 2,
+          "savedDraws": 55
+        },
+        {
+          "id": "snowcat",
+          "lod": 0,
+          "savedDraws": 89
+        },
+        {
+          "id": "snowcat",
+          "lod": 1,
+          "savedDraws": 77
+        },
+        {
+          "id": "snowcat",
+          "lod": 2,
+          "savedDraws": 77
+        },
+        {
+          "id": "bucket_wheel_excavator",
+          "lod": 0,
+          "savedDraws": 109
+        },
+        {
+          "id": "bucket_wheel_excavator",
+          "lod": 1,
+          "savedDraws": 61
+        },
+        {
+          "id": "bucket_wheel_excavator",
+          "lod": 2,
+          "savedDraws": 55
+        },
+        {
+          "id": "polar_tracked_science_rover",
+          "lod": 0,
+          "savedDraws": 105
+        },
+        {
+          "id": "polar_tracked_science_rover",
+          "lod": 1,
+          "savedDraws": 60
+        },
+        {
+          "id": "polar_tracked_science_rover",
+          "lod": 2,
+          "savedDraws": 58
+        }
+      ],
+      "gpuVerified": false,
+      "fpsMeasured": false,
+      "status": "passed"
+    },
+    "terrain-worker": {
+      "terrainWorkerChecks": 142,
+      "comparedVertices": 762060,
+      "realCpuWorkerCases": 6,
+      "browserWorkerTransportVerified": false,
+      "gpuVerified": false,
+      "status": "passed"
+    },
+    "model-worker": {
+      "modelWorkerChecks": 3124547,
+      "comparedAttributeValues": 19182846,
+      "maxAttributeError": 0,
+      "realCpuWorkerCases": 4,
+      "environmentModelsCompiled": 385,
+      "browserWorkerTransportVerified": false,
+      "gpuVerified": false,
+      "status": "passed"
+    }
+  },
+  "cpuSceneInventory": {
+    "results": [
+      {
+        "theme": "coast",
+        "nodes": 920,
+        "potentialMainPassDraws": 599,
+        "triangles": 2228154,
+        "geometryMiB": 48.09,
+        "workerFallbacks": [],
+        "actors": 13,
+        "compiled": 103,
+        "cachedModels": 139
+      },
+      {
+        "theme": "city",
+        "nodes": 745,
+        "potentialMainPassDraws": 527,
+        "triangles": 2204024,
+        "geometryMiB": 50.86,
+        "workerFallbacks": [],
+        "actors": 9,
+        "compiled": 101,
+        "cachedModels": 125
+      },
+      {
+        "theme": "forest",
+        "nodes": 509,
+        "potentialMainPassDraws": 382,
+        "triangles": 2335700,
+        "geometryMiB": 95.09,
+        "workerFallbacks": [],
+        "actors": 4,
+        "compiled": 91,
+        "cachedModels": 95
+      }
+    ],
+    "gpuVerified": false,
+    "fpsMeasured": false,
+    "terrainTransport": "Node worker; browser transport unverified",
+    "note": "CPU scene inventory only. No GPU, frustum, shadow/postprocess draw or FPS measurement. CPU timings omitted because validation ran concurrently."
+  },
+  "typecheck": "passed",
+  "productionBuild": "passed",
+  "verificationLimits": {
+    "webglRendered": false,
+    "browserLayoutVerified": false,
+    "deviceFPSMeasured": false
+  },
+  "sourceModelInventory": {
+    "suppliedModels": 403,
+    "auxiliaryModels": 4,
+    "animatedSuppliedModels": 203,
+    "sourceClips": 775
+  },
+  "animationCostBasis": "Prepared cost combines existing identical-leaf instancing with new rigid-pivot merging. Source comparison is not a version-4.3 performance comparison."
+}

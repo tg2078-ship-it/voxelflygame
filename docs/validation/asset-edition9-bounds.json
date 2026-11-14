@@ -1,0 +1,9 @@
+{
+  "status": "passed",
+  "models": 403,
+  "visualExports": 1209,
+  "sourceBoundsCorrections": 135,
+  "maximumRemovedUnusedVertexExtentM": 3.2500495918211634,
+  "method": "Referenced source triangle vertices transformed through exact native hierarchy; no unreferenced accessor rows",
+  "gpuRenderedOrVerified": false
+}

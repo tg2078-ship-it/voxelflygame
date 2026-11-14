@@ -1,0 +1,4093 @@
+{
+  "version": "5.0",
+  "edition": 12,
+  "testSuites": 28,
+  "status": "passed",
+  "suites": [
+    {
+      "suite": "assets",
+      "status": "passed",
+      "summary": {
+        "suppliedModels": 403,
+        "supplementaryModels": 4,
+        "exports": 1620,
+        "animationClips": 3608,
+        "trafficPoseChanges": 60,
+        "compressedBytes": 471942166,
+        "status": "passed"
+      }
+    },
+    {
+      "suite": "storage",
+      "status": "passed",
+      "summary": {
+        "storageChecks": 17,
+        "legacyPlanes": 22,
+        "checkpointRewardOnce": true,
+        "invalidOriginalPreserved": true,
+        "status": "passed"
+      }
+    },
+    {
+      "suite": "progression",
+      "status": "passed",
+      "summary": {
+        "progressionChecks": 172,
+        "questConditions": 64,
+        "careerConditions": 20,
+        "status": "passed"
+      }
+    },
+    {
+      "suite": "streaming",
+      "status": "passed",
+      "summary": {
+        "streamingChecks": 576016,
+        "summary": [
+          {
+            "speed": 40,
+            "minutes": 30,
+            "distance": 72000,
+            "maxEncounters": 3,
+            "maxObstacles": 168,
+            "maxPickups": 103,
+            "cpuMilliseconds": 181
+          },
+          {
+            "speed": 60,
+            "minutes": 30,
+            "distance": 108000,
+            "maxEncounters": 3,
+            "maxObstacles": 186,
+            "maxPickups": 103,
+            "cpuMilliseconds": 210
+          },
+          {
+            "speed": 90,
+            "minutes": 30,
+            "distance": 162000,
+            "maxEncounters": 3,
+            "maxObstacles": 173,
+            "maxPickups": 103,
+            "cpuMilliseconds": 711
+          },
+          {
+            "speed": 120,
+            "minutes": 30,
+            "distance": 216000,
+            "maxEncounters": 3,
+            "maxObstacles": 183,
+            "maxPickups": 103,
+            "cpuMilliseconds": 941
+          },
+          {
+            "speed": 180,
+            "minutes": 30,
+            "distance": 324000,
+            "maxEncounters": 4,
+            "maxObstacles": 204,
+            "maxPickups": 123,
+            "cpuMilliseconds": 1359
+          },
+          {
+            "speed": 250,
+            "minutes": 30,
+            "distance": 450000,
+            "maxEncounters": 5,
+            "maxObstacles": 243,
+            "maxPickups": 152,
+            "cpuMilliseconds": 1847
+          },
+          {
+            "speed": 400,
+            "minutes": 30,
+            "distance": 720000,
+            "maxEncounters": 7,
+            "maxObstacles": 358,
+            "maxPickups": 222,
+            "cpuMilliseconds": 2929
+          },
+          {
+            "speed": 600,
+            "minutes": 30,
+            "distance": 1080000,
+            "maxEncounters": 9,
+            "maxObstacles": 483,
+            "maxPickups": 315,
+            "cpuMilliseconds": 4475
+          }
+        ],
+        "status": "passed"
+      }
+    },
+    {
+      "suite": "core",
+      "status": "passed",
+      "summary": {
+        "coreChecks": 2607,
+        "patterns": 168,
+        "quests": 64,
+        "career": 20,
+        "achievements": 40,
+        "status": "passed"
+      }
+    },
+    {
+      "suite": "audit-route",
+      "status": "passed",
+      "summary": {
+        "failures": 0,
+        "examples": [],
+        "models": {}
+      }
+    },
+    {
+      "suite": "audit-course",
+      "status": "passed",
+      "summary": {
+        "centerSweepErrors": 0,
+        "examples": [],
+        "noInput": {
+          "failedWithin45s": 100,
+          "mean": 4.266666666666652,
+          "latest": 4.266666666666657
+        }
+      }
+    },
+    {
+      "suite": "audit-autopilot",
+      "status": "passed",
+      "summary": {
+        "controlledFlights": 66,
+        "minSurvivalSeconds": 240,
+        "maxSurvivalSeconds": 240,
+        "humanFunVerified": false,
+        "status": "passed"
+      }
+    },
+    {
+      "suite": "continuous-flight",
+      "status": "passed",
+      "summary": {
+        "checks": 12021,
+        "continuousPhysicsSeconds": 192.00000000004493,
+        "distance": 15247.760997488285,
+        "departureReloads": 0,
+        "maxX": 27.954166666666666,
+        "maxY": 52,
+        "actualGLBFallback": true,
+        "gpuVerified": false,
+        "status": "passed"
+      }
+    },
+    {
+      "suite": "theme-coverage",
+      "status": "passed",
+      "summary": {
+        "checks": 22067,
+        "cases": [
+          {
+            "theme": "coast",
+            "variant": 0,
+            "seed": 13,
+            "plane": "skyhawk",
+            "total": 71,
+            "placed": 71,
+            "inCameraFrustum": 71,
+            "completeAt": 92
+          },
+          {
+            "theme": "coast",
+            "variant": 0,
+            "seed": 13,
+            "plane": "transport",
+            "total": 71,
+            "placed": 71,
+            "inCameraFrustum": 71,
+            "completeAt": 92
+          },
+          {
+            "theme": "coast",
+            "variant": 0,
+            "seed": 42,
+            "plane": "skyhawk",
+            "total": 71,
+            "placed": 71,
+            "inCameraFrustum": 71,
+            "completeAt": 112
+          },
+          {
+            "theme": "coast",
+            "variant": 0,
+            "seed": 42,
+            "plane": "transport",
+            "total": 71,
+            "placed": 71,
+            "inCameraFrustum": 71,
+            "completeAt": 112
+          },
+          {
+            "theme": "village",
+            "variant": 0,
+            "seed": 13,
+            "plane": "skyhawk",
+            "total": 45,
+            "placed": 45,
+            "inCameraFrustum": 45,
+            "completeAt": 61
+          },
+          {
+            "theme": "village",
+            "variant": 0,
+            "seed": 13,
+            "plane": "transport",
+            "total": 45,
+            "placed": 45,
+            "inCameraFrustum": 45,
+            "completeAt": 61
+          },
+          {
+            "theme": "village",
+            "variant": 0,
+            "seed": 42,
+            "plane": "skyhawk",
+            "total": 45,
+            "placed": 45,
+            "inCameraFrustum": 45,
+            "completeAt": 61
+          },
+          {
+            "theme": "village",
+            "variant": 0,
+            "seed": 42,
+            "plane": "transport",
+            "total": 45,
+            "placed": 45,
+            "inCameraFrustum": 45,
+            "completeAt": 61
+          },
+          {
+            "theme": "city",
+            "variant": 0,
+            "seed": 13,
+            "plane": "skyhawk",
+            "total": 55,
+            "placed": 55,
+            "inCameraFrustum": 55,
+            "completeAt": 64
+          },
+          {
+            "theme": "city",
+            "variant": 0,
+            "seed": 13,
+            "plane": "transport",
+            "total": 55,
+            "placed": 55,
+            "inCameraFrustum": 55,
+            "completeAt": 64
+          },
+          {
+            "theme": "city",
+            "variant": 0,
+            "seed": 42,
+            "plane": "skyhawk",
+            "total": 55,
+            "placed": 55,
+            "inCameraFrustum": 55,
+            "completeAt": 64
+          },
+          {
+            "theme": "city",
+            "variant": 0,
+            "seed": 42,
+            "plane": "transport",
+            "total": 55,
+            "placed": 55,
+            "inCameraFrustum": 55,
+            "completeAt": 64
+          },
+          {
+            "theme": "ice",
+            "variant": 0,
+            "seed": 13,
+            "plane": "skyhawk",
+            "total": 38,
+            "placed": 38,
+            "inCameraFrustum": 38,
+            "completeAt": 42
+          },
+          {
+            "theme": "ice",
+            "variant": 0,
+            "seed": 13,
+            "plane": "transport",
+            "total": 38,
+            "placed": 38,
+            "inCameraFrustum": 38,
+            "completeAt": 42
+          },
+          {
+            "theme": "ice",
+            "variant": 0,
+            "seed": 42,
+            "plane": "skyhawk",
+            "total": 38,
+            "placed": 38,
+            "inCameraFrustum": 38,
+            "completeAt": 49
+          },
+          {
+            "theme": "ice",
+            "variant": 0,
+            "seed": 42,
+            "plane": "transport",
+            "total": 38,
+            "placed": 38,
+            "inCameraFrustum": 38,
+            "completeAt": 49
+          },
+          {
+            "theme": "desert",
+            "variant": 0,
+            "seed": 13,
+            "plane": "skyhawk",
+            "total": 47,
+            "placed": 47,
+            "inCameraFrustum": 47,
+            "completeAt": 63
+          },
+          {
+            "theme": "desert",
+            "variant": 0,
+            "seed": 13,
+            "plane": "transport",
+            "total": 47,
+            "placed": 47,
+            "inCameraFrustum": 47,
+            "completeAt": 63
+          },
+          {
+            "theme": "desert",
+            "variant": 0,
+            "seed": 42,
+            "plane": "skyhawk",
+            "total": 47,
+            "placed": 47,
+            "inCameraFrustum": 47,
+            "completeAt": 55
+          },
+          {
+            "theme": "desert",
+            "variant": 0,
+            "seed": 42,
+            "plane": "transport",
+            "total": 47,
+            "placed": 47,
+            "inCameraFrustum": 47,
+            "completeAt": 55
+          },
+          {
+            "theme": "forest",
+            "variant": 0,
+            "seed": 13,
+            "plane": "skyhawk",
+            "total": 42,
+            "placed": 42,
+            "inCameraFrustum": 42,
+            "completeAt": 66
+          },
+          {
+            "theme": "forest",
+            "variant": 0,
+            "seed": 13,
+            "plane": "transport",
+            "total": 42,
+            "placed": 42,
+            "inCameraFrustum": 42,
+            "completeAt": 125
+          },
+          {
+            "theme": "forest",
+            "variant": 0,
+            "seed": 42,
+            "plane": "skyhawk",
+            "total": 42,
+            "placed": 42,
+            "inCameraFrustum": 42,
+            "completeAt": 49
+          },
+          {
+            "theme": "forest",
+            "variant": 0,
+            "seed": 42,
+            "plane": "transport",
+            "total": 42,
+            "placed": 42,
+            "inCameraFrustum": 42,
+            "completeAt": 49
+          },
+          {
+            "theme": "farm",
+            "variant": 0,
+            "seed": 13,
+            "plane": "skyhawk",
+            "total": 43,
+            "placed": 43,
+            "inCameraFrustum": 43,
+            "completeAt": 66
+          },
+          {
+            "theme": "farm",
+            "variant": 0,
+            "seed": 13,
+            "plane": "transport",
+            "total": 43,
+            "placed": 43,
+            "inCameraFrustum": 43,
+            "completeAt": 66
+          },
+          {
+            "theme": "farm",
+            "variant": 0,
+            "seed": 42,
+            "plane": "skyhawk",
+            "total": 43,
+            "placed": 43,
+            "inCameraFrustum": 43,
+            "completeAt": 62
+          },
+          {
+            "theme": "farm",
+            "variant": 0,
+            "seed": 42,
+            "plane": "transport",
+            "total": 43,
+            "placed": 43,
+            "inCameraFrustum": 43,
+            "completeAt": 62
+          },
+          {
+            "theme": "korea",
+            "variant": 0,
+            "seed": 13,
+            "plane": "skyhawk",
+            "total": 40,
+            "placed": 40,
+            "inCameraFrustum": 40,
+            "completeAt": 63
+          },
+          {
+            "theme": "korea",
+            "variant": 0,
+            "seed": 13,
+            "plane": "transport",
+            "total": 40,
+            "placed": 40,
+            "inCameraFrustum": 40,
+            "completeAt": 63
+          },
+          {
+            "theme": "korea",
+            "variant": 0,
+            "seed": 42,
+            "plane": "skyhawk",
+            "total": 40,
+            "placed": 40,
+            "inCameraFrustum": 40,
+            "completeAt": 55
+          },
+          {
+            "theme": "korea",
+            "variant": 0,
+            "seed": 42,
+            "plane": "transport",
+            "total": 40,
+            "placed": 40,
+            "inCameraFrustum": 40,
+            "completeAt": 55
+          },
+          {
+            "theme": "korea",
+            "variant": 1,
+            "seed": 13,
+            "plane": "skyhawk",
+            "total": 40,
+            "placed": 40,
+            "inCameraFrustum": 40,
+            "completeAt": 47
+          },
+          {
+            "theme": "korea",
+            "variant": 1,
+            "seed": 13,
+            "plane": "transport",
+            "total": 40,
+            "placed": 40,
+            "inCameraFrustum": 40,
+            "completeAt": 47
+          },
+          {
+            "theme": "korea",
+            "variant": 1,
+            "seed": 42,
+            "plane": "skyhawk",
+            "total": 40,
+            "placed": 40,
+            "inCameraFrustum": 40,
+            "completeAt": 43
+          },
+          {
+            "theme": "korea",
+            "variant": 1,
+            "seed": 42,
+            "plane": "transport",
+            "total": 40,
+            "placed": 40,
+            "inCameraFrustum": 40,
+            "completeAt": 43
+          },
+          {
+            "theme": "korea",
+            "variant": 2,
+            "seed": 13,
+            "plane": "skyhawk",
+            "total": 40,
+            "placed": 40,
+            "inCameraFrustum": 40,
+            "completeAt": 62
+          },
+          {
+            "theme": "korea",
+            "variant": 2,
+            "seed": 13,
+            "plane": "transport",
+            "total": 40,
+            "placed": 40,
+            "inCameraFrustum": 40,
+            "completeAt": 62
+          },
+          {
+            "theme": "korea",
+            "variant": 2,
+            "seed": 42,
+            "plane": "skyhawk",
+            "total": 40,
+            "placed": 40,
+            "inCameraFrustum": 40,
+            "completeAt": 55
+          },
+          {
+            "theme": "korea",
+            "variant": 2,
+            "seed": 42,
+            "plane": "transport",
+            "total": 40,
+            "placed": 40,
+            "inCameraFrustum": 40,
+            "completeAt": 55
+          },
+          {
+            "theme": "korea",
+            "variant": 3,
+            "seed": 13,
+            "plane": "skyhawk",
+            "total": 40,
+            "placed": 40,
+            "inCameraFrustum": 40,
+            "completeAt": 66
+          },
+          {
+            "theme": "korea",
+            "variant": 3,
+            "seed": 13,
+            "plane": "transport",
+            "total": 40,
+            "placed": 40,
+            "inCameraFrustum": 40,
+            "completeAt": 66
+          },
+          {
+            "theme": "korea",
+            "variant": 3,
+            "seed": 42,
+            "plane": "skyhawk",
+            "total": 40,
+            "placed": 40,
+            "inCameraFrustum": 40,
+            "completeAt": 55
+          },
+          {
+            "theme": "korea",
+            "variant": 3,
+            "seed": 42,
+            "plane": "transport",
+            "total": 40,
+            "placed": 40,
+            "inCameraFrustum": 40,
+            "completeAt": 55
+          }
+        ],
+        "method": "CPU generation, source bounds and chase-camera frustum; no GPU visibility or human enjoyment claim",
+        "gpuVerified": false,
+        "status": "passed"
+      }
+    },
+    {
+      "suite": "render-data",
+      "status": "passed",
+      "summary": {
+        "renderDataChecks": 2890,
+        "simulatedMinutes": 30,
+        "maxChunks": 12,
+        "maxCached": 239,
+        "maxCompiled": 20,
+        "maxBatches": 18,
+        "maxAnimated": 28,
+        "gpuVerified": false,
+        "status": "passed"
+      }
+    },
+    {
+      "suite": "audit-trick",
+      "status": "passed",
+      "summary": {
+        "cases": 352,
+        "failures": [],
+        "slowest": [
+          {
+            "theme": "city",
+            "variant": 0,
+            "plane": "transport",
+            "clear": true,
+            "solid": 0,
+            "eRemaining": 0,
+            "planms": 2692,
+            "x": 13.870563687970213,
+            "y": 30.795637420854796,
+            "failed": false
+          },
+          {
+            "theme": "korea",
+            "variant": 3,
+            "plane": "transport",
+            "clear": true,
+            "solid": 0,
+            "eRemaining": 0,
+            "planms": 96,
+            "x": 14.406580216400325,
+            "y": 30,
+            "failed": false
+          },
+          {
+            "theme": "landmark",
+            "variant": 0,
+            "plane": "falcon",
+            "clear": true,
+            "solid": 0,
+            "eRemaining": 0,
+            "planms": 24,
+            "x": 8.120528422539472,
+            "y": 29.526927758642053,
+            "failed": false
+          },
+          {
+            "theme": "landmark",
+            "variant": 0,
+            "plane": "swept",
+            "clear": true,
+            "solid": 0,
+            "eRemaining": 0,
+            "planms": 23,
+            "x": 11.323814190746553,
+            "y": 31.454224850282305,
+            "failed": false
+          },
+          {
+            "theme": "korea",
+            "variant": 0,
+            "plane": "stearman",
+            "clear": true,
+            "solid": 0,
+            "eRemaining": 0,
+            "planms": 21,
+            "x": 5.306814987496728,
+            "y": 48,
+            "failed": false
+          }
+        ],
+        "maxPlanMilliseconds": 2692,
+        "meanPlanMilliseconds": 11.835227272727273,
+        "elapsed": 20467.171181
+      }
+    },
+    {
+      "suite": "audit-trick-stress",
+      "status": "passed",
+      "summary": {
+        "candidates": 216,
+        "activated": 216,
+        "rejectedWithoutSpending": 0,
+        "startsInsideGeometry": 0,
+        "failures": []
+      }
+    },
+    {
+      "suite": "surface-audit",
+      "status": "passed",
+      "summary": {
+        "surfaceChecks": 14,
+        "upperVerticesPreserved": 122388,
+        "preservedSignals": 0,
+        "contrastReports": [
+          {
+            "id": "rocky_arch",
+            "lod": 1,
+            "nativeAtlas": true,
+            "before": null,
+            "after": null
+          },
+          {
+            "id": "rocky_arch",
+            "lod": 2,
+            "nativeAtlas": true,
+            "before": null,
+            "after": null
+          },
+          {
+            "id": "sea_stacks",
+            "lod": 1,
+            "nativeAtlas": true,
+            "before": null,
+            "after": null
+          },
+          {
+            "id": "sea_stacks",
+            "lod": 2,
+            "nativeAtlas": true,
+            "before": null,
+            "after": null
+          },
+          {
+            "id": "mountain_peak",
+            "lod": 1,
+            "nativeAtlas": true,
+            "before": null,
+            "after": null
+          },
+          {
+            "id": "mountain_peak",
+            "lod": 2,
+            "nativeAtlas": true,
+            "before": null,
+            "after": null
+          },
+          {
+            "id": "rocky_ridge",
+            "lod": 1,
+            "nativeAtlas": true,
+            "before": null,
+            "after": null
+          },
+          {
+            "id": "rocky_ridge",
+            "lod": 2,
+            "nativeAtlas": true,
+            "before": null,
+            "after": null
+          },
+          {
+            "id": "waterfall_cliff",
+            "lod": 1,
+            "nativeAtlas": true,
+            "before": null,
+            "after": null
+          },
+          {
+            "id": "waterfall_cliff",
+            "lod": 2,
+            "nativeAtlas": true,
+            "before": null,
+            "after": null
+          }
+        ],
+        "geometryPreserved": true,
+        "aircraftPalettesPreserved": true,
+        "gpuVerified": false,
+        "status": "passed"
+      }
+    },
+    {
+      "suite": "preview-cache",
+      "status": "passed",
+      "summary": {
+        "jpegCacheChecks": "passed",
+        "nativeAircraftPreparation": true,
+        "nativeThemePreparation": true,
+        "themeMeshes": 160,
+        "releasedReferences": true,
+        "nonLobbyCaptureBlocked": true,
+        "gpuRenderedOrVerified": false
+      }
+    },
+    {
+      "suite": "revision",
+      "status": "passed",
+      "summary": {
+        "revisionChecks": 10752865,
+        "aircraftOrbitCases": 2640,
+        "maxRadius": 31.5,
+        "unlimitedBoost": true,
+        "settingsValidated": true,
+        "gpuVerified": false,
+        "status": "passed"
+      }
+    },
+    {
+      "suite": "world-revision",
+      "status": "passed",
+      "summary": {
+        "worldRevisionChecks": 43852,
+        "anchoredModels": 17248,
+        "districtModels": 6954,
+        "gpuVerified": false,
+        "status": "passed"
+      }
+    },
+    {
+      "suite": "interface",
+      "status": "passed",
+      "summary": {
+        "interfaceContracts": 17,
+        "browserOrLayoutVerified": false,
+        "gpuVerified": false,
+        "status": "passed"
+      }
+    },
+    {
+      "suite": "visual-quality",
+      "status": "passed",
+      "summary": {
+        "visualQualityChecks": 2515,
+        "importedModels": 407,
+        "renderBoundaryStubs": true,
+        "gpuVerified": false,
+        "browserLayoutVerified": false,
+        "fpsMeasured": false,
+        "status": "passed"
+      }
+    },
+    {
+      "suite": "scene-quality",
+      "status": "passed",
+      "summary": {
+        "sceneQualityChecks": 31712,
+        "animatedModelLODs": 270,
+        "sampledVertices": 4032,
+        "maxPositionError": 1.3588563199394614e-07,
+        "maxNormalError": 0,
+        "sourceDraws": 1107,
+        "preparedDraws": 1059,
+        "costs": [
+          {
+            "id": "harbor_working_container_crane",
+            "lod": 0,
+            "original": 6,
+            "prepared": 6
+          },
+          {
+            "id": "harbor_working_container_crane",
+            "lod": 1,
+            "original": 6,
+            "prepared": 6
+          },
+          {
+            "id": "harbor_working_container_crane",
+            "lod": 2,
+            "original": 6,
+            "prepared": 6
+          },
+          {
+            "id": "village_windmill_miller",
+            "lod": 0,
+            "original": 4,
+            "prepared": 4
+          },
+          {
+            "id": "village_windmill_miller",
+            "lod": 1,
+            "original": 4,
+            "prepared": 4
+          },
+          {
+            "id": "village_windmill_miller",
+            "lod": 2,
+            "original": 4,
+            "prepared": 4
+          },
+          {
+            "id": "tower_rooftop_ventilation",
+            "lod": 0,
+            "original": 4,
+            "prepared": 4
+          },
+          {
+            "id": "tower_rooftop_ventilation",
+            "lod": 1,
+            "original": 4,
+            "prepared": 3
+          },
+          {
+            "id": "tower_rooftop_ventilation",
+            "lod": 2,
+            "original": 4,
+            "prepared": 3
+          },
+          {
+            "id": "ski_resort_cable_gondola",
+            "lod": 0,
+            "original": 4,
+            "prepared": 4
+          },
+          {
+            "id": "ski_resort_cable_gondola",
+            "lod": 1,
+            "original": 4,
+            "prepared": 4
+          },
+          {
+            "id": "ski_resort_cable_gondola",
+            "lod": 2,
+            "original": 4,
+            "prepared": 4
+          },
+          {
+            "id": "bucket_wheel_excavator",
+            "lod": 0,
+            "original": 2,
+            "prepared": 2
+          },
+          {
+            "id": "bucket_wheel_excavator",
+            "lod": 1,
+            "original": 2,
+            "prepared": 2
+          },
+          {
+            "id": "bucket_wheel_excavator",
+            "lod": 2,
+            "original": 2,
+            "prepared": 2
+          },
+          {
+            "id": "oil_pumpjack",
+            "lod": 0,
+            "original": 5,
+            "prepared": 5
+          },
+          {
+            "id": "oil_pumpjack",
+            "lod": 1,
+            "original": 5,
+            "prepared": 5
+          },
+          {
+            "id": "oil_pumpjack",
+            "lod": 2,
+            "original": 5,
+            "prepared": 5
+          },
+          {
+            "id": "forest_log_loader",
+            "lod": 0,
+            "original": 2,
+            "prepared": 2
+          },
+          {
+            "id": "forest_log_loader",
+            "lod": 1,
+            "original": 2,
+            "prepared": 2
+          },
+          {
+            "id": "forest_log_loader",
+            "lod": 2,
+            "original": 2,
+            "prepared": 2
+          },
+          {
+            "id": "working_crop_harvester",
+            "lod": 0,
+            "original": 3,
+            "prepared": 3
+          },
+          {
+            "id": "working_crop_harvester",
+            "lod": 1,
+            "original": 3,
+            "prepared": 3
+          },
+          {
+            "id": "working_crop_harvester",
+            "lod": 2,
+            "original": 3,
+            "prepared": 3
+          },
+          {
+            "id": "korean_astronomical_waterclock",
+            "lod": 0,
+            "original": 2,
+            "prepared": 2
+          },
+          {
+            "id": "korean_astronomical_waterclock",
+            "lod": 1,
+            "original": 2,
+            "prepared": 2
+          },
+          {
+            "id": "korean_astronomical_waterclock",
+            "lod": 2,
+            "original": 2,
+            "prepared": 2
+          }
+        ],
+        "cloudInventory": [
+          {
+            "budget": 650,
+            "cells": 645,
+            "formations": 32
+          },
+          {
+            "budget": 900,
+            "cells": 886,
+            "formations": 32
+          },
+          {
+            "budget": 2600,
+            "cells": 2578,
+            "formations": 32
+          },
+          {
+            "budget": 5200,
+            "cells": 5170,
+            "formations": 32
+          }
+        ],
+        "scenery": {
+          "coast:0:balanced": 42,
+          "coast:0:high": 60,
+          "coast:0:ultra": 84,
+          "village:0:balanced": 42,
+          "village:0:high": 60,
+          "village:0:ultra": 84,
+          "city:0:balanced": 42,
+          "city:0:high": 60,
+          "city:0:ultra": 84,
+          "ice:0:balanced": 42,
+          "ice:0:high": 60,
+          "ice:0:ultra": 84,
+          "desert:0:balanced": 42,
+          "desert:0:high": 60,
+          "desert:0:ultra": 84,
+          "forest:0:balanced": 42,
+          "forest:0:high": 60,
+          "forest:0:ultra": 84,
+          "farm:0:balanced": 42,
+          "farm:0:high": 60,
+          "farm:0:ultra": 84,
+          "korea:0:balanced": 42,
+          "korea:0:high": 60,
+          "korea:0:ultra": 84,
+          "korea:1:balanced": 42,
+          "korea:1:high": 60,
+          "korea:1:ultra": 84,
+          "korea:2:balanced": 42,
+          "korea:2:high": 60,
+          "korea:2:ultra": 84,
+          "korea:3:balanced": 42,
+          "korea:3:high": 60,
+          "korea:3:ultra": 84,
+          "river:0:balanced": 42,
+          "river:0:high": 60,
+          "river:0:ultra": 84,
+          "landmark:0:balanced": 42,
+          "landmark:0:high": 60,
+          "landmark:0:ultra": 84,
+          "aurora:0:balanced": 42,
+          "aurora:0:high": 60,
+          "aurora:0:ultra": 84,
+          "volcano:0:balanced": 42,
+          "volcano:0:high": 60,
+          "volcano:0:ultra": 84,
+          "waterfall:0:balanced": 42,
+          "waterfall:0:high": 60,
+          "waterfall:0:ultra": 84
+        },
+        "gpuVerified": false,
+        "fpsMeasured": false,
+        "status": "passed"
+      }
+    },
+    {
+      "suite": "upgrade-400",
+      "status": "passed",
+      "summary": {
+        "upgrade400Checks": 307,
+        "nativeRigMatrices": 124,
+        "maxPoseError": 8.215650382226158e-15,
+        "gpuVerified": false,
+        "status": "passed"
+      }
+    },
+    {
+      "suite": "trick-worker",
+      "status": "passed",
+      "summary": {
+        "workerChecks": 19,
+        "realWorkerCases": 3,
+        "gpuVerified": false,
+        "status": "passed"
+      }
+    },
+    {
+      "suite": "expedition",
+      "status": "passed",
+      "summary": {
+        "expeditionChecks": 8038,
+        "fullCoverageCases": [
+          {
+            "theme": "coast",
+            "seed": 13,
+            "span": 11,
+            "total": 71,
+            "encounters": 4
+          },
+          {
+            "theme": "coast",
+            "seed": 13,
+            "span": 30.976,
+            "total": 71,
+            "encounters": 4
+          },
+          {
+            "theme": "coast",
+            "seed": 42,
+            "span": 11,
+            "total": 71,
+            "encounters": 4
+          },
+          {
+            "theme": "coast",
+            "seed": 42,
+            "span": 30.976,
+            "total": 71,
+            "encounters": 4
+          },
+          {
+            "theme": "village",
+            "seed": 13,
+            "span": 11,
+            "total": 45,
+            "encounters": 3
+          },
+          {
+            "theme": "village",
+            "seed": 13,
+            "span": 30.976,
+            "total": 45,
+            "encounters": 3
+          },
+          {
+            "theme": "village",
+            "seed": 42,
+            "span": 11,
+            "total": 45,
+            "encounters": 3
+          },
+          {
+            "theme": "village",
+            "seed": 42,
+            "span": 30.976,
+            "total": 45,
+            "encounters": 3
+          },
+          {
+            "theme": "city",
+            "seed": 13,
+            "span": 11,
+            "total": 55,
+            "encounters": 3
+          },
+          {
+            "theme": "city",
+            "seed": 13,
+            "span": 30.976,
+            "total": 55,
+            "encounters": 3
+          },
+          {
+            "theme": "city",
+            "seed": 42,
+            "span": 11,
+            "total": 55,
+            "encounters": 3
+          },
+          {
+            "theme": "city",
+            "seed": 42,
+            "span": 30.976,
+            "total": 55,
+            "encounters": 3
+          },
+          {
+            "theme": "ice",
+            "seed": 13,
+            "span": 11,
+            "total": 38,
+            "encounters": 3
+          },
+          {
+            "theme": "ice",
+            "seed": 13,
+            "span": 30.976,
+            "total": 38,
+            "encounters": 3
+          },
+          {
+            "theme": "ice",
+            "seed": 42,
+            "span": 11,
+            "total": 38,
+            "encounters": 3
+          },
+          {
+            "theme": "ice",
+            "seed": 42,
+            "span": 30.976,
+            "total": 38,
+            "encounters": 3
+          },
+          {
+            "theme": "desert",
+            "seed": 13,
+            "span": 11,
+            "total": 47,
+            "encounters": 3
+          },
+          {
+            "theme": "desert",
+            "seed": 13,
+            "span": 30.976,
+            "total": 47,
+            "encounters": 3
+          },
+          {
+            "theme": "desert",
+            "seed": 42,
+            "span": 11,
+            "total": 47,
+            "encounters": 3
+          },
+          {
+            "theme": "desert",
+            "seed": 42,
+            "span": 30.976,
+            "total": 47,
+            "encounters": 3
+          },
+          {
+            "theme": "forest",
+            "seed": 13,
+            "span": 11,
+            "total": 42,
+            "encounters": 2
+          },
+          {
+            "theme": "forest",
+            "seed": 13,
+            "span": 30.976,
+            "total": 42,
+            "encounters": 2
+          },
+          {
+            "theme": "forest",
+            "seed": 42,
+            "span": 11,
+            "total": 42,
+            "encounters": 3
+          },
+          {
+            "theme": "forest",
+            "seed": 42,
+            "span": 30.976,
+            "total": 42,
+            "encounters": 3
+          },
+          {
+            "theme": "farm",
+            "seed": 13,
+            "span": 11,
+            "total": 43,
+            "encounters": 3
+          },
+          {
+            "theme": "farm",
+            "seed": 13,
+            "span": 30.976,
+            "total": 43,
+            "encounters": 3
+          },
+          {
+            "theme": "farm",
+            "seed": 42,
+            "span": 11,
+            "total": 43,
+            "encounters": 3
+          },
+          {
+            "theme": "farm",
+            "seed": 42,
+            "span": 30.976,
+            "total": 43,
+            "encounters": 3
+          },
+          {
+            "theme": "korea",
+            "seed": 13,
+            "span": 11,
+            "total": 40,
+            "encounters": 3
+          },
+          {
+            "theme": "korea",
+            "seed": 13,
+            "span": 30.976,
+            "total": 40,
+            "encounters": 3
+          },
+          {
+            "theme": "korea",
+            "seed": 42,
+            "span": 11,
+            "total": 40,
+            "encounters": 3
+          },
+          {
+            "theme": "korea",
+            "seed": 42,
+            "span": 30.976,
+            "total": 40,
+            "encounters": 3
+          }
+        ],
+        "chasePoses": 132,
+        "maximumChaseExtent": 0.8587125334037953,
+        "sourceModels": 403,
+        "animatedModels": 271,
+        "gpuVerified": false,
+        "status": "passed"
+      }
+    },
+    {
+      "suite": "performance-revision",
+      "status": "passed",
+      "summary": {
+        "performanceRevisionChecks": 5863,
+        "silhouetteFallbacks": 88,
+        "courseModelVariety": {
+          "coast": 15,
+          "village": 11,
+          "city": 10,
+          "ice": 12,
+          "desert": 11,
+          "forest": 11,
+          "farm": 11,
+          "korea": 9
+        },
+        "animatedVertexComparisons": 0,
+        "staticVertexComparisons": 274913,
+        "maxStaticError": 2.629755580870841e-06,
+        "partialCompilePasses": 8,
+        "maxPositionError": 0,
+        "maxNormalError": 0,
+        "actorCosts": [
+          {
+            "id": "airport_flipdot_arrivals",
+            "lod": 0,
+            "savedDraws": 0
+          },
+          {
+            "id": "airport_flipdot_arrivals",
+            "lod": 1,
+            "savedDraws": 0
+          },
+          {
+            "id": "airport_flipdot_arrivals",
+            "lod": 2,
+            "savedDraws": 0
+          },
+          {
+            "id": "forest_log_loader",
+            "lod": 0,
+            "savedDraws": 0
+          },
+          {
+            "id": "forest_log_loader",
+            "lod": 1,
+            "savedDraws": 0
+          },
+          {
+            "id": "forest_log_loader",
+            "lod": 2,
+            "savedDraws": 0
+          },
+          {
+            "id": "snowcat",
+            "lod": 0,
+            "savedDraws": 0
+          },
+          {
+            "id": "snowcat",
+            "lod": 1,
+            "savedDraws": 0
+          },
+          {
+            "id": "snowcat",
+            "lod": 2,
+            "savedDraws": 0
+          },
+          {
+            "id": "bucket_wheel_excavator",
+            "lod": 0,
+            "savedDraws": 0
+          },
+          {
+            "id": "bucket_wheel_excavator",
+            "lod": 1,
+            "savedDraws": 0
+          },
+          {
+            "id": "bucket_wheel_excavator",
+            "lod": 2,
+            "savedDraws": 0
+          },
+          {
+            "id": "polar_tracked_science_rover",
+            "lod": 0,
+            "savedDraws": 0
+          },
+          {
+            "id": "polar_tracked_science_rover",
+            "lod": 1,
+            "savedDraws": 0
+          },
+          {
+            "id": "polar_tracked_science_rover",
+            "lod": 2,
+            "savedDraws": 0
+          }
+        ],
+        "gpuVerified": false,
+        "fpsMeasured": false,
+        "status": "passed"
+      }
+    },
+    {
+      "suite": "terrain-worker",
+      "status": "passed",
+      "summary": {
+        "terrainWorkerChecks": 142,
+        "comparedVertices": 762060,
+        "realCpuWorkerCases": 6,
+        "browserWorkerTransportVerified": false,
+        "gpuVerified": false,
+        "status": "passed"
+      }
+    },
+    {
+      "suite": "model-worker",
+      "status": "passed",
+      "summary": {
+        "modelWorkerChecks": 4750098,
+        "comparedAttributeValues": 40268016,
+        "maxAttributeError": 0,
+        "realCpuWorkerCases": 4,
+        "environmentModelsCompiled": 385,
+        "browserWorkerTransportVerified": false,
+        "gpuVerified": false,
+        "status": "passed"
+      }
+    },
+    {
+      "suite": "edition12",
+      "status": "passed",
+      "summary": {
+        "edition12Checks": 68295,
+        "skinModels": 26,
+        "morphModels": 115,
+        "sampledVertices": 32664,
+        "maximumPoseError": 7.768896180182845e-14,
+        "gpuVerified": false,
+        "status": "passed"
+      }
+    },
+    {
+      "suite": "collision-cache",
+      "status": "passed",
+      "summary": {
+        "collisionCacheCases": 1512,
+        "maximumContactTimeError": 1.9095836023552692e-14,
+        "transformInvalidation": true,
+        "sourceSurfaceOracle": true,
+        "gpuVerified": false,
+        "status": "passed"
+      }
+    }
+  ],
+  "typecheck": "passed",
+  "gpuVerified": false,
+  "deviceFPSVerified": false,
+  "humanFunVerified": false,
+  "previewLimitation": "Preview restarted after stale dev lock; browser observation blocked by URL security policy. No alternate browser path used.",
+  "nativeCollision": {
+    "models": 403,
+    "sampledVertices": 204508,
+    "nativeColliderClips": 775,
+    "maximumPositionErrorM": 2.220446049250313e-16,
+    "method": "Supplied original collider GLBs parsed and animated by Three.js; compare runtime CPU rig and triangle surfaces at four times",
+    "gpuVerified": false,
+    "status": "passed",
+    "assets": [
+      {
+        "id": "amphibious_twin_float",
+        "vertices": 1044,
+        "maxError": 0
+      },
+      {
+        "id": "autogyro_patrol",
+        "vertices": 680,
+        "maxError": 0
+      },
+      {
+        "id": "bush_stol_tundra",
+        "vertices": 604,
+        "maxError": 0
+      },
+      {
+        "id": "canard_pusher_scout",
+        "vertices": 1048,
+        "maxError": 0
+      },
+      {
+        "id": "cessna_skyhawk",
+        "vertices": 576,
+        "maxError": 0
+      },
+      {
+        "id": "coaxial_utility_helicopter",
+        "vertices": 588,
+        "maxError": 0
+      },
+      {
+        "id": "delta_interceptor_jet",
+        "vertices": 780,
+        "maxError": 0
+      },
+      {
+        "id": "dhc2_beaver",
+        "vertices": 628,
+        "maxError": 0
+      },
+      {
+        "id": "extra_330lx",
+        "vertices": 564,
+        "maxError": 0
+      },
+      {
+        "id": "f16_fighting_falcon",
+        "vertices": 1064,
+        "maxError": 0
+      },
+      {
+        "id": "firefighting_flying_boat",
+        "vertices": 1144,
+        "maxError": 0
+      },
+      {
+        "id": "forward_swept_test_jet",
+        "vertices": 800,
+        "maxError": 0
+      },
+      {
+        "id": "heavy_transport",
+        "vertices": 2136,
+        "maxError": 0
+      },
+      {
+        "id": "l39_albatros",
+        "vertices": 784,
+        "maxError": 0
+      },
+      {
+        "id": "p51d_mustang",
+        "vertices": 800,
+        "maxError": 0
+      },
+      {
+        "id": "pitts_s2c",
+        "vertices": 648,
+        "maxError": 0
+      },
+      {
+        "id": "rescue_helicopter",
+        "vertices": 352,
+        "maxError": 0
+      },
+      {
+        "id": "sailplane",
+        "vertices": 512,
+        "maxError": 0
+      },
+      {
+        "id": "stearman_model_75",
+        "vertices": 684,
+        "maxError": 0
+      },
+      {
+        "id": "tiltrotor_rescue_vtol",
+        "vertices": 1492,
+        "maxError": 0
+      },
+      {
+        "id": "twin_boom_cargo_scout",
+        "vertices": 880,
+        "maxError": 0
+      },
+      {
+        "id": "twin_engine_commuter",
+        "vertices": 1376,
+        "maxError": 0
+      },
+      {
+        "id": "buoy_markers",
+        "vertices": 412,
+        "maxError": 0
+      },
+      {
+        "id": "cargo_container",
+        "vertices": 184,
+        "maxError": 0
+      },
+      {
+        "id": "cargo_warehouse",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "clifftop_coastal_villa",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "coastal_bridge",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "coastal_fishing_hamlet",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "coastal_rescue_patrol_boat",
+        "vertices": 396,
+        "maxError": 0
+      },
+      {
+        "id": "coastal_town_clockmarket",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "container_straddle_carrier",
+        "vertices": 1792,
+        "maxError": 0
+      },
+      {
+        "id": "dock_folding_gangway",
+        "vertices": 1060,
+        "maxError": 0
+      },
+      {
+        "id": "drydock_service_crane",
+        "vertices": 528,
+        "maxError": 0
+      },
+      {
+        "id": "drydock_sliding_floodgate",
+        "vertices": 344,
+        "maxError": 0
+      },
+      {
+        "id": "fishing_boat",
+        "vertices": 288,
+        "maxError": 0
+      },
+      {
+        "id": "fishmarket_jetty",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "harbor_boat_lift",
+        "vertices": 528,
+        "maxError": 0
+      },
+      {
+        "id": "harbor_breakwater_portal",
+        "vertices": 140,
+        "maxError": 0
+      },
+      {
+        "id": "harbor_crane",
+        "vertices": 608,
+        "maxError": 0
+      },
+      {
+        "id": "harbor_double_bascule",
+        "vertices": 2264,
+        "maxError": 0
+      },
+      {
+        "id": "harbor_swing_bridge",
+        "vertices": 272,
+        "maxError": 0
+      },
+      {
+        "id": "harbor_working_container_crane",
+        "vertices": 656,
+        "maxError": 0
+      },
+      {
+        "id": "hero_clifftop_lighthouse",
+        "vertices": 372,
+        "maxError": 0
+      },
+      {
+        "id": "lifeguard_tower",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "lighthouse",
+        "vertices": 280,
+        "maxError": 0
+      },
+      {
+        "id": "lighthouse_keeper_estate",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "marina_fuel_station",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "marina_pontoon_drawbridge",
+        "vertices": 1748,
+        "maxError": 0
+      },
+      {
+        "id": "modular_pier_deck",
+        "vertices": 140,
+        "maxError": 0
+      },
+      {
+        "id": "modular_seawall",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "offshore_navigation_beacon",
+        "vertices": 232,
+        "maxError": 0
+      },
+      {
+        "id": "offshore_service_hoist",
+        "vertices": 556,
+        "maxError": 0
+      },
+      {
+        "id": "pier_section",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "rescue_tug",
+        "vertices": 256,
+        "maxError": 0
+      },
+      {
+        "id": "rocky_arch",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "rocky_headland_lighthouse",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "sea_stacks",
+        "vertices": 144,
+        "maxError": 0
+      },
+      {
+        "id": "seaside_raised_boardwalk",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "seaside_swing_lock_gate",
+        "vertices": 428,
+        "maxError": 0
+      },
+      {
+        "id": "ship_boarding_bridge",
+        "vertices": 1240,
+        "maxError": 0
+      },
+      {
+        "id": "shipyard_propeller_test_rig",
+        "vertices": 768,
+        "maxError": 0
+      },
+      {
+        "id": "stormworn_sea_cave",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "weathered_coastal_arch",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "working_capstan_berth",
+        "vertices": 288,
+        "maxError": 0
+      },
+      {
+        "id": "bell_tower",
+        "vertices": 472,
+        "maxError": 0
+      },
+      {
+        "id": "blacksmith_trip_hammer",
+        "vertices": 888,
+        "maxError": 0
+      },
+      {
+        "id": "clockwork_gazebo",
+        "vertices": 472,
+        "maxError": 0
+      },
+      {
+        "id": "clockwork_toy_railway",
+        "vertices": 280,
+        "maxError": 0
+      },
+      {
+        "id": "cobbled_market_square",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "covered_market_arcade",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "covered_well",
+        "vertices": 496,
+        "maxError": 0
+      },
+      {
+        "id": "decorative_tree",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "folding_market_gate",
+        "vertices": 428,
+        "maxError": 0
+      },
+      {
+        "id": "half_timber_townhall",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "hero_workshop_windmill",
+        "vertices": 276,
+        "maxError": 0
+      },
+      {
+        "id": "hillside_coaching_inn",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "horological_clock_tower",
+        "vertices": 632,
+        "maxError": 0
+      },
+      {
+        "id": "market_hall",
+        "vertices": 132,
+        "maxError": 0
+      },
+      {
+        "id": "medieval_stone_barracks",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "plaza_fountain",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "pottery_wheel_workshop",
+        "vertices": 272,
+        "maxError": 0
+      },
+      {
+        "id": "roof_bridge",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "smithy_dual_bellows",
+        "vertices": 508,
+        "maxError": 0
+      },
+      {
+        "id": "stone_arch_gate",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "stone_chapel_courtyard",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "stone_wall_segment",
+        "vertices": 140,
+        "maxError": 0
+      },
+      {
+        "id": "timber_fence",
+        "vertices": 160,
+        "maxError": 0
+      },
+      {
+        "id": "timber_saw_waterwheel",
+        "vertices": 692,
+        "maxError": 0
+      },
+      {
+        "id": "vaulted_masonry_bridge",
+        "vertices": 140,
+        "maxError": 0
+      },
+      {
+        "id": "village_bakery",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "village_bakery_clockwork",
+        "vertices": 240,
+        "maxError": 0
+      },
+      {
+        "id": "village_canal_millhouse",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "village_church",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "village_grain_mill",
+        "vertices": 576,
+        "maxError": 0
+      },
+      {
+        "id": "village_hand_crank_pump",
+        "vertices": 804,
+        "maxError": 0
+      },
+      {
+        "id": "village_hill_terrace_houses",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "village_houses",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "village_merry_go_round",
+        "vertices": 1720,
+        "maxError": 0
+      },
+      {
+        "id": "village_old_stone_drawbridge",
+        "vertices": 804,
+        "maxError": 0
+      },
+      {
+        "id": "village_pottery_drying_carousel",
+        "vertices": 276,
+        "maxError": 0
+      },
+      {
+        "id": "village_timber_covered_bridge",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "village_windmill_miller",
+        "vertices": 276,
+        "maxError": 0
+      },
+      {
+        "id": "watermill",
+        "vertices": 420,
+        "maxError": 0
+      },
+      {
+        "id": "windmill",
+        "vertices": 668,
+        "maxError": 0
+      },
+      {
+        "id": "airport_baggage_conveyor",
+        "vertices": 1096,
+        "maxError": 0
+      },
+      {
+        "id": "art_deco_rail_station",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "articulated_city_bus",
+        "vertices": 1576,
+        "maxError": 0
+      },
+      {
+        "id": "brick_factory_courtyard",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "brick_warehouse_loading_court",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "cargo_drone",
+        "vertices": 796,
+        "maxError": 0
+      },
+      {
+        "id": "city_billboard",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "city_clock_civic_square",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "city_lifting_footbridge",
+        "vertices": 276,
+        "maxError": 0
+      },
+      {
+        "id": "city_metro_canopy_hub",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "city_swing_parking_gate",
+        "vertices": 412,
+        "maxError": 0
+      },
+      {
+        "id": "city_water_tower",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "civic_colonnade_library",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "construction_crane",
+        "vertices": 644,
+        "maxError": 0
+      },
+      {
+        "id": "curved_glass_office_plaza",
+        "vertices": 132,
+        "maxError": 0
+      },
+      {
+        "id": "elevated_commuter_train",
+        "vertices": 1168,
+        "maxError": 0
+      },
+      {
+        "id": "elevated_road",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "factory_building",
+        "vertices": 576,
+        "maxError": 0
+      },
+      {
+        "id": "freight_terminal_lift",
+        "vertices": 520,
+        "maxError": 0
+      },
+      {
+        "id": "gantry_frame",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "glass_skylight_arcade",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "highway_span",
+        "vertices": 140,
+        "maxError": 0
+      },
+      {
+        "id": "metro_escalator_hall",
+        "vertices": 1408,
+        "maxError": 0
+      },
+      {
+        "id": "metro_station",
+        "vertices": 200,
+        "maxError": 0
+      },
+      {
+        "id": "radio_mast",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "recycling_jaw_crusher",
+        "vertices": 1144,
+        "maxError": 0
+      },
+      {
+        "id": "rooftop_helipad",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "rooftop_solar_array",
+        "vertices": 440,
+        "maxError": 0
+      },
+      {
+        "id": "skyscraper",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "substation",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "tower_block",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "tower_rooftop_ventilation",
+        "vertices": 780,
+        "maxError": 0
+      },
+      {
+        "id": "tower_window_cleaner",
+        "vertices": 464,
+        "maxError": 0
+      },
+      {
+        "id": "traffic_signal_gantry",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "triangular_office_tower",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "urban_canal_lift_bridge",
+        "vertices": 272,
+        "maxError": 0
+      },
+      {
+        "id": "urban_garden_skybridge",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "urban_street_tram",
+        "vertices": 1160,
+        "maxError": 0
+      },
+      {
+        "id": "vertical_parking_carousel",
+        "vertices": 1612,
+        "maxError": 0
+      },
+      {
+        "id": "alpine_rotating_snow_fan",
+        "vertices": 288,
+        "maxError": 0
+      },
+      {
+        "id": "aurora_science_habitat",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "blue_ice_cathedral",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "cable_car_station",
+        "vertices": 560,
+        "maxError": 0
+      },
+      {
+        "id": "chairlift_bullwheel_station",
+        "vertices": 272,
+        "maxError": 0
+      },
+      {
+        "id": "frozen_bridge",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "frozen_lake",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "frozen_waterfall_gorge",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "glacier_cliff",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "glacier_core_drill",
+        "vertices": 272,
+        "maxError": 0
+      },
+      {
+        "id": "glacier_observation_deck",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "glacier_portcullis",
+        "vertices": 384,
+        "maxError": 0
+      },
+      {
+        "id": "glacier_wall_segment",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "ice_arch",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "ice_canyon_needle_pair",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "ice_harbor_rolling_crane",
+        "vertices": 508,
+        "maxError": 0
+      },
+      {
+        "id": "ice_sample_carousel",
+        "vertices": 284,
+        "maxError": 0
+      },
+      {
+        "id": "ice_shelf_tunnel",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "icebreaker_bow",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "icy_cave_gate",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "jagged_ice_spire",
+        "vertices": 144,
+        "maxError": 0
+      },
+      {
+        "id": "polar_geodesic_dome",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "polar_lighthouse",
+        "vertices": 280,
+        "maxError": 0
+      },
+      {
+        "id": "polar_observatory_shutter",
+        "vertices": 452,
+        "maxError": 0
+      },
+      {
+        "id": "polar_rescue_winch",
+        "vertices": 280,
+        "maxError": 0
+      },
+      {
+        "id": "polar_research_station",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "polar_solar_tracker",
+        "vertices": 516,
+        "maxError": 0
+      },
+      {
+        "id": "polar_tracked_science_rover",
+        "vertices": 11028,
+        "maxError": 0
+      },
+      {
+        "id": "polar_tracking_array",
+        "vertices": 516,
+        "maxError": 0
+      },
+      {
+        "id": "rotary_snow_plow",
+        "vertices": 9840,
+        "maxError": 0
+      },
+      {
+        "id": "ski_jump_service_lift",
+        "vertices": 488,
+        "maxError": 0
+      },
+      {
+        "id": "ski_resort_cable_gondola",
+        "vertices": 432,
+        "maxError": 0
+      },
+      {
+        "id": "ski_resort_chalet",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "snow_cabin",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "snow_lodge_and_sauna",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "snow_monastery_courtyard",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "snowcat",
+        "vertices": 3216,
+        "maxError": 0
+      },
+      {
+        "id": "snowy_fir_cluster",
+        "vertices": 140,
+        "maxError": 0
+      },
+      {
+        "id": "adobe_caravanserai",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "ancient_stone_aqueduct",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "bucket_wheel_excavator",
+        "vertices": 9212,
+        "maxError": 0
+      },
+      {
+        "id": "canyon_bascule_crossing",
+        "vertices": 1072,
+        "maxError": 0
+      },
+      {
+        "id": "canyon_bridge",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "canyon_gate",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "canyon_rail_mine_cart",
+        "vertices": 548,
+        "maxError": 0
+      },
+      {
+        "id": "canyon_suspension_pylon",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "canyon_switchback_trestle",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "deep_well_crank_pump",
+        "vertices": 804,
+        "maxError": 0
+      },
+      {
+        "id": "desert_excavation_crane",
+        "vertices": 584,
+        "maxError": 0
+      },
+      {
+        "id": "desert_oasis",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "desert_observatory",
+        "vertices": 448,
+        "maxError": 0
+      },
+      {
+        "id": "desert_ore_hoist",
+        "vertices": 592,
+        "maxError": 0
+      },
+      {
+        "id": "desert_outpost",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "desert_rotary_kiln",
+        "vertices": 276,
+        "maxError": 0
+      },
+      {
+        "id": "desert_solar_tracking_field",
+        "vertices": 1052,
+        "maxError": 0
+      },
+      {
+        "id": "desert_stepwell_courtyard",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "dune_caravan_outpost",
+        "vertices": 140,
+        "maxError": 0
+      },
+      {
+        "id": "layered_rocks",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "mesa_cliff",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "mining_conveyor",
+        "vertices": 1288,
+        "maxError": 0
+      },
+      {
+        "id": "mobile_sand_screener",
+        "vertices": 1304,
+        "maxError": 0
+      },
+      {
+        "id": "natural_arch",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "oasis_palm_courtyard",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "oasis_windpowered_noria",
+        "vertices": 272,
+        "maxError": 0
+      },
+      {
+        "id": "oil_pumpjack",
+        "vertices": 580,
+        "maxError": 0
+      },
+      {
+        "id": "ore_sorting_turntable",
+        "vertices": 280,
+        "maxError": 0
+      },
+      {
+        "id": "ore_transfer_loader",
+        "vertices": 1036,
+        "maxError": 0
+      },
+      {
+        "id": "railroad_trestle",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "red_mesa_sky_arch",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "sandstone_lifting_drawbridge",
+        "vertices": 1020,
+        "maxError": 0
+      },
+      {
+        "id": "sandstone_spire",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "sandstone_wall_segment",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "sandstone_watchtower",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "stirling_solar_dish",
+        "vertices": 532,
+        "maxError": 0
+      },
+      {
+        "id": "striped_slot_canyon",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "wind_carved_canyon_citadel",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "alpine_funicular_drive",
+        "vertices": 1124,
+        "maxError": 0
+      },
+      {
+        "id": "alpine_timber_lodge",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "alpine_waterfall_traverse",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "cedar_canopy_arch",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "columnar_basalt_outcrop",
+        "vertices": 140,
+        "maxError": 0
+      },
+      {
+        "id": "fern_basalt_grotto",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "forest_log_loader",
+        "vertices": 5980,
+        "maxError": 0
+      },
+      {
+        "id": "forest_river_log_flume",
+        "vertices": 312,
+        "maxError": 0
+      },
+      {
+        "id": "forest_spillway_sluice",
+        "vertices": 320,
+        "maxError": 0
+      },
+      {
+        "id": "forest_tracking_dish",
+        "vertices": 520,
+        "maxError": 0
+      },
+      {
+        "id": "hydro_turbine_gallery",
+        "vertices": 584,
+        "maxError": 0
+      },
+      {
+        "id": "lake_counterweight_bridge",
+        "vertices": 924,
+        "maxError": 0
+      },
+      {
+        "id": "lake_research_sailboat",
+        "vertices": 300,
+        "maxError": 0
+      },
+      {
+        "id": "lakeside_boathouse",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "lakeside_dock",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "lakeside_stone_abbey",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "large_dam",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "lookout_tower",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "misty_lake_rock_islets",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "mountain_cable_car",
+        "vertices": 380,
+        "maxError": 0
+      },
+      {
+        "id": "mountain_forest_firewatch",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "mountain_peak",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "mountain_rail_viaduct",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "mountain_suspension_gondola",
+        "vertices": 432,
+        "maxError": 0
+      },
+      {
+        "id": "narrow_bridge_arch",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "park_ranger_station",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "pine_cluster",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "pine_tree_single",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "ranger_rescue_hoist",
+        "vertices": 632,
+        "maxError": 0
+      },
+      {
+        "id": "river_lock",
+        "vertices": 428,
+        "maxError": 0
+      },
+      {
+        "id": "rocky_ridge",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "rope_bridge",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "suspension_cable_tensioner",
+        "vertices": 552,
+        "maxError": 0
+      },
+      {
+        "id": "timber_sawmill_complex",
+        "vertices": 1232,
+        "maxError": 0
+      },
+      {
+        "id": "waterfall_cliff",
+        "vertices": 132,
+        "maxError": 0
+      },
+      {
+        "id": "wooden_cabin",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "woodland_lookout_windstation",
+        "vertices": 448,
+        "maxError": 0
+      },
+      {
+        "id": "woodland_piston_pump",
+        "vertices": 856,
+        "maxError": 0
+      },
+      {
+        "id": "apple_orchard_terraces",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "barn_sectional_door",
+        "vertices": 344,
+        "maxError": 0
+      },
+      {
+        "id": "center_pivot_irrigator",
+        "vertices": 276,
+        "maxError": 0
+      },
+      {
+        "id": "combine_harvester",
+        "vertices": 1088,
+        "maxError": 0
+      },
+      {
+        "id": "dairy_feed_mixer",
+        "vertices": 276,
+        "maxError": 0
+      },
+      {
+        "id": "farm_pivot_windmill",
+        "vertices": 276,
+        "maxError": 0
+      },
+      {
+        "id": "farm_water_tower",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "farm_windbreak_lane",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "farmhouse",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "field_fence",
+        "vertices": 132,
+        "maxError": 0
+      },
+      {
+        "id": "grain_bucket_elevator",
+        "vertices": 792,
+        "maxError": 0
+      },
+      {
+        "id": "grain_silo",
+        "vertices": 352,
+        "maxError": 0
+      },
+      {
+        "id": "greenhouse",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "hay_bales",
+        "vertices": 160,
+        "maxError": 0
+      },
+      {
+        "id": "hay_loader_forklift",
+        "vertices": 1012,
+        "maxError": 0
+      },
+      {
+        "id": "hilltop_stone_silo_farm",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "irrigation_lock_pump_house",
+        "vertices": 336,
+        "maxError": 0
+      },
+      {
+        "id": "irrigation_pump",
+        "vertices": 372,
+        "maxError": 0
+      },
+      {
+        "id": "orchard_cherry_sorter",
+        "vertices": 1612,
+        "maxError": 0
+      },
+      {
+        "id": "orchard_packing_shed",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "orchard_sorting_line",
+        "vertices": 1556,
+        "maxError": 0
+      },
+      {
+        "id": "orchard_windbreak",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "power_pylon",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "red_barn",
+        "vertices": 416,
+        "maxError": 0
+      },
+      {
+        "id": "red_barn_courtyard",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "rotary_milking_parlor",
+        "vertices": 272,
+        "maxError": 0
+      },
+      {
+        "id": "seed_planter_tractor",
+        "vertices": 1816,
+        "maxError": 0
+      },
+      {
+        "id": "seedling_glasshouse",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "silo_pipe",
+        "vertices": 144,
+        "maxError": 0
+      },
+      {
+        "id": "stone_farm_estate",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "terraced_rice_farm",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "terraced_vineyard_gateway",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "tile_roof_granary",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "tool_shed",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "tractor",
+        "vertices": 700,
+        "maxError": 0
+      },
+      {
+        "id": "wind_turbine",
+        "vertices": 412,
+        "maxError": 0
+      },
+      {
+        "id": "windpump_piston_tower",
+        "vertices": 1112,
+        "maxError": 0
+      },
+      {
+        "id": "working_crop_harvester",
+        "vertices": 272,
+        "maxError": 0
+      },
+      {
+        "id": "working_hay_baler",
+        "vertices": 1332,
+        "maxError": 0
+      },
+      {
+        "id": "bronze_celestial_orrery",
+        "vertices": 636,
+        "maxError": 0
+      },
+      {
+        "id": "cliffside_castle",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "curved_roof_segment",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "fortress_lifting_portcullis",
+        "vertices": 328,
+        "maxError": 0
+      },
+      {
+        "id": "fortress_wall_gate",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "gwangan_bridge",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "hanok_bridge_pavilion",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "hanok_courtyard_rotating_grain_mill",
+        "vertices": 296,
+        "maxError": 0
+      },
+      {
+        "id": "hanok_gate",
+        "vertices": 432,
+        "maxError": 0
+      },
+      {
+        "id": "hanok_lattice_shutter_house",
+        "vertices": 432,
+        "maxError": 0
+      },
+      {
+        "id": "hanok_workshop",
+        "vertices": 472,
+        "maxError": 0
+      },
+      {
+        "id": "harbor_structure",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "hwangnyong_roof_gateway",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "korean_astronomical_waterclock",
+        "vertices": 292,
+        "maxError": 0
+      },
+      {
+        "id": "korean_cliff_observation_tower",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "korean_fortress_arch_gate",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "korean_hanok_courtyard_estate",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "korean_market_stall",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "korean_mountain_pagoda_garden",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "korean_palace_double_door",
+        "vertices": 456,
+        "maxError": 0
+      },
+      {
+        "id": "korean_palace_throne_hall",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "korean_river_ferryboat",
+        "vertices": 560,
+        "maxError": 0
+      },
+      {
+        "id": "korean_river_seowon_academy",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "korean_temple_bell_and_striker",
+        "vertices": 340,
+        "maxError": 0
+      },
+      {
+        "id": "korean_water_pounding_mill",
+        "vertices": 1088,
+        "maxError": 0
+      },
+      {
+        "id": "mountain_temple_main_hall",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "pagoda_five_story",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "palace_drum_gateway",
+        "vertices": 420,
+        "maxError": 0
+      },
+      {
+        "id": "palace_wall_pavilion",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "palace_wall_segment",
+        "vertices": 140,
+        "maxError": 0
+      },
+      {
+        "id": "riverside_apartments",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "riverside_ferry_gangway",
+        "vertices": 852,
+        "maxError": 0
+      },
+      {
+        "id": "royal_ancestral_hall",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "seoul_tower",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "temple_bell_pavilion",
+        "vertices": 408,
+        "maxError": 0
+      },
+      {
+        "id": "temple_drum_carriage",
+        "vertices": 516,
+        "maxError": 0
+      },
+      {
+        "id": "traditional_pavilion",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "traditional_rice_huller",
+        "vertices": 888,
+        "maxError": 0
+      },
+      {
+        "id": "turtle_ship_rudder_rig",
+        "vertices": 1300,
+        "maxError": 0
+      },
+      {
+        "id": "advertising_rotor_airship",
+        "vertices": 464,
+        "maxError": 0
+      },
+      {
+        "id": "aeroway_gantry",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "air_race_motorized_finish_gate",
+        "vertices": 404,
+        "maxError": 0
+      },
+      {
+        "id": "airport_billboard_service_house",
+        "vertices": 140,
+        "maxError": 0
+      },
+      {
+        "id": "airport_carousel_information_kiosk",
+        "vertices": 336,
+        "maxError": 0
+      },
+      {
+        "id": "airport_control_tower",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "airport_flipdot_arrivals",
+        "vertices": 4268,
+        "maxError": 0
+      },
+      {
+        "id": "airport_service_tug",
+        "vertices": 792,
+        "maxError": 0
+      },
+      {
+        "id": "airport_windsock_gimbal",
+        "vertices": 324,
+        "maxError": 0
+      },
+      {
+        "id": "airrun_waypoint_ring",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "airshow_rotating_neon_monument",
+        "vertices": 444,
+        "maxError": 0
+      },
+      {
+        "id": "cloudpeak_balloon",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "coastal_skyport_fuel_pylon",
+        "vertices": 164,
+        "maxError": 0
+      },
+      {
+        "id": "danger_gate",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "directional_sign_tower",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "folding_approach_gantry",
+        "vertices": 332,
+        "maxError": 0
+      },
+      {
+        "id": "hangar_segment",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "kinetic_brand_pylon",
+        "vertices": 520,
+        "maxError": 0
+      },
+      {
+        "id": "kinetic_waypoint_arch",
+        "vertices": 444,
+        "maxError": 0
+      },
+      {
+        "id": "landing_pad_marker_kit",
+        "vertices": 148,
+        "maxError": 0
+      },
+      {
+        "id": "mountain_airrace_checkpoint_arch",
+        "vertices": 140,
+        "maxError": 0
+      },
+      {
+        "id": "premium_airport_fuel_station",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "radar_station",
+        "vertices": 272,
+        "maxError": 0
+      },
+      {
+        "id": "retro_airfield_neon_hangar_sign",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "retro_aviation_sign_pylon",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "runway_approach_array",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "runway_light_tower",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "runway_retractable_bollards",
+        "vertices": 944,
+        "maxError": 0
+      },
+      {
+        "id": "runway_segmented_lighting_gate",
+        "vertices": 1580,
+        "maxError": 0
+      },
+      {
+        "id": "sky_race_finish_arch",
+        "vertices": 148,
+        "maxError": 0
+      },
+      {
+        "id": "skyfuel_billboard",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "skyline_blimp",
+        "vertices": 396,
+        "maxError": 0
+      },
+      {
+        "id": "split_flap_departure_board",
+        "vertices": 2552,
+        "maxError": 0
+      },
+      {
+        "id": "terminal_departure_portal",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "terminal_wayfinding_totem_set",
+        "vertices": 132,
+        "maxError": 0
+      },
+      {
+        "id": "tri_vision_billboard",
+        "vertices": 1152,
+        "maxError": 0
+      },
+      {
+        "id": "vista_banner_plane",
+        "vertices": 680,
+        "maxError": 2.220446049250313e-16
+      },
+      {
+        "id": "warning_bollard",
+        "vertices": 160,
+        "maxError": 0
+      },
+      {
+        "id": "waypoint_chevron",
+        "vertices": 56,
+        "maxError": 0
+      },
+      {
+        "id": "articulated_access_ramp",
+        "vertices": 960,
+        "maxError": 0
+      },
+      {
+        "id": "dock_leveler_module",
+        "vertices": 1012,
+        "maxError": 0
+      },
+      {
+        "id": "glass_canopy_portal",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "hangar_door_module",
+        "vertices": 544,
+        "maxError": 0
+      },
+      {
+        "id": "hero_airfield_hangar",
+        "vertices": 300,
+        "maxError": 0
+      },
+      {
+        "id": "hinged_bulkhead_airlock",
+        "vertices": 424,
+        "maxError": 0
+      },
+      {
+        "id": "hydraulic_scissor_lift",
+        "vertices": 1536,
+        "maxError": 0
+      },
+      {
+        "id": "industrial_chain_hoist",
+        "vertices": 632,
+        "maxError": 0
+      },
+      {
+        "id": "industrial_service_balcony",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "modular_arched_viaduct_span",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "modular_curved_stone_retaining_wall",
+        "vertices": 140,
+        "maxError": 0
+      },
+      {
+        "id": "modular_glass_atrium_segment",
+        "vertices": 132,
+        "maxError": 0
+      },
+      {
+        "id": "modular_korean_tiled_corner",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "modular_lift_platform_cage",
+        "vertices": 444,
+        "maxError": 0
+      },
+      {
+        "id": "modular_pier_pile_cap",
+        "vertices": 148,
+        "maxError": 0
+      },
+      {
+        "id": "modular_roller_bridge_deck",
+        "vertices": 1340,
+        "maxError": 0
+      },
+      {
+        "id": "modular_service_hydraulic_jack",
+        "vertices": 364,
+        "maxError": 0
+      },
+      {
+        "id": "modular_telescopic_loading_arm",
+        "vertices": 620,
+        "maxError": 0
+      },
+      {
+        "id": "modular_two_leaf_pressure_door",
+        "vertices": 460,
+        "maxError": 0
+      },
+      {
+        "id": "pipe_elbow_module",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "pipe_manifold_assembly",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "retractable_road_barrier",
+        "vertices": 1380,
+        "maxError": 0
+      },
+      {
+        "id": "riveted_tunnel_segment",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "rotating_pipe_valve",
+        "vertices": 428,
+        "maxError": 0
+      },
+      {
+        "id": "service_stair_module",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "storm_drain_module",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "structural_truss_corner",
+        "vertices": 136,
+        "maxError": 0
+      },
+      {
+        "id": "telescopic_bridge_module",
+        "vertices": 272,
+        "maxError": 0
+      },
+      {
+        "id": "turntable_floor_module",
+        "vertices": 276,
+        "maxError": 0
+      }
+    ]
+  },
+  "transport": {
+    "format": "KHR_meshopt_compression-v1/gzip",
+    "exports": 1612,
+    "bytes": 471886770,
+    "positionsNormalsUvSkinMorphAnimationExact": true,
+    "colorBits": {
+      "environment": 12,
+      "aircraft": 14
+    },
+    "maximumColorErrorU16": 24,
+    "alphaExact": true,
+    "allExportsDecodedWithShippedThreeLoader": true
+  },
+  "productionDelivery": {
+    "profile": "edition12-sites-256MiB",
+    "models": 403,
+    "highestNativeDetailModels": 65,
+    "nativeLod1NearModels": 338,
+    "highestNativeDetailAircraft": 22,
+    "movingModels": 271,
+    "clips": 891,
+    "allDistantLodsPreserved": true,
+    "allCollisionModelsPreserved": true,
+    "canonicalSourceLod0FilesPreserved": true,
+    "modelBudgetBytes": 246415360,
+    "categories": {
+      "aircraft": {
+        "models": 22,
+        "sourceLod0": 22
+      },
+      "coastal": {
+        "models": 42,
+        "sourceLod0": 4
+      },
+      "village": {
+        "models": 40,
+        "sourceLod0": 2
+      },
+      "city": {
+        "models": 39,
+        "sourceLod0": 2
+      },
+      "snow_ice": {
+        "models": 38,
+        "sourceLod0": 1
+      },
+      "desert_canyon": {
+        "models": 38,
+        "sourceLod0": 1
+      },
+      "forest_mountain_lake": {
+        "models": 38,
+        "sourceLod0": 2
+      },
+      "farm": {
+        "models": 39,
+        "sourceLod0": 1
+      },
+      "korean_landmarks": {
+        "models": 39,
+        "sourceLod0": 22
+      },
+      "ads_signage": {
+        "models": 39,
+        "sourceLod0": 6
+      },
+      "modules": {
+        "models": 29,
+        "sourceLod0": 2
+      }
+    },
+    "nativeLod0Ids": [
+      "air_race_motorized_finish_gate",
+      "airport_control_tower",
+      "airport_flipdot_arrivals",
+      "airport_windsock_gimbal",
+      "amphibious_twin_float",
+      "art_deco_rail_station",
+      "autogyro_patrol",
+      "blue_ice_cathedral",
+      "bronze_celestial_orrery",
+      "bush_stol_tundra",
+      "canard_pusher_scout",
+      "canyon_bridge",
+      "cessna_skyhawk",
+      "city_clock_civic_square",
+      "cliffside_castle",
+      "coastal_bridge",
+      "coaxial_utility_helicopter",
+      "curved_roof_segment",
+      "delta_interceptor_jet",
+      "dhc2_beaver",
+      "extra_330lx",
+      "f16_fighting_falcon",
+      "firefighting_flying_boat",
+      "folding_approach_gantry",
+      "fortress_lifting_portcullis",
+      "fortress_wall_gate",
+      "forward_swept_test_jet",
+      "hanok_courtyard_rotating_grain_mill",
+      "hanok_lattice_shutter_house",
+      "heavy_transport",
+      "korean_astronomical_waterclock",
+      "korean_fortress_arch_gate",
+      "korean_mountain_pagoda_garden",
+      "korean_palace_double_door",
+      "korean_palace_throne_hall",
+      "korean_river_ferryboat",
+      "korean_temple_bell_and_striker",
+      "korean_water_pounding_mill",
+      "l39_albatros",
+      "large_dam",
+      "lighthouse",
+      "modular_service_hydraulic_jack",
+      "modular_telescopic_loading_arm",
+      "p51d_mustang",
+      "palace_drum_gateway",
+      "palace_wall_segment",
+      "pitts_s2c",
+      "red_barn",
+      "rescue_helicopter",
+      "riverside_ferry_gangway",
+      "runway_retractable_bollards",
+      "sailplane",
+      "seoul_tower",
+      "stearman_model_75",
+      "stormworn_sea_cave",
+      "temple_drum_carriage",
+      "tiltrotor_rescue_vtol",
+      "timber_fence",
+      "traditional_rice_huller",
+      "turtle_ship_rudder_rig",
+      "twin_boom_cargo_scout",
+      "twin_engine_commuter",
+      "waterfall_cliff",
+      "weathered_coastal_arch",
+      "windmill"
+    ],
+    "nativeLod1Ids": [
+      "adobe_caravanserai",
+      "advertising_rotor_airship",
+      "aeroway_gantry",
+      "airport_baggage_conveyor",
+      "airport_billboard_service_house",
+      "airport_carousel_information_kiosk",
+      "airport_service_tug",
+      "airrun_waypoint_ring",
+      "airshow_rotating_neon_monument",
+      "alpine_funicular_drive",
+      "alpine_rotating_snow_fan",
+      "alpine_timber_lodge",
+      "alpine_waterfall_traverse",
+      "ancient_stone_aqueduct",
+      "apple_orchard_terraces",
+      "articulated_access_ramp",
+      "articulated_city_bus",
+      "aurora_science_habitat",
+      "barn_sectional_door",
+      "bell_tower",
+      "blacksmith_trip_hammer",
+      "brick_factory_courtyard",
+      "brick_warehouse_loading_court",
+      "bucket_wheel_excavator",
+      "buoy_markers",
+      "cable_car_station",
+      "canyon_bascule_crossing",
+      "canyon_gate",
+      "canyon_rail_mine_cart",
+      "canyon_suspension_pylon",
+      "canyon_switchback_trestle",
+      "cargo_container",
+      "cargo_drone",
+      "cargo_warehouse",
+      "cedar_canopy_arch",
+      "center_pivot_irrigator",
+      "chairlift_bullwheel_station",
+      "city_billboard",
+      "city_lifting_footbridge",
+      "city_metro_canopy_hub",
+      "city_swing_parking_gate",
+      "city_water_tower",
+      "civic_colonnade_library",
+      "clifftop_coastal_villa",
+      "clockwork_gazebo",
+      "clockwork_toy_railway",
+      "cloudpeak_balloon",
+      "coastal_fishing_hamlet",
+      "coastal_rescue_patrol_boat",
+      "coastal_skyport_fuel_pylon",
+      "coastal_town_clockmarket",
+      "cobbled_market_square",
+      "columnar_basalt_outcrop",
+      "combine_harvester",
+      "construction_crane",
+      "container_straddle_carrier",
+      "covered_market_arcade",
+      "covered_well",
+      "curved_glass_office_plaza",
+      "dairy_feed_mixer",
+      "danger_gate",
+      "decorative_tree",
+      "deep_well_crank_pump",
+      "desert_excavation_crane",
+      "desert_oasis",
+      "desert_observatory",
+      "desert_ore_hoist",
+      "desert_outpost",
+      "desert_rotary_kiln",
+      "desert_solar_tracking_field",
+      "desert_stepwell_courtyard",
+      "directional_sign_tower",
+      "dock_folding_gangway",
+      "dock_leveler_module",
+      "drydock_service_crane",
+      "drydock_sliding_floodgate",
+      "dune_caravan_outpost",
+      "elevated_commuter_train",
+      "elevated_road",
+      "factory_building",
+      "farm_pivot_windmill",
+      "farm_water_tower",
+      "farm_windbreak_lane",
+      "farmhouse",
+      "fern_basalt_grotto",
+      "field_fence",
+      "fishing_boat",
+      "fishmarket_jetty",
+      "folding_market_gate",
+      "forest_log_loader",
+      "forest_river_log_flume",
+      "forest_spillway_sluice",
+      "forest_tracking_dish",
+      "freight_terminal_lift",
+      "frozen_bridge",
+      "frozen_lake",
+      "frozen_waterfall_gorge",
+      "gantry_frame",
+      "glacier_cliff",
+      "glacier_core_drill",
+      "glacier_observation_deck",
+      "glacier_portcullis",
+      "glacier_wall_segment",
+      "glass_canopy_portal",
+      "glass_skylight_arcade",
+      "grain_bucket_elevator",
+      "grain_silo",
+      "greenhouse",
+      "gwangan_bridge",
+      "half_timber_townhall",
+      "hangar_door_module",
+      "hangar_segment",
+      "hanok_bridge_pavilion",
+      "hanok_gate",
+      "hanok_workshop",
+      "harbor_boat_lift",
+      "harbor_breakwater_portal",
+      "harbor_crane",
+      "harbor_double_bascule",
+      "harbor_structure",
+      "harbor_swing_bridge",
+      "harbor_working_container_crane",
+      "hay_bales",
+      "hay_loader_forklift",
+      "hero_airfield_hangar",
+      "hero_clifftop_lighthouse",
+      "hero_workshop_windmill",
+      "highway_span",
+      "hillside_coaching_inn",
+      "hilltop_stone_silo_farm",
+      "hinged_bulkhead_airlock",
+      "horological_clock_tower",
+      "hwangnyong_roof_gateway",
+      "hydraulic_scissor_lift",
+      "hydro_turbine_gallery",
+      "ice_arch",
+      "ice_canyon_needle_pair",
+      "ice_harbor_rolling_crane",
+      "ice_sample_carousel",
+      "ice_shelf_tunnel",
+      "icebreaker_bow",
+      "icy_cave_gate",
+      "industrial_chain_hoist",
+      "industrial_service_balcony",
+      "irrigation_lock_pump_house",
+      "irrigation_pump",
+      "jagged_ice_spire",
+      "kinetic_brand_pylon",
+      "kinetic_waypoint_arch",
+      "korean_cliff_observation_tower",
+      "korean_hanok_courtyard_estate",
+      "korean_market_stall",
+      "korean_river_seowon_academy",
+      "lake_counterweight_bridge",
+      "lake_research_sailboat",
+      "lakeside_boathouse",
+      "lakeside_dock",
+      "lakeside_stone_abbey",
+      "landing_pad_marker_kit",
+      "layered_rocks",
+      "lifeguard_tower",
+      "lighthouse_keeper_estate",
+      "lookout_tower",
+      "marina_fuel_station",
+      "marina_pontoon_drawbridge",
+      "market_hall",
+      "medieval_stone_barracks",
+      "mesa_cliff",
+      "metro_escalator_hall",
+      "metro_station",
+      "mining_conveyor",
+      "misty_lake_rock_islets",
+      "mobile_sand_screener",
+      "modular_arched_viaduct_span",
+      "modular_curved_stone_retaining_wall",
+      "modular_glass_atrium_segment",
+      "modular_korean_tiled_corner",
+      "modular_lift_platform_cage",
+      "modular_pier_deck",
+      "modular_pier_pile_cap",
+      "modular_roller_bridge_deck",
+      "modular_seawall",
+      "modular_two_leaf_pressure_door",
+      "mountain_airrace_checkpoint_arch",
+      "mountain_cable_car",
+      "mountain_forest_firewatch",
+      "mountain_peak",
+      "mountain_rail_viaduct",
+      "mountain_suspension_gondola",
+      "mountain_temple_main_hall",
+      "narrow_bridge_arch",
+      "natural_arch",
+      "oasis_palm_courtyard",
+      "oasis_windpowered_noria",
+      "offshore_navigation_beacon",
+      "offshore_service_hoist",
+      "oil_pumpjack",
+      "orchard_cherry_sorter",
+      "orchard_packing_shed",
+      "orchard_sorting_line",
+      "orchard_windbreak",
+      "ore_sorting_turntable",
+      "ore_transfer_loader",
+      "pagoda_five_story",
+      "palace_wall_pavilion",
+      "park_ranger_station",
+      "pier_section",
+      "pine_cluster",
+      "pine_tree_single",
+      "pipe_elbow_module",
+      "pipe_manifold_assembly",
+      "plaza_fountain",
+      "polar_geodesic_dome",
+      "polar_lighthouse",
+      "polar_observatory_shutter",
+      "polar_rescue_winch",
+      "polar_research_station",
+      "polar_solar_tracker",
+      "polar_tracked_science_rover",
+      "polar_tracking_array",
+      "pottery_wheel_workshop",
+      "power_pylon",
+      "premium_airport_fuel_station",
+      "radar_station",
+      "radio_mast",
+      "railroad_trestle",
+      "ranger_rescue_hoist",
+      "recycling_jaw_crusher",
+      "red_barn_courtyard",
+      "red_mesa_sky_arch",
+      "rescue_tug",
+      "retractable_road_barrier",
+      "retro_airfield_neon_hangar_sign",
+      "retro_aviation_sign_pylon",
+      "river_lock",
+      "riverside_apartments",
+      "riveted_tunnel_segment",
+      "rocky_arch",
+      "rocky_headland_lighthouse",
+      "rocky_ridge",
+      "roof_bridge",
+      "rooftop_helipad",
+      "rooftop_solar_array",
+      "rope_bridge",
+      "rotary_milking_parlor",
+      "rotary_snow_plow",
+      "rotating_pipe_valve",
+      "royal_ancestral_hall",
+      "runway_approach_array",
+      "runway_light_tower",
+      "runway_segmented_lighting_gate",
+      "sandstone_lifting_drawbridge",
+      "sandstone_spire",
+      "sandstone_wall_segment",
+      "sandstone_watchtower",
+      "sea_stacks",
+      "seaside_raised_boardwalk",
+      "seaside_swing_lock_gate",
+      "seed_planter_tractor",
+      "seedling_glasshouse",
+      "service_stair_module",
+      "ship_boarding_bridge",
+      "shipyard_propeller_test_rig",
+      "silo_pipe",
+      "ski_jump_service_lift",
+      "ski_resort_cable_gondola",
+      "ski_resort_chalet",
+      "sky_race_finish_arch",
+      "skyfuel_billboard",
+      "skyline_blimp",
+      "skyscraper",
+      "smithy_dual_bellows",
+      "snow_cabin",
+      "snow_lodge_and_sauna",
+      "snow_monastery_courtyard",
+      "snowcat",
+      "snowy_fir_cluster",
+      "split_flap_departure_board",
+      "stirling_solar_dish",
+      "stone_arch_gate",
+      "stone_chapel_courtyard",
+      "stone_farm_estate",
+      "stone_wall_segment",
+      "storm_drain_module",
+      "striped_slot_canyon",
+      "structural_truss_corner",
+      "substation",
+      "suspension_cable_tensioner",
+      "telescopic_bridge_module",
+      "temple_bell_pavilion",
+      "terminal_departure_portal",
+      "terminal_wayfinding_totem_set",
+      "terraced_rice_farm",
+      "terraced_vineyard_gateway",
+      "tile_roof_granary",
+      "timber_saw_waterwheel",
+      "timber_sawmill_complex",
+      "tool_shed",
+      "tower_block",
+      "tower_rooftop_ventilation",
+      "tower_window_cleaner",
+      "tractor",
+      "traditional_pavilion",
+      "traffic_signal_gantry",
+      "tri_vision_billboard",
+      "triangular_office_tower",
+      "turntable_floor_module",
+      "urban_canal_lift_bridge",
+      "urban_garden_skybridge",
+      "urban_street_tram",
+      "vaulted_masonry_bridge",
+      "vertical_parking_carousel",
+      "village_bakery",
+      "village_bakery_clockwork",
+      "village_canal_millhouse",
+      "village_church",
+      "village_grain_mill",
+      "village_hand_crank_pump",
+      "village_hill_terrace_houses",
+      "village_houses",
+      "village_merry_go_round",
+      "village_old_stone_drawbridge",
+      "village_pottery_drying_carousel",
+      "village_timber_covered_bridge",
+      "village_windmill_miller",
+      "vista_banner_plane",
+      "warning_bollard",
+      "watermill",
+      "waypoint_chevron",
+      "wind_carved_canyon_citadel",
+      "wind_turbine",
+      "windpump_piston_tower",
+      "wooden_cabin",
+      "woodland_lookout_windstation",
+      "woodland_piston_pump",
+      "working_capstan_berth",
+      "working_crop_harvester",
+      "working_hay_baler"
+    ],
+    "gpuVerified": false,
+    "actualModelBytes": 246412348
+  },
+  "productionValidation": {
+    "assets": {
+      "suppliedModels": 403,
+      "supplementaryModels": 4,
+      "exports": 1620,
+      "animationClips": 3608,
+      "trafficPoseChanges": 60,
+      "compressedBytes": 247096259,
+      "status": "passed"
+    },
+    "edition12": {
+      "edition12Checks": 68295,
+      "skinModels": 26,
+      "morphModels": 115,
+      "sampledVertices": 32664,
+      "maximumPoseError": 7.768896180182845e-14,
+      "gpuVerified": false,
+      "status": "passed"
+    },
+    "continuousFlight": {
+      "checks": 12021,
+      "continuousPhysicsSeconds": 192.00000000004493,
+      "distance": 15247.760997488285,
+      "departureReloads": 0,
+      "maxX": 27.954166666666666,
+      "maxY": 52,
+      "actualGLBFallback": true,
+      "gpuVerified": false,
+      "status": "passed"
+    },
+    "physicalGlbFiles": 1282,
+    "typecheck": "passed",
+    "build": "passed"
+  }
+}

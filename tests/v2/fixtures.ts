@@ -1,0 +1,14 @@
+import fs from 'node:fs';
+import { gunzipSync } from 'node:zlib';
+import path from 'node:path';
+import type { AssetMeta, Input } from '../../app/airrun/types';
+import type { ProxyData } from '../../app/airrun/collision';
+import { DEFAULT_SETTINGS } from '../../app/airrun/data';
+import { FlightSimulation, type RunConfig } from '../../app/airrun/simulation';
+const root = path.resolve(process.env.AIRRUN_ASSET_ROOT ?? 'public');
+export const suppliedAssets: AssetMeta[] = JSON.parse(fs.readFileSync(path.join(root, 'models/catalog.json'), 'utf8')).assets;
+const trafficAssets: AssetMeta[] = JSON.parse(fs.readFileSync(path.join(root, 'models/traffic-catalog.json'), 'utf8')).assets;
+export const catalog = new Map<string, AssetMeta>([...suppliedAssets, ...trafficAssets].map(m => [m.id, m]));
+export const proxies = new Map<string, ProxyData>([...catalog].map(([id, m]) => [id, JSON.parse((m.proxy!.endsWith('.gz') ? gunzipSync(fs.readFileSync(path.join(root, m.proxy!))) : fs.readFileSync(path.join(root, m.proxy!))).toString('utf8'))]));
+export const controls = (): Input => ({ x: 0, y: 0, boost: false, brake: false, gear: 3 });
+export const createSim = (patch: Partial<RunConfig> = {}) => new FlightSimulation({ id: 'test', seed: 42, plane: 'skyhawk', level: 1, practice: null, settings: { ...DEFAULT_SETTINGS }, catalog, proxies, ...patch });

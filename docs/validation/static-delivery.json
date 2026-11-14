@@ -1,0 +1,14 @@
+{
+  "version": "8.0.1",
+  "type": "standalone-static",
+  "requiresServer": false,
+  "basePath": "/voxelflygame/",
+  "files": 1785,
+  "bytes": 252946324,
+  "largestFileBytes": 15127210,
+  "models": 403,
+  "aircraft": 22,
+  "clips": 891,
+  "cloudflareWranglerLimitsPassed": true,
+  "dashboardDragDropSupported": false
+}

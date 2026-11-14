@@ -1,0 +1,76 @@
+{
+  "sourceZIPBytes": 532821338,
+  "previousSiteVersion": 8,
+  "previousStoredArchiveBytes": 227584000,
+  "sourceModels": 403,
+  "aircraft": 22,
+  "environment": 381,
+  "visualGLBs": 1217,
+  "rows": [
+    {
+      "theme": "coast",
+      "dedicated": 42,
+      "gameDeck": 71,
+      "residentModels": 77,
+      "baseVisualBytes": 2640036,
+      "proxyBytes": 1575959
+    },
+    {
+      "theme": "village",
+      "dedicated": 40,
+      "gameDeck": 45,
+      "residentModels": 49,
+      "baseVisualBytes": 2008368,
+      "proxyBytes": 977740
+    },
+    {
+      "theme": "city",
+      "dedicated": 39,
+      "gameDeck": 55,
+      "residentModels": 63,
+      "baseVisualBytes": 1908707,
+      "proxyBytes": 1167497
+    },
+    {
+      "theme": "ice",
+      "dedicated": 38,
+      "gameDeck": 38,
+      "residentModels": 40,
+      "baseVisualBytes": 2156713,
+      "proxyBytes": 1461596
+    },
+    {
+      "theme": "desert",
+      "dedicated": 38,
+      "gameDeck": 47,
+      "residentModels": 49,
+      "baseVisualBytes": 1854730,
+      "proxyBytes": 1454402
+    },
+    {
+      "theme": "forest",
+      "dedicated": 38,
+      "gameDeck": 42,
+      "residentModels": 43,
+      "baseVisualBytes": 2662613,
+      "proxyBytes": 1509155
+    },
+    {
+      "theme": "farm",
+      "dedicated": 39,
+      "gameDeck": 43,
+      "residentModels": 49,
+      "baseVisualBytes": 2468328,
+      "proxyBytes": 818580
+    },
+    {
+      "theme": "korea",
+      "dedicated": 39,
+      "gameDeck": 40,
+      "residentModels": 62,
+      "baseVisualBytes": 2496977,
+      "proxyBytes": 1647985
+    }
+  ],
+  "scope": "File inventory and transfer sizes; does not measure GPU memory or frame rate"
+}

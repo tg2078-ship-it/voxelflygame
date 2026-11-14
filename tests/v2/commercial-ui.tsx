@@ -1,0 +1,77 @@
+import assert from 'node:assert/strict';
+import React from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
+import { AIRCRAFT, emptyMetrics, freshSave, stats } from '../../app/airrun/data';
+import { ensureQuests } from '../../app/airrun/progression';
+import { useAirrun } from '../../app/airrun/state';
+import { debriefInsight, FLIGHT_COACH } from '../../app/airrun/debrief-insight';
+import { FlightDebrief } from '../../app/airrun/flight-debrief';
+import { PilotBriefing, RewardCeremony } from '../../app/airrun/interface';
+import { HangarDashboard } from '../../app/airrun/hangar-dashboard';
+import type { RunResult } from '../../app/airrun/types';
+let checks = 0;
+const check = (value: unknown, label: string) => { assert.ok(value, label); checks++; };
+const equal = (actual: unknown, expected: unknown, label: string) => { assert.deepEqual(actual, expected, label); checks++; };
+function result(patch: Partial<RunResult> = {}): RunResult {
+    return { id: 'ui-run', date: '2026-11-04T12:00:00.000Z', planeId: 'skyhawk', distance: 1000, bonus: 500, score: 1500, coins: 5, reward: 40, maxCombo: 3, eUsed: false, practice: false, interrupted: false, reason: 'TEST', metrics: { ...emptyMetrics(), time: 6, distance: 1000, bonus: 500, coins: 5 }, debrief: { version: 1, medal: 'bronze', rating: 39, operationsCompleted: 1, operationsExpired: 0, perfectPasses: 2, bestFlow: 6, flowActions: 6, operationBonus: 250, precisionBonus: 150, flowBonus: 70, controlDistance: 800, lowDistance: 10, boostDistance: 50, cleanDistance: 1000 }, ...patch };
+}
+const opening = result(), first = debriefInsight(opening)!;
+equal(first.next, 'silver', 'Bronze with an adequate rating still explains the next silver medal');
+check(first.requirements.find(item => item.kind === 'rating')!.complete, 'Rating39 satisfies the silver score requirement');
+equal(first.requirements.find(item => item.kind === 'manualSeconds'), { kind: 'manualSeconds', current: 6, target: 25, complete: false }, 'The missing flight-time condition is explicit instead of implying a score bug');
+equal(first.otherBonus, 30, 'Non-skill points are separated without double counting');
+equal(first.skillBonus + first.otherBonus + opening.distance, opening.score, 'Displayed point categories reconcile to the actual settled score');
+equal(first.coach, 'survive', 'A strong short flight gets an actionable duration goal');
+const bronzeHTML = renderToStaticMarkup(<FlightDebrief result={opening} ko/>);
+check(bronzeHTML.includes('SILVER 도달 조건') && bronzeHTML.includes('25초') && bronzeHTML.includes('실제 총 점수'), 'The UI presents both medal conditions and a real score breakdown');
+check(bronzeHTML.includes('<details') && !bronzeHTML.includes('<details class="debrief-analysis" open'), 'The score explanation does not force a long results page');
+const oldHyper = debriefInsight(result({ eUsed: true, metrics: { ...opening.metrics, time: 80 } }))!;
+equal(oldHyper.manualSeconds, null, 'An old E record cannot reconstruct its real manual-flight duration');
+check(!oldHyper.requirements.find(item => item.kind === 'manualSeconds')!.complete, 'Unknown duration cannot mark the condition as achieved');
+check(renderToStaticMarkup(<FlightDebrief result={result({ eUsed: true })} ko/>).includes('이전 기록에는 수동 비행 시간이'), 'The older-record uncertainty is explained');
+const newHyper = result({ eUsed: true, metrics: { ...opening.metrics, time: 22 }, debrief: { ...opening.debrief!, manualSeconds: 7 } });
+equal(debriefInsight(newHyper)!.manualSeconds, 7, 'New records use the authoritative manual clock rather than total time');
+const silver = result({ debrief: { ...opening.debrief!, medal: 'silver', rating: 80, manualSeconds: 100, operationsCompleted: 1 } });
+const goldRequirement = debriefInsight(silver)!;
+equal(goldRequirement.next, 'gold', 'The next medal follows the earned medal');
+equal(goldRequirement.requirements.filter(item => !item.complete).map(item => item.kind), ['operations'], 'A high score alone cannot hide the missing two-operation condition');
+const ace = result({ debrief: { ...opening.debrief!, medal: 'ace', rating: 100, manualSeconds: 200, operationsCompleted: 5 } });
+equal(debriefInsight(ace)!.next, null, 'An ace is not shown a fictional higher medal');
+equal(debriefInsight(ace)!.requirements, [], 'Top medal has no impossible progress bar');
+const vault = result({ debrief: { ...opening.debrief!, vault: { pending: 0, secured: 70, lost: 500, banks: 2, peak: 500 } } });
+equal(debriefInsight(vault)!.coach, 'bank', 'Losing pending flow explains the actual bank choice');
+equal(debriefInsight(vault)!.skillBonus, 470, 'Lost points do not inflate the settled skill bonus');
+const vaultHTML = renderToStaticMarkup(<FlightDebrief result={vault} ko/>);
+check(vaultHTML.includes('잃은 미정산 보너스') && vaultHTML.includes('플로우 확정'), 'Secured and lost flow are distinguished in the debrief');
+for (const reasonEn of ['STRUCTURE IMPACT', 'HIGH SPEED IMPACT']) {
+    const impact = debriefInsight(result({ reasonEn, metrics: { ...opening.metrics, damage: 0 } }))!;
+    equal(impact.coach, 'impact', 'Fatal impact feedback works even though no HP damage event is recorded');
+    check(FLIGHT_COACH[impact.coach][2].includes('내구도나 방패로 버틸 수 없습니다'), 'Feedback explains the real lethal-obstacle rule');
+}
+check(debriefInsight(result({ debrief: undefined })) === null, 'Legacy records without skill telemetry remain supported');
+for (const ko of [true, false]) {
+    const briefing = renderToStaticMarkup(<PilotBriefing ko={ko} control="hold" onClose={() => {}} onControls={() => {}} onLaunch={() => {}}/>);
+    check(briefing.includes('role="dialog"') && briefing.includes('aria-modal="true"'), 'Optional tutorial has an accessible modal identity');
+    check(briefing.includes('W A S D') && briefing.includes('Shift') && briefing.includes('Space') && briefing.includes('<kbd>F</kbd>'), 'The guide uses actual steering, speed and banking controls');
+    check(!briefing.includes('Control') && !briefing.includes('Ctrl'), 'The tutorial cannot teach an unsupported brake binding');
+    check(briefing.includes(ko ? '내구도·방패로 버틸 수 없습니다' : 'cannot absorb large-structure impacts'), 'The guide warns about lethal large structures before flight');
+    check(briefing.includes(ko ? '전체 조작법' : 'ALL CONTROLS') && briefing.includes(ko ? '준비됐어요 · 출격' : 'READY. TAKE FLIGHT.'), 'Guide buttons have real close/controls/departure purposes');
+}
+const gearBriefing = renderToStaticMarkup(<PilotBriefing ko control="gear" onClose={() => {}} onControls={() => {}} onLaunch={() => {}} launchDisabled/>);
+check(gearBriefing.includes('기어를 올리고 Space로 내립니다') && gearBriefing.includes('disabled=""'), 'Gear-mode instructions and launch readiness match the actual selected settings');
+const save = ensureQuests(freshSave()); save.nickname = 'TEST';
+const state = { ...useAirrun.getState(), phase: 'hangar' as const, save };
+const props = { state, ko: true, launching: false, onLaunch: () => {}, onPanel: () => {}, onView: () => {}, onZoom: () => {} };
+const hangar = renderToStaticMarkup(<HangarDashboard {...props}/>);
+check(hangar.includes('안내 경로 두 개를 통과하세요.') && hangar.includes('비행 안내'), 'The first objective and optional tutorial can be discovered before launch');
+check(hangar.includes('추가로 필요해요') && hangar.includes('보유 코인'), 'A disabled upgrade explains its real coin shortfall');
+const rich = { ...state, save: { ...save, coins: 200 } };
+check(renderToStaticMarkup(<HangarDashboard {...props} state={rich}/>).includes('강화 후 잔액'), 'An affordable upgrade previews its resulting balance');
+const other = AIRCRAFT.find(plane => !save.owned.includes(plane.id))!;
+const locked = { ...state, save: { ...save, selected: other.id } };
+check(renderToStaticMarkup(<HangarDashboard {...props} state={locked}/>).includes('이 기체 해금하기'), 'Locked aircraft has a real unlock action rather than a dead-end disabled launch');
+const upgraded = renderToStaticMarkup(<RewardCeremony ko reduced reward={{ id: 'upgrade', kind: 'upgrade', title: AIRCRAFT[0].name, titleEn: AIRCRAFT[0].name, coins: 0, tier: 1, detail: 'Lv. 1 → 2' }} onClose={() => {}}/>);
+check(upgraded.includes('실제 기체 성능 변화') && upgraded.includes('106 HP') && upgraded.includes(stats(AIRCRAFT[0], 2).handling.toFixed(2)), 'The reward uses actual upgraded aircraft stats');
+const impossible = renderToStaticMarkup(<RewardCeremony ko reduced reward={{ id: 'invalid-upgrade', kind: 'upgrade', title: AIRCRAFT[0].name, titleEn: AIRCRAFT[0].name, coins: 0, tier: 1, detail: 'Lv. 1 → 20' }} onClose={() => {}}/>);
+check(!impossible.includes('실제 기체 성능 변화'), 'An unsupported reward detail does not manufacture a stat comparison');
+console.log(JSON.stringify({ commercialUI: checks, oldBackupsPreserved: true, settledScoreReconciles: true, actualBrowserValidated: false, status: 'passed' }));

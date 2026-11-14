@@ -1,0 +1,59 @@
+
+> voxel-airrun@8.0.1 build
+> node scripts/build-delivery.mjs
+
+
+  vinext build  (Vite 8.0.13)
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mProxy environment variables detected. We'll use your proxy for fetch requests.[0m
+
+
+[1/5] analyze client references...
+[2Ktransforming...✓ 228 modules transformed.
+rendering chunks...
+✓ built in 1.40s
+[2/5] analyze server references...
+[2Ktransforming...✓ 288 modules transformed.
+rendering chunks...
+✓ built in 2.51s
+[3/5] build rsc environment...
+[2Ktransforming...✓ 225 modules transformed.
+rendering chunks...
+computing gzip size...
+✓ built in 1.03s
+[4/5] build client environment...
+[2Ktransforming...✓ 2054 modules transformed.
+rendering chunks...
+computing gzip size...
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - vinext:middleware-server-only (25%)
+  - alias (13%)
+  - rsc:virtual-client-package (13%)
+  - vinext:css-data-url (10%)
+  - vinext:jsx-in-js (10%)
+See https://rolldown.rs/options/checks#plugintimings for more details.
+
+✓ built in 4.66s
+[5/5] build ssr environment...
+[2Ktransforming...✓ 294 modules transformed.
+rendering chunks...
+computing gzip size...
+✓ built in 2.26s
+[0m
+  Route (app)
+  ─ ? /
+
+  ? Unknown
+
+  ? Some routes could not be classified. vinext currently uses static analysis
+    and cannot detect dynamic API usage (headers(), cookies(), etc.) at build time.
+    Automatic classification will be improved in a future release.
+
+  Build complete. Run `vinext start` to start the production server.
+
+{"profile":"edition12-sites-256MiB","models":403,"highestNativeDetailModels":65,"nativeLod1NearModels":338,"highestNativeDetailAircraft":22,"movingModels":271,"clips":891,"allDistantLodsPreserved":true,"allCollisionModelsPreserved":true,"canonicalSourceLod0FilesPreserved":true,"modelBudgetBytes":246415360,"categories":{"aircraft":{"models":22,"sourceLod0":22},"coastal":{"models":42,"sourceLod0":4},"village":{"models":40,"sourceLod0":2},"city":{"models":39,"sourceLod0":2},"snow_ice":{"models":38,"sourceLod0":1},"desert_canyon":{"models":38,"sourceLod0":1},"forest_mountain_lake":{"models":38,"sourceLod0":2},"farm":{"models":39,"sourceLod0":1},"korean_landmarks":{"models":39,"sourceLod0":22},"ads_signage":{"models":39,"sourceLod0":6},"modules":{"models":29,"sourceLod0":2}},"gpuVerified":false,"actualModelBytes":246412348}

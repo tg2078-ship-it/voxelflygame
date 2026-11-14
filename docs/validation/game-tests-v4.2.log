@@ -1,0 +1,127 @@
+{"coreChecks":2607,"patterns":168,"quests":64,"career":20,"achievements":40,"status":"passed"}
+{"suppliedModels":403,"supplementaryModels":4,"exports":1217,"animationClips":2385,"trafficPoseChanges":60,"compressedBytes":190320645,"status":"passed"}
+{"storageChecks":17,"legacyPlanes":22,"checkpointRewardOnce":true,"invalidOriginalPreserved":true,"status":"passed"}
+{"progressionChecks":172,"questConditions":64,"careerConditions":20,"status":"passed"}
+{
+  "failures": 0,
+  "examples": [],
+  "models": {}
+}
+{
+  "centerSweepErrors": 0,
+  "examples": [],
+  "noInput": {
+    "failedWithin45s": 100,
+    "mean": 4.26533333333332,
+    "latest": 4.266666666666657
+  }
+}
+{"earlyFailures":[]}
+{"controlledFlights":66,"minSurvivalSeconds":240,"maxSurvivalSeconds":240,"humanFunVerified":false,"status":"passed"}
+{
+  "streamingChecks": 576016,
+  "summary": [
+    {
+      "speed": 40,
+      "minutes": 30,
+      "distance": 72000,
+      "maxEncounters": 3,
+      "maxObstacles": 175,
+      "maxPickups": 103,
+      "cpuMilliseconds": 193
+    },
+    {
+      "speed": 60,
+      "minutes": 30,
+      "distance": 108000,
+      "maxEncounters": 3,
+      "maxObstacles": 189,
+      "maxPickups": 103,
+      "cpuMilliseconds": 227
+    },
+    {
+      "speed": 90,
+      "minutes": 30,
+      "distance": 162000,
+      "maxEncounters": 3,
+      "maxObstacles": 180,
+      "maxPickups": 103,
+      "cpuMilliseconds": 767
+    },
+    {
+      "speed": 120,
+      "minutes": 30,
+      "distance": 216000,
+      "maxEncounters": 3,
+      "maxObstacles": 187,
+      "maxPickups": 103,
+      "cpuMilliseconds": 1085
+    },
+    {
+      "speed": 180,
+      "minutes": 30,
+      "distance": 324000,
+      "maxEncounters": 4,
+      "maxObstacles": 207,
+      "maxPickups": 123,
+      "cpuMilliseconds": 1612
+    },
+    {
+      "speed": 250,
+      "minutes": 30,
+      "distance": 450000,
+      "maxEncounters": 5,
+      "maxObstacles": 254,
+      "maxPickups": 152,
+      "cpuMilliseconds": 2232
+    },
+    {
+      "speed": 400,
+      "minutes": 30,
+      "distance": 720000,
+      "maxEncounters": 7,
+      "maxObstacles": 366,
+      "maxPickups": 222,
+      "cpuMilliseconds": 3212
+    },
+    {
+      "speed": 600,
+      "minutes": 30,
+      "distance": 1080000,
+      "maxEncounters": 9,
+      "maxObstacles": 494,
+      "maxPickups": 315,
+      "cpuMilliseconds": 5286
+    }
+  ],
+  "status": "passed"
+}
+{"checks":12021,"continuousPhysicsSeconds":192.00000000004493,"distance":15247.760997488285,"departureReloads":0,"maxX":27.954166666666666,"maxY":52,"actualGLBFallback":true,"gpuVerified":false,"status":"passed"}
+{"checks":22265,"cases":[{"theme":"coast","variant":0,"seed":13,"plane":"skyhawk","total":71,"placed":71,"inCameraFrustum":71,"completeAt":92},{"theme":"coast","variant":0,"seed":13,"plane":"transport","total":71,"placed":71,"inCameraFrustum":71,"completeAt":92},{"theme":"coast","variant":0,"seed":42,"plane":"skyhawk","total":71,"placed":71,"inCameraFrustum":71,"completeAt":112},{"theme":"coast","variant":0,"seed":42,"plane":"transport","total":71,"placed":71,"inCameraFrustum":71,"completeAt":112},{"theme":"village","variant":0,"seed":13,"plane":"skyhawk","total":45,"placed":45,"inCameraFrustum":45,"completeAt":61},{"theme":"village","variant":0,"seed":13,"plane":"transport","total":45,"placed":45,"inCameraFrustum":45,"completeAt":61},{"theme":"village","variant":0,"seed":42,"plane":"skyhawk","total":45,"placed":45,"inCameraFrustum":45,"completeAt":61},{"theme":"village","variant":0,"seed":42,"plane":"transport","total":45,"placed":45,"inCameraFrustum":45,"completeAt":61},{"theme":"city","variant":0,"seed":13,"plane":"skyhawk","total":55,"placed":55,"inCameraFrustum":55,"completeAt":71},{"theme":"city","variant":0,"seed":13,"plane":"transport","total":55,"placed":55,"inCameraFrustum":55,"completeAt":71},{"theme":"city","variant":0,"seed":42,"plane":"skyhawk","total":55,"placed":55,"inCameraFrustum":55,"completeAt":64},{"theme":"city","variant":0,"seed":42,"plane":"transport","total":55,"placed":55,"inCameraFrustum":55,"completeAt":64},{"theme":"ice","variant":0,"seed":13,"plane":"skyhawk","total":38,"placed":38,"inCameraFrustum":38,"completeAt":42},{"theme":"ice","variant":0,"seed":13,"plane":"transport","total":38,"placed":38,"inCameraFrustum":38,"completeAt":42},{"theme":"ice","variant":0,"seed":42,"plane":"skyhawk","total":38,"placed":38,"inCameraFrustum":38,"completeAt":49},{"theme":"ice","variant":0,"seed":42,"plane":"transport","total":38,"placed":38,"inCameraFrustum":38,"completeAt":49},{"theme":"desert","variant":0,"seed":13,"plane":"skyhawk","total":47,"placed":47,"inCameraFrustum":47,"completeAt":63},{"theme":"desert","variant":0,"seed":13,"plane":"transport","total":47,"placed":47,"inCameraFrustum":47,"completeAt":63},{"theme":"desert","variant":0,"seed":42,"plane":"skyhawk","total":47,"placed":47,"inCameraFrustum":47,"completeAt":55},{"theme":"desert","variant":0,"seed":42,"plane":"transport","total":47,"placed":47,"inCameraFrustum":47,"completeAt":55},{"theme":"forest","variant":0,"seed":13,"plane":"skyhawk","total":42,"placed":42,"inCameraFrustum":42,"completeAt":66},{"theme":"forest","variant":0,"seed":13,"plane":"transport","total":42,"placed":42,"inCameraFrustum":42,"completeAt":66},{"theme":"forest","variant":0,"seed":42,"plane":"skyhawk","total":42,"placed":42,"inCameraFrustum":42,"completeAt":49},{"theme":"forest","variant":0,"seed":42,"plane":"transport","total":42,"placed":42,"inCameraFrustum":42,"completeAt":49},{"theme":"farm","variant":0,"seed":13,"plane":"skyhawk","total":43,"placed":43,"inCameraFrustum":43,"completeAt":66},{"theme":"farm","variant":0,"seed":13,"plane":"transport","total":43,"placed":43,"inCameraFrustum":43,"completeAt":66},{"theme":"farm","variant":0,"seed":42,"plane":"skyhawk","total":43,"placed":43,"inCameraFrustum":43,"completeAt":62},{"theme":"farm","variant":0,"seed":42,"plane":"transport","total":43,"placed":43,"inCameraFrustum":43,"completeAt":62},{"theme":"korea","variant":0,"seed":13,"plane":"skyhawk","total":40,"placed":40,"inCameraFrustum":40,"completeAt":63},{"theme":"korea","variant":0,"seed":13,"plane":"transport","total":40,"placed":40,"inCameraFrustum":40,"completeAt":63},{"theme":"korea","variant":0,"seed":42,"plane":"skyhawk","total":40,"placed":40,"inCameraFrustum":40,"completeAt":55},{"theme":"korea","variant":0,"seed":42,"plane":"transport","total":40,"placed":40,"inCameraFrustum":40,"completeAt":55},{"theme":"korea","variant":1,"seed":13,"plane":"skyhawk","total":40,"placed":40,"inCameraFrustum":40,"completeAt":47},{"theme":"korea","variant":1,"seed":13,"plane":"transport","total":40,"placed":40,"inCameraFrustum":40,"completeAt":47},{"theme":"korea","variant":1,"seed":42,"plane":"skyhawk","total":40,"placed":40,"inCameraFrustum":40,"completeAt":43},{"theme":"korea","variant":1,"seed":42,"plane":"transport","total":40,"placed":40,"inCameraFrustum":40,"completeAt":43},{"theme":"korea","variant":2,"seed":13,"plane":"skyhawk","total":40,"placed":40,"inCameraFrustum":40,"completeAt":62},{"theme":"korea","variant":2,"seed":13,"plane":"transport","total":40,"placed":40,"inCameraFrustum":40,"completeAt":62},{"theme":"korea","variant":2,"seed":42,"plane":"skyhawk","total":40,"placed":40,"inCameraFrustum":40,"completeAt":55},{"theme":"korea","variant":2,"seed":42,"plane":"transport","total":40,"placed":40,"inCameraFrustum":40,"completeAt":55},{"theme":"korea","variant":3,"seed":13,"plane":"skyhawk","total":40,"placed":40,"inCameraFrustum":40,"completeAt":66},{"theme":"korea","variant":3,"seed":13,"plane":"transport","total":40,"placed":40,"inCameraFrustum":40,"completeAt":66},{"theme":"korea","variant":3,"seed":42,"plane":"skyhawk","total":40,"placed":40,"inCameraFrustum":40,"completeAt":55},{"theme":"korea","variant":3,"seed":42,"plane":"transport","total":40,"placed":40,"inCameraFrustum":40,"completeAt":55}],"method":"CPU generation, source bounds and chase-camera frustum; no GPU visibility or human enjoyment claim","gpuVerified":false,"status":"passed"}
+{"renderDataChecks":2890,"simulatedMinutes":30,"maxChunks":12,"maxCached":195,"maxCompiled":31,"maxBatches":31,"maxAnimated":13,"gpuVerified":false,"status":"passed"}
+{
+  "cases": 352,
+  "failures": [],
+  "maxPlanMilliseconds": 3450,
+  "meanPlanMilliseconds": 185.25,
+  "elapsed": 78886.83301399999
+}
+{
+  "candidates": 216,
+  "activated": 216,
+  "rejectedWithoutSpending": 0,
+  "startsInsideGeometry": 0,
+  "failures": []
+}
+{"surfaceChecks":14,"upperVerticesPreserved":99972,"preservedSignals":8,"contrastReports":[{"id":"rocky_arch","lod":1,"before":1.38,"after":1.38},{"id":"rocky_arch","lod":2,"before":1.53,"after":1.53},{"id":"sea_stacks","lod":1,"before":1.34,"after":1.34},{"id":"sea_stacks","lod":2,"before":1.37,"after":1.37},{"id":"mountain_peak","lod":1,"before":1.51,"after":1.51},{"id":"mountain_peak","lod":2,"before":1.51,"after":1.51},{"id":"rocky_ridge","lod":1,"before":1.51,"after":1.51},{"id":"rocky_ridge","lod":2,"before":1.51,"after":1.51},{"id":"waterfall_cliff","lod":1,"before":1.38,"after":1.38},{"id":"waterfall_cliff","lod":2,"before":1.43,"after":1.43}],"geometryPreserved":true,"aircraftPalettesPreserved":true,"gpuVerified":false,"status":"passed"}
+{"jpegCacheChecks":"passed","nativeAircraftPreparation":true,"nativeThemePreparation":true,"themeMeshes":175,"releasedReferences":true,"nonLobbyCaptureBlocked":true,"gpuRenderedOrVerified":false}
+{"revisionChecks":10767145,"aircraftOrbitCases":2640,"maxRadius":31.5,"unlimitedBoost":true,"settingsValidated":true,"gpuVerified":false,"status":"passed"}
+{"worldRevisionChecks":44299,"anchoredModels":17501,"districtModels":6987,"gpuVerified":false,"status":"passed"}
+{"interfaceContracts":17,"browserOrLayoutVerified":false,"gpuVerified":false,"status":"passed"}
+{"upgrade400Checks":395,"nativeRigMatrices":168,"maxPoseError":8.215650382226158e-15,"gpuVerified":false,"status":"passed"}
+{"workerChecks":19,"realWorkerCases":3,"gpuVerified":false,"status":"passed"}
+{"expeditionChecks":8170,"fullCoverageCases":[{"theme":"coast","seed":13,"span":11,"total":71,"encounters":4},{"theme":"coast","seed":13,"span":30.976,"total":71,"encounters":4},{"theme":"coast","seed":42,"span":11,"total":71,"encounters":4},{"theme":"coast","seed":42,"span":30.976,"total":71,"encounters":4},{"theme":"village","seed":13,"span":11,"total":45,"encounters":3},{"theme":"village","seed":13,"span":30.976,"total":45,"encounters":3},{"theme":"village","seed":42,"span":11,"total":45,"encounters":3},{"theme":"village","seed":42,"span":30.976,"total":45,"encounters":3},{"theme":"city","seed":13,"span":11,"total":55,"encounters":3},{"theme":"city","seed":13,"span":30.976,"total":55,"encounters":5},{"theme":"city","seed":42,"span":11,"total":55,"encounters":3},{"theme":"city","seed":42,"span":30.976,"total":55,"encounters":3},{"theme":"ice","seed":13,"span":11,"total":38,"encounters":3},{"theme":"ice","seed":13,"span":30.976,"total":38,"encounters":3},{"theme":"ice","seed":42,"span":11,"total":38,"encounters":3},{"theme":"ice","seed":42,"span":30.976,"total":38,"encounters":3},{"theme":"desert","seed":13,"span":11,"total":47,"encounters":3},{"theme":"desert","seed":13,"span":30.976,"total":47,"encounters":3},{"theme":"desert","seed":42,"span":11,"total":47,"encounters":3},{"theme":"desert","seed":42,"span":30.976,"total":47,"encounters":3},{"theme":"forest","seed":13,"span":11,"total":42,"encounters":2},{"theme":"forest","seed":13,"span":30.976,"total":42,"encounters":2},{"theme":"forest","seed":42,"span":11,"total":42,"encounters":3},{"theme":"forest","seed":42,"span":30.976,"total":42,"encounters":3},{"theme":"farm","seed":13,"span":11,"total":43,"encounters":3},{"theme":"farm","seed":13,"span":30.976,"total":43,"encounters":3},{"theme":"farm","seed":42,"span":11,"total":43,"encounters":3},{"theme":"farm","seed":42,"span":30.976,"total":43,"encounters":3},{"theme":"korea","seed":13,"span":11,"total":40,"encounters":3},{"theme":"korea","seed":13,"span":30.976,"total":40,"encounters":3},{"theme":"korea","seed":42,"span":11,"total":40,"encounters":3},{"theme":"korea","seed":42,"span":30.976,"total":40,"encounters":3}],"chasePoses":132,"maximumChaseExtent":0.8494310025282971,"sourceModels":403,"animatedModels":203,"gpuVerified":false,"status":"passed"}
+{"performanceRevisionChecks":5858,"silhouetteFallbacks":94,"courseModelVariety":{"coast":15,"village":11,"city":10,"ice":12,"desert":11,"forest":11,"farm":11,"korea":9},"animatedVertexComparisons":1305040,"staticVertexComparisons":223877,"maxStaticError":0.000002488175278171769,"partialCompilePasses":24,"maxPositionError":2.337173619142942e-7,"maxNormalError":4.991179410480384e-8,"actorCosts":[{"id":"airport_flipdot_arrivals","lod":0,"savedDraws":188},{"id":"airport_flipdot_arrivals","lod":1,"savedDraws":93},{"id":"airport_flipdot_arrivals","lod":2,"savedDraws":101},{"id":"forest_log_loader","lod":0,"savedDraws":109},{"id":"forest_log_loader","lod":1,"savedDraws":61},{"id":"forest_log_loader","lod":2,"savedDraws":55},{"id":"snowcat","lod":0,"savedDraws":89},{"id":"snowcat","lod":1,"savedDraws":77},{"id":"snowcat","lod":2,"savedDraws":77},{"id":"bucket_wheel_excavator","lod":0,"savedDraws":109},{"id":"bucket_wheel_excavator","lod":1,"savedDraws":61},{"id":"bucket_wheel_excavator","lod":2,"savedDraws":55},{"id":"polar_tracked_science_rover","lod":0,"savedDraws":105},{"id":"polar_tracked_science_rover","lod":1,"savedDraws":60},{"id":"polar_tracked_science_rover","lod":2,"savedDraws":58}],"gpuVerified":false,"fpsMeasured":false,"status":"passed"}
+{"terrainWorkerChecks":142,"comparedVertices":762060,"realCpuWorkerCases":6,"browserWorkerTransportVerified":false,"gpuVerified":false,"status":"passed"}
+{"modelWorkerChecks":3124547,"comparedAttributeValues":19182846,"maxAttributeError":0,"realCpuWorkerCases":4,"environmentModelsCompiled":385,"browserWorkerTransportVerified":false,"gpuVerified":false,"status":"passed"}
+{"suites":24,"elapsedSeconds":338,"gpuVerified":false,"status":"passed"}

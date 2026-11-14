@@ -1,0 +1,192 @@
+{
+  "seed": 44171,
+  "quality": "high",
+  "speedMetersPerSecond": 80,
+  "traceSeconds": 6,
+  "gpuVerified": false,
+  "fpsMeasured": false,
+  "before": {
+    "results": [
+      {
+        "theme": "coast",
+        "nodes": 1118,
+        "potentialMainPassDraws": 665,
+        "triangles": 2482548,
+        "geometryMiB": 57.5,
+        "actors": 20,
+        "compiled": 54,
+        "cachedModels": 70,
+        "cpuMedianMs": 0.5983199999991484,
+        "cpuP95Ms": 9.904614000000947,
+        "cpuMaxMs": 305.77945700000055
+      },
+      {
+        "theme": "city",
+        "nodes": 946,
+        "potentialMainPassDraws": 593,
+        "triangles": 5768150,
+        "geometryMiB": 57.26,
+        "actors": 21,
+        "compiled": 49,
+        "cachedModels": 59,
+        "cpuMedianMs": 1.259845000000496,
+        "cpuP95Ms": 7.947834999999031,
+        "cpuMaxMs": 248.461593
+      },
+      {
+        "theme": "forest",
+        "nodes": 698,
+        "potentialMainPassDraws": 402,
+        "triangles": 2908030,
+        "geometryMiB": 44.01,
+        "actors": 7,
+        "compiled": 37,
+        "cachedModels": 52,
+        "cpuMedianMs": 0.3026949999984936,
+        "cpuP95Ms": 4.677173000000039,
+        "cpuMaxMs": 274.45450399999754
+      }
+    ],
+    "gpuVerified": false,
+    "fpsMeasured": false,
+    "note": "CPU scene inventory; no frustum, shadows or postprocess draw measurement"
+  },
+  "after": {
+    "results": [
+      {
+        "theme": "coast",
+        "nodes": 623,
+        "potentialMainPassDraws": 450,
+        "triangles": 1210346,
+        "geometryMiB": 40.88,
+        "workerFallbacks": [],
+        "operations": {
+          "compile": {
+            "calls": 1199,
+            "totalMs": 30.23259900002995,
+            "maxMs": 8.377472000000125,
+            "maxArgs": [
+              "coastal_bridge",
+              0
+            ]
+          },
+          "rebuild": {
+            "calls": 30,
+            "totalMs": 297.95468399999663,
+            "maxMs": 20.510403000000224,
+            "maxArgs": [
+              "simulation",
+              "high"
+            ]
+          },
+          "makeChunk": {
+            "calls": 3,
+            "totalMs": 2.726349000000482,
+            "maxMs": 1.3955330000007962,
+            "maxArgs": [
+              12,
+              "simulation"
+            ]
+          }
+        },
+        "actors": 7,
+        "compiled": 60,
+        "cachedModels": 66,
+        "cpuMedianMs": 0.36174600000049395,
+        "cpuP95Ms": 8.827924000001076,
+        "cpuMaxMs": 21.83675100000073
+      },
+      {
+        "theme": "city",
+        "nodes": 521,
+        "potentialMainPassDraws": 390,
+        "triangles": 1735862,
+        "geometryMiB": 35.76,
+        "workerFallbacks": [],
+        "operations": {
+          "compile": {
+            "calls": 1205,
+            "totalMs": 26.235651999959373,
+            "maxMs": 3.166151000001264,
+            "maxArgs": [
+              "urban_street_tram",
+              1,
+              false
+            ]
+          },
+          "rebuild": {
+            "calls": 31,
+            "totalMs": 434.3169749999961,
+            "maxMs": 49.19357099999979,
+            "maxArgs": [
+              "simulation",
+              "high"
+            ]
+          },
+          "makeChunk": {
+            "calls": 3,
+            "totalMs": 1.9942410000003292,
+            "maxMs": 0.9573230000005424,
+            "maxArgs": [
+              11,
+              "simulation"
+            ]
+          }
+        },
+        "actors": 6,
+        "compiled": 57,
+        "cachedModels": 59,
+        "cpuMedianMs": 0.4851920000000973,
+        "cpuP95Ms": 10.410668000000442,
+        "cpuMaxMs": 50.232804000001124
+      },
+      {
+        "theme": "forest",
+        "nodes": 229,
+        "potentialMainPassDraws": 193,
+        "triangles": 1196676,
+        "geometryMiB": 39.53,
+        "workerFallbacks": [],
+        "operations": {
+          "compile": {
+            "calls": 818,
+            "totalMs": 48.8656749999991,
+            "maxMs": 24.463466000001063,
+            "maxArgs": [
+              "cloudpeak_balloon",
+              0
+            ]
+          },
+          "rebuild": {
+            "calls": 30,
+            "totalMs": 270.969423999999,
+            "maxMs": 31.94578299999921,
+            "maxArgs": [
+              "simulation",
+              "high"
+            ]
+          },
+          "makeChunk": {
+            "calls": 3,
+            "totalMs": 4.226973000000726,
+            "maxMs": 2.9979960000018764,
+            "maxArgs": [
+              11,
+              "simulation"
+            ]
+          }
+        },
+        "actors": 1,
+        "compiled": 36,
+        "cachedModels": 37,
+        "cpuMedianMs": 0.05127899999934016,
+        "cpuP95Ms": 7.012897000000521,
+        "cpuMaxMs": 32.223762999998144
+      }
+    ],
+    "gpuVerified": false,
+    "fpsMeasured": false,
+    "terrainTransport": "Node worker; browser transport unverified",
+    "note": "CPU scene inventory; no frustum, shadows or postprocess draw measurement"
+  }
+}

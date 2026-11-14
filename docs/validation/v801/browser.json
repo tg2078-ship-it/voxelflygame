@@ -1,0 +1,19 @@
+{
+  "fixture": "Native hangar selection, then injected HUD progress and genuine CPU completion data for UI checks. No simulation or performance claim.",
+  "softwareGPU": true,
+  "nativeKeyboardSelection": true,
+  "sequentialProgress": [
+    3,
+    1,
+    0
+  ],
+  "gameAndSystemReducedMotion": true,
+  "status": "passed",
+  "javascriptErrors": [],
+  "viewports": [
+    "1280x800",
+    "360x800",
+    "844x390"
+  ],
+  "completedSeals": 3
+}

@@ -1,0 +1,9 @@
+{
+  "status": "passed",
+  "models": 403,
+  "dynamicBoxes": 60941,
+  "exactSolidAndNativeMotionMatches": 60816,
+  "modelsWithMatches": 191,
+  "noApproximationOrMotionKeyChanges": true,
+  "gpuRenderedOrVerified": false
+}

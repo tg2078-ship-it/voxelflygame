@@ -1,0 +1,63 @@
+{
+  "modelCount": 150,
+  "movingModels": 50,
+  "heroModels": [
+    "cessna_skyhawk",
+    "dhc2_beaver",
+    "extra_330lx",
+    "f16_fighting_falcon",
+    "l39_albatros",
+    "p51d_mustang",
+    "pitts_s2c",
+    "stearman_model_75"
+  ],
+  "glbCount": 308,
+  "categories": {
+    "aircraft": 12,
+    "coastal": 17,
+    "village": 15,
+    "city": 15,
+    "snow_ice": 14,
+    "desert_canyon": 14,
+    "forest_mountain_lake": 14,
+    "farm": 15,
+    "korean_landmarks": 15,
+    "ads_signage": 15,
+    "modules": 4
+  },
+  "sourceRuntimeBytes": 252480200,
+  "meshoptBytes": 49979184,
+  "gzipGeometryBytes": 24663598,
+  "catalogBytes": 122212,
+  "proxyBytes": 1510005,
+  "maxPositionErrorM": 0.000571297758860112,
+  "sourceTrianglesPreserved": 4085056,
+  "staticProxyCoverageMin": 0.37246,
+  "staticProxyCoverageMedian": 0.928485,
+  "qualification": "Numerical geometry/material/animation validation; no GPU render or device FPS certification.",
+  "loaderValidation": {
+    "parsed": 308,
+    "clips": 444,
+    "animatedPoses": 100,
+    "maxBindBoundsErrorM": 0.0005712977588583357,
+    "maxAnimatedBoundsErrorM": 0.00020483479289090667,
+    "maxSocketErrorM": 0
+  },
+  "runtimeDirectoryBytes": 26295815,
+  "dynamicEnvelopes": {
+    "models": 50,
+    "boxes": 2349,
+    "minPhasesPerClip": 48,
+    "cartesianPoseSamples": 11832520,
+    "keyframePoseSamples": 76440,
+    "validationPoseSamples": 430080,
+    "cornerChecks": 28864512,
+    "failures": 0,
+    "maxGuardM": 1.7467073523783458,
+    "method": "Independent relevant ancestor-clip phases + full source hierarchy + analytic velocity guard",
+    "proxyBytes": 1510005,
+    "modelsDirectoryBytes": 26295815,
+    "existingStaticAndDynamicFieldsPreserved": true,
+    "catalogAndGeometryExportsUnchanged": true
+  }
+}

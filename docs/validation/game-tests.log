@@ -1,0 +1,108 @@
+{"coreChecks":2607,"patterns":168,"quests":64,"career":20,"achievements":40,"status":"passed"}
+{"suppliedModels":150,"supplementaryModels":4,"exports":316,"animationClips":504,"trafficPoseChanges":60,"compressedBytes":24718994,"status":"passed"}
+{"storageChecks":17,"legacyPlanes":8,"checkpointRewardOnce":true,"invalidOriginalPreserved":true,"status":"passed"}
+{"progressionChecks":172,"questConditions":64,"careerConditions":20,"status":"passed"}
+{
+  "failures": 0,
+  "examples": []
+}
+{
+  "centerSweepErrors": 0,
+  "examples": [],
+  "noInput": {
+    "failedWithin45s": 100,
+    "mean": 7.566666666666637,
+    "latest": 7.566666666666645
+  }
+}
+{
+  "streamingChecks": 576016,
+  "summary": [
+    {
+      "speed": 40,
+      "minutes": 30,
+      "distance": 72000,
+      "maxEncounters": 3,
+      "maxObstacles": 23,
+      "maxPickups": 72,
+      "cpuMilliseconds": 49
+    },
+    {
+      "speed": 60,
+      "minutes": 30,
+      "distance": 108000,
+      "maxEncounters": 3,
+      "maxObstacles": 24,
+      "maxPickups": 71,
+      "cpuMilliseconds": 42
+    },
+    {
+      "speed": 90,
+      "minutes": 30,
+      "distance": 162000,
+      "maxEncounters": 3,
+      "maxObstacles": 24,
+      "maxPickups": 72,
+      "cpuMilliseconds": 58
+    },
+    {
+      "speed": 120,
+      "minutes": 30,
+      "distance": 216000,
+      "maxEncounters": 3,
+      "maxObstacles": 24,
+      "maxPickups": 72,
+      "cpuMilliseconds": 49
+    },
+    {
+      "speed": 180,
+      "minutes": 30,
+      "distance": 324000,
+      "maxEncounters": 3,
+      "maxObstacles": 30,
+      "maxPickups": 93,
+      "cpuMilliseconds": 120
+    },
+    {
+      "speed": 250,
+      "minutes": 30,
+      "distance": 450000,
+      "maxEncounters": 4,
+      "maxObstacles": 33,
+      "maxPickups": 106,
+      "cpuMilliseconds": 107
+    },
+    {
+      "speed": 400,
+      "minutes": 30,
+      "distance": 720000,
+      "maxEncounters": 5,
+      "maxObstacles": 46,
+      "maxPickups": 151,
+      "cpuMilliseconds": 108
+    },
+    {
+      "speed": 600,
+      "minutes": 30,
+      "distance": 1080000,
+      "maxEncounters": 7,
+      "maxObstacles": 61,
+      "maxPickups": 204,
+      "cpuMilliseconds": 122
+    }
+  ],
+  "status": "passed"
+}
+{"renderDataChecks":2890,"simulatedMinutes":30,"maxChunks":12,"maxCached":106,"maxCompiled":103,"maxBatches":103,"maxAnimated":14,"gpuVerified":false,"status":"passed"}
+{
+  "cases": 128,
+  "failures": [],
+  "maxPlanMilliseconds": 78,
+  "meanPlanMilliseconds": 31.515625,
+  "elapsed": 11452.458882
+}
+{
+  "cases": 216,
+  "failures": []
+}
+{"suites":10,"elapsedSeconds":64,"gpuVerified":false,"status":"passed"}

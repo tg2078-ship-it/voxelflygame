@@ -1,0 +1,120 @@
+$ node --import tsx tests/v2/run.ts
+{"coreChecks":2607,"patterns":168,"quests":64,"career":20,"achievements":40,"status":"passed"}
+{"suppliedModels":400,"supplementaryModels":4,"exports":1208,"animationClips":2373,"trafficPoseChanges":60,"compressedBytes":281188918,"status":"passed"}
+{"storageChecks":17,"legacyPlanes":16,"checkpointRewardOnce":true,"invalidOriginalPreserved":true,"status":"passed"}
+{"progressionChecks":172,"questConditions":64,"careerConditions":20,"status":"passed"}
+{
+  "failures": 0,
+  "examples": []
+}
+{
+  "centerSweepErrors": 0,
+  "examples": [],
+  "noInput": {
+    "failedWithin45s": 100,
+    "mean": 4.899999999999981,
+    "latest": 4.899999999999988
+  }
+}
+{"controlledFlights":48,"minSurvivalSeconds":362,"maxSurvivalSeconds":453,"humanFunVerified":false,"status":"passed"}
+{
+  "streamingChecks": 576016,
+  "summary": [
+    {
+      "speed": 40,
+      "minutes": 30,
+      "distance": 72000,
+      "maxEncounters": 3,
+      "maxObstacles": 115,
+      "maxPickups": 103,
+      "cpuMilliseconds": 106
+    },
+    {
+      "speed": 60,
+      "minutes": 30,
+      "distance": 108000,
+      "maxEncounters": 3,
+      "maxObstacles": 120,
+      "maxPickups": 102,
+      "cpuMilliseconds": 161
+    },
+    {
+      "speed": 90,
+      "minutes": 30,
+      "distance": 162000,
+      "maxEncounters": 3,
+      "maxObstacles": 115,
+      "maxPickups": 103,
+      "cpuMilliseconds": 645
+    },
+    {
+      "speed": 120,
+      "minutes": 30,
+      "distance": 216000,
+      "maxEncounters": 3,
+      "maxObstacles": 116,
+      "maxPickups": 103,
+      "cpuMilliseconds": 791
+    },
+    {
+      "speed": 180,
+      "minutes": 30,
+      "distance": 324000,
+      "maxEncounters": 4,
+      "maxObstacles": 136,
+      "maxPickups": 123,
+      "cpuMilliseconds": 1308
+    },
+    {
+      "speed": 250,
+      "minutes": 30,
+      "distance": 450000,
+      "maxEncounters": 5,
+      "maxObstacles": 169,
+      "maxPickups": 152,
+      "cpuMilliseconds": 1756
+    },
+    {
+      "speed": 400,
+      "minutes": 30,
+      "distance": 720000,
+      "maxEncounters": 7,
+      "maxObstacles": 241,
+      "maxPickups": 222,
+      "cpuMilliseconds": 2541
+    },
+    {
+      "speed": 600,
+      "minutes": 30,
+      "distance": 1080000,
+      "maxEncounters": 9,
+      "maxObstacles": 339,
+      "maxPickups": 315,
+      "cpuMilliseconds": 4589
+    }
+  ],
+  "status": "passed"
+}
+{"renderDataChecks":2890,"simulatedMinutes":30,"maxChunks":12,"maxCached":91,"maxCompiled":68,"maxBatches":68,"maxAnimated":22,"gpuVerified":false,"status":"passed"}
+{
+  "cases": 256,
+  "failures": [],
+  "maxPlanMilliseconds": 579,
+  "meanPlanMilliseconds": 147.1015625,
+  "elapsed": 52395.076764
+}
+{
+  "candidates": 216,
+  "activated": 212,
+  "rejectedWithoutSpending": 4,
+  "startsInsideGeometry": 0,
+  "failures": []
+}
+{"surfaceChecks":14,"upperVerticesPreserved":325119,"preservedSignals":12,"contrastReports":[{"id":"rocky_arch","lod":1,"before":3.33,"after":1.08},{"id":"rocky_arch","lod":2,"before":3.33,"after":1.08},{"id":"sea_stacks","lod":1,"before":3.33,"after":1.15},{"id":"sea_stacks","lod":2,"before":2.92,"after":1.08},{"id":"mountain_peak","lod":1,"before":2.82,"after":1.12},{"id":"mountain_peak","lod":2,"before":3.16,"after":1.08},{"id":"rocky_ridge","lod":1,"before":3.16,"after":1.1},{"id":"rocky_ridge","lod":2,"before":3.2,"after":1.08},{"id":"waterfall_cliff","lod":1,"before":3.2,"after":1.1},{"id":"waterfall_cliff","lod":2,"before":3.33,"after":1.08}],"geometryPreserved":true,"aircraftPalettesPreserved":true,"gpuVerified":false,"status":"passed"}
+{"jpegCacheChecks":"passed","nativeAircraftPreparation":true,"nativeThemePreparation":true,"themeMeshes":350,"releasedReferences":true,"nonLobbyCaptureBlocked":true,"gpuRenderedOrVerified":false}
+{"revisionChecks":7804105,"aircraftOrbitCases":1920,"maxRadius":31.5,"unlimitedBoost":true,"settingsValidated":true,"gpuVerified":false,"status":"passed"}
+{"worldRevisionChecks":37054,"anchoredModels":14314,"districtModels":6160,"gpuVerified":false,"status":"passed"}
+{"interfaceContracts":16,"browserOrLayoutVerified":false,"gpuVerified":false,"status":"passed"}
+{"upgrade400Checks":395,"nativeRigMatrices":168,"maxPoseError":8.215650382226158e-15,"gpuVerified":false,"status":"passed"}
+{"workerChecks":19,"realWorkerCases":3,"gpuVerified":false,"status":"passed"}
+{"suites":18,"elapsedSeconds":291,"gpuVerified":false,"status":"passed"}

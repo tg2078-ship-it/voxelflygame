@@ -1,0 +1,41 @@
+.contract-selector{margin:16px 0 4px;border-top:1px solid #a5dad52b;padding-top:14px}
+.contract-selector header{font-size:11px;color:#d5eadb;line-height:1.7}.contract-selector header>span{display:block;color:#d6bd85;font-size:9px;letter-spacing:.08em}
+.contract-selector>div{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;margin:10px 0}
+.airrun .contract-selector button{display:flex;flex-direction:column;align-items:flex-start;gap:6px;min-height:76px;padding:10px 8px;border:1px solid #adcbd32c;background:#1026348c;border-radius:4px;color:#a9c2c7;text-align:left;position:relative}
+.airrun .contract-selector button b{font-size:10px;line-height:1.5;font-weight:500}.airrun .contract-selector button.selected{color:#c2f1d9;background:#447d632a;border-color:#b1eadb98}.contract-selector button>svg:last-child:not(:first-child){position:absolute;right:5px;top:7px}
+.contract-selector p{font-size:11px;margin:6px 0;color:#d7e3d8;line-height:1.7}.contract-selector>small{font-size:10px;line-height:1.65;color:#a8c3bf;display:block}
+.contract-milestones{display:flex;gap:6px;margin:14px 0 10px}.contract-milestones>div{flex:1;min-width:0;position:relative;height:28px;background:#102731;border:1px solid #9ac6cb30;border-radius:3px;overflow:hidden}.contract-milestones i{position:absolute;inset:0 auto 0 0;background:#77b5a233;transition:width .15s linear}.contract-milestones span{position:relative;display:flex;align-items:center;justify-content:space-between;padding:6px;font-size:10px}.contract-milestones .earned{color:#c0f7cd;border-color:#9ad4b178}.contract-milestones b{font-weight:500}
+.mastery-ghost{display:block;margin-top:8px;font:11px system-ui;color:#9bd8f3;font-variant-numeric:tabular-nums}.mastery-ghost.behind{color:#e6bf8e}
+.contract-debrief{display:flex;align-items:center;gap:10px;padding:16px;margin-top:16px;border:1px solid #bed8c931;background:#1a3942;border-radius:5px;color:#bfe5d4}.contract-debrief>div{flex:1}.contract-debrief b{font-size:13px;font-weight:500}.contract-debrief span{display:block;font-size:11px;color:#a8c7be;margin-top:4px}.contract-debrief strong{font-size:22px;font-weight:500;color:#ebd4a2}.contract-debrief small{font-size:9px;margin-left:4px}
+.result-actions:has([data-rematch]){display:grid!important;grid-template-columns:1fr 1fr;gap:8px}.result-actions [data-rematch]{grid-column:1/-1}.result-actions:has([data-rematch]) button{min-height:44px}
+@media(max-width:650px) and (orientation:portrait){.flightdeck-six .contract-hud{display:block;top:153px;right:22px;left:auto;bottom:auto;width:150px;padding:10px;background:#18333de8}.contract-hud h2{font-size:13px}.contract-hud>p{display:none}.contract-hud header{font-size:9px}.contract-hud .contract-milestones{margin:8px 0}.contract-hud .contract-milestones span{padding:5px 3px;font-size:8px}.contract-hud footer{font-size:9px;display:flex;flex-wrap:wrap}.sortie-active .f6-airframe{top:278px}.sortie-active .f6-bank{top:382px}.mastery-ghost{max-width:155px;font-size:10px}.contract-selector>div{gap:6px}.airrun .contract-selector button{min-height:72px}}
+@media(max-height:450px){.contract-hud>p{display:none}.contract-hud .contract-milestones{margin:5px 0}.contract-hud{max-width:210px}.result-actions:has([data-rematch]){display:flex!important}.result-actions:has([data-rematch]) button{min-height:44px}.mastery-ghost{font-size:10px}}
+@media(prefers-reduced-motion:reduce){.contract-milestones i{transition:none}}
+
+/* A short acknowledgement at each earned tier; no continuous HUD animation. */
+.airrun .contract-selector button{overflow:hidden;transition:background .18s ease,border-color .18s ease,box-shadow .18s ease,transform .14s ease}
+.airrun .contract-selector button::before{content:"";position:absolute;inset:0 auto 0 0;width:2px;background:#b9ead4;transform:scaleY(0);transition:transform .18s ease;transform-origin:center}
+.airrun .contract-selector button.selected::before{transform:scaleY(1)}
+.airrun .contract-selector button.selected{box-shadow:inset 0 1px #d0f9e515,0 3px 14px #0002}
+.airrun .contract-selector button:focus-visible{outline:2px solid #f3d59a;outline-offset:3px}
+.airrun .contract-selector button:active{transform:translateY(1px) scale(.98)}
+@media(hover:hover){.airrun .contract-selector button:hover{background:#28504a99;border-color:#afd4cb88;transform:translateY(-2px)}.airrun .contract-selector button:active{transform:translateY(1px) scale(.98)}}
+.contract-milestones>div.current{border-color:#e5c68c99}
+.contract-milestones>div.earned{background:#244c42;animation:contract-earned .65s ease-out both}
+.contract-milestones .earned::after{content:"";position:absolute;inset:-20% -50%;background:linear-gradient(105deg,transparent 35%,#e5ffe94d 50%,transparent 65%);animation:contract-sweep .6s ease-out both;pointer-events:none}
+.contract-tier.earned{color:#bcebd0;animation:contract-earned .65s ease-out both}
+.contract-hud footer{font-variant-numeric:tabular-nums;gap:8px}
+.contract-hud.completed footer{color:#c7efd3}
+.contract-insignia{display:grid;place-items:center;flex-shrink:0;width:36px;height:36px;border:1px solid #b6d3ca44;border-radius:50%;background:#9dcdbd0c}
+.contract-debrief.all-clear{border-color:#a9d4ae77;background:linear-gradient(120deg,#244b42,#19333b)}
+.contract-debrief.all-clear .contract-insignia{color:#e4f9cf;border-color:#d9e6b7aa;background:#c5e1ac19}
+.contract-seals{display:flex;gap:4px;margin-top:9px}
+.contract-seals i{width:22px;height:3px;border-radius:2px;background:#acc8c626}
+.contract-seals i.earned{background:#d9d59c}
+@keyframes contract-earned{0%{box-shadow:0 0 0 1px #d2f0b9,0 0 14px #b8ebbb66}100%{box-shadow:0 0 0 0 transparent,0 0 0 transparent}}
+@keyframes contract-sweep{from{transform:translateX(-80%);opacity:0}30%{opacity:1}to{transform:translateX(80%);opacity:0}}
+.reduced-motion .contract-selector button,.reduced-motion .contract-selector button::before,.reduced-motion .contract-milestones i{transition:none!important;transform:none!important}
+.reduced-motion .contract-selector button:not(.selected)::before{visibility:hidden}
+.reduced-motion .contract-milestones .earned,.reduced-motion .contract-milestones .earned::after,.reduced-motion .contract-tier.earned{animation:none!important}
+.reduced-motion .contract-milestones .earned::after{display:none}
+@media(prefers-reduced-motion:reduce){.airrun .contract-selector button,.airrun .contract-selector button::before,.contract-milestones i{transition:none!important;transform:none!important}.contract-selector button:not(.selected)::before{visibility:hidden}.contract-milestones .earned,.contract-milestones .earned::after,.contract-tier.earned{animation:none!important}.contract-milestones .earned::after{display:none}}

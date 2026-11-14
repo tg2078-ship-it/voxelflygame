@@ -1,0 +1,474 @@
+{
+  "status": "passed",
+  "softwareGPU": true,
+  "humanPlaytest": false,
+  "interaction": "Native pointer/keyboard; automated steering from the read-only HUD.",
+  "fixture": "Existing fresh skyhawk pilot in localStorage; no flight state, clock, geometry or score injection.",
+  "completionAttempt": false,
+  "nativeContractSelection": true,
+  "hangarViewports": {
+    "1280x800": {
+      "sortie": {
+        "x": 953,
+        "y": 284.6875,
+        "width": 282,
+        "height": 72,
+        "receivesPointer": true
+      },
+      "launch": {
+        "x": 954,
+        "y": 716,
+        "width": 300,
+        "height": 62,
+        "receivesPointer": true
+      }
+    },
+    "360x800": {
+      "sortie": {
+        "x": 36,
+        "y": 336.1875,
+        "width": 140,
+        "height": 109,
+        "receivesPointer": true
+      },
+      "launch": {
+        "x": 16,
+        "y": 719,
+        "width": 328,
+        "height": 56,
+        "receivesPointer": true
+      }
+    },
+    "844x390": {
+      "sortie": {
+        "x": 630,
+        "y": 128.140625,
+        "width": 186,
+        "height": 63,
+        "receivesPointer": true
+      },
+      "launch": {
+        "x": 601,
+        "y": 332.5,
+        "width": 228,
+        "height": 45,
+        "receivesPointer": true
+      }
+    }
+  },
+  "departure": {
+    "phase": "flying",
+    "mode": "sortie",
+    "time": 0.11666666666666665,
+    "navigation": {
+      "distance": 128.99299216056278,
+      "dx": -8.063235757650888,
+      "dy": -2.9472567019984126,
+      "role": "orientation",
+      "screen": {
+        "x": -176.40306522163092,
+        "y": 68.20405412850629,
+        "visible": false
+      }
+    },
+    "choice": null,
+    "sortie": {
+      "elapsed": 0.11666666666666665,
+      "duration": 180,
+      "remaining": 179.88333333333333,
+      "progress": 0.0006481481481481481,
+      "stage": {
+        "id": "departure",
+        "index": 0,
+        "label": "출격 항로",
+        "en": "DEPARTURE",
+        "start": 0,
+        "end": 25,
+        "spacingMultiplier": 1.2
+      },
+      "completed": false,
+      "operations": 0,
+      "perfectPasses": 0
+    },
+    "adventure": {
+      "vault": {
+        "pending": 0,
+        "secured": 0,
+        "lost": 0,
+        "banks": 0,
+        "peak": 0
+      },
+      "operation": {
+        "id": "OP-1",
+        "kind": "pathfinder",
+        "title": "항로 개척",
+        "titleEn": "PATHFINDER",
+        "instruction": "전방에 표시된 통과 경로를 연결하세요.",
+        "instructionEn": "Link the marked passages ahead.",
+        "progress": 0,
+        "target": 2,
+        "unit": "count",
+        "remaining": 31.883333333333333,
+        "duration": 32,
+        "reward": 250,
+        "status": "active"
+      },
+      "completed": 0,
+      "expired": 0,
+      "earnedBonus": 0,
+      "flow": {
+        "value": 0,
+        "tier": 0,
+        "chain": 0,
+        "multiplier": 1,
+        "remaining": 0,
+        "bestChain": 0
+      }
+    },
+    "hp": 100,
+    "speed": 126.74721486790118,
+    "modelError": "",
+    "renderError": ""
+  },
+  "portraitBankHit": {
+    "x": 182,
+    "y": 382,
+    "width": 156,
+    "height": 98,
+    "receivesPointer": true
+  },
+  "flightWallSeconds": 224.14323996300027,
+  "bankBefore": {
+    "pending": 22,
+    "secured": 0,
+    "lost": 0,
+    "banks": 0,
+    "peak": 22
+  },
+  "lastFlightSnapshot": {
+    "phase": "flying",
+    "mode": "sortie",
+    "time": 8.133333333333317,
+    "navigation": {
+      "distance": 89.83302160470464,
+      "dx": -17.153710979677207,
+      "dy": -0.7475923589474789,
+      "role": "orientation",
+      "screen": {
+        "x": 41.134348856780974,
+        "y": 41.93277283813914,
+        "visible": true
+      }
+    },
+    "choice": null,
+    "sortie": {
+      "elapsed": 8.133333333333317,
+      "duration": 180,
+      "remaining": 171.86666666666667,
+      "progress": 0.04518518518518509,
+      "stage": {
+        "id": "departure",
+        "index": 0,
+        "label": "출격 항로",
+        "en": "DEPARTURE",
+        "start": 0,
+        "end": 25,
+        "spacingMultiplier": 1.2
+      },
+      "completed": false,
+      "operations": 1,
+      "perfectPasses": 2
+    },
+    "adventure": {
+      "vault": {
+        "pending": 0,
+        "secured": 22,
+        "lost": 0,
+        "banks": 1,
+        "peak": 22
+      },
+      "operation": {
+        "id": "OP-1",
+        "kind": "pathfinder",
+        "title": "항로 개척",
+        "titleEn": "PATHFINDER",
+        "instruction": "전방에 표시된 통과 경로를 연결하세요.",
+        "instructionEn": "Link the marked passages ahead.",
+        "progress": 2,
+        "target": 2,
+        "unit": "count",
+        "remaining": 24.966666666666686,
+        "duration": 32,
+        "reward": 250,
+        "status": "completed"
+      },
+      "completed": 1,
+      "expired": 0,
+      "earnedBonus": 422,
+      "flow": {
+        "value": 0,
+        "tier": 0,
+        "chain": 0,
+        "multiplier": 1,
+        "remaining": 0,
+        "bestChain": 2
+      },
+      "callout": "플로우 확정 +22",
+      "calloutEn": "FLOW BANKED +22"
+    },
+    "hp": 100,
+    "speed": 142.04051236262757,
+    "modelError": "",
+    "renderError": ""
+  },
+  "pausedClock": {
+    "before": {
+      "elapsed": 8.933333333333357,
+      "duration": 180,
+      "remaining": 171.06666666666663,
+      "progress": 0.04962962962962976,
+      "stage": {
+        "id": "departure",
+        "index": 0,
+        "label": "출격 항로",
+        "en": "DEPARTURE",
+        "start": 0,
+        "end": 25,
+        "spacingMultiplier": 1.2
+      },
+      "completed": false,
+      "operations": 1,
+      "perfectPasses": 2
+    },
+    "after": {
+      "elapsed": 8.933333333333357,
+      "duration": 180,
+      "remaining": 171.06666666666663,
+      "progress": 0.04962962962962976,
+      "stage": {
+        "id": "departure",
+        "index": 0,
+        "label": "출격 항로",
+        "en": "DEPARTURE",
+        "start": 0,
+        "end": 25,
+        "spacingMultiplier": 1.2
+      },
+      "completed": false,
+      "operations": 1,
+      "perfectPasses": 2
+    }
+  },
+  "actualCompletedSortie": false,
+  "result": {
+    "difficulty": "relaxed",
+    "seed": 560870756,
+    "level": 1,
+    "contract": {
+      "id": "precision",
+      "progress": 2,
+      "targets": [
+        3,
+        6,
+        9
+      ],
+      "tier": 0,
+      "bonus": 0
+    },
+    "sortie": {
+      "version": 1,
+      "elapsed": 8.933333333333357,
+      "duration": 180,
+      "completed": false,
+      "bonus": 0,
+      "operations": 1,
+      "perfectPasses": 2
+    },
+    "mode": "sortie",
+    "debrief": {
+      "version": 1,
+      "manualSeconds": 8.933333333333357,
+      "vault": {
+        "pending": 0,
+        "secured": 22,
+        "lost": 0,
+        "banks": 1,
+        "peak": 22
+      },
+      "medal": "bronze",
+      "rating": 26,
+      "operationsCompleted": 1,
+      "operationsExpired": 0,
+      "perfectPasses": 2,
+      "bestFlow": 2,
+      "flowActions": 2,
+      "operationBonus": 250,
+      "precisionBonus": 150,
+      "flowBonus": 22,
+      "controlDistance": 105,
+      "lowDistance": 0,
+      "boostDistance": 0,
+      "cleanDistance": 335
+    },
+    "id": "6e6ac621-1027-4aa5-93c3-d88832c36988",
+    "date": "2026-11-13T01:37:58.907Z",
+    "planeId": "skyhawk",
+    "distance": 335,
+    "bonus": 722,
+    "score": 1057,
+    "coins": 3,
+    "reward": 18,
+    "maxCombo": 0,
+    "eUsed": false,
+    "practice": false,
+    "interrupted": true,
+    "reason": "비행 종료",
+    "reasonEn": "FLIGHT ENDED",
+    "metrics": {
+      "minorHits": 0,
+      "recoveryDistance": 0,
+      "highRisk": 0,
+      "cleanDistance": 0,
+      "distance": 335,
+      "bonus": 722,
+      "coins": 3,
+      "rings": 2,
+      "crystals": 0,
+      "near": 0,
+      "narrow": 0,
+      "low": 0,
+      "boost": 0,
+      "maxCombo": 0,
+      "damage": 0,
+      "repair": 0,
+      "shieldBlocks": 0,
+      "brakePass": 0,
+      "directionPass": 2,
+      "riskPaths": 0,
+      "safePaths": 2,
+      "nightRings": 0,
+      "multRings": 0,
+      "slowPass": 0,
+      "turboNear": 0,
+      "bridgePass": 0,
+      "roofPass": 0,
+      "cityPass": 0,
+      "canyonPass": 0,
+      "forestNear": 0,
+      "coastLow": 0,
+      "postShield": 0,
+      "postRepair": 0,
+      "postE": 0,
+      "rainDistance": 0,
+      "snowSafe": 0,
+      "fogPass": 0,
+      "stormNear": 0,
+      "dayDistance": 335.1399510405339,
+      "nightDistance": 0,
+      "weatherCoins": {
+        "clear": 3
+      },
+      "effects": [],
+      "weathers": [
+        "clear"
+      ],
+      "themes": [],
+      "landmarks": [],
+      "themeTime": {
+        "coast": 8.933333333333357
+      },
+      "time": 8.933333333333357
+    },
+    "discoveryImages": {},
+    "discoveredModels": [
+      "cessna_skyhawk",
+      "brick_warehouse_loading_court",
+      "fishmarket_jetty",
+      "coastal_rescue_patrol_boat",
+      "cargo_warehouse",
+      "cargo_container",
+      "pine_tree_single",
+      "fishing_boat"
+    ],
+    "newBest": true
+  },
+  "storedRuns": 1,
+  "sameRouteSeedPreserved": true,
+  "nativeRetry": {
+    "phase": "flying",
+    "mode": "sortie",
+    "time": 0.11666666666666665,
+    "navigation": {
+      "distance": 128.99299216056278,
+      "dx": -8.063235757650888,
+      "dy": -2.9472567019984126,
+      "role": "orientation",
+      "screen": {
+        "x": 1.6786828116789776,
+        "y": 3.398142278122196,
+        "visible": false
+      }
+    },
+    "choice": null,
+    "sortie": {
+      "elapsed": 0.11666666666666665,
+      "duration": 180,
+      "remaining": 179.88333333333333,
+      "progress": 0.0006481481481481481,
+      "stage": {
+        "id": "departure",
+        "index": 0,
+        "label": "출격 항로",
+        "en": "DEPARTURE",
+        "start": 0,
+        "end": 25,
+        "spacingMultiplier": 1.2
+      },
+      "completed": false,
+      "operations": 0,
+      "perfectPasses": 0
+    },
+    "adventure": {
+      "vault": {
+        "pending": 0,
+        "secured": 0,
+        "lost": 0,
+        "banks": 0,
+        "peak": 0
+      },
+      "operation": {
+        "id": "OP-1",
+        "kind": "pathfinder",
+        "title": "항로 개척",
+        "titleEn": "PATHFINDER",
+        "instruction": "전방에 표시된 통과 경로를 연결하세요.",
+        "instructionEn": "Link the marked passages ahead.",
+        "progress": 0,
+        "target": 2,
+        "unit": "count",
+        "remaining": 31.883333333333333,
+        "duration": 32,
+        "reward": 250,
+        "status": "active"
+      },
+      "completed": 0,
+      "expired": 0,
+      "earnedBonus": 0,
+      "flow": {
+        "value": 0,
+        "tier": 0,
+        "chain": 0,
+        "multiplier": 1,
+        "remaining": 0,
+        "bestChain": 0
+      }
+    },
+    "hp": 100,
+    "speed": 126.74721486790118,
+    "modelError": "",
+    "renderError": ""
+  },
+  "javascriptErrors": [],
+  "webglErrors": [],
+  "httpFailures": []
+}

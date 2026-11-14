@@ -1,0 +1,262 @@
+{
+  "status": "passed",
+  "edition": "9.0.0",
+  "models": 403,
+  "animated_models": 203,
+  "glb_exports": 2015,
+  "core_upgraded_aircraft": 8,
+  "new_structures": 3,
+  "retained_edition8": 392,
+  "binary": {
+    "models": 403,
+    "moving_models": 203,
+    "glb_files": 2015,
+    "embedded_image_instances": 11655,
+    "unique_decoded_images": 59,
+    "maximum_position_component_error_m": 0.000573138246324191,
+    "position_error_method": "Conservative accumulation of per-decode coordinate error through parent transforms, metres",
+    "collision_detail_vertex_samples": 38688,
+    "maximum_added_detail_collision_error_m": 9.5367431640625e-07,
+    "models_with_edition8_detail": 392,
+    "edition9_core_models": 11,
+    "errors": [],
+    "status": "passed",
+    "themes": {
+      "forest_mountain_lake": 38,
+      "village": 40,
+      "desert_canyon": 38,
+      "ads_signage": 39,
+      "aircraft": 22,
+      "snow_ice": 38,
+      "farm": 39,
+      "korean_landmarks": 39,
+      "city": 39,
+      "coastal": 42,
+      "modules": 29
+    },
+    "triangle_totals": [
+      26614206,
+      4044568,
+      1445084
+    ],
+    "seconds": 82.13
+  },
+  "native_imports": {
+    "models": 403,
+    "moving_models": 203,
+    "pose_comparisons": 39512,
+    "maximum_pose_error": 0,
+    "individual_clip_samples": 4650,
+    "joint_samples": 954,
+    "max_joint_error_m": 0.00010081577104157296
+  },
+  "input_and_contacts": {
+    "status": "passed",
+    "aircraft": [
+      {
+        "id": "cessna_skyhawk",
+        "samples": 300,
+        "maxError": 0
+      },
+      {
+        "id": "dhc2_beaver",
+        "samples": 300,
+        "maxError": 0
+      },
+      {
+        "id": "extra_330lx",
+        "samples": 300,
+        "maxError": 0
+      },
+      {
+        "id": "f16_fighting_falcon",
+        "samples": 480,
+        "maxError": 0
+      },
+      {
+        "id": "l39_albatros",
+        "samples": 480,
+        "maxError": 0
+      },
+      {
+        "id": "p51d_mustang",
+        "samples": 420,
+        "maxError": 0
+      },
+      {
+        "id": "pitts_s2c",
+        "samples": 420,
+        "maxError": 0
+      },
+      {
+        "id": "stearman_model_75",
+        "samples": 420,
+        "maxError": 0
+      }
+    ],
+    "contacts": [
+      {
+        "id": "hero_airfield_hangar",
+        "closed_blocks": true,
+        "open_passes": true
+      },
+      {
+        "id": "hero_workshop_windmill",
+        "native_sail_initial_hit": true,
+        "old_position_clear_after_rotation": true
+      }
+    ]
+  },
+  "precision_core": {
+    "status": "passed",
+    "method": "Every exported Hero triangle vertex and native mesh node checked against precision collider, independently re-read from GLB bytes",
+    "models": [
+      {
+        "id": "hero_workshop_windmill",
+        "triangle_vertices_compared": 79008,
+        "exact_exported_surface_match": true
+      },
+      {
+        "id": "stearman_model_75",
+        "triangle_vertices_compared": 519162,
+        "exact_exported_surface_match": true
+      },
+      {
+        "id": "cessna_skyhawk",
+        "triangle_vertices_compared": 680178,
+        "exact_exported_surface_match": true
+      },
+      {
+        "id": "pitts_s2c",
+        "triangle_vertices_compared": 513270,
+        "exact_exported_surface_match": true
+      },
+      {
+        "id": "extra_330lx",
+        "triangle_vertices_compared": 514536,
+        "exact_exported_surface_match": true
+      },
+      {
+        "id": "p51d_mustang",
+        "triangle_vertices_compared": 555882,
+        "exact_exported_surface_match": true
+      },
+      {
+        "id": "dhc2_beaver",
+        "triangle_vertices_compared": 595050,
+        "exact_exported_surface_match": true
+      },
+      {
+        "id": "f16_fighting_falcon",
+        "triangle_vertices_compared": 614814,
+        "exact_exported_surface_match": true
+      },
+      {
+        "id": "l39_albatros",
+        "triangle_vertices_compared": 651798,
+        "exact_exported_surface_match": true
+      },
+      {
+        "id": "hero_clifftop_lighthouse",
+        "triangle_vertices_compared": 65862,
+        "exact_exported_surface_match": true
+      },
+      {
+        "id": "hero_airfield_hangar",
+        "triangle_vertices_compared": 41424,
+        "exact_exported_surface_match": true
+      }
+    ]
+  },
+  "browser": {
+    "html_sha256": "270a68d23445efbad4f734aa62ff7849fa3bbf87e8952417676463f9cd009001",
+    "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+    "checks": [
+      "Initial offline WebGL model render",
+      "8 core aircraft control/collider transforms match",
+      "GLB save produces a downloadable binary file",
+      "403-model folder imported; non-embedded GLB opened",
+      "Actual fixed-step forward flight and lateral input",
+      "Real closed hangar collider stops flight",
+      "Landscape touch controls visible"
+    ],
+    "live_input_sync": [
+      {
+        "id": "cessna_skyhawk",
+        "count": 10,
+        "max": 0
+      },
+      {
+        "id": "dhc2_beaver",
+        "count": 10,
+        "max": 0
+      },
+      {
+        "id": "extra_330lx",
+        "count": 10,
+        "max": 0
+      },
+      {
+        "id": "f16_fighting_falcon",
+        "count": 16,
+        "max": 0
+      },
+      {
+        "id": "l39_albatros",
+        "count": 16,
+        "max": 0
+      },
+      {
+        "id": "p51d_mustang",
+        "count": 14,
+        "max": 0
+      },
+      {
+        "id": "pitts_s2c",
+        "count": 14,
+        "max": 0
+      },
+      {
+        "id": "stearman_model_75",
+        "count": 14,
+        "max": 0
+      }
+    ],
+    "download": {
+      "filename": "stearman_model_75_lod0.glb",
+      "bytes": 15088204
+    },
+    "full_folder": {
+      "models": 403,
+      "aircraft": 22,
+      "world": 381,
+      "files": 3643
+    },
+    "flight": {
+      "x": 14.00000000000001,
+      "distance": 28.00000000000002,
+      "actors": 6,
+      "flying": true
+    },
+    "contact": {
+      "stopped": true,
+      "status": "CONTACT / hero_airfield_hangar"
+    },
+    "mobile": {
+      "width": 844,
+      "height": 390,
+      "touchControls": true
+    },
+    "errors": [],
+    "http_requests": [],
+    "status": "passed",
+    "environment": "Real Chromium WebGL2 using SwiftShader software GPU; no physical-device FPS benchmark"
+  },
+  "actual_rendered_core": 11,
+  "limits": [
+    "Chromium WebGL2 exercised on SwiftShader software GPU; no physical-device FPS benchmark",
+    "No Unity, Unreal or Godot project integration test",
+    "403 models are not all newly authored in Edition9",
+    "Swept spheres approximate aircraft contact; not full continuous mesh-to-mesh rigid-body dynamics"
+  ]
+}

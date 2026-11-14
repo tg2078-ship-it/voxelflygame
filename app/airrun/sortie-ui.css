@@ -1,0 +1,89 @@
+/* Finite sorties use the existing flight console and keep the flight corridor clear. */
+.airrun .ops-mode-selector > button.sortie { color: #8edfd8; }
+.airrun .ops-mode-selector > button.sortie.selected { border-color: #8edfd894; background: linear-gradient(115deg,#3d81792c,#1e4a5026); box-shadow: inset 3px 0 #9de7d5; }
+.airrun .ops-mode-selector > button.sortie em { color: #b1f1e0; background: #8edfd817; }
+.sortie-briefing { margin-top: 12px; padding: 14px 12px 12px; border: 1px solid #93d6c837; border-radius: 5px; background: #142e3680; }
+.sortie-briefing-head { display: flex; gap: 9px; align-items: flex-start; color: #a4e4cd; }
+.sortie-briefing-head > svg { margin-top: 3px; flex-shrink: 0; }
+.sortie-briefing-head > span { font-size: 12px; font-weight: 500; line-height: 1.6; color: #e2ecdd; }
+.sortie-briefing-head small { display: block; margin-top: 4px; font-size: 10px; color: #b3cac2; font-weight: 400; }
+.sortie-briefing-head small b { margin-left: 4px; color: #efd594; font-weight: 500; }
+.sortie-stage-plan { display: flex; gap: 4px; list-style: none; padding: 0; margin: 16px 0 11px; }
+.sortie-stage-plan > li { position: relative; flex: 1; display: flex; flex-direction: column; gap: 8px; align-items: center; min-width: 0; font-size: 9px; text-align: center; color: #c7ddd2; line-height: 1.5; }
+.sortie-stage-plan > li::before { content: ''; position: absolute; height: 1px; background: #a8d4c94f; top: 4px; right: 50%; width: calc(100% + 4px); }
+.sortie-stage-plan > li:first-child::before { display: none; }
+.sortie-stage-plan i { position: relative; width: 9px; height: 9px; border: 1px solid #b8e4d4; border-radius: 50%; background: #183c42; }
+.sortie-stage-plan > li:nth-child(4) i { border-color: #efd594; background: #776749; }
+.sortie-stage-plan > li:last-child i { background: #b0e5cc; }
+.sortie-briefing > p { font-size: 10px; line-height: 1.75; color: #acc8c0; margin: 0; }
+.sortie-flight-progress { position: absolute; left: 50%; top: 0; transform: translateX(-50%); width: min(290px,28vw); pointer-events: none; font-variant-numeric: tabular-nums; }
+.sortie-flight-progress > header { display: flex; gap: 10px; justify-content: space-between; align-items: center; }
+.sortie-flight-progress > header > span { font-size: 10px; color: #d5eee2; letter-spacing: .06em; }
+.sortie-flight-progress > header > b { display: flex; align-items: center; gap: 5px; font-size: 21px; line-height: 1.1; font-weight: 500; color: #e5f7e9; }
+.sortie-stage-meter { display: flex; gap: 4px; margin: 9px 0 6px; height: 4px; }
+.sortie-stage-meter > i { display: block; background: #c7e6e72b; overflow: hidden; border-radius: 1px; }
+.sortie-stage-meter > i > b { display: block; height: 100%; background: #a7e7cd; transition: width .12s linear; }
+.sortie-stage-meter > i.current > b { background: #f1d693; }
+.sortie-flight-progress > small { display: block; text-align: center; font-size: 9px; line-height: 1.5; color: #bdd9d6; }
+.sortie-flight-progress.clock-held > header > b { color: #9ad9fd; }
+.sortie-flight-progress.stage-extraction > header > span { color: #f4dfa5; }
+.sortie-debrief { margin-top: 22px; padding: 18px; border: 1px solid #c5d8ce36; border-radius: 6px; background: linear-gradient(115deg,#264f4cba,#152e3ac2); }
+.sortie-debrief.completed { border-color: #a5e0ba69; background: linear-gradient(115deg,#355d49e6,#183b42d9); }
+.sortie-debrief > header { display: flex; align-items: center; gap: 12px; color: #d3dfc6; }
+.sortie-debrief.completed > header > svg { color: #afe9c5; }
+.sortie-debrief > header > div { flex: 1; }
+.sortie-debrief > header span { display: block; font-size: 9px; color: #b0cbc2; letter-spacing: .08em; }
+.airrun .sortie-debrief h2 { margin: 6px 0 0; font-size: 19px; font-weight: 500; color: #eef0dd; }
+.sortie-debrief > header > b { font-size: 26px; font-weight: 500; white-space: nowrap; }
+.sortie-debrief > header > b > small { font-size: 10px; color: #b7d2c6; }
+.sortie-result-stages { display: grid; grid-template-columns: repeat(5,1fr); gap: 8px; list-style: none; margin: 21px 0 18px; padding: 0; }
+.sortie-result-stages > li { display: flex; flex-direction: column; align-items: center; gap: 7px; text-align: center; color: #9bb6b2; font-size: 9px; line-height: 1.5; }
+.sortie-result-stages i { display: grid; place-items: center; width: 25px; height: 25px; font: 10px system-ui; border: 1px solid #c7ded42b; border-radius: 50%; background: #0f283a55; }
+.sortie-result-stages .cleared { color: #c7e9d2; }
+.sortie-result-stages .cleared i { color: #c4efcf; background: #8edfb51a; border-color: #a9dfb777; }
+.sortie-result-stages .reached { color: #e5d5a9; }
+.sortie-result-stages .reached i { border-color: #dbc0828c; }
+.sortie-result-note { display: flex; align-items: center; justify-content: space-between; gap: 10px; border-top: 1px solid #c5d8ce24; padding-top: 12px; font-size: 11px; color: #c5dcd1; line-height: 1.6; }
+.sortie-result-note > b { color: #f2d695; font-size: 15px; font-weight: 500; white-space: nowrap; }
+.sortie-debrief > p { margin: 8px 0 0; color: #b0cac1; font-size: 11px; line-height: 1.75; }
+@media (max-width: 1050px) { .sortie-flight-progress { width: min(252px,30vw); } .sortie-flight-progress > header > span { font-size: 9px; } }
+@media (pointer: coarse) and (orientation: landscape), (max-height: 450px) {
+    .sortie-flight-progress { width: min(245px,29vw); }
+    .sortie-flight-progress > header > span { font-size: 8px; letter-spacing: 0; }
+    .sortie-flight-progress > header > b { font-size: 17px; }
+    .sortie-flight-progress > small { font-size: 8px; }
+    .sortie-stage-meter { margin-block: 6px 4px; height: 3px; }
+    .sortie-debrief { padding: 13px 15px; margin-top: 14px; }
+    .sortie-debrief > header > b { font-size: 22px; }
+    .airrun .sortie-debrief h2 { font-size: 16px; }
+    .sortie-result-stages { margin-block: 13px; }
+}
+@media (max-width: 650px) and (orientation: portrait) {
+    .sortie-flight-progress { top: 51px; width: calc(100vw - 48px); }
+    .sortie-flight-progress > header > span { font-size: 11px; }
+    .sortie-flight-progress > header > b { font-size: 20px; }
+    .sortie-flight-progress > small { font-size: 9px; }
+    .sortie-active .f6-distance { top: 156px; }
+    .sortie-active .f6-distance > strong { font-size: 37px; }
+    .sortie-active .f6-airframe { top: 252px; }
+    /* The bank action must remain available on touch devices without an F key. */
+    .flightdeck-six .f6-flow { display: block; position: static; width: auto; border: 0; padding: 0; }
+    .flightdeck-six .f6-flow > header, .flightdeck-six .f6-flow > div, .flightdeck-six .f6-flow > p { display: none; }
+    .flightdeck-six .f6-bank { position: absolute; right: 22px; top: 320px; width: 156px; margin: 0; min-height: 56px; padding: 9px 10px; }
+    .sortie-active .f6-bank { top: 362px; }
+    .flightdeck-six .f6-bank > span { font-size: 10px; flex-wrap: wrap; gap: 5px; }
+    .flightdeck-six .f6-bank > span > b { font-size: 17px; }
+    .flightdeck-six .f6-bank > small { font-size: 9px; }
+    .sortie-debrief { padding: 15px; }
+    .sortie-debrief > header { gap: 8px; flex-wrap: wrap; }
+    .sortie-debrief > header > svg { width: 20px; }
+    .sortie-debrief > header span { font-size: 8px; }
+    .airrun .sortie-debrief h2 { font-size: 17px; }
+    .sortie-debrief > header > b { font-size: 23px; }
+    .sortie-result-stages { gap: 5px; }
+    .sortie-result-stages > li { font-size: 9px; }
+    .sortie-result-note { font-size: 10px; }
+    .sortie-result-note > b { font-size: 13px; }
+}
+@media (prefers-reduced-motion: reduce) { .sortie-stage-meter > i > b { transition: none; } }
+.reduced-motion .sortie-stage-meter > i > b { transition: none; }

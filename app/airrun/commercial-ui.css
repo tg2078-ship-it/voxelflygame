@@ -1,0 +1,263 @@
+/* Readable instruments and deliberate input targets for the 7.0 flight deck. */
+.airrun .ops-dashboard { grid-template-rows: minmax(250px, 1fr) 180px 76px; }
+.airrun .ops-kicker { font-size: 10px; letter-spacing: .12em; }
+.airrun .ops-showcase-heading p { font-size: 12px; line-height: 1.65; }
+.airrun .ops-console-tabs > button { min-height: 44px; font-size: 12px; }
+.airrun .ops-console-tabs > button > small { font-size: 10px; }
+.airrun .ops-right-stack { scroll-padding-top: 63px; scrollbar-color: #a9c6b874 transparent; }
+.airrun .ops-bay-label > span { font-size: 10px; }
+.airrun .ops-bay-label > small { font-size: 10px; }
+.airrun .ops-stage-footer > span { font-size: 11px; }
+.airrun .ops-stage-footer .inspection-controls button { min-width: 36px; min-height: 36px; font-size: 10px; }
+.airrun .ops-model-actions > button { min-height: 44px; min-width: 38px; }
+.airrun .ops-departure-title h2 { font-size: 22px; }
+.airrun .ops-mode-selector > button { min-height: 72px; }
+.airrun .ops-mode-selector b { font-size: 13px; }
+.airrun .ops-mode-selector small { font-size: 10px; line-height: 1.65; }
+.airrun .ops-mode-selector em { font-size: 8px; }
+.airrun .ops-difficulty > div > span { font-size: 12px; }
+.airrun .ops-difficulty > div > small { font-size: 10px; }
+.airrun .ops-difficulty-selector > button { min-height: 56px; font-size: 12px; }
+.airrun .ops-difficulty-selector small { font-size: 9px; line-height: 1.5; }
+.airrun .ops-route-briefing { grid-template-columns: minmax(0, 1fr) 82px; }
+.airrun .ops-route-briefing > div:nth-child(2) > b { font-size: 11px; line-height: 1.6; }
+.airrun .ops-route-briefing p { font-size: 11px; line-height: 1.75; }
+.airrun .ops-briefing-record > span { font-size: 10px; }
+.airrun .ops-briefing-record b { font-size: 18px; }
+.airrun .ops-inline-milestone { font-size: 12px; min-height: 48px; }
+.airrun .ops-daily-detail { font-size: 10px; line-height: 1.65; flex-wrap: wrap; }
+.airrun .ops-performance > div:first-child { font-size: 12px; }
+.airrun .ops-performance > b { font-size: 26px; }
+.airrun .ops-performance > em { font-size: 11px; }
+.airrun .ops-airframe-footnote { font-size: 11px; }
+.airrun .ops-airframe-footnote b { font-size: 12px; }
+.airrun .ops-maintenance { min-height: 48px; font-size: 13px; }
+.airrun .ops-maintenance > b { font-size: 13px; }
+.airrun .ops-next-goal strong { font-size: 13px; line-height: 1.6; }
+.airrun .ops-next-goal small { font-size: 11px; line-height: 1.5; }
+.airrun .ops-next-goal > div:nth-child(2) > span { font-size: 10px; }
+.airrun .ops-fleet-heading h2 { font-size: 13px; }
+.airrun .ops-fleet-filters > button { min-width: 36px; min-height: 36px; font-size: 11px; }
+.airrun .ops-fleet-count { font-size: 17px; }
+.airrun .ops-fleet-count > small { font-size: 10px; }
+.airrun .ops-fleet-dock .aircraft-selector > button { height: 126px; grid-template-columns: 1fr; grid-template-rows: 78px 46px; }
+.airrun .ops-fleet-dock .aircraft-photo { width: 100%; height: 78px; }
+.airrun .ops-fleet-dock .fleet-card-copy > b { font-size: 12px; min-height: 34px; }
+.airrun .ops-fleet-dock .fleet-card-copy > small { font-size: 10px; }
+.airrun .ops-fleet-dock .fleet-card-copy > span { font-size: 8px; }
+.airrun .ops-fleet-dock .grade-text { font-size: 10px; }
+.airrun .ops-photo-waiting > span { font-size: 9px; line-height: 1.5; }
+.airrun .ops-challenge-shortcut b { font-size: 13px; }
+.airrun .ops-challenge-shortcut small { font-size: 10px; }
+.airrun .ops-departure-status { font-size: 12px; }
+.airrun .ops-departure-status small { font-size: 10px; }
+.airrun .ops-launch > span:nth-child(2) { font-size: 15px; }
+.airrun .ops-launch > span:nth-child(2) > small { font-size: 10px; }
+.airrun .ops-sortie-objective { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 12px 0 15px; margin-bottom: 14px; border-bottom: 1px solid #b8cbb52b; }
+.ops-sortie-objective > div { display: flex; align-items: center; gap: 9px; flex: 1; min-width: 170px; }
+.ops-sortie-objective > div > svg { color: #e3c48c; flex-shrink: 0; }
+.ops-sortie-objective > div > span { color: #a8c9bd; font-size: 10px; line-height: 1.5; }
+.ops-sortie-objective b { display: block; color: #e6e9dc; font-size: 13px; font-weight: 500; margin-top: 3px; }
+.ops-sortie-objective > button { display: flex; align-items: center; justify-content: center; gap: 7px; min-height: 44px; padding: 9px 12px; border: 1px solid #bfcdb83d; border-radius: 4px; background: #d1c18b0c; color: #e8d5a9; font-size: 12px; }
+.ops-performance-explainer { font-size: 11px; color: #b7cfc1; line-height: 1.8; margin: 16px 0 0; }
+.ops-cost-summary { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 12px; padding: 12px 0 0; border-top: 1px solid #b7c9b825; font-size: 11px; color: #abc4b6; }
+.ops-cost-summary > span { display: flex; flex-direction: column; gap: 5px; }
+.ops-cost-summary b { font-size: 14px; color: #e7e6d1; font-weight: 500; }
+.ops-cost-summary.shortfall > span:last-child b { color: #e9bf8e; }
+.airrun .airport-nav > button { font-size: 12px; }
+.airrun .ops-progression-intro p { font-size: 13px; }
+.airrun .ops-progress-cards > button > span { font-size: 12px; }
+.airrun .ops-progress-cards strong { font-size: 14px; line-height: 1.65; }
+.airrun .ops-progress-cards > button > small { font-size: 12px; line-height: 1.6; }
+
+/* An optional flight lesson, using the same actions the pilot actually has. */
+.pilot-briefing-backdrop { position: absolute; inset: 0; z-index: 140; overflow-y: auto; display: grid; align-items: center; justify-items: center; padding: 28px; background: #071822e8; backdrop-filter: blur(18px); color: #e9eddf; }
+.pilot-briefing { width: min(780px, 100%); padding: 28px; border: 1px solid #bed2bc42; border-top: 2px solid #e6cc96; border-radius: 8px; background: linear-gradient(140deg, #213d46, #102833); box-shadow: 0 35px 100px #020e1b90; }
+.pilot-briefing > header { display: flex; align-items: flex-start; gap: 18px; }
+.pilot-briefing > header > div { flex: 1; }
+.pilot-briefing .eyebrow { font-size: 10px; color: #dbc38e; }
+.pilot-briefing h1 { font-weight: 500; font-size: clamp(25px, 3vw, 34px); line-height: 1.4; letter-spacing: -.045em; margin: 10px 0 8px; word-break: keep-all; }
+.pilot-briefing header p { font-size: 13px; color: #b6d0c8; line-height: 1.75; }
+.briefing-close { min-height: 44px; min-width: 44px; display: grid; place-items: center; color: #cfe1d7; background: #09243280; border: 1px solid #c3d9cb35; border-radius: 50%; }
+.briefing-lessons { display: flex; flex-direction: column; list-style: none; margin: 22px 0; padding: 0; }
+.briefing-lessons > li { display: flex; gap: 18px; padding: 20px 0; border-top: 1px solid #b7cdb82b; }
+.briefing-lesson-icon { display: flex; align-items: center; flex-direction: column; gap: 8px; min-width: 42px; padding-top: 2px; color: #d9c18b; }
+.briefing-lesson-icon small { font-size: 10px; letter-spacing: .12em; color: #97b7ac; }
+.briefing-lessons h2 { font-size: 18px; font-weight: 500; line-height: 1.5; margin: 0 0 8px; letter-spacing: -.03em; }
+.briefing-lessons p { font-size: 13px; color: #bdd2ca; line-height: 1.8; margin: 0; word-break: keep-all; }
+.briefing-keys { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-top: 13px; font-size: 11px; color: #c8d6c7; }
+.briefing-keys kbd { padding: 6px 9px; border: 1px solid #c3d6bf45; border-bottom-width: 3px; border-radius: 4px; background: #09243299; color: #e6e5cc; font-size: 11px; min-height: 31px; }
+.briefing-risk-label { margin-left: auto; color: #d9bb83; font-size: 10px; }
+.briefing-safety { display: flex; align-items: flex-start; gap: 12px; padding: 15px; background: #c2dbc40a; border: 1px solid #b8d5be24; border-radius: 5px; }
+.briefing-safety > svg { flex-shrink: 0; margin-top: 2px; color: #b2d4bf; }
+.briefing-safety p { font-size: 12px; line-height: 1.75; color: #b9d0c4; margin: 0; }
+.pilot-briefing > footer { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
+.pilot-briefing footer > button { min-height: 48px; font-size: 13px; }
+
+/* A debrief teaches the next attempt instead of merely showing a bronze badge. */
+.debrief-seven .debrief-medal { padding: 16px 18px; }
+.debrief-seven .debrief-medal > span { font-size: 12px; }
+.debrief-seven .debrief-medal small { font-size: 11px; line-height: 1.5; }
+.debrief-seven .debrief-skills { padding: 14px 18px; }
+.debrief-seven .debrief-skills span { font-size: 11px; line-height: 1.5; }
+.debrief-seven .debrief-skills b { font-size: 24px; }
+.debrief-next-level { padding: 12px 18px; border-top: 1px solid #b8d2be24; background: #0b23342b; }
+.debrief-next-level > header { display: flex; align-items: center; gap: 7px; font-size: 10px; letter-spacing: .08em; color: #c9d9cb; }
+.debrief-next-level ul { list-style: none; padding: 0; margin: 11px 0 0; display: flex; flex-wrap: wrap; gap: 11px 20px; }
+.debrief-next-level li { display: flex; align-items: center; gap: 6px; color: #b6c7c5; min-width: 100px; }
+.debrief-next-level li.complete { color: #b3e8bf; }
+.debrief-next-level li > span { font-size: 10px; line-height: 1.5; }
+.debrief-next-level li b { display: block; color: #e4e8d8; font-size: 13px; font-weight: 500; }
+.debrief-requirement-dot { height: 6px; width: 6px; border: 1px solid #b6c7c5; border-radius: 50%; }
+.debrief-analysis { border-top: 1px solid #c3d7bf24; }
+.debrief-analysis > summary { display: flex; align-items: center; gap: 10px; cursor: pointer; min-height: 57px; padding: 10px 18px; list-style: none; color: #e4d5ac; }
+.debrief-analysis > summary::-webkit-details-marker { display: none; }
+.debrief-analysis > summary > span { flex: 1; font-size: 12px; line-height: 1.5; }
+.debrief-analysis > summary small { display: block; color: #a8c3ba; font-size: 10px; margin-top: 3px; }
+.debrief-analysis > summary > svg:last-child { transition: transform .2s; }
+.debrief-analysis[open] > summary > svg:last-child { transform: rotate(180deg); }
+.debrief-analysis-body { padding: 0 18px 17px; }
+.debrief-analysis-body > p { font-size: 12px; line-height: 1.85; color: #c8d8cf; margin: 4px 0 18px; word-break: keep-all; }
+.debrief-breakdown { margin: 0; font-variant-numeric: tabular-nums; }
+.debrief-breakdown > div { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 8px 0; border-top: 1px solid #bdd3bd18; }
+.debrief-breakdown dt { font-size: 11px; color: #b8d0c3; }
+.debrief-breakdown dd { margin: 0; font-size: 13px; color: #e5e7d2; }
+.debrief-breakdown > .total { margin-top: 5px; border-top-color: #c9d7bf42; }
+.debrief-breakdown > .total dt, .debrief-breakdown > .total dd { font-size: 13px; color: #ecd39b; }
+.debrief-vault { display: flex; gap: 10px; padding: 12px; margin: 13px 0; border: 1px solid #bdd6bf29; border-radius: 4px; background: #b5d8c009; color: #b8d3c4; }
+.debrief-vault > div { flex: 1; display: flex; flex-direction: column; gap: 5px; }
+.debrief-vault b { font-weight: 500; font-size: 12px; }
+.debrief-vault span, .debrief-vault small { font-size: 11px; }
+.debrief-vault strong { font-weight: 500; color: #dfbc89; margin-left: 7px; }
+.debrief-rating-note { display: block; color: #99b9b1; font-size: 10px; line-height: 1.8; }
+.debrief-seven .debrief-score { font-size: 11px; line-height: 1.7; }
+.debrief-seven .debrief-score > b { font-size: 14px; }
+.airrun .result-stats span, .airrun .result-stats small, .airrun .result-quest small { font-size: 11px; line-height: 1.6; }
+.airrun .result-reason { font-size: 12px; line-height: 1.7; }
+
+.reward-upgrade-details { width: min(410px, 100%); margin: 14px auto 22px; text-align: left; border: 1px solid #c5d7bb35; border-radius: 5px; background: #0c2937b3; padding: 15px; }
+.reward-upgrade-details > div { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 7px; font-size: 11px; color: #c9dac7; }
+.reward-upgrade-details > div small { display: flex; align-items: center; gap: 4px; font-size: 10px; color: #d5c18f; }
+.reward-upgrade-details dl { display: grid; grid-template-columns: 1fr 1fr; gap: 15px 22px; margin: 17px 0 0; }
+.reward-upgrade-details dt { font-size: 10px; color: #a9c8b7; margin-bottom: 7px; }
+.reward-upgrade-details dd { display: flex; align-items: center; gap: 7px; font-size: 12px; margin: 0; }
+.reward-upgrade-details dd span { color: #92aea3; }
+.reward-upgrade-details dd b { font-size: 15px; color: #e4d3a2; font-weight: 500; }
+.airrun .reward-stage > small { font-size: 11px; line-height: 1.7; }
+.airrun .registration-intro > small { font-size: 11px; line-height: 1.7; }
+.airrun .callsign-error { color: #f1b99a; }
+
+@media (pointer: coarse) {
+    .airrun .ops-stage-footer .inspection-controls button,
+    .airrun .ops-fleet-filters > button,
+    .airrun .ops-model-actions > button { min-width: 44px; min-height: 44px; }
+}
+@media (max-width: 740px) {
+    .airrun .mobile-menu { min-width: 44px; min-height: 44px; }
+    .airrun .airport-nav.expanded > button { min-height: 44px; }
+    .airrun .ops-showcase-heading p { font-size: 11px; }
+    .airrun .ops-kicker { font-size: 9px; }
+    .airrun .ops-model-actions > button { min-width: 36px; }
+    .airrun .ops-difficulty-selector small { font-size: 9px; }
+    .airrun .ops-fleet-filters > button { min-width: 36px; min-height: 36px; font-size: 11px; }
+}
+@media (max-width: 600px) and (orientation: portrait) {
+    .airrun .ops-dashboard { display: flex; scroll-padding-bottom: 105px; }
+    .airrun .ops-showcase { min-height: 354px; }
+    .airrun .ops-stage-footer .inspection-controls button { min-width: 28px; min-height: 36px; font-size: 10px; }
+    .airrun .ops-stage-footer > span { font-size: 9px; }
+    .airrun .ops-fleet-heading { row-gap: 12px; }
+    .airrun .ops-fleet-filters { order: 3; width: 100%; margin-left: 0; }
+    .airrun .ops-fleet-filters > button { min-height: 44px; flex: 1; }
+    .airrun .ops-fleet-dock .aircraft-selector { grid-auto-columns: 168px; }
+    .airrun .ops-model-stage.hangar-stage { top: 103px; }
+    .airrun .ops-launch > span:nth-child(2) { font-size: 15px; }
+    .airrun .ops-launch > span:nth-child(2) > small { font-size: 10px; }
+    .airrun .ops-launch-dock { margin-top: 3px; }
+    .pilot-briefing-backdrop { padding: 16px; align-items: start; }
+    .pilot-briefing { padding: 20px 18px; }
+    .pilot-briefing h1 { font-size: 25px; }
+    .briefing-lessons > li { gap: 11px; padding: 18px 0; }
+    .briefing-lessons h2 { font-size: 16px; }
+    .briefing-lesson-icon { min-width: 29px; }
+    .briefing-lesson-icon > svg { width: 21px; }
+    .briefing-lessons p { font-size: 12px; }
+    .briefing-risk-label { margin-left: 0; width: 100%; }
+    .pilot-briefing footer { flex-direction: column-reverse; align-items: stretch; }
+    .debrief-seven .debrief-skills { padding: 13px 14px; gap: 10px; }
+    .debrief-seven .debrief-skills span { font-size: 10px; }
+    .debrief-seven .debrief-medal { padding: 14px; gap: 10px; }
+    .debrief-seven .debrief-medal > span { font-size: 11px; }
+    .debrief-seven .debrief-medal small { font-size: 10px; }
+    .debrief-next-level { padding: 12px 14px; }
+    .debrief-next-level ul { gap: 10px 17px; }
+    .debrief-next-level li { min-width: 90px; }
+    .debrief-seven .debrief-score { padding: 12px 14px; font-size: 10px; }
+    .debrief-analysis > summary, .debrief-analysis-body { padding-inline: 14px; }
+    .reward-upgrade-details dl { gap: 14px; }
+    .reward-upgrade-details dd { gap: 5px; font-size: 11px; }
+    .reward-upgrade-details dd b { font-size: 14px; }
+}
+@media (max-height: 470px) and (min-width: 601px) {
+    .airrun .ops-dashboard { grid-template-rows: minmax(120px, 1fr) 98px 50px; }
+    .airrun .ops-console-tabs > button { min-height: 36px; font-size: 11px; }
+    .airrun .ops-console-tabs > button > small { font-size: 9px; }
+    .airrun .ops-departure-title h2 { font-size: 19px; }
+    .airrun .ops-departure-title > .ops-kicker { font-size: 9px; }
+    .airrun .ops-sortie-objective { margin-bottom: 9px; padding-bottom: 10px; }
+    .ops-sortie-objective b { font-size: 12px; }
+    .airrun .ops-mode-selector b { font-size: 12px; }
+    .airrun .ops-mode-selector small { font-size: 9px; }
+    .airrun .ops-mode-selector > button { min-height: 63px; }
+    .airrun .ops-difficulty-selector > button { min-height: 48px; font-size: 11px; }
+    .airrun .ops-difficulty > div > small { font-size: 9px; }
+    .airrun .ops-right-stack { scroll-padding-top: 48px; }
+    .airrun .ops-fleet-filters > button { min-width: 32px; min-height: 32px; font-size: 10px; }
+    .airrun .ops-fleet-dock .aircraft-selector { grid-auto-columns: 148px; }
+    .airrun .ops-fleet-dock .aircraft-selector > button { height: 53px; grid-template-columns: 58px minmax(0, 1fr); grid-template-rows: none; }
+    .airrun .ops-fleet-dock .aircraft-photo { height: 51px; width: 58px; }
+    .airrun .ops-fleet-dock .fleet-card-copy { display: flex; padding: 4px 7px; gap: 3px; }
+    .airrun .ops-fleet-dock .fleet-card-copy > b { font-size: 10px; min-height: 27px; }
+    .airrun .ops-fleet-dock .fleet-card-copy > small { font-size: 9px; }
+    .airrun .ops-fleet-dock .fleet-card-copy > span { display: none; }
+    .airrun .ops-fleet-count > small { font-size: 9px; }
+    .airrun .ops-fleet-heading { padding-bottom: 5px; }
+    .airrun .ops-stage-footer .inspection-controls button { min-width: 28px; min-height: 32px; font-size: 9px; }
+    .airrun .ops-bay-label > small { font-size: 9px; }
+    .airrun .ops-bay-label > span { font-size: 9px; }
+    .airrun .ops-showcase-heading .ops-kicker { font-size: 9px; }
+    .airrun .ops-showcase-heading h1 { font-size: 23px; }
+    .airrun .ops-launch > span:nth-child(2) { font-size: 13px; }
+    .airrun .ops-launch > span:nth-child(2) > small { font-size: 9px; }
+    .airrun .ops-airframe-card.aircraft-spec { padding: 15px; }
+    .airrun .ops-performance > div:first-child { font-size: 11px; }
+    .airrun .ops-performance > em { font-size: 10px; }
+    .airrun .ops-next-goal small { font-size: 10px; }
+    .airrun .mobile-menu { min-width: 44px; min-height: 36px; }
+    .pilot-briefing-backdrop { align-items: start; padding: 16px; }
+    .pilot-briefing { padding: 22px; }
+}
+@media (prefers-reduced-motion: reduce) { .debrief-analysis > summary > svg:last-child { transition: none; } }
+.reduced-motion .debrief-analysis > summary > svg:last-child { transition: none; }
+/* Coarse pointers keep full touch targets even in the compact landscape console. */
+@media (pointer: coarse) {
+    .airrun .ops-stage-footer .inspection-controls button,
+    .airrun .ops-fleet-filters > button,
+    .airrun .ops-model-actions > button,
+    .airrun .ops-console-tabs > button,
+    .airrun .mobile-menu { min-width: 44px; min-height: 44px; }
+}
+@media (pointer: coarse) and (max-height: 470px) and (min-width: 601px) {
+    .airrun .ops-dashboard { grid-template-rows: minmax(100px, 1fr) 122px 50px; }
+}
+.pilot-briefing button:focus-visible,
+.ops-sortie-objective > button:focus-visible,
+.debrief-analysis > summary:focus-visible { outline: 2px solid #e7ce96; outline-offset: 3px; }
+
+/* Keep the next flight available while reviewing a long debrief. */
+.airrun .results-wrap{padding-bottom:132px;scroll-padding-bottom:132px}
+.airrun .result-actions{position:fixed;z-index:12;left:8vw;bottom:max(16px,env(safe-area-inset-bottom));width:min(610px,50vw);display:flex;flex-direction:row;align-items:stretch;gap:12px;margin:0;padding:12px;border:1px solid #c7d7c234;border-radius:7px;background:#112b38f5;box-shadow:0 -6px 30px #06182455;backdrop-filter:blur(12px)}
+.airrun .result-actions .launch{flex:1;min-width:0;min-height:52px;font-size:14px}
+.airrun .result-actions .secondary{min-height:52px;padding:12px 17px;white-space:nowrap;font-size:12px}
+@media(max-width:740px) and (orientation:portrait){.airrun .results-wrap{display:block;padding:26px 18px 142px}.airrun .results-main{min-width:0}.airrun .result-progress{margin-top:28px;padding-top:24px;border-top:1px solid #c7d7c234}.airrun .result-actions{left:18px;right:18px;bottom:max(12px,env(safe-area-inset-bottom));width:auto;gap:8px;padding:9px}.airrun .result-actions .launch{font-size:13px}.airrun .result-actions .secondary{padding:10px 12px;font-size:11px}}
+@media(max-height:470px) and (min-width:741px){.airrun .result-actions{left:5vw;bottom:10px;width:min(530px,55vw);padding:7px;gap:8px}.airrun .result-actions .launch,.airrun .result-actions .secondary{min-height:44px;font-size:11px}.airrun .results-wrap{padding-bottom:94px;scroll-padding-bottom:94px}}

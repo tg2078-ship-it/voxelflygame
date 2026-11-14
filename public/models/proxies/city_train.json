@@ -1,0 +1,1 @@
+{"schema":1,"id":"city_train","sourceBoxes":1,"sourceDynamicBoxes":0,"static":[{"c":[0,1.7474999965168534,0],"s":[3.210000003576279,3.250000007338822,37.70000038146973],"zone":"body"}],"dynamic":[],"clearances":[],"coverage":{"staticVolume":1,"method":"hand-authored traffic hull"}}

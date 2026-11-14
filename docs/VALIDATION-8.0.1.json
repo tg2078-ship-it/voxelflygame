@@ -1,0 +1,68 @@
+{
+  "version": "8.0.1",
+  "published": false,
+  "typecheck": "passed",
+  "gameESLint": "passed",
+  "productionBuild": "passed",
+  "focusedRegression": {
+    "mastery": {
+      "masteryChecks": 57,
+      "deterministicCourses": 3,
+      "boundedLocalReplay": true,
+      "actualBrowserValidated": false,
+      "status": "passed"
+    },
+    "sortie-ui": {
+      "sortieUIChecks": 35,
+      "scoreBreakdownConserved": true,
+      "actualBrowserValidated": false,
+      "status": "passed"
+    },
+    "commercial-ui": {
+      "commercialUI": 41,
+      "oldBackupsPreserved": true,
+      "settledScoreReconciles": true,
+      "actualBrowserValidated": false,
+      "status": "passed"
+    }
+  },
+  "browser": {
+    "fixture": "Native hangar selection, then injected HUD progress and genuine CPU completion data for UI checks. No simulation or performance claim.",
+    "softwareGPU": true,
+    "nativeKeyboardSelection": true,
+    "sequentialProgress": [
+      3,
+      1,
+      0
+    ],
+    "gameAndSystemReducedMotion": true,
+    "status": "passed",
+    "javascriptErrors": [],
+    "viewports": [
+      "1280x800",
+      "360x800",
+      "844x390"
+    ],
+    "completedSeals": 3
+  },
+  "priorFullRegression": "VALIDATION-8.0.json (51 suites; not rerun for this UI polish)",
+  "humanFunVerified": false,
+  "hardwareFPSMeasured": false,
+  "evidenceHashes": {
+    "typecheck.log": "5c20e36fb7c1c1e73a5603258f1973ac2a9bd4613976d5cd7a569fe5b7fc35fb",
+    "browser.json": "6c09f069ec53bd01577f76453a7be018ac94fdafc84edada0c86d821f0c16f5d",
+    "commercial-ui.log": "9d3257a9396ea0b56f3ae36336acdfcb1f1f8b1ef0f7413ab602bbc7603e2c0a",
+    "mastery.log": "6dbfb38a29c9fdff0b619e2f217cba9970f41074204247374540c6e2ebe2d742",
+    "lint.log": "e51573843cee9d28fbacba10f78bdb8fd5d25e983849a953110700e4f0ab3eaa",
+    "sortie-ui.log": "784c91658ff2593f08a22aedc45b1ba07be8d267594cd1f25e3089ceb8e65cf5",
+    "build.log": "ce710a334d27cac837f11d32f2407b3db90af1388ef99ea3ce83757476e35f48",
+    "polish-browser.py": "a14b0e92c390aad99033995f6a351b7aac6301186eecddaf41e8c57b003d8dd6"
+  },
+  "sourceHashes": {
+    "app/airrun/mastery-ui.tsx": "dcece93ad718d7bd0d00ca46ca7433eb59781c11965e4e26e02ba8ac481cfe61",
+    "app/airrun/mastery-ui.css": "a0f47f4eed2c368768a2e39c5ca1b3a3bcfd04bd99852f213468bfda11e23e1d",
+    "app/airrun/data.ts": "31894d0284dc628daff4ba4d421eef6748dc830c96f904ed153c12d77f74ba49",
+    "app/layout.tsx": "86974ba69e52183e0d9214725056f75494f54c790715cf8bb8e42360bba73ce2",
+    "package.json": "4cf2ce1638ed101e49c0669b8cc402d3b6592371ea9a074038ce0fcf59127a1d"
+  }
+}

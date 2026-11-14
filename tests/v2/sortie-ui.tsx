@@ -1,0 +1,63 @@
+import assert from 'node:assert/strict';
+import React from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
+import { HangarDashboard } from '../../app/airrun/hangar-dashboard';
+import { FlightDeck } from '../../app/airrun/flight-deck';
+import { FlightDebrief, SortieDebrief } from '../../app/airrun/flight-debrief';
+import { SortieDirector } from '../../app/airrun/sortie';
+import { freshSave } from '../../app/airrun/data';
+import { ensureQuests } from '../../app/airrun/progression';
+import { useAirrun } from '../../app/airrun/state';
+import { createSim, controls } from './fixtures';
+
+let checks = 0;
+const check = (value: unknown, label: string) => { assert.ok(value, label); checks++; };
+const save = ensureQuests(freshSave()); save.nickname = 'TEST';
+const state = { ...useAirrun.getState(), phase: 'hangar' as const, flightMode: 'sortie' as const, save };
+const props = { state, ko: true, launching: false, onLaunch: () => {}, onPanel: () => {}, onView: () => {}, onZoom: () => {} };
+for (const ko of [true, false]) {
+    const html = renderToStaticMarkup(<HangarDashboard {...props} ko={ko}/>);
+    check(html.includes('aria-pressed="true"') && html.includes('selected sortie'), 'The selected mode is identified to assistive technology');
+    check(html.includes(ko ? '3분 출격 시작' : 'START YOUR SORTIE'), 'Departure button names the selected finite mode');
+    check(html.includes(ko ? 'E 연출·일시정지 중에는 출격 시간이 멈춥니다.' : 'Hyper Trick and pause stop the sortie clock.'), 'Briefing explains that cinematic and pause time do not complete the sortie');
+    check(html.includes('1,200') && html.includes('PTS'), 'Finish reward is points and not falsely advertised as currency');
+    check(html.includes(ko ? '무한 항로' : 'ENDLESS FLIGHT') && html.includes(ko ? '오늘의 항로' : 'DAILY ROUTE'), 'Existing modes remain reachable alongside sorties');
+    for (const label of ko ? ['출격 항로', '흐름 연결', '재정비 구간', '최종 도전', '귀환 항로'] : ['DEPARTURE', 'BUILD FLOW', 'BREATHER', 'FINAL CHALLENGE', 'EXTRACTION']) check(html.includes(label), 'The plan exposes every actual sortie stage');
+}
+const endless = renderToStaticMarkup(<HangarDashboard {...props} state={{ ...state, flightMode: 'endless' }}/>);
+check(!endless.includes('class="sortie-briefing"'), 'Endless does not inherit an incorrect finite finish briefing');
+const daily = renderToStaticMarkup(<HangarDashboard {...props} state={{ ...state, flightMode: 'daily' }}/>);
+check(!daily.includes('class="sortie-briefing"') && daily.includes('오늘의 항로 출격'), 'Daily keeps its existing seed/launch briefing');
+
+const sim = createSim();
+sim.adventure.event('ring', 'ui:1', true); sim.adventure.event('ring', 'ui:2', true);
+const clock = new SortieDirector();
+for (let i = 0; i < 75; i++) clock.advance(1, false, { operations: 1, perfectPasses: 2 });
+const hud = { ...sim.hud(controls()), sortie: clock.hud() };
+const deck = renderToStaticMarkup(<FlightDeck hud={hud} ko hyper={<button>E</button>} onPause={() => {}} onBank={() => {}}/>);
+check(deck.includes('재정비 구간') && deck.includes('1:45'), 'HUD displays the real current stage and remaining manual time');
+check(deck.includes('출격 진행') && deck.includes('aria-valuenow="75"'), 'Finite progress is exposed as elapsed seconds rather than an invented progress value');
+check(deck.includes('미정산 플로우') && deck.includes('점 확정'), 'The flight contains an actionable banking control when pending points exist');
+const hyper = renderToStaticMarkup(<FlightDeck hud={{ ...hud, eRemaining: 10 }} ko hyper={<button>E</button>} onPause={() => {}} onBank={() => {}}/>);
+check(hyper.includes('E 비행 중 · 출격 시계 멈춤') && hyper.includes('clock-held'), 'Hyper visually explains a stopped sortie clock');
+check(/class="f6-bank"[^>]*disabled=""/.test(hyper), 'Banking is disabled during automatic Hyper flight');
+const noSortie = renderToStaticMarkup(<FlightDeck hud={sim.hud(controls())} ko hyper={null} onPause={() => {}}/>);
+check(!noSortie.includes('sortie-flight-progress'), 'Endless HUD does not imply a finish timer');
+
+const base = sim.result(true, true);
+const unfinished = { ...base, mode: 'sortie' as const, sortie: clock.result() };
+const abortHTML = renderToStaticMarkup(<SortieDebrief result={unfinished} ko/>);
+check(abortHTML.includes('출격 중도 종료') && abortHTML.includes('완주 보너스 없음') && abortHTML.includes('+0 PTS'), 'Controlled exit cannot masquerade as a completed/rewarded sortie');
+const crashHTML = renderToStaticMarkup(<SortieDebrief result={{ ...unfinished, interrupted: false }} ko/>);
+check(crashHTML.includes('출격 미완주') && !crashHTML.includes('출격 중도 종료'), 'Crash and intentional exit are distinguished');
+for (let i = 75; i < 180; i++) clock.advance(1, false, { operations: 1, perfectPasses: 2 });
+const completed = { ...base, mode: 'sortie' as const, interrupted: false, bonus: base.bonus + 1200, score: base.score + 1200, sortie: clock.result() };
+const finishHTML = renderToStaticMarkup(<FlightDebrief result={completed} ko/>);
+check(finishHTML.includes('3분 출격 완수') && finishHTML.includes('완주 보너스 · 총점에 반영됨'), 'Completion uses a clear success state and says the bonus is already paid');
+check(!finishHTML.includes('완주 보너스 없음'), 'Completion never shows the incomplete warning');
+const rows = [...finishHTML.matchAll(/<dt>(.*?)<\/dt><dd>(.*?)<\/dd>/g)].map(match => [match[1], Number(match[2].replaceAll(',', ''))] as const);
+const total = rows.find(([label]) => label === '실제 총 점수')![1];
+check(rows.filter(([label]) => label !== '실제 총 점수').reduce((sum, [, value]) => sum + value, 0) === total, 'Finish reward is separated from other bonuses without double counting the rendered score');
+check(rows.find(([label]) => label === '출격 완주')?.[1] === 1200, 'The actual fixed completion subtotal appears once in the breakdown');
+check(renderToStaticMarkup(<SortieDebrief result={base} ko/>) === '', 'Old result records render without a fabricated sortie panel');
+console.log(JSON.stringify({ sortieUIChecks: checks, scoreBreakdownConserved: true, actualBrowserValidated: false, status: 'passed' }));

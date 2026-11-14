@@ -1,0 +1,139 @@
+{
+  "results": [
+    {
+      "theme": "coast",
+      "nodes": 880,
+      "potentialMainPassDraws": 597,
+      "triangles": 1354378,
+      "geometryMiB": 41.6,
+      "workerFallbacks": [],
+      "operations": {
+        "compile": {
+          "calls": 1672,
+          "totalMs": 3.4101660000019365,
+          "maxMs": 0.12897100000009232,
+          "maxArgs": [
+            "air_race_motorized_finish_gate",
+            2,
+            false
+          ]
+        },
+        "rebuild": {
+          "calls": 30,
+          "totalMs": 130.39937900000086,
+          "maxMs": 6.550187999999707,
+          "maxArgs": [
+            "simulation",
+            "high"
+          ]
+        },
+        "makeChunk": {
+          "calls": 3,
+          "totalMs": 0.9360079999996742,
+          "maxMs": 0.36246799999980794,
+          "maxArgs": [
+            12,
+            "simulation"
+          ]
+        }
+      },
+      "actors": 11,
+      "compiled": 85,
+      "cachedModels": 122,
+      "cpuMedianMs": 0.1699719999996887,
+      "cpuP95Ms": 3.8882579999999507,
+      "cpuMaxMs": 7.033453999999892
+    },
+    {
+      "theme": "city",
+      "nodes": 743,
+      "potentialMainPassDraws": 528,
+      "triangles": 1743000,
+      "geometryMiB": 42.95,
+      "workerFallbacks": [],
+      "operations": {
+        "compile": {
+          "calls": 1586,
+          "totalMs": 2.8508669999964695,
+          "maxMs": 0.10165099999994709,
+          "maxArgs": [
+            "metro_escalator_hall",
+            2,
+            false
+          ]
+        },
+        "rebuild": {
+          "calls": 30,
+          "totalMs": 129.51473199999782,
+          "maxMs": 7.415900999999394,
+          "maxArgs": [
+            "simulation",
+            "high"
+          ]
+        },
+        "makeChunk": {
+          "calls": 3,
+          "totalMs": 0.7610590000003867,
+          "maxMs": 0.2857640000001993,
+          "maxArgs": [
+            10,
+            "simulation"
+          ]
+        }
+      },
+      "actors": 9,
+      "compiled": 86,
+      "cachedModels": 112,
+      "cpuMedianMs": 0.18689699999958975,
+      "cpuP95Ms": 3.6057500000006257,
+      "cpuMaxMs": 7.888842999999724
+    },
+    {
+      "theme": "forest",
+      "nodes": 490,
+      "potentialMainPassDraws": 367,
+      "triangles": 1793976,
+      "geometryMiB": 75.64,
+      "workerFallbacks": [],
+      "operations": {
+        "compile": {
+          "calls": 1329,
+          "totalMs": 3.237707999977829,
+          "maxMs": 0.27842300000065734,
+          "maxArgs": [
+            "forest_log_loader",
+            0
+          ]
+        },
+        "rebuild": {
+          "calls": 30,
+          "totalMs": 104.20425699999578,
+          "maxMs": 10.3284220000005,
+          "maxArgs": [
+            "simulation",
+            "high"
+          ]
+        },
+        "makeChunk": {
+          "calls": 3,
+          "totalMs": 0.7693830000007438,
+          "maxMs": 0.2995950000004086,
+          "maxArgs": [
+            10,
+            "simulation"
+          ]
+        }
+      },
+      "actors": 4,
+      "compiled": 76,
+      "cachedModels": 84,
+      "cpuMedianMs": 0.05389000000013766,
+      "cpuP95Ms": 2.6805260000001,
+      "cpuMaxMs": 10.453528000000006
+    }
+  ],
+  "gpuVerified": false,
+  "fpsMeasured": false,
+  "terrainTransport": "Node worker; browser transport unverified",
+  "note": "CPU scene inventory; no frustum, shadows or postprocess draw measurement"
+}

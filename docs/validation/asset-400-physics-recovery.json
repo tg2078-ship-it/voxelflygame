@@ -1,0 +1,12 @@
+{
+  "status": "passed",
+  "models": 400,
+  "trees": 2037,
+  "nodes": 122031,
+  "leafReferences": 542153,
+  "queries": 24444,
+  "nativeChannels": 1959,
+  "derivedApertures": 8,
+  "gpuRenderedOrVerified": false,
+  "scope": "Fresh complete BVH leaf coverage, node containment, deterministic independent broad-phase queries, rig graph/channel structure and static aperture intersections."
+}

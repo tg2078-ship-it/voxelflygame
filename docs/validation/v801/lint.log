@@ -1,0 +1,4 @@
+
+> voxel-airrun@8.0.1 lint:game
+> eslint app/airrun --max-warnings 0
+

@@ -1,0 +1,1 @@
+{"schema":1,"id":"road_car","sourceBoxes":1,"sourceDynamicBoxes":0,"static":[{"c":[0,0.7937499932944774,-0.008750000149011505],"s":[1.9900000041723251,1.3825000151991844,4.537499999850988],"zone":"body"}],"dynamic":[],"clearances":[],"coverage":{"staticVolume":1,"method":"hand-authored traffic hull"}}

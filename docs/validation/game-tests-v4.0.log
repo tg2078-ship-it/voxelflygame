@@ -1,0 +1,183 @@
+VOXEL AIRRUN 4.0 — final individual suite runs, 2026-10-17
+GPU/browser/FPS not verified. Logs below are CPU/data/SSR tests.
+
+
+## core
+{"coreChecks":2607,"patterns":168,"quests":64,"career":20,"achievements":40,"status":"passed"}
+
+
+## assets
+{"suppliedModels":403,"supplementaryModels":4,"exports":1217,"animationClips":2385,"trafficPoseChanges":60,"compressedBytes":190320645,"status":"passed"}
+
+
+## storage
+{"storageChecks":17,"legacyPlanes":22,"checkpointRewardOnce":true,"invalidOriginalPreserved":true,"status":"passed"}
+
+
+## progression
+{"progressionChecks":172,"questConditions":64,"careerConditions":20,"status":"passed"}
+
+
+## audit-route
+{
+  "failures": 0,
+  "examples": [],
+  "models": {}
+}
+
+
+## audit-course
+{
+  "centerSweepErrors": 0,
+  "examples": [],
+  "noInput": {
+    "failedWithin45s": 100,
+    "mean": 4.76583333333332,
+    "latest": 4.766666666666655
+  }
+}
+
+
+## audit-autopilot
+{"earlyFailures":[]}
+{"controlledFlights":66,"minSurvivalSeconds":208,"maxSurvivalSeconds":240,"humanFunVerified":false,"status":"passed"}
+
+
+## streaming
+{
+  "streamingChecks": 576016,
+  "summary": [
+    {
+      "speed": 40,
+      "minutes": 30,
+      "distance": 72000,
+      "maxEncounters": 3,
+      "maxObstacles": 127,
+      "maxPickups": 103,
+      "cpuMilliseconds": 179
+    },
+    {
+      "speed": 60,
+      "minutes": 30,
+      "distance": 108000,
+      "maxEncounters": 3,
+      "maxObstacles": 128,
+      "maxPickups": 102,
+      "cpuMilliseconds": 225
+    },
+    {
+      "speed": 90,
+      "minutes": 30,
+      "distance": 162000,
+      "maxEncounters": 3,
+      "maxObstacles": 127,
+      "maxPickups": 103,
+      "cpuMilliseconds": 949
+    },
+    {
+      "speed": 120,
+      "minutes": 30,
+      "distance": 216000,
+      "maxEncounters": 3,
+      "maxObstacles": 132,
+      "maxPickups": 103,
+      "cpuMilliseconds": 1191
+    },
+    {
+      "speed": 180,
+      "minutes": 30,
+      "distance": 324000,
+      "maxEncounters": 4,
+      "maxObstacles": 155,
+      "maxPickups": 123,
+      "cpuMilliseconds": 1947
+    },
+    {
+      "speed": 250,
+      "minutes": 30,
+      "distance": 450000,
+      "maxEncounters": 5,
+      "maxObstacles": 189,
+      "maxPickups": 152,
+      "cpuMilliseconds": 2407
+    },
+    {
+      "speed": 400,
+      "minutes": 30,
+      "distance": 720000,
+      "maxEncounters": 7,
+      "maxObstacles": 269,
+      "maxPickups": 222,
+      "cpuMilliseconds": 2954
+    },
+    {
+      "speed": 600,
+      "minutes": 30,
+      "distance": 1080000,
+      "maxEncounters": 9,
+      "maxObstacles": 380,
+      "maxPickups": 315,
+      "cpuMilliseconds": 5147
+    }
+  ],
+  "status": "passed"
+}
+
+
+## render-data
+{"renderDataChecks":2890,"simulatedMinutes":30,"maxChunks":12,"maxCached":124,"maxCompiled":63,"maxBatches":63,"maxAnimated":30,"gpuVerified":false,"status":"passed"}
+
+
+## audit-trick
+{
+  "cases": 352,
+  "failures": [],
+  "maxPlanMilliseconds": 5688,
+  "meanPlanMilliseconds": 732.1761363636364,
+  "elapsed": 286452.36136800004
+}
+
+
+## audit-trick-stress
+{
+  "candidates": 216,
+  "activated": 212,
+  "rejectedWithoutSpending": 4,
+  "startsInsideGeometry": 0,
+  "failures": []
+}
+
+
+## surface-audit
+{"surfaceChecks":14,"upperVerticesPreserved":99972,"preservedSignals":8,"contrastReports":[{"id":"rocky_arch","lod":1,"before":1.38,"after":1.38},{"id":"rocky_arch","lod":2,"before":1.53,"after":1.53},{"id":"sea_stacks","lod":1,"before":1.34,"after":1.34},{"id":"sea_stacks","lod":2,"before":1.37,"after":1.37},{"id":"mountain_peak","lod":1,"before":1.51,"after":1.51},{"id":"mountain_peak","lod":2,"before":1.51,"after":1.51},{"id":"rocky_ridge","lod":1,"before":1.51,"after":1.51},{"id":"rocky_ridge","lod":2,"before":1.51,"after":1.51},{"id":"waterfall_cliff","lod":1,"before":1.38,"after":1.38},{"id":"waterfall_cliff","lod":2,"before":1.43,"after":1.43}],"geometryPreserved":true,"aircraftPalettesPreserved":true,"gpuVerified":false,"status":"passed"}
+
+
+## preview-cache
+{"jpegCacheChecks":"passed","nativeAircraftPreparation":true,"nativeThemePreparation":true,"themeMeshes":580,"releasedReferences":true,"nonLobbyCaptureBlocked":true,"gpuRenderedOrVerified":false}
+
+
+## revision
+{"revisionChecks":10767145,"aircraftOrbitCases":2640,"maxRadius":31.5,"unlimitedBoost":true,"settingsValidated":true,"gpuVerified":false,"status":"passed"}
+
+
+## world-revision
+{"worldRevisionChecks":38664,"anchoredModels":15001,"districtModels":6213,"gpuVerified":false,"status":"passed"}
+
+
+## interface
+{"interfaceContracts":17,"browserOrLayoutVerified":false,"gpuVerified":false,"status":"passed"}
+
+
+## upgrade-400
+{"upgrade400Checks":395,"nativeRigMatrices":168,"maxPoseError":8.215650382226158e-15,"gpuVerified":false,"status":"passed"}
+
+
+## trick-worker
+{"workerChecks":19,"realWorkerCases":3,"gpuVerified":false,"status":"passed"}
+
+
+## expedition
+{"expeditionChecks":9328,"fullCoverageCases":[{"theme":"coast","seed":13,"span":11,"total":71,"encounters":7},{"theme":"coast","seed":13,"span":30.976,"total":71,"encounters":7},{"theme":"coast","seed":42,"span":11,"total":71,"encounters":8},{"theme":"coast","seed":42,"span":30.976,"total":71,"encounters":8},{"theme":"village","seed":13,"span":11,"total":45,"encounters":5},{"theme":"village","seed":13,"span":30.976,"total":45,"encounters":5},{"theme":"village","seed":42,"span":11,"total":45,"encounters":5},{"theme":"village","seed":42,"span":30.976,"total":45,"encounters":5},{"theme":"city","seed":13,"span":11,"total":55,"encounters":6},{"theme":"city","seed":13,"span":30.976,"total":55,"encounters":6},{"theme":"city","seed":42,"span":11,"total":55,"encounters":6},{"theme":"city","seed":42,"span":30.976,"total":55,"encounters":6},{"theme":"ice","seed":13,"span":11,"total":38,"encounters":4},{"theme":"ice","seed":13,"span":30.976,"total":38,"encounters":4},{"theme":"ice","seed":42,"span":11,"total":38,"encounters":4},{"theme":"ice","seed":42,"span":30.976,"total":38,"encounters":4},{"theme":"desert","seed":13,"span":11,"total":47,"encounters":5},{"theme":"desert","seed":13,"span":30.976,"total":47,"encounters":5},{"theme":"desert","seed":42,"span":11,"total":47,"encounters":5},{"theme":"desert","seed":42,"span":30.976,"total":47,"encounters":5},{"theme":"forest","seed":13,"span":11,"total":42,"encounters":5},{"theme":"forest","seed":13,"span":30.976,"total":42,"encounters":5},{"theme":"forest","seed":42,"span":11,"total":42,"encounters":5},{"theme":"forest","seed":42,"span":30.976,"total":42,"encounters":5},{"theme":"farm","seed":13,"span":11,"total":43,"encounters":5},{"theme":"farm","seed":13,"span":30.976,"total":43,"encounters":5},{"theme":"farm","seed":42,"span":11,"total":43,"encounters":5},{"theme":"farm","seed":42,"span":30.976,"total":43,"encounters":5},{"theme":"korea","seed":13,"span":11,"total":40,"encounters":4},{"theme":"korea","seed":13,"span":30.976,"total":40,"encounters":4},{"theme":"korea","seed":42,"span":11,"total":40,"encounters":4},{"theme":"korea","seed":42,"span":30.976,"total":40,"encounters":4}],"chasePoses":132,"maximumChaseExtent":0.8494310025282971,"sourceModels":403,"animatedModels":203,"gpuVerified":false,"status":"passed"}
+
+
+{"suites": 19, "mode": "individual-process executions", "gpuVerified": false, "status": "passed"}

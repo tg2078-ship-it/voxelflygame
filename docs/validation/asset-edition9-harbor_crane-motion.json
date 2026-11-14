@@ -1,0 +1,104 @@
+{
+  "status": "passed",
+  "model": "harbor_crane",
+  "samples": 100,
+  "sampleTimeIntervalS": [
+    0,
+    40
+  ],
+  "nativeClips": [
+    {
+      "name": "boom_luff",
+      "duration": 18,
+      "autoplay": true,
+      "targets": [
+        "gravity_frame",
+        "luff_boom"
+      ]
+    },
+    {
+      "name": "hoist_cycle",
+      "duration": 16,
+      "autoplay": true,
+      "targets": [
+        "hoist_cable",
+        "load_root"
+      ]
+    },
+    {
+      "name": "load_pendulum",
+      "duration": 7,
+      "autoplay": true,
+      "targets": [
+        "load_root"
+      ]
+    },
+    {
+      "name": "slew_survey",
+      "duration": 40,
+      "autoplay": true,
+      "targets": [
+        "slew_head"
+      ]
+    }
+  ],
+  "sampledVisibleHeroBounds": {
+    "min": [
+      -20.897385127395946,
+      0,
+      -9.310752797381108
+    ],
+    "max": [
+      9.02400016784668,
+      20.65317634045452,
+      9.497776344527102
+    ],
+    "size": [
+      29.921385295242626,
+      20.65317634045452,
+      18.80852914190821
+    ]
+  },
+  "sampledActualColliderBounds": {
+    "min": [
+      -20.964045349897123,
+      0,
+      -9.369940558436229
+    ],
+    "max": [
+      9.088,
+      20.71693225408145,
+      9.55657397841721
+    ],
+    "size": [
+      30.05204534989712,
+      20.71693225408145,
+      18.92651453685344
+    ]
+  },
+  "certifiedAllPhasePlacementBounds": {
+    "min": [
+      -22.285432999999998,
+      0,
+      -10.548333
+    ],
+    "max": [
+      9.088,
+      20.890774,
+      10.548333
+    ],
+    "size": [
+      31.373433,
+      20.890774,
+      21.096666
+    ]
+  },
+  "certifiedToSampledSizeRatio": [
+    1.043969973914185,
+    1.0083912880433492,
+    1.1146619711157526
+  ],
+  "safetyProof": "Each reused envelope has exactly identical native ancestor TRS, animation keys, playback flags and cuboid shape to the previously independently certified envelope; sampling is corroboration, not the safety proof.",
+  "priorFallbackCause": "Source cuboid order changed. Array-position comparison rejected identical cuboids and selected an origin-centred sphere fallback. Canonical exact-value comparison restores the certified local swept envelopes.",
+  "gpuRenderedOrVerified": false
+}

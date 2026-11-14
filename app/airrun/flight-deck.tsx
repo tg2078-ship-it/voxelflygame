@@ -1,0 +1,41 @@
+import type { ReactNode, CSSProperties } from 'react';
+import { Pause, Plane, Coins, Wind, CloudRain, ShieldCheck, Zap, Target, Check, Timer, Flame, ScanLine, Navigation } from 'lucide-react';
+import { THEMES, distance, fmt, clamp } from './data';
+import type { HUD } from './types';
+import { ContractHUD } from './mastery-ui';
+import { FlightGuidance } from './flight-guidance';
+import { SORTIE_STAGES } from './sortie';
+
+export function FlightDeck({ hud, ko, hyper, onPause, onBank }: { hud: HUD; ko: boolean; hyper: ReactNode; onPause: () => void; onBank?: () => void }) {
+    const theme = THEMES.find(theme => theme.id === hud.theme)!;
+    const integrity = clamp(hud.hp / Math.max(1, hud.maxHp), 0, 1), adventure = hud.adventure;
+    const operation = adventure?.operation, flow = adventure?.flow, vault = adventure?.vault, sortie = hud.sortie;
+    const remaining = Math.ceil(sortie?.remaining ?? 0), sortieClock = `${Math.floor(remaining / 60)}:${String(remaining % 60).padStart(2, '0')}`;
+    const t = (a: string, b: string) => ko ? a : b;
+    const flowLabel = !flow || flow.tier === 0 ? 'FIND YOUR FLOW' : flow.tier >= 3 ? 'SKY MASTER' : flow.tier === 2 ? 'IN THE ZONE' : 'ON A ROLL';
+    return <div className={'flight-deck flightdeck-six ' + (hud.eRemaining > 0 ? 'hyper-active ' : '') + (sortie ? 'sortie-active' : '')} style={{ '--sector-color': theme.color, '--engine': hud.boost, '--integrity': integrity } as CSSProperties}>
+        <FlightGuidance hud={hud} ko={ko}/>
+        <header className="f6-topbar">
+            <div className="f6-brand"><button type="button" onClick={onPause} aria-label={t('일시정지', 'Pause')}><Pause size={16}/></button><Plane size={22}/><span>AIRRUN<small>{sortie ? 'SORTIE / 03:00' : `EXPEDITION / ${String(Math.floor(hud.time / 180) + 1).padStart(2, '0')}`} · {(hud.difficulty ?? 'standard').toUpperCase()}</small></span></div>
+            {sortie ? <section className={'sortie-flight-progress stage-' + sortie.stage.id + (hud.eRemaining > 0 ? ' clock-held' : '')} aria-label={t('출격 진행', 'Sortie progress')}>
+                <header><span>{String(sortie.stage.index + 1).padStart(2, '0')} / 05 · {ko ? sortie.stage.label : sortie.stage.en}</span><b><Timer size={12}/>{sortieClock}</b></header>
+                <div className="sortie-stage-meter" role="progressbar" aria-label={t('출격 완주', 'Sortie completion')} aria-valuenow={Math.floor(sortie.elapsed)} aria-valuemin={0} aria-valuemax={sortie.duration}>{SORTIE_STAGES.map(stage => <i key={stage.id} className={sortie.elapsed >= stage.end ? 'cleared' : stage.id === sortie.stage.id ? 'current' : ''} style={{ flex: stage.end - stage.start }}><b style={{ width: `${clamp((sortie.elapsed - stage.start) / (stage.end - stage.start), 0, 1) * 100}%` }}/></i>)}</div>
+                <small>{hud.eRemaining > 0 ? t('E 비행 중 · 출격 시계 멈춤', 'HYPER ACTIVE · SORTIE CLOCK HELD') : sortie.stage.id === 'extraction' ? t('마지막 구간 · 완주까지 집중하세요', 'FINAL STAGE · BRING IT HOME') : theme.en + ' · ' + t('완주 보너스 +1,200', 'FINISH BONUS +1,200')}</small>
+            </section> : <div className="f6-sector"><span>{theme.en}</span><div><i style={{ width: hud.time % 180 / 180 * 100 + '%' }}/></div><small>{ko ? hud.route : hud.routeEn}</small></div>}
+            <div className="f6-actions"><span><Coins size={15}/>{fmt(hud.coins)}</span><div className="f6-hyper">{hyper}<span>{hud.eRemaining > 0 ? t('무적 비행', 'HYPER ACTIVE') : hud.eUsed ? t('하이퍼 사용 완료', 'HYPER EXPENDED') : 'HYPER TRICK'}<small>{hud.eRemaining > 0 ? hud.eRemaining.toFixed(1) + ' SEC' : hud.eUsed ? '01 / 01' : t('E · 한 판 1회', 'E · ONCE PER FLIGHT')}</small></span></div></div>
+        </header>
+        <section className="f6-distance" aria-label={t('비행 기록', 'Flight record')}><span>{sortie ? t('완주를 향한 비행', 'FLY IT HOME') : t('지평선까지, 더 멀리', 'CHASE YOUR HORIZON')}</span><strong>{distance(hud.distance)}</strong><div><b>{fmt(hud.score)}</b><small>PTS</small>{adventure && adventure.completed > 0 && <em><Check size={11}/>{adventure.completed} {t('작전 성공', 'OPS COMPLETE')}</em>}</div>{hud.ghost && <small className={'mastery-ghost '+(hud.ghost.delta<0?'behind':'ahead')}>{t('내 최고 비행','PERSONAL GHOST')} · {hud.ghost.delta>=0?'+':'−'}{Math.round(Math.abs(hud.ghost.delta))}m {hud.ghost.delta>=0?t('앞섬','AHEAD'):t('뒤처짐','BEHIND')}</small>}</section>
+        {hud.contract && <ContractHUD contract={hud.contract} ko={ko}/>}
+        {operation && !hud.contract && <section className={'f6-operation ' + operation.status} aria-label={t('현재 비행 작전', 'Current flight operation')}>
+            <header><span><Target size={13}/>{t('비행 작전', 'FLIGHT OPERATION')} <i>{operation.id.replace('OP-', '').padStart(2, '0')}</i></span><b><Timer size={11}/>{Math.max(0, Math.ceil(operation.remaining))}s</b></header>
+            <h2>{ko ? operation.title : operation.titleEn}</h2><p>{ko ? operation.instruction : operation.instructionEn}</p>
+            <div className="f6-operation-progress" role="progressbar" aria-valuemin={0} aria-valuemax={operation.target} aria-valuenow={Math.min(operation.target, operation.progress)} aria-label={ko ? operation.title : operation.titleEn}><i style={{ width: clamp(operation.progress / Math.max(1, operation.target), 0, 1) * 100 + '%' }}/></div>
+            <footer><span>{operation.status === 'completed' ? <><Check size={12}/>{t('작전 성공', 'OPERATION COMPLETE')}</> : operation.status === 'expired' ? t('다음 기회를 향해', 'NEXT OPPORTUNITY') : `${fmt(Math.floor(operation.progress))} / ${fmt(operation.target)}${operation.unit === 'm' ? ' m' : ''}`}</span><b>+{fmt(operation.reward)} PTS</b></footer>
+        </section>}
+        <section className={'f6-airframe ' + (integrity < .3 ? 'critical' : '')}><header><ShieldCheck size={14}/><span>{t('기체 상태', 'AIRFRAME')}</span><b>{Math.ceil(integrity * 100)}<small>%</small></b></header><div className="f6-hp">{Array.from({ length: 20 }, (_, i) => <i key={i} className={i / 20 < integrity ? 'full' : ''}/>)}</div><p>{hud.weather.rain > .1 ? <CloudRain size={11}/> : <Wind size={11}/>}<span>{t('바람', 'WIND')} {Math.round(hud.weather.wind * 100)}%</span>{hud.collection && <span><ScanLine size={11}/>{hud.collection.found}/{hud.collection.total}</span>}</p></section>
+        {flow && <section className={'f6-flow tier-' + flow.tier}><header><Flame size={15}/><span>{flowLabel}</span></header><div><b>{flow.chain}<small>{t('연속', 'CHAIN')}</small></b><strong>×{flow.multiplier.toFixed(2).replace(/0$/, '')}</strong></div><div className="f6-flow-track"><i style={{ width: clamp(flow.value, 0, 100) + '%' }}/></div><p>{flow.chain ? t('정밀 통과로 흐름을 이어가세요', 'LINK PRECISION PASSES TO KEEP FLOW') : t('링 · 정밀 통과 · 위험 경로', 'RINGS · PRECISION · RISK LINES')}</p>{vault && vault.pending > 0 && <button type="button" className="f6-bank" onClick={onBank} disabled={!onBank || hud.eRemaining > 0} aria-label={t(`미정산 플로우 ${fmt(vault.pending)}점 확정`, `Bank ${fmt(vault.pending)} pending flow points`)}><span><kbd>F</kbd>{t('플로우 확정', 'BANK FLOW')}<b>+{fmt(vault.pending)}</b></span><small>{t(`${Math.ceil(flow.remaining)}초 내 연결·확정 / 확정 시 배율 재시작`, `${Math.ceil(flow.remaining)}s TO LINK OR BANK · BANK RESETS MULTIPLIER`)}</small></button>}</section>}
+        {hud.time < 12 && !adventure?.completed && !(vault?.pending) && <div className="f6-coach"><Navigation size={14}/><span>{t('WASD · 방향키 / 조이스틱으로 표식 중앙을 향해 비행하세요.', 'WASD · ARROWS / JOYSTICK — FOLLOW THE MARKED PASSAGE.')}</span></div>}
+        <section className={'f6-instruments ' + (hud.boost > .1 ? 'boosting' : '')}><div><span>AIRSPEED</span><strong>{Math.round(hud.speed)}<small>KM/H</small></strong></div><i/><div><span>{t('지면 고도', 'TERRAIN ALT')}</span><strong>{Math.max(0, Math.round(hud.altitude))}<small>M AGL</small></strong></div><i/><div className="f6-throttle"><span>{hud.boost > .1 ? <><Zap size={10}/>HYPER BOOST</> : hud.gear === 3 ? 'AUTO CRUISE' : t('선택 기어', 'SELECTED GEAR')}</span><strong>{hud.boost > .1 ? Math.round(hud.heat * 100) : hud.gear}<small>{hud.boost > .1 ? t('열 반응', 'ENGINE HEAT') : '/ 5'}</small></strong><div><b style={{ width: (hud.boost > .1 ? 30 + hud.heat * 70 : hud.gear * 20) + '%' }}/></div></div></section>
+        {hud.combo > 1 && <div className="f6-risk"><Navigation size={12}/><b>{hud.combo}</b><span>RISK COMBO</span></div>}
+    </div>;
+}

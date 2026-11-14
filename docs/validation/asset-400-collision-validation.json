@@ -1,0 +1,18 @@
+{
+  "models": 400,
+  "sourceStaticBoxes": 476480,
+  "sourceDynamicBoxes": 65673,
+  "missingSourceSolids": 0,
+  "bvhTrees": 2037,
+  "bvhNodes": 122031,
+  "leafIndices": 542153,
+  "bvhQueries": 32592,
+  "derivedApertures": 8,
+  "clearanceSourceBoxChecks": 12005,
+  "individualGzipBytes": 8974886,
+  "maxIndividualGzipBytes": 185119,
+  "gzipRoundTrips": 400,
+  "failures": 0,
+  "gpuRenderedOrVerified": false,
+  "bundleGzipBytes": 8953348
+}

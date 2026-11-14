@@ -1,0 +1,17 @@
+{
+  "models": 403,
+  "trees": 2154,
+  "nodes": 197572,
+  "boxLeafReferences": 507217,
+  "triangleLeafReferences": 79284,
+  "queries": 17232,
+  "structuralSourceBoxes": 436671,
+  "additionalSourceSolids": 72776,
+  "sourceAdditionalKinds": {
+    "cylinder": 522,
+    "convex": 1708,
+    "box": 70546
+  },
+  "gpuRenderedOrVerified": false,
+  "status": "passed"
+}

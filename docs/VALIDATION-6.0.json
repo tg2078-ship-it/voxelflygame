@@ -1,0 +1,408 @@
+{
+  "version": "6.0.0",
+  "typecheck": "passed",
+  "gameESLint": "passed",
+  "productionBuild": "passed",
+  "fullRunner": {
+    "suites": 38,
+    "status": "passed",
+    "elapsedSeconds": 485
+  },
+  "additionalSuite": {
+    "name": "trick-recovery",
+    "status": "passed",
+    "relaxedExpertCases": 96,
+    "independentHandoffs": 97,
+    "pinnedCinematicFrames": 900
+  },
+  "registeredSuiteCount": 39,
+  "finalInterfaceContracts": 26,
+  "difficultyOpenings": 198,
+  "difficultyAssertions": 91383,
+  "proceduralDirectorAssertions": 23493,
+  "themes": 13,
+  "aircraft": 22,
+  "cpuControlledFlights": 66,
+  "controlledFlightSeconds": 240,
+  "standardECombinations": 352,
+  "highSpeedECandidates": 216,
+  "highSpeedEActivated": 180,
+  "highSpeedESafelyRejected": 36,
+  "sourceChangesAfterFullRun": [
+    "app/airrun/Game.tsx",
+    "app/airrun/expedition.css"
+  ],
+  "finalChangesValidatedBy": [
+    "TypeScript",
+    "game ESLint",
+    "26 UI contracts",
+    "actual portrait pointer-hit test and upgrade",
+    "production build"
+  ],
+  "hardwareFPSMeasured": false,
+  "humanFunVerified": false,
+  "published": false,
+  "browser": {
+    "javascriptErrors": [],
+    "webglErrors": [],
+    "httpFailures": [],
+    "pauseBefore": {
+      "phase": "paused",
+      "time": 6.883333333333314
+    },
+    "pauseAfter": {
+      "phase": "paused",
+      "time": 6.883333333333314
+    },
+    "softwareGPU": true,
+    "dailySummary": {
+      "mode": "daily",
+      "key": "2026-11-03",
+      "debrief": {
+        "version": 1,
+        "medal": "bronze",
+        "rating": 39,
+        "operationsCompleted": 1,
+        "operationsExpired": 0,
+        "perfectPasses": 4,
+        "bestFlow": 6,
+        "flowActions": 6,
+        "operationBonus": 250,
+        "precisionBonus": 300,
+        "flowBonus": 272,
+        "controlDistance": 120,
+        "lowDistance": 0,
+        "boostDistance": 0,
+        "cleanDistance": 296
+      },
+      "daily": {
+        "attempts": 1,
+        "updatedAt": "2026-11-04T01:22:34.483Z",
+        "normal": {
+          "distance": 296,
+          "score": 2063,
+          "combo": 2,
+          "planeId": "skyhawk",
+          "runId": "066ccf31-8cac-4170-bd3a-00917cd17913"
+        }
+      }
+    },
+    "liveOperationCompleted": 1
+  },
+  "responsive": {
+    "softwareGPU": true,
+    "checks": [
+      "All three difficulty buttons update actual settings",
+      "Daily locks standard and preserves the endless expert preference",
+      "Owned, S grade, and full fleet filters work"
+    ],
+    "viewports": {
+      "390x844": {
+        "launch": {
+          "x": 16,
+          "y": 763,
+          "width": 358,
+          "height": 56
+        },
+        "stage": {
+          "x": 17,
+          "y": 163,
+          "width": 356,
+          "height": 249
+        },
+        "maintenanceReached": true,
+        "settingsReached": true,
+        "navigationTargets": 8
+      },
+      "844x390": {
+        "launch": {
+          "x": 601,
+          "y": 332.5,
+          "width": 228,
+          "height": 45
+        },
+        "stage": {
+          "x": 18,
+          "y": 120,
+          "width": 589,
+          "height": 121
+        },
+        "maintenanceReached": true,
+        "settingsReached": true,
+        "navigationTargets": 8
+      }
+    },
+    "interactionMethod": "DOM click handlers; target layout checked separately",
+    "status": "passed",
+    "javascriptErrors": [],
+    "httpFailures": []
+  },
+  "registration": {
+    "freshContext": true,
+    "externalAuthenticationTested": false,
+    "softwareGPU": true,
+    "interactionMethod": "DOM click handlers and native input fill",
+    "loadingChartCaptured": true,
+    "nickname": "ACE SIX",
+    "phase": "airport",
+    "invalidNameBlocked": true,
+    "approvalComplete": true,
+    "airportReached": true,
+    "restoredAfterReload": true,
+    "status": "passed",
+    "javascriptErrors": []
+  },
+  "portraitFinal": {
+    "softwareGPU": true,
+    "interactionMethod": "DOM click handlers and actual browser pointer hit testing",
+    "menuExpandedAndControlled": true,
+    "navigationTargets": 8,
+    "upgradeVisibility": {
+      "x": 37,
+      "y": 690.1875,
+      "width": 316,
+      "height": 46,
+      "centerReceivesPointer": true,
+      "visibleAboveLaunch": true,
+      "scrollTop": 95
+    },
+    "upgradeApplied": true,
+    "javascriptErrors": [],
+    "status": "passed"
+  },
+  "isolatedAtmosphereWebGL": {
+    "renderer": "Chromium SwiftShader software WebGL2",
+    "fullGame": false,
+    "fpsMeasured": false,
+    "results": [
+      {
+        "kind": "day",
+        "error": 0,
+        "calls": 13,
+        "triangles": 111688,
+        "clouds": 2574,
+        "programs": [
+          {
+            "name": "",
+            "runnable": true
+          },
+          {
+            "name": "",
+            "runnable": true
+          },
+          {
+            "name": "",
+            "runnable": true
+          },
+          {
+            "name": "",
+            "runnable": true
+          }
+        ]
+      },
+      {
+        "kind": "sunset",
+        "error": 0,
+        "calls": 13,
+        "triangles": 111688,
+        "clouds": 2574,
+        "programs": [
+          {
+            "name": "",
+            "runnable": true
+          },
+          {
+            "name": "",
+            "runnable": true
+          },
+          {
+            "name": "",
+            "runnable": true
+          },
+          {
+            "name": "",
+            "runnable": true
+          }
+        ]
+      },
+      {
+        "kind": "storm",
+        "error": 0,
+        "calls": 13,
+        "triangles": 111688,
+        "clouds": 2574,
+        "programs": [
+          {
+            "name": "",
+            "runnable": true
+          },
+          {
+            "name": "",
+            "runnable": true
+          },
+          {
+            "name": "",
+            "runnable": true
+          },
+          {
+            "name": "",
+            "runnable": true
+          }
+        ]
+      },
+      {
+        "kind": "night",
+        "error": 0,
+        "calls": 13,
+        "triangles": 111688,
+        "clouds": 2574,
+        "programs": [
+          {
+            "name": "",
+            "runnable": true
+          },
+          {
+            "name": "",
+            "runnable": true
+          },
+          {
+            "name": "",
+            "runnable": true
+          },
+          {
+            "name": "",
+            "runnable": true
+          }
+        ]
+      }
+    ],
+    "errors": []
+  },
+  "sourceSHA256": {
+    "app/airrun/Game.tsx": "b0a570baa937cda90d950153c5a16112d2e9242381ddc51d9a46cff85054ef09",
+    "app/airrun/actor-batching.ts": "ad324d20c93ada7dba73b1b7acd0d332b8ea9518c0dfadb94eff53e8ec3b9063",
+    "app/airrun/ads.ts": "98c903138b9e3c1ef53545275d2d08ed5a534842a580cadf6aa214d302fe8698",
+    "app/airrun/adventure.ts": "da42a7ec9564efe09c1f9477d6ad91e782482139e635d6ec794b58444a10dd12",
+    "app/airrun/airport.ts": "c1fa7c9cb8f71bb81af73fb74d7ad291558329eb3dd97ab85aa87e72b36a85c4",
+    "app/airrun/assets.ts": "bac057bb705eef7c5e3b1c04c2015eed29d8a70e24f6d59d2a2b03281a6416ee",
+    "app/airrun/atmosphere.ts": "6b8e02c5d641505279e6707c0b28abe72dda7b4b3cd88fc7965e369050debdcd",
+    "app/airrun/audio.ts": "c7f3664211aae38c40b06521bbc36cd2e00b8c2d582cb80a6b1e1cb948d6ac7b",
+    "app/airrun/beacon-fx.ts": "65c75007e9310f09309ffe4be2c22dcf5521cce0d6f149f258661a5a2ccbb3ff",
+    "app/airrun/cloud-field.ts": "d434772152dae79889510d655030d7aa3592e420bed96bb5ad89e553c636e33f",
+    "app/airrun/collision.ts": "df03ad735242fb27e5d02994f15bd559dd103a03da773dfbd6711ac0f2e7a711",
+    "app/airrun/daily-route.ts": "7c097a18493f3b75851a83df070c26f53a3f930141777ba75f5f76f2f99a3036",
+    "app/airrun/data.ts": "031a96add2f9ee47e2367515bb27a669111c3ad0403e23cf3601edcb11ae8d74",
+    "app/airrun/display-quality-controls.tsx": "8d5d59d79a8d42787a4241558a437273edf3b746ae6835c8c35c99c6fcdc5e52",
+    "app/airrun/encounter-director.ts": "38bd0a0d66de2f1b46bdc8283877b094b0b06fa8aa3d7383c4dfdb98fc476e5d",
+    "app/airrun/environment-fx.ts": "6fcf41e9bae287862e13688417d74fb2e8fc675ceae9cb0f7a3e02d83faa0f0d",
+    "app/airrun/environment-palette.ts": "7c5bc72ad7eeb8ef572cb9d96c834c73af7d77cbe035deea9c363f4947c657d3",
+    "app/airrun/expedition.css": "423ec5aeb96e0a53bf7d9ef4708346d99b44ef07c1ab06b09d6d6e287fdc96e9",
+    "app/airrun/flight-debrief.tsx": "620066ad7ce23216106a783b84442b2e37d74f005e0a61682a472072276f6353",
+    "app/airrun/flight-deck.css": "bddebb27ba3ef67a9b1c9596baa648a1aa1f0f072c7c8e146019a61f295a3663",
+    "app/airrun/flight-deck.tsx": "18af9355396145f4f5dc0d4981926d35c3d7b41c3cb4d88da3f661a510eba6a9",
+    "app/airrun/flight-framing.ts": "e2b6ad3181e71a0bb16858b724f155202b95ba09d10a78cf9d729e62899b0fb7",
+    "app/airrun/flight-guidance.tsx": "f208c353073de391c223dc4e96f9faf26ea94128fb48e142e6bb38b539706572",
+    "app/airrun/flight-presentation.ts": "63f017dca07f1d9d98b34c4dfa2130a60aeb93f8f2f5fa4faa4bc267519f33dd",
+    "app/airrun/flight-route.tsx": "4a1e1679acb55e654697a9d5b09edd5c8203f39f0f4f486f6fd75e9ddbc5f10f",
+    "app/airrun/flight-stream.ts": "de0e0724b4bdc9d16bca94e19c3e4c3a18e4c322694ca490cdc146d6c158fb90",
+    "app/airrun/flight-wake.ts": "34233fecd4215760240c9fd7771cd3a86684a86ef47dd585699c3b38deb96475",
+    "app/airrun/fx.ts": "99d54b1939a20fd207461f153bd2895cea40dd3945045e04dc0f7486c779bd40",
+    "app/airrun/game.css": "ec02aa82a37f59010acd53561caf62218b2a51e7f8aa8195ad92e5fd8e098718",
+    "app/airrun/graphics.ts": "92f2dccc80fe14543fcd0a7a2a3980e3d8d3238da60a31602d451d309c4bad3e",
+    "app/airrun/guidance-projection.ts": "9b0df4337a9f3c3749c8bf681b0ad03f8b4e657c922df9a4b0d3c3a80cd5baf7",
+    "app/airrun/hangar-dashboard.tsx": "25d890bd26b8540d35aedef4b30109e1df442b687b4f115484049c4f37956783",
+    "app/airrun/insignia.ts": "eae2552d35cd69deac88298548ef6c5856339f5933e479b4a9ba6cc5339ff868",
+    "app/airrun/inspection.ts": "0bc0796aed77e79af42337af384b21565d55900e4b03b72a6e5ea02de9e49f6f",
+    "app/airrun/interface.tsx": "ee0bcb9e98ff857eb8f26c581fa4cb19e5a6e14440c1127d1344cacf255e6e52",
+    "app/airrun/landscape.ts": "703eb2a2bfbe7150afb6856c6432865caa014ac106ff8d1112c6019d2af75086",
+    "app/airrun/livery-surface.ts": "34f198d3f1febdc58232b036172ffd645a075a435a9b59147f257dd5f85a7168",
+    "app/airrun/mesh-collision.ts": "a0974c92f90f467f313e97ef88d574831278ef434cd68b948d2885554158af37",
+    "app/airrun/model-archive.tsx": "93d568069f5d065c03c47e3ec2df8ca00d4807f27d23766e37681602c50895ab",
+    "app/airrun/model-collection.ts": "aa8583212c46948f9ede8366a0de9d320b3267798bf757de4c156e4defb43c5d",
+    "app/airrun/model-compile-protocol.ts": "398dc231452ac94305a13f9b1aabeb6063e04e1dc390c3ae16d842021f3808af",
+    "app/airrun/model-compiler-worker.ts": "5adee93da59157769801d271da0741f141e12f55608d0848b3396637a6cdc73a",
+    "app/airrun/model-compiler.ts": "1e963ca1f2adb913cfa6a50595616b4c3a70dbcc84aba173e3093872586309ea",
+    "app/airrun/model-image.tsx": "101a68fca0f142cccb2f52fac6258bcd9b3189fbc19305df63f4b4d831c24398",
+    "app/airrun/model-inspector.tsx": "41789a65d5191e72939dc75eb0acd4e03ba6150600dbf706f50b92525ecc1313",
+    "app/airrun/model-kind.ts": "5b21e1b657ff5cf09b80bafc2e49042f9af2c1a096d2b7f3f44ba7e0b4808715",
+    "app/airrun/model-pose.ts": "f44d57ae1ebc055220f9cc8af2b0b34ba33a834126a9770640e56977d4f31fb8",
+    "app/airrun/model-surface.ts": "def3c4273bc80dec7f590412953e92fa77d7b4fb521df1ad020b04a8f6888a6d",
+    "app/airrun/particle-trace.ts": "937cd3eb9786ae4dc706e7fab951d660ef4aada89c2b9f0044ee1ef3de886f2c",
+    "app/airrun/patterns.ts": "3a04d3d431b060c183fc0fa27bac5e64826c1bda4aba9984ae785076bdb4c465",
+    "app/airrun/pointer-owner.ts": "91493833aed6ff7439fc2fa05cc45af781a78bc4195322ac67def36a469170a7",
+    "app/airrun/previews.ts": "d6a813bddda031d55503256c2a1b46fb8d29e5dca352a6c4610cd84076c1243a",
+    "app/airrun/progression.ts": "53d2f704497bfb39dcd3ea788634da2790ec5805ece0497b6dbe8b8091fec982",
+    "app/airrun/renderer.ts": "9a9ac733fab3d26ca967277ef0f49af1380f359e6b0f054c9dc06c575fec3261",
+    "app/airrun/rig-motion.ts": "fa099e36caf164dae743866f6bb3f7384002cfe854ccb3a11b89ccfa38491b8b",
+    "app/airrun/rigid-batching.ts": "a4b9fcdf6ad10a9888b2a315e5d89577f495fc3ed330b6a55ef07510e1ca8b66",
+    "app/airrun/scenery.ts": "d308b0af26b9d23811d0c106619064bc441566af27eeef3abce9488eee86e244",
+    "app/airrun/shaders.ts": "5c5966224f2054b887051c3479971dd9c3a6b15a8a2ed0ed361c9bc876fadf82",
+    "app/airrun/simulation.ts": "0e7063817945276c2f3a81c2271ed30eebb05221c7fcae88222dc2d7e3cb376f",
+    "app/airrun/state.ts": "7902b55509109ca9c749e2f5e70da1299262611765081d7c2949b1b192bb37af",
+    "app/airrun/terrain-builder.ts": "1ae62a2abbebd559ee3ef1d5a084e6740a0d32c9f0ad19c61602017a7e629f43",
+    "app/airrun/terrain-palette.ts": "b7ac32104d29a16d1ee27478870fb4919bc11f92fd4d79b8fe3ab91a41b2c2af",
+    "app/airrun/terrain-protocol.ts": "fd8421d60117d95fbb6c63ebf557eca8ef61d4ec12c93e6fc67f47abb7136440",
+    "app/airrun/terrain-worker.ts": "2744cc6ac9ce4db395248facd2b043388fef6ebc019f136fd9ef91307dde1d7c",
+    "app/airrun/terrain.ts": "0ca98d23342ecf61b2819f691d13d391f15ff3e02df8a58bbd04874c8bb715d7",
+    "app/airrun/texture-pool.ts": "bf5083333ba2bad37834db7939ee6e603912deeb3c7c81fd52d673139c1fb3bc",
+    "app/airrun/touch-input.ts": "8343d19938e4592a6d01a6ee299d344144f366c4cf611875fd1db17784c6e8ae",
+    "app/airrun/trick-path.ts": "862b69e2d0074cf3af63eaf653ca765706f5b19808bdd61ecdf050764b025f2a",
+    "app/airrun/trick-planner.ts": "e883778b9b83d29c48c0049407b03e42cdf2276e40a178ff1dfea3f76c83ede1",
+    "app/airrun/trick-protocol.ts": "0cabe8ca020125680d40947822ae688aafbe29a90aabc7846d4a6477bfe0f2d9",
+    "app/airrun/trick-worker.ts": "e5f93bbab23e5aab1b6696c9d91d1aca1016fa9f2744554a7911a0d292924cf9",
+    "app/airrun/types.ts": "c4779a1adff84c28e420956a8fc1c42125b938243e07448fdb4443b3556e5161",
+    "app/airrun/weather.ts": "11cc9198940745aa1e90be220b1336ca26e2afb12da7835c8b3536d349d133cf",
+    "app/airrun/world-ground.ts": "5ec4ac220aab24c1cbbc5825995b1530c29f54910e8b7c96e2dec9c351da9b2b",
+    "app/airrun/world-view.ts": "fe6dbd17ed4f2bb0a62d13095864023a89a893172a2bd7b31b92512c04b33fab",
+    "tests/v2/adventure.ts": "afe026eb2a13accfc947976357bbb8dd592b4dd95fe5cf083af776e2a52aabae",
+    "tests/v2/asset-reliability.ts": "7cc4178a1d43cc021732db9c443877e4f289071c8c52803e324fb1c54e116965",
+    "tests/v2/assets.ts": "d66ba2e0c692ffb50a2d3cc79f60d1c8465fd029a21fcedae1f324731fae123f",
+    "tests/v2/atmosphere-art.ts": "c6944f0835439518c4286eb0cacce1aed4c3d8688387cd440ed1ba5eb11fcbf6",
+    "tests/v2/audit-autopilot.ts": "428f7b8d595a46f25b6297134cc912154a5f72f1ab084c95da9ada40508b9cc7",
+    "tests/v2/audit-course.ts": "9e1a618f697fa990ad6039fd7303455488cb3f65541c681fd64ac324431f78f3",
+    "tests/v2/audit-route.ts": "d61be74f3596b125d55ed91f64729955b30e087f75eaee612fe38757dba33dd2",
+    "tests/v2/audit-trick-stress.ts": "a12d785587e4b60583fdc8d63d971b84699b14af57051673b544141373b3ceb3",
+    "tests/v2/audit-trick.ts": "3352cfe02169582c18ed85f53c8255650ce2649dad6c158a8e52c2f8cd3abb56",
+    "tests/v2/collision-cache.ts": "e6ab5f7d0d91672a03f74eb1aa02a1ad5fa69a1bbf9a091cfd365f119e43bdb8",
+    "tests/v2/continuous-flight.ts": "66b35eac7aae4fa1cfb33aa9e3666a5d0e1d16ef074d415df1e530e012fa5a46",
+    "tests/v2/core.ts": "538c50e45f5010016636d5200e69267e09320eabbef6746f932bfb6b3e97faac",
+    "tests/v2/daily-route.ts": "03505bd0907cbe6c1c0d85215bed13edc30ec74685cf909a1b41b32f1f7e7a83",
+    "tests/v2/difficulty.ts": "0f27c9572835c284868681b46bd6060c637e61079b518a11883da2b38c982cd0",
+    "tests/v2/edition12.ts": "43b29cb5630df21404c15f186ee975522f198c45fa653f175d84f2337143d332",
+    "tests/v2/expedition.tsx": "7f02c32b378bd07bc7890a0c48e5eee43916f158cc9218b7acd8d3429845346c",
+    "tests/v2/fixtures/trick-korea-handoff.json": "2d8df34a7ce183b265bf8c7d54c413619153aa5f86f6cd12d5e9a08960d06f9a",
+    "tests/v2/fixtures.ts": "ad051567080282ee1322366f880cdcbdaa9a4d6d41fab1339015e73c4ee928a2",
+    "tests/v2/flight-effects.ts": "0a6e1479d7a766c7ed9ad17676891188eb683143dc3d61e71c4993ac62bfb446",
+    "tests/v2/frame-profile.ts": "7c58b39bf8774599cdaea24396d28ec6090d1956de985490409da826696ec0af",
+    "tests/v2/image-runtime.ts": "c02f6d7991ca6d2b5241725809955ac9202146f4ba49a80cd06240d35adc52ae",
+    "tests/v2/interface.tsx": "169584fbc2e3469fa2cdf66d56a49d82b30401897b90231d22469092b5d6ce7c",
+    "tests/v2/model-residency.ts": "81eee316fabbd8a939a9bc90b2374e70093a50154c1d7fb9c37cba80d52d207d",
+    "tests/v2/model-worker-adapter.ts": "3be9a083868f9f33312cbc75e929f9336aa74c9e219abfed48cfa2e8e4f1ffe2",
+    "tests/v2/model-worker-node.ts": "9a7b8800f0a5d3acb075e05448113ad4174287c3e6315267064443e405bcfe76",
+    "tests/v2/model-worker.ts": "427e3424b09d8ae73013932c7102129cc020c64ae913fdad04a720e3e7f97f5e",
+    "tests/v2/performance-revision.ts": "affd0c2bff94909317a34bdbbd2d1f745cdb4adc3e7e8d15de9f7f82f9672585",
+    "tests/v2/preview-cache.ts": "ce0663f5220dad07e8e2815e7d658c6618edb9f17b0b5b5b7b53bffadf6f425b",
+    "tests/v2/procedural-director.ts": "17ab9a0d024b084ac90aaef33936d857ba5162f0614a192505aef870fcbf9067",
+    "tests/v2/progression.ts": "8572903fb497df9a8cd477934435a4207750ebe85344875fd6e1035d6978f6d6",
+    "tests/v2/render-controls.ts": "6cd94aa6a7528c5da7a2187352f06bffda239f077f8ee5e7a68acf2c9cdb58c2",
+    "tests/v2/render-data.ts": "431a136d5c88f3e4ff65c583199dccbc39145789aebb3e014d7d675b3975973e",
+    "tests/v2/revision.ts": "d841e61330990efd7243be2646bb515e80c94e2f68b669f015438d8a2e5fc82f",
+    "tests/v2/run.ts": "ae032368004599c27648d48a12f6106f1c2611ee7df6244ad1119ebb02a47786",
+    "tests/v2/scene-quality.tsx": "9b03df980ddc7c7088c3183523a71ef224ad9efb101e941f6cf087f6612bc20a",
+    "tests/v2/storage.ts": "3a9e33b50a20d9febfc5ec65f5a194cad884570757edc31189a820f22440921f",
+    "tests/v2/streaming.ts": "0428a1bcef58c6ca697dcba1f2a416b057b19c9f7f3b967d83be8d1cf8b09c8e",
+    "tests/v2/surface-audit.ts": "539ff8171e7d52862fd3f10c10667f911299ec7a1cdf4465dc23452131daf1b9",
+    "tests/v2/terrain-worker-adapter.ts": "1f512e8a786dbd4198ef56182c819b3a9ca0a0477ea6a233d7fecc219ac42a5a",
+    "tests/v2/terrain-worker-node.ts": "3fb422d1974f4904519e9d5686dcd88d51419c0e47dbc81c9436f3915d57d835",
+    "tests/v2/terrain-worker.ts": "3ae617e54e8015249c4fa8352349057a08416d3671da9fab9de0ff5ed9fe7cc9",
+    "tests/v2/theme-coverage.ts": "d7a8700876efe4ed37d880a04d04b640caed08dd4957afdb01e3458bbb59d511",
+    "tests/v2/trick-checks.ts": "01c10baf87a2902739b14d96953b9d60bdf3fd69484db3c8e049cc038db408d1",
+    "tests/v2/trick-recovery.ts": "ca52550436185521f53d4eaead9e650ad2693eb037102a584d87ba73a97d755f",
+    "tests/v2/trick-worker-node.ts": "65da8b9294317420611423cca57004780aa829f8222e26899a5200a433231e30",
+    "tests/v2/trick-worker.ts": "ed18f5a37f8df7894887a848461e8fb47d51a3e0a203857fda5af769b75bf49a",
+    "tests/v2/upgrade-400.ts": "eeaf5288a1297fe63285147aa39255ca846ba7f13a746112c001da7b27d6c3ea",
+    "tests/v2/visual-quality.tsx": "2fda11e12af0225c1cc5871a7d49c4c87faf77a9dbd69ca7e1ee05e83d31dd2f",
+    "tests/v2/world-art.ts": "97e9ebfb625f11e343fb3c5b0a61c0385ccc6fcb60ff987bfd31a21d9ba5c200",
+    "tests/v2/world-revision.ts": "0ea78fdb0cd6b7ed37cc516bcfaa9b09d32adc07380eecf7bf06e060ec3707f8"
+  }
+}

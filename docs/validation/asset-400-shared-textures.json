@@ -1,0 +1,12 @@
+{
+  "status": "passed",
+  "models": 400,
+  "visualExports": 1200,
+  "gzipModelBytes": 188301181,
+  "sharedImageCount": 49,
+  "sharedImageBytes": 493830,
+  "sourceImageOccurrencesVerified": 11400,
+  "compressedGeometryAnimationSegmentsUnchanged": true,
+  "nodesMeshesMaterialsTexturesSamplersAccessorsAnimationsUnchangedAfterReferenceRebase": true,
+  "gpuRenderedOrVerified": false
+}

@@ -1,0 +1,1 @@
+{"schema":1,"id":"rail_track","sourceBoxes":1,"sourceDynamicBoxes":0,"static":[{"c":[0,0.17750000089406967,0],"s":[2.700000047683716,0.3950000023841858,12],"zone":"body"}],"dynamic":[],"clearances":[],"coverage":{"staticVolume":1,"method":"hand-authored traffic hull"}}

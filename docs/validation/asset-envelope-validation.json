@@ -1,0 +1,3341 @@
+{
+  "models": 50,
+  "boxes": 2349,
+  "minPhasesPerClip": 48,
+  "cartesianPoseSamples": 11832520,
+  "keyframePoseSamples": 76440,
+  "validationPoseSamples": 430080,
+  "cornerChecks": 28864512,
+  "failures": 0,
+  "maxGuardM": 1.7467073523783458,
+  "modelsDetail": [
+    {
+      "id": "cessna_skyhawk",
+      "dynamicBoxes": 54,
+      "groups": [
+        {
+          "node": "main_wing_aileron_left",
+          "clips": [
+            "main_wing_aileron_left_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.017284885216616332
+        },
+        {
+          "node": "main_wing_aileron_right",
+          "clips": [
+            "main_wing_aileron_right_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.017284885216616332
+        },
+        {
+          "node": "elevator_left",
+          "clips": [
+            "elevator_left_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.01341280044873659
+        },
+        {
+          "node": "elevator_right",
+          "clips": [
+            "elevator_right_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.01341280044873659
+        },
+        {
+          "node": "rudder",
+          "clips": [
+            "rudder_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.014897271719259959
+        },
+        {
+          "node": "propeller",
+          "clips": [
+            "propeller_spin"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.06930845175990202
+        }
+      ],
+      "maxGuardM": 0.06930845175990202,
+      "largestEnvelope": {
+        "node": "propeller",
+        "c": [
+          0,
+          0.04,
+          -3.74
+        ],
+        "s": [
+          2.19,
+          2.19,
+          0.183
+        ],
+        "volume": 0.8776863
+      }
+    },
+    {
+      "id": "dhc2_beaver",
+      "dynamicBoxes": 61,
+      "groups": [
+        {
+          "node": "main_wing_aileron_left",
+          "clips": [
+            "main_wing_aileron_left_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.022428892533463057
+        },
+        {
+          "node": "main_wing_aileron_right",
+          "clips": [
+            "main_wing_aileron_right_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.022428892533463057
+        },
+        {
+          "node": "elevator_left",
+          "clips": [
+            "elevator_left_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.019523826600768485
+        },
+        {
+          "node": "elevator_right",
+          "clips": [
+            "elevator_right_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.019523826600768485
+        },
+        {
+          "node": "rudder",
+          "clips": [
+            "rudder_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.018111119784982324
+        },
+        {
+          "node": "propeller",
+          "clips": [
+            "propeller_spin"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.07766187742103299
+        }
+      ],
+      "maxGuardM": 0.07766187742103299,
+      "largestEnvelope": {
+        "node": "propeller",
+        "c": [
+          0,
+          0.04,
+          -3.76
+        ],
+        "s": [
+          2.466,
+          2.466,
+          0.239
+        ],
+        "volume": 1.453396284
+      }
+    },
+    {
+      "id": "stearman_model_75",
+      "dynamicBoxes": 46,
+      "groups": [
+        {
+          "node": "upper_wing_aileron_left",
+          "clips": [
+            "upper_wing_aileron_left_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.017165853837051232
+        },
+        {
+          "node": "upper_wing_aileron_right",
+          "clips": [
+            "upper_wing_aileron_right_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.01716585383705123
+        },
+        {
+          "node": "lower_wing_aileron_left",
+          "clips": [
+            "lower_wing_aileron_left_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.015742896996210353
+        },
+        {
+          "node": "lower_wing_aileron_right",
+          "clips": [
+            "lower_wing_aileron_right_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.015742896996210353
+        },
+        {
+          "node": "elevator_left",
+          "clips": [
+            "elevator_left_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.014318622336867244
+        },
+        {
+          "node": "elevator_right",
+          "clips": [
+            "elevator_right_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.014318622336867244
+        },
+        {
+          "node": "rudder",
+          "clips": [
+            "rudder_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.013669220264117796
+        },
+        {
+          "node": "propeller",
+          "clips": [
+            "propeller_spin"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.080283095478079
+        }
+      ],
+      "maxGuardM": 0.080283095478079,
+      "largestEnvelope": {
+        "node": "propeller",
+        "c": [
+          0,
+          0.07,
+          -3.4
+        ],
+        "s": [
+          2.552,
+          2.552,
+          0.244
+        ],
+        "volume": 1.589099776
+      }
+    },
+    {
+      "id": "pitts_s2c",
+      "dynamicBoxes": 52,
+      "groups": [
+        {
+          "node": "upper_wing_aileron_left",
+          "clips": [
+            "upper_wing_aileron_left_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.011437783423076074
+        },
+        {
+          "node": "upper_wing_aileron_right",
+          "clips": [
+            "upper_wing_aileron_right_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.011437783423076074
+        },
+        {
+          "node": "lower_wing_aileron_left",
+          "clips": [
+            "lower_wing_aileron_left_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.010408804950593414
+        },
+        {
+          "node": "lower_wing_aileron_right",
+          "clips": [
+            "lower_wing_aileron_right_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.010408804950593414
+        },
+        {
+          "node": "elevator_left",
+          "clips": [
+            "elevator_left_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.010941895730654063
+        },
+        {
+          "node": "elevator_right",
+          "clips": [
+            "elevator_right_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.010941895730654065
+        },
+        {
+          "node": "rudder",
+          "clips": [
+            "rudder_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.0128538619724346
+        },
+        {
+          "node": "propeller",
+          "clips": [
+            "propeller_spin"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.06623383883746055
+        }
+      ],
+      "maxGuardM": 0.06623383883746055,
+      "largestEnvelope": {
+        "node": "propeller",
+        "c": [
+          0,
+          0.04,
+          -2.38
+        ],
+        "s": [
+          2.094,
+          2.094,
+          0.176
+        ],
+        "volume": 0.7717311359999998
+      }
+    },
+    {
+      "id": "extra_330lx",
+      "dynamicBoxes": 56,
+      "groups": [
+        {
+          "node": "main_wing_aileron_left",
+          "clips": [
+            "main_wing_aileron_left_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.013196714031791821
+        },
+        {
+          "node": "main_wing_aileron_right",
+          "clips": [
+            "main_wing_aileron_right_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.013196714031791821
+        },
+        {
+          "node": "elevator_left",
+          "clips": [
+            "elevator_left_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.013140022348611396
+        },
+        {
+          "node": "elevator_right",
+          "clips": [
+            "elevator_right_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.013140022348611396
+        },
+        {
+          "node": "rudder",
+          "clips": [
+            "rudder_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.014022018222549858
+        },
+        {
+          "node": "propeller",
+          "clips": [
+            "propeller_spin"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.06934416297595908
+        }
+      ],
+      "maxGuardM": 0.06934416297595908,
+      "largestEnvelope": {
+        "node": "propeller",
+        "c": [
+          0,
+          0.035,
+          -3.1
+        ],
+        "s": [
+          2.196,
+          2.196,
+          0.183
+        ],
+        "volume": 0.882502128
+      }
+    },
+    {
+      "id": "p51d_mustang",
+      "dynamicBoxes": 95,
+      "groups": [
+        {
+          "node": "main_wing_aileron_left",
+          "clips": [
+            "main_wing_aileron_left_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.01823260600419581
+        },
+        {
+          "node": "main_wing_aileron_right",
+          "clips": [
+            "main_wing_aileron_right_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.01823260600419581
+        },
+        {
+          "node": "elevator_left",
+          "clips": [
+            "elevator_left_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.016965668515879544
+        },
+        {
+          "node": "elevator_right",
+          "clips": [
+            "elevator_right_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.016965668515879544
+        },
+        {
+          "node": "rudder",
+          "clips": [
+            "rudder_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.01736009540019281
+        },
+        {
+          "node": "propeller",
+          "clips": [
+            "propeller_spin"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.08963932514383534
+        },
+        {
+          "node": "gear_left",
+          "clips": [
+            "gear_left_retract"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.02583590065501161
+        },
+        {
+          "node": "gear_right",
+          "clips": [
+            "gear_right_retract"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.02583590065501161
+        }
+      ],
+      "maxGuardM": 0.08963932514383534,
+      "largestEnvelope": {
+        "node": "propeller",
+        "c": [
+          0,
+          0.09,
+          -4.64
+        ],
+        "s": [
+          2.856,
+          2.856,
+          0.262
+        ],
+        "volume": 2.1370648319999996
+      }
+    },
+    {
+      "id": "l39_albatros",
+      "dynamicBoxes": 108,
+      "groups": [
+        {
+          "node": "main_wing_aileron_left",
+          "clips": [
+            "main_wing_aileron_left_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.01630607902631579
+        },
+        {
+          "node": "main_wing_aileron_right",
+          "clips": [
+            "main_wing_aileron_right_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.01714512713092864
+        },
+        {
+          "node": "elevator_left",
+          "clips": [
+            "elevator_left_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.018587912039015206
+        },
+        {
+          "node": "elevator_right",
+          "clips": [
+            "elevator_right_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.018587912039015206
+        },
+        {
+          "node": "rudder",
+          "clips": [
+            "rudder_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.02402121303686816
+        },
+        {
+          "node": "gear_left",
+          "clips": [
+            "gear_left_retract"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.02292924521186583
+        },
+        {
+          "node": "gear_right",
+          "clips": [
+            "gear_right_retract"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.02292924521186583
+        },
+        {
+          "node": "gear_nose",
+          "clips": [
+            "gear_nose_retract"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.02461190971988246
+        }
+      ],
+      "maxGuardM": 0.02461190971988246,
+      "largestEnvelope": {
+        "node": "gear_left",
+        "c": [
+          -0.616,
+          -0.864,
+          0.68
+        ],
+        "s": [
+          1.456,
+          1.456,
+          0.368
+        ],
+        "volume": 0.780136448
+      }
+    },
+    {
+      "id": "f16_fighting_falcon",
+      "dynamicBoxes": 106,
+      "groups": [
+        {
+          "node": "main_wing_aileron_left",
+          "clips": [
+            "main_wing_aileron_left_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.015377244661763292
+        },
+        {
+          "node": "main_wing_aileron_right",
+          "clips": [
+            "main_wing_aileron_right_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.015377244661763292
+        },
+        {
+          "node": "elevator_left",
+          "clips": [
+            "elevator_left_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.029770289265711875
+        },
+        {
+          "node": "elevator_right",
+          "clips": [
+            "elevator_right_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.03452428186965785
+        },
+        {
+          "node": "rudder",
+          "clips": [
+            "rudder_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.028770796989629678
+        },
+        {
+          "node": "gear_left",
+          "clips": [
+            "gear_left_retract"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.02519894729919312
+        },
+        {
+          "node": "gear_right",
+          "clips": [
+            "gear_right_retract"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.02519894729919312
+        },
+        {
+          "node": "gear_nose",
+          "clips": [
+            "gear_nose_retract"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.027131887288038288
+        }
+      ],
+      "maxGuardM": 0.03452428186965785,
+      "largestEnvelope": {
+        "node": "gear_nose",
+        "c": [
+          0,
+          -0.847,
+          -2.921
+        ],
+        "s": [
+          0.298,
+          1.803,
+          1.416
+        ],
+        "volume": 0.7608083039999999
+      }
+    },
+    {
+      "id": "lighthouse",
+      "dynamicBoxes": 16,
+      "groups": [
+        {
+          "node": "fresnel_carriage",
+          "clips": [
+            "fresnel_carriage_spin"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.09658606407173997
+        }
+      ],
+      "maxGuardM": 0.09658606407173997,
+      "largestEnvelope": {
+        "node": "fresnel_carriage",
+        "c": [
+          0,
+          26.112,
+          0
+        ],
+        "s": [
+          2.398,
+          1.733,
+          2.398
+        ],
+        "volume": 9.965450132000003
+      }
+    },
+    {
+      "id": "harbor_crane",
+      "dynamicBoxes": 50,
+      "groups": [
+        {
+          "node": "slew_platform",
+          "clips": [
+            "slew_survey"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.2562295208342344
+        },
+        {
+          "node": "lattice_boom",
+          "clips": [
+            "boom_luff",
+            "slew_survey"
+          ],
+          "phaseCombinations": 2401,
+          "guardMaxM": 0.6838143333626198
+        },
+        {
+          "node": "hoist_cable",
+          "clips": [
+            "boom_luff",
+            "hoist_cycle",
+            "slew_survey"
+          ],
+          "phaseCombinations": 117649,
+          "guardMaxM": 1.1381303963479492
+        },
+        {
+          "node": "hook_and_load",
+          "clips": [
+            "boom_luff",
+            "hoist_cycle",
+            "load_pendulum",
+            "slew_survey"
+          ],
+          "phaseCombinations": 5764801,
+          "guardMaxM": 1.317809709301042
+        }
+      ],
+      "maxGuardM": 1.317809709301042,
+      "largestEnvelope": {
+        "node": "hook_and_load",
+        "c": [
+          -16.789,
+          8.997,
+          -0.928
+        ],
+        "s": [
+          10.826,
+          11.11,
+          20.716
+        ],
+        "volume": 2491.6554317600003
+      }
+    },
+    {
+      "id": "fishing_boat",
+      "dynamicBoxes": 57,
+      "groups": [
+        {
+          "node": "boat_hull",
+          "clips": [
+            "boat_motion_buoyancy"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.046181856011317135
+        },
+        {
+          "node": "wheelhouse",
+          "clips": [
+            "boat_motion_buoyancy"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.044504231067557805
+        },
+        {
+          "node": "rigging",
+          "clips": [
+            "boat_motion_buoyancy"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.06284927202962462
+        },
+        {
+          "node": "radar_scanner",
+          "clips": [
+            "radar_scanner_spin",
+            "boat_motion_buoyancy"
+          ],
+          "phaseCombinations": 2401,
+          "guardMaxM": 0.14383497773292644
+        },
+        {
+          "node": "deck_winch",
+          "clips": [
+            "deck_winch_spin",
+            "boat_motion_buoyancy"
+          ],
+          "phaseCombinations": 2401,
+          "guardMaxM": 0.08200303918207988
+        }
+      ],
+      "maxGuardM": 0.14383497773292644,
+      "largestEnvelope": {
+        "node": "wheelhouse",
+        "c": [
+          -1.38,
+          2.398,
+          0.06
+        ],
+        "s": [
+          4.433,
+          1.652,
+          3.556
+        ],
+        "volume": 26.041711695999997
+      }
+    },
+    {
+      "id": "buoy_markers",
+      "dynamicBoxes": 48,
+      "groups": [
+        {
+          "node": "buoy_red",
+          "clips": [
+            "buoy_red_float"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.016104116678235886
+        },
+        {
+          "node": "buoy_yellow",
+          "clips": [
+            "buoy_yellow_float"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.01610496547679758
+        },
+        {
+          "node": "buoy_green",
+          "clips": [
+            "buoy_green_float"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.016118311502528092
+        }
+      ],
+      "maxGuardM": 0.016118311502528092,
+      "largestEnvelope": {
+        "node": "buoy_red",
+        "c": [
+          -4.004,
+          0.946,
+          0
+        ],
+        "s": [
+          2.312,
+          1.26,
+          0.528
+        ],
+        "volume": 1.5381273599999998
+      }
+    },
+    {
+      "id": "windmill",
+      "dynamicBoxes": 42,
+      "groups": [
+        {
+          "node": "windmill_rotor",
+          "clips": [
+            "windmill_rotor_spin"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.5680646238426247
+        },
+        {
+          "node": "drive_gear",
+          "clips": [
+            "drive_gear_spin"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.11430991657478445
+        },
+        {
+          "node": "counter_gear",
+          "clips": [
+            "counter_gear_spin"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.12939089018760497
+        },
+        {
+          "node": "windshaft",
+          "clips": [
+            "windshaft_spin"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.12581894199057317
+        }
+      ],
+      "maxGuardM": 0.5680646238426247,
+      "largestEnvelope": {
+        "node": "windmill_rotor",
+        "c": [
+          0,
+          11.8,
+          -2.816
+        ],
+        "s": [
+          18.384,
+          18.384,
+          1.396
+        ],
+        "volume": 471.80815257599994
+      }
+    },
+    {
+      "id": "bell_tower",
+      "dynamicBoxes": 24,
+      "groups": [
+        {
+          "node": "cast_bell",
+          "clips": [
+            "bell_ringing"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.03281521446520157
+        },
+        {
+          "node": "bell_clapper",
+          "clips": [
+            "bell_ringing"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.07496983212263163
+        },
+        {
+          "node": "clock_minute",
+          "clips": [
+            "clock_minute_spin"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.07737788689656966
+        },
+        {
+          "node": "clock_hour",
+          "clips": [
+            "clock_hour_spin"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.0613459469543274
+        },
+        {
+          "node": "clock_second",
+          "clips": [
+            "clock_second_spin"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.08589976631924422
+        }
+      ],
+      "maxGuardM": 0.08589976631924422,
+      "largestEnvelope": {
+        "node": "clock_second",
+        "c": [
+          0,
+          12.3,
+          -3.2
+        ],
+        "s": [
+          2.722,
+          2.723,
+          0.43
+        ],
+        "volume": 3.18716258
+      }
+    },
+    {
+      "id": "construction_crane",
+      "dynamicBoxes": 59,
+      "groups": [
+        {
+          "node": "slew_platform",
+          "clips": [
+            "slew_survey"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.13548372507865256
+        },
+        {
+          "node": "horizontal_jib",
+          "clips": [
+            "slew_survey"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.6652313153112972
+        },
+        {
+          "node": "trolley_carriage",
+          "clips": [
+            "trolley_traverse",
+            "slew_survey"
+          ],
+          "phaseCombinations": 2401,
+          "guardMaxM": 0.8466996217441334
+        },
+        {
+          "node": "hoist_cable",
+          "clips": [
+            "trolley_traverse",
+            "hoist_cycle",
+            "slew_survey"
+          ],
+          "phaseCombinations": 117649,
+          "guardMaxM": 1.1571832275013778
+        },
+        {
+          "node": "hook_and_load",
+          "clips": [
+            "trolley_traverse",
+            "hoist_cycle",
+            "load_pendulum",
+            "slew_survey"
+          ],
+          "phaseCombinations": 5764801,
+          "guardMaxM": 1.2897142868738358
+        }
+      ],
+      "maxGuardM": 1.2897142868738358,
+      "largestEnvelope": {
+        "node": "hook_and_load",
+        "c": [
+          -11.567,
+          12.098,
+          -0.928
+        ],
+        "s": [
+          18.475,
+          7.955,
+          19.502
+        ],
+        "volume": 2866.1821247499997
+      }
+    },
+    {
+      "id": "factory_building",
+      "dynamicBoxes": 22,
+      "groups": [
+        {
+          "node": "vent_fan_0",
+          "clips": [
+            "vent_fan_0_spin"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.04572367105543799
+        },
+        {
+          "node": "vent_fan_1",
+          "clips": [
+            "vent_fan_1_spin"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.045215968313319276
+        },
+        {
+          "node": "vent_fan_2",
+          "clips": [
+            "vent_fan_2_spin"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.04481122699473164
+        }
+      ],
+      "maxGuardM": 0.04572367105543799,
+      "largestEnvelope": {
+        "node": "vent_fan_0",
+        "c": [
+          -5,
+          10.816,
+          0
+        ],
+        "s": [
+          1.413,
+          0.223,
+          1.412
+        ],
+        "volume": 0.444919788
+      }
+    },
+    {
+      "id": "cargo_drone",
+      "dynamicBoxes": 112,
+      "groups": [
+        {
+          "node": "drone_fuselage",
+          "clips": [
+            "airframe_hover_buoyancy"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.018567936240776475
+        },
+        {
+          "node": "drone_rotor_0",
+          "clips": [
+            "drone_rotor_0_spin",
+            "airframe_hover_buoyancy"
+          ],
+          "phaseCombinations": 2401,
+          "guardMaxM": 0.12068972984242404
+        },
+        {
+          "node": "drone_rotor_1",
+          "clips": [
+            "drone_rotor_1_spin",
+            "airframe_hover_buoyancy"
+          ],
+          "phaseCombinations": 2401,
+          "guardMaxM": 0.12047079008503161
+        },
+        {
+          "node": "drone_rotor_2",
+          "clips": [
+            "drone_rotor_2_spin",
+            "airframe_hover_buoyancy"
+          ],
+          "phaseCombinations": 2401,
+          "guardMaxM": 0.12068972984242404
+        },
+        {
+          "node": "drone_rotor_3",
+          "clips": [
+            "drone_rotor_3_spin",
+            "airframe_hover_buoyancy"
+          ],
+          "phaseCombinations": 2401,
+          "guardMaxM": 0.12047079008503161
+        },
+        {
+          "node": "drone_cargo",
+          "clips": [
+            "airframe_hover_buoyancy",
+            "cargo_pendulum_sway"
+          ],
+          "phaseCombinations": 2401,
+          "guardMaxM": 0.03826135112428709
+        },
+        {
+          "node": "camera_gimbal",
+          "clips": [
+            "camera_survey",
+            "airframe_hover_buoyancy"
+          ],
+          "phaseCombinations": 2401,
+          "guardMaxM": 0.02729590379472551
+        }
+      ],
+      "maxGuardM": 0.12068972984242404,
+      "largestEnvelope": {
+        "node": "drone_cargo",
+        "c": [
+          0,
+          2.399,
+          -0.396
+        ],
+        "s": [
+          5.252,
+          3.462,
+          1.044
+        ],
+        "volume": 18.982450656
+      }
+    },
+    {
+      "id": "polar_lighthouse",
+      "dynamicBoxes": 16,
+      "groups": [
+        {
+          "node": "fresnel_carriage",
+          "clips": [
+            "fresnel_carriage_spin"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.09658606407173997
+        }
+      ],
+      "maxGuardM": 0.09658606407173997,
+      "largestEnvelope": {
+        "node": "fresnel_carriage",
+        "c": [
+          0,
+          26.112,
+          0
+        ],
+        "s": [
+          2.398,
+          1.733,
+          2.398
+        ],
+        "volume": 9.965450132000003
+      }
+    },
+    {
+      "id": "red_barn",
+      "dynamicBoxes": 32,
+      "groups": [
+        {
+          "node": "barn_door_left",
+          "clips": [
+            "barn_door_left_slide"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.11972572300503063
+        },
+        {
+          "node": "barn_door_right",
+          "clips": [
+            "barn_door_right_slide"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.11972572300503063
+        }
+      ],
+      "maxGuardM": 0.11972572300503063,
+      "largestEnvelope": {
+        "node": "barn_door_left",
+        "c": [
+          -3.656,
+          2.688,
+          -6.592
+        ],
+        "s": [
+          7.554,
+          4.594,
+          0.37
+        ],
+        "volume": 12.84013812
+      }
+    },
+    {
+      "id": "grain_silo",
+      "dynamicBoxes": 18,
+      "groups": [
+        {
+          "node": "auger_drive",
+          "clips": [
+            "auger_drive_spin"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.0502010087107836
+        },
+        {
+          "node": "grain_outlet_gate",
+          "clips": [
+            "outlet_gate_cycle"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.04447411092122396
+        }
+      ],
+      "maxGuardM": 0.0502010087107836,
+      "largestEnvelope": {
+        "node": "grain_outlet_gate",
+        "c": [
+          4.416,
+          2.378,
+          -3.584
+        ],
+        "s": [
+          1.244,
+          3.056,
+          0.349
+        ],
+        "volume": 1.326780736
+      }
+    },
+    {
+      "id": "wind_turbine",
+      "dynamicBoxes": 80,
+      "groups": [
+        {
+          "node": "nacelle",
+          "clips": [
+            "nacelle_weather_yaw"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.020457437864219143
+        },
+        {
+          "node": "rotor_hub",
+          "clips": [
+            "nacelle_weather_yaw",
+            "wind_rotor_spin"
+          ],
+          "phaseCombinations": 2401,
+          "guardMaxM": 0.11334150759932704
+        },
+        {
+          "node": "blade_0",
+          "clips": [
+            "nacelle_weather_yaw",
+            "wind_rotor_spin"
+          ],
+          "phaseCombinations": 2401,
+          "guardMaxM": 0.9977468401582535
+        },
+        {
+          "node": "blade_1",
+          "clips": [
+            "nacelle_weather_yaw",
+            "wind_rotor_spin"
+          ],
+          "phaseCombinations": 2401,
+          "guardMaxM": 0.48787607437399527
+        },
+        {
+          "node": "blade_2",
+          "clips": [
+            "nacelle_weather_yaw",
+            "wind_rotor_spin"
+          ],
+          "phaseCombinations": 2401,
+          "guardMaxM": 0.5220967570440466
+        }
+      ],
+      "maxGuardM": 0.9977468401582535,
+      "largestEnvelope": {
+        "node": "blade_0",
+        "c": [
+          0,
+          31,
+          -2.662
+        ],
+        "s": [
+          28.592,
+          28.062,
+          5.88
+        ],
+        "volume": 4717.8103795199995
+      }
+    },
+    {
+      "id": "tractor",
+      "dynamicBoxes": 80,
+      "groups": [
+        {
+          "node": "farm_structure",
+          "clips": [
+            "tractor_forward"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.14575019073486328
+        },
+        {
+          "node": "wheel_-1_1.16",
+          "clips": [
+            "wheel_-1_1.16_spin",
+            "tractor_forward"
+          ],
+          "phaseCombinations": 2401,
+          "guardMaxM": 0.21036818076067754
+        },
+        {
+          "node": "wheel_-1_-1.56",
+          "clips": [
+            "wheel_-1_-1.56_spin",
+            "tractor_forward"
+          ],
+          "phaseCombinations": 2401,
+          "guardMaxM": 0.19027244930736037
+        },
+        {
+          "node": "wheel_1_1.16",
+          "clips": [
+            "wheel_1_1.16_spin",
+            "tractor_forward"
+          ],
+          "phaseCombinations": 2401,
+          "guardMaxM": 0.21032733164464484
+        },
+        {
+          "node": "wheel_1_-1.56",
+          "clips": [
+            "wheel_1_-1.56_spin",
+            "tractor_forward"
+          ],
+          "phaseCombinations": 2401,
+          "guardMaxM": 0.1903800793577949
+        }
+      ],
+      "maxGuardM": 0.21036818076067754,
+      "largestEnvelope": {
+        "node": "farm_structure",
+        "c": [
+          0,
+          2.59,
+          -6.998
+        ],
+        "s": [
+          1.918,
+          2.17,
+          14.178
+        ],
+        "volume": 59.009686679999994
+      }
+    },
+    {
+      "id": "hanok_gate",
+      "dynamicBoxes": 32,
+      "groups": [
+        {
+          "node": "gate_left",
+          "clips": [
+            "gate_left_swing"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.17858088554377868
+        },
+        {
+          "node": "gate_right",
+          "clips": [
+            "gate_right_swing"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.17858088554377868
+        }
+      ],
+      "maxGuardM": 0.17858088554377868,
+      "largestEnvelope": {
+        "node": "gate_left",
+        "c": [
+          -1.578,
+          4.288,
+          -3.355
+        ],
+        "s": [
+          3.521,
+          4.84,
+          3.507
+        ],
+        "volume": 59.76503147999999
+      }
+    },
+    {
+      "id": "cloudpeak_balloon",
+      "dynamicBoxes": 16,
+      "groups": [
+        {
+          "node": "advertising_asset",
+          "clips": [
+            "balloon_drift_buoyancy"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.0724680359064472
+        }
+      ],
+      "maxGuardM": 0.0724680359064472,
+      "largestEnvelope": {
+        "node": "advertising_asset",
+        "c": [
+          0,
+          17.471,
+          -1.728
+        ],
+        "s": [
+          15.307,
+          3.137,
+          0.694
+        ],
+        "volume": 33.324532946
+      }
+    },
+    {
+      "id": "skyline_blimp",
+      "dynamicBoxes": 26,
+      "groups": [
+        {
+          "node": "advertising_asset",
+          "clips": [
+            "airship_motion_buoyancy"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.05693977996508975
+        },
+        {
+          "node": "airship_prop_0",
+          "clips": [
+            "airship_prop_0_spin",
+            "airship_motion_buoyancy"
+          ],
+          "phaseCombinations": 2401,
+          "guardMaxM": 0.08943574437167019
+        },
+        {
+          "node": "airship_prop_1",
+          "clips": [
+            "airship_prop_1_spin",
+            "airship_motion_buoyancy"
+          ],
+          "phaseCombinations": 2401,
+          "guardMaxM": 0.08943574437167019
+        }
+      ],
+      "maxGuardM": 0.08943574437167019,
+      "largestEnvelope": {
+        "node": "advertising_asset",
+        "c": [
+          0,
+          7.56,
+          0
+        ],
+        "s": [
+          26.062,
+          1.733,
+          0.706
+        ],
+        "volume": 31.886804876
+      }
+    },
+    {
+      "id": "vista_banner_plane",
+      "dynamicBoxes": 61,
+      "groups": [
+        {
+          "node": "main_wing_aileron_left",
+          "clips": [
+            "main_wing_aileron_left_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.017221671861270604
+        },
+        {
+          "node": "main_wing_aileron_right",
+          "clips": [
+            "main_wing_aileron_right_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.017221671861270604
+        },
+        {
+          "node": "elevator_left",
+          "clips": [
+            "elevator_left_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.013563488899471284
+        },
+        {
+          "node": "elevator_right",
+          "clips": [
+            "elevator_right_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.013563488899471284
+        },
+        {
+          "node": "rudder",
+          "clips": [
+            "rudder_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.014567620843275876
+        },
+        {
+          "node": "propeller",
+          "clips": [
+            "propeller_spin"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.06945441698178499
+        }
+      ],
+      "maxGuardM": 0.06945441698178499,
+      "largestEnvelope": {
+        "node": "propeller",
+        "c": [
+          0,
+          0.04,
+          -3.794
+        ],
+        "s": [
+          2.202,
+          2.202,
+          0.171
+        ],
+        "volume": 0.829145484
+      }
+    },
+    {
+      "id": "twin_engine_commuter",
+      "dynamicBoxes": 140,
+      "groups": [
+        {
+          "node": "main_wing_aileron_left",
+          "clips": [
+            "main_wing_aileron_left_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.026909160078587797
+        },
+        {
+          "node": "main_wing_aileron_right",
+          "clips": [
+            "main_wing_aileron_right_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.026909160078587797
+        },
+        {
+          "node": "elevator_left",
+          "clips": [
+            "elevator_left_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.027908282033619072
+        },
+        {
+          "node": "elevator_right",
+          "clips": [
+            "elevator_right_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.027908282033619072
+        },
+        {
+          "node": "rudder",
+          "clips": [
+            "rudder_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.020435336181828002
+        },
+        {
+          "node": "propeller_0",
+          "clips": [
+            "propeller_0_spin"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.08348705746676258
+        },
+        {
+          "node": "propeller_1",
+          "clips": [
+            "propeller_1_spin"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.08348705746676258
+        },
+        {
+          "node": "gear_left",
+          "clips": [
+            "gear_left_retract"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.03114218286008215
+        },
+        {
+          "node": "gear_right",
+          "clips": [
+            "gear_right_retract"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.03114218286008215
+        },
+        {
+          "node": "gear_nose",
+          "clips": [
+            "gear_nose_retract"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.033780555216191964
+        }
+      ],
+      "maxGuardM": 0.08348705746676258,
+      "largestEnvelope": {
+        "node": "propeller_0",
+        "c": [
+          -3.2,
+          1.62,
+          -4.68
+        ],
+        "s": [
+          2.654,
+          2.654,
+          0.251
+        ],
+        "volume": 1.767972716
+      }
+    },
+    {
+      "id": "heavy_transport",
+      "dynamicBoxes": 161,
+      "groups": [
+        {
+          "node": "main_wing_aileron_left",
+          "clips": [
+            "main_wing_aileron_left_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.04184969100699778
+        },
+        {
+          "node": "main_wing_aileron_right",
+          "clips": [
+            "main_wing_aileron_right_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.04226751114863029
+        },
+        {
+          "node": "elevator_left",
+          "clips": [
+            "elevator_left_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.04410182902968324
+        },
+        {
+          "node": "elevator_right",
+          "clips": [
+            "elevator_right_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.04410182902968324
+        },
+        {
+          "node": "rudder",
+          "clips": [
+            "rudder_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.038209552963590396
+        },
+        {
+          "node": "propeller_0",
+          "clips": [
+            "propeller_0_spin"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.11345418860806751
+        },
+        {
+          "node": "propeller_1",
+          "clips": [
+            "propeller_1_spin"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.1158163989812891
+        },
+        {
+          "node": "propeller_2",
+          "clips": [
+            "propeller_2_spin"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.11497018888645967
+        },
+        {
+          "node": "propeller_3",
+          "clips": [
+            "propeller_3_spin"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.11345418860806751
+        },
+        {
+          "node": "gear_left",
+          "clips": [
+            "gear_left_retract"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.04507669075998499
+        },
+        {
+          "node": "gear_right",
+          "clips": [
+            "gear_right_retract"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.04507669075998499
+        },
+        {
+          "node": "gear_nose",
+          "clips": [
+            "gear_nose_retract"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.04879261317460636
+        },
+        {
+          "node": "cargo_ramp",
+          "clips": [
+            "cargo_ramp_open"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.4508970597753945
+        }
+      ],
+      "maxGuardM": 0.4508970597753945,
+      "largestEnvelope": {
+        "node": "cargo_ramp",
+        "c": [
+          0,
+          2.68,
+          11.487
+        ],
+        "s": [
+          3.464,
+          3.704,
+          3.915
+        ],
+        "volume": 50.23201824
+      }
+    },
+    {
+      "id": "sailplane",
+      "dynamicBoxes": 39,
+      "groups": [
+        {
+          "node": "main_wing_aileron_left",
+          "clips": [
+            "main_wing_aileron_left_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.0334954909779345
+        },
+        {
+          "node": "main_wing_aileron_right",
+          "clips": [
+            "main_wing_aileron_right_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.0334954909779345
+        },
+        {
+          "node": "elevator_left",
+          "clips": [
+            "elevator_left_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.016488495218946717
+        },
+        {
+          "node": "elevator_right",
+          "clips": [
+            "elevator_right_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.016488495218946717
+        },
+        {
+          "node": "rudder",
+          "clips": [
+            "rudder_deflect"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.016182045281562914
+        }
+      ],
+      "maxGuardM": 0.0334954909779345,
+      "largestEnvelope": {
+        "node": "main_wing_aileron_left",
+        "c": [
+          -7.3,
+          1.462,
+          -0.124
+        ],
+        "s": [
+          2.587,
+          0.208,
+          0.256
+        ],
+        "volume": 0.13775257600000002
+      }
+    },
+    {
+      "id": "rescue_helicopter",
+      "dynamicBoxes": 32,
+      "groups": [
+        {
+          "node": "main_rotor",
+          "clips": [
+            "main_rotor_spin"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.4419945334968139
+        },
+        {
+          "node": "tail_rotor",
+          "clips": [
+            "tail_rotor_spin"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.06917903550562615
+        }
+      ],
+      "maxGuardM": 0.4419945334968139,
+      "largestEnvelope": {
+        "node": "main_rotor",
+        "c": [
+          0,
+          4.01,
+          0.35
+        ],
+        "s": [
+          14.326,
+          1.022,
+          14.326
+        ],
+        "volume": 209.74943007200002
+      }
+    },
+    {
+      "id": "rescue_tug",
+      "dynamicBoxes": 21,
+      "groups": [
+        {
+          "node": "tug_hull",
+          "clips": [
+            "tug_motion_buoyancy"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.028738523890601414
+        },
+        {
+          "node": "radar_scanner",
+          "clips": [
+            "radar_scanner_spin",
+            "tug_motion_buoyancy"
+          ],
+          "phaseCombinations": 2401,
+          "guardMaxM": 0.10976195909665332
+        },
+        {
+          "node": "tug_propeller",
+          "clips": [
+            "tug_propeller_spin",
+            "tug_motion_buoyancy"
+          ],
+          "phaseCombinations": 2401,
+          "guardMaxM": 0.08592577244859281
+        }
+      ],
+      "maxGuardM": 0.10976195909665332,
+      "largestEnvelope": {
+        "node": "tug_hull",
+        "c": [
+          0,
+          3.199,
+          -1.215
+        ],
+        "s": [
+          3.562,
+          2.456,
+          3.463
+        ],
+        "volume": 30.295265936
+      }
+    },
+    {
+      "id": "drydock_service_crane",
+      "dynamicBoxes": 33,
+      "groups": [
+        {
+          "node": "trolley_carriage",
+          "clips": [
+            "gantry_service_cycle"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.2633790432612105
+        },
+        {
+          "node": "hoist_cable",
+          "clips": [
+            "gantry_service_cycle"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.4076545606575315
+        },
+        {
+          "node": "hook_load",
+          "clips": [
+            "gantry_service_cycle"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.4064454495112105
+        }
+      ],
+      "maxGuardM": 0.4076545606575315,
+      "largestEnvelope": {
+        "node": "hook_load",
+        "c": [
+          0,
+          3.84,
+          0.064
+        ],
+        "s": [
+          10.864,
+          5.064,
+          2.736
+        ],
+        "volume": 150.52184985600002
+      }
+    },
+    {
+      "id": "harbor_swing_bridge",
+      "dynamicBoxes": 16,
+      "groups": [
+        {
+          "node": "swing_deck",
+          "clips": [
+            "bridge_open_cycle"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 1.7467073523783458
+        }
+      ],
+      "maxGuardM": 1.7467073523783458,
+      "largestEnvelope": {
+        "node": "swing_deck",
+        "c": [
+          0,
+          2.624,
+          0
+        ],
+        "s": [
+          21.256,
+          3.88,
+          21.256
+        ],
+        "volume": 1753.05203968
+      }
+    },
+    {
+      "id": "watermill",
+      "dynamicBoxes": 32,
+      "groups": [
+        {
+          "node": "water_wheel",
+          "clips": [
+            "water_wheel_spin"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.17778597135804045
+        },
+        {
+          "node": "mill_drive_gear",
+          "clips": [
+            "mill_drive_gear_spin"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.05479852148067307
+        }
+      ],
+      "maxGuardM": 0.17778597135804045,
+      "largestEnvelope": {
+        "node": "water_wheel",
+        "c": [
+          4.032,
+          2.5,
+          0
+        ],
+        "s": [
+          1.51,
+          5.59,
+          5.59
+        ],
+        "volume": 47.184630999999996
+      }
+    },
+    {
+      "id": "covered_well",
+      "dynamicBoxes": 20,
+      "groups": [
+        {
+          "node": "well_winch",
+          "clips": [
+            "well_bucket_hoist"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.10673989245589226
+        },
+        {
+          "node": "well_rope",
+          "clips": [
+            "well_bucket_hoist"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.02535745929370123
+        },
+        {
+          "node": "well_bucket",
+          "clips": [
+            "well_bucket_hoist"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.024870699564615885
+        }
+      ],
+      "maxGuardM": 0.10673989245589226,
+      "largestEnvelope": {
+        "node": "well_winch",
+        "c": [
+          0,
+          3.777,
+          -0.023
+        ],
+        "s": [
+          2.732,
+          1.105,
+          1.104
+        ],
+        "volume": 3.3328214400000005
+      }
+    },
+    {
+      "id": "clockwork_gazebo",
+      "dynamicBoxes": 12,
+      "groups": [
+        {
+          "node": "clock_second",
+          "clips": [
+            "clock_second_spin"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.05783451619055471
+        },
+        {
+          "node": "clock_minute",
+          "clips": [
+            "clock_minute_spin"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.04971235827109116
+        },
+        {
+          "node": "clock_hour",
+          "clips": [
+            "clock_hour_spin"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.04215891109898038
+        },
+        {
+          "node": "clock_drive_gear",
+          "clips": [
+            "clock_drive_gear_spin"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.048870137200940716
+        }
+      ],
+      "maxGuardM": 0.05783451619055471,
+      "largestEnvelope": {
+        "node": "clock_second",
+        "c": [
+          0,
+          3,
+          -1.088
+        ],
+        "s": [
+          1.818,
+          1.818,
+          0.246
+        ],
+        "volume": 0.8130605040000001
+      }
+    },
+    {
+      "id": "metro_station",
+      "dynamicBoxes": 2,
+      "groups": [
+        {
+          "node": "platform_door_left",
+          "clips": [
+            "platform_door_left_slide"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.21449993315766658
+        },
+        {
+          "node": "platform_door_right",
+          "clips": [
+            "platform_door_right_slide"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.21449993315766658
+        }
+      ],
+      "maxGuardM": 0.21449993315766658,
+      "largestEnvelope": {
+        "node": "platform_door_left",
+        "c": [
+          -1.746,
+          7.04,
+          -2.304
+        ],
+        "s": [
+          3.924,
+          2.48,
+          0.688
+        ],
+        "volume": 6.695285759999999
+      }
+    },
+    {
+      "id": "snowcat",
+      "dynamicBoxes": 100,
+      "groups": [
+        {
+          "node": "track_wheel_-1_-1.8",
+          "clips": [
+            "track_wheel_-1_-1.8_spin"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.050148522827087455
+        },
+        {
+          "node": "track_wheel_-1_-0.6",
+          "clips": [
+            "track_wheel_-1_-0.6_spin"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.0523528728130524
+        },
+        {
+          "node": "track_wheel_-1_0.6",
+          "clips": [
+            "track_wheel_-1_0.6_spin"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.0523528728130524
+        },
+        {
+          "node": "track_wheel_-1_1.8",
+          "clips": [
+            "track_wheel_-1_1.8_spin"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.050148522827087455
+        },
+        {
+          "node": "track_-1_cleat_0",
+          "clips": [
+            "track_-1_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.2395850033516921
+        },
+        {
+          "node": "track_-1_cleat_1",
+          "clips": [
+            "track_-1_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.23482501504494793
+        },
+        {
+          "node": "track_-1_cleat_2",
+          "clips": [
+            "track_-1_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.24041483819291212
+        },
+        {
+          "node": "track_-1_cleat_3",
+          "clips": [
+            "track_-1_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.24061858220051216
+        },
+        {
+          "node": "track_-1_cleat_4",
+          "clips": [
+            "track_-1_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.23495894158132954
+        },
+        {
+          "node": "track_-1_cleat_5",
+          "clips": [
+            "track_-1_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.23939130197142403
+        },
+        {
+          "node": "track_-1_cleat_6",
+          "clips": [
+            "track_-1_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.24170406199410388
+        },
+        {
+          "node": "track_-1_cleat_7",
+          "clips": [
+            "track_-1_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.2422745334674481
+        },
+        {
+          "node": "track_-1_cleat_8",
+          "clips": [
+            "track_-1_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.24226491288989915
+        },
+        {
+          "node": "track_-1_cleat_9",
+          "clips": [
+            "track_-1_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.2377704625874518
+        },
+        {
+          "node": "track_-1_cleat_10",
+          "clips": [
+            "track_-1_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.24480848163709587
+        },
+        {
+          "node": "track_-1_cleat_11",
+          "clips": [
+            "track_-1_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.24158693925840327
+        },
+        {
+          "node": "track_-1_cleat_12",
+          "clips": [
+            "track_-1_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.23691618228593456
+        },
+        {
+          "node": "track_-1_cleat_13",
+          "clips": [
+            "track_-1_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.24240198758323994
+        },
+        {
+          "node": "track_-1_cleat_14",
+          "clips": [
+            "track_-1_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.2426021307137037
+        },
+        {
+          "node": "track_-1_cleat_15",
+          "clips": [
+            "track_-1_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.23704748982269794
+        },
+        {
+          "node": "track_-1_cleat_16",
+          "clips": [
+            "track_-1_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.24139672134401022
+        },
+        {
+          "node": "track_-1_cleat_17",
+          "clips": [
+            "track_-1_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.24366865719140943
+        },
+        {
+          "node": "track_-1_cleat_18",
+          "clips": [
+            "track_-1_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.24422931041256077
+        },
+        {
+          "node": "track_-1_cleat_19",
+          "clips": [
+            "track_-1_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.23875101396750675
+        },
+        {
+          "node": "track_-1_cleat_20",
+          "clips": [
+            "track_-1_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.2355913900037736
+        },
+        {
+          "node": "track_-1_cleat_21",
+          "clips": [
+            "track_-1_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.24472918744778568
+        },
+        {
+          "node": "track_wheel_1_-1.8",
+          "clips": [
+            "track_wheel_1_-1.8_spin"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.050148522827087455
+        },
+        {
+          "node": "track_wheel_1_-0.6",
+          "clips": [
+            "track_wheel_1_-0.6_spin"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.0523528728130524
+        },
+        {
+          "node": "track_wheel_1_0.6",
+          "clips": [
+            "track_wheel_1_0.6_spin"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.0523528728130524
+        },
+        {
+          "node": "track_wheel_1_1.8",
+          "clips": [
+            "track_wheel_1_1.8_spin"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.050148522827087455
+        },
+        {
+          "node": "track_1_cleat_0",
+          "clips": [
+            "track_1_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.2395850033516921
+        },
+        {
+          "node": "track_1_cleat_1",
+          "clips": [
+            "track_1_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.23482501504494793
+        },
+        {
+          "node": "track_1_cleat_2",
+          "clips": [
+            "track_1_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.24041483819291212
+        },
+        {
+          "node": "track_1_cleat_3",
+          "clips": [
+            "track_1_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.24061858220051216
+        },
+        {
+          "node": "track_1_cleat_4",
+          "clips": [
+            "track_1_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.23495894158132954
+        },
+        {
+          "node": "track_1_cleat_5",
+          "clips": [
+            "track_1_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.23939130197142403
+        },
+        {
+          "node": "track_1_cleat_6",
+          "clips": [
+            "track_1_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.24170406199410388
+        },
+        {
+          "node": "track_1_cleat_7",
+          "clips": [
+            "track_1_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.2422745334674481
+        },
+        {
+          "node": "track_1_cleat_8",
+          "clips": [
+            "track_1_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.24226491288989915
+        },
+        {
+          "node": "track_1_cleat_9",
+          "clips": [
+            "track_1_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.2377704625874518
+        },
+        {
+          "node": "track_1_cleat_10",
+          "clips": [
+            "track_1_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.24480848163709587
+        },
+        {
+          "node": "track_1_cleat_11",
+          "clips": [
+            "track_1_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.24158693925840327
+        },
+        {
+          "node": "track_1_cleat_12",
+          "clips": [
+            "track_1_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.23691618228593456
+        },
+        {
+          "node": "track_1_cleat_13",
+          "clips": [
+            "track_1_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.24240198758323994
+        },
+        {
+          "node": "track_1_cleat_14",
+          "clips": [
+            "track_1_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.2426021307137037
+        },
+        {
+          "node": "track_1_cleat_15",
+          "clips": [
+            "track_1_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.23704748982269794
+        },
+        {
+          "node": "track_1_cleat_16",
+          "clips": [
+            "track_1_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.24139672134401022
+        },
+        {
+          "node": "track_1_cleat_17",
+          "clips": [
+            "track_1_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.24366865719140943
+        },
+        {
+          "node": "track_1_cleat_18",
+          "clips": [
+            "track_1_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.24422931041256077
+        },
+        {
+          "node": "track_1_cleat_19",
+          "clips": [
+            "track_1_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.23875101396750675
+        },
+        {
+          "node": "track_1_cleat_20",
+          "clips": [
+            "track_1_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.2355913900037736
+        },
+        {
+          "node": "track_1_cleat_21",
+          "clips": [
+            "track_1_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.24472918744778568
+        }
+      ],
+      "maxGuardM": 0.24480848163709587,
+      "largestEnvelope": {
+        "node": "track_-1_cleat_10",
+        "c": [
+          -1.984,
+          1,
+          0
+        ],
+        "s": [
+          1.389,
+          2.104,
+          6.3
+        ],
+        "volume": 18.4114728
+      }
+    },
+    {
+      "id": "cable_car_station",
+      "dynamicBoxes": 48,
+      "groups": [
+        {
+          "node": "station_sheave_-3",
+          "clips": [
+            "station_shuttle"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.2527141059057571
+        },
+        {
+          "node": "station_sheave_3",
+          "clips": [
+            "station_shuttle"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.25215461831002056
+        },
+        {
+          "node": "cabin_shell",
+          "clips": [
+            "station_shuttle"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.23070667775472006
+        }
+      ],
+      "maxGuardM": 0.2527141059057571,
+      "largestEnvelope": {
+        "node": "cabin_shell",
+        "c": [
+          3.436,
+          3.648,
+          0
+        ],
+        "s": [
+          10.408,
+          1.872,
+          2.512
+        ],
+        "volume": 48.943245311999995
+      }
+    },
+    {
+      "id": "desert_observatory",
+      "dynamicBoxes": 31,
+      "groups": [
+        {
+          "node": "observatory_dome",
+          "clips": [
+            "observatory_dome_spin"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.3369526719195164
+        },
+        {
+          "node": "telescope",
+          "clips": [
+            "observatory_dome_spin",
+            "telescope_elevation"
+          ],
+          "phaseCombinations": 2401,
+          "guardMaxM": 0.3405756897206269
+        }
+      ],
+      "maxGuardM": 0.3405756897206269,
+      "largestEnvelope": {
+        "node": "observatory_dome",
+        "c": [
+          0,
+          5.76,
+          0
+        ],
+        "s": [
+          10.868,
+          1.188,
+          10.868
+        ],
+        "volume": 140.318747712
+      }
+    },
+    {
+      "id": "oil_pumpjack",
+      "dynamicBoxes": 34,
+      "groups": [
+        {
+          "node": "pump_crank",
+          "clips": [
+            "pumpjack_linkage"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.10674608507444111
+        },
+        {
+          "node": "walking_beam",
+          "clips": [
+            "pumpjack_linkage"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.12951341177483597
+        },
+        {
+          "node": "connecting_rod",
+          "clips": [
+            "pumpjack_linkage"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.17146358894821503
+        },
+        {
+          "node": "polished_rod",
+          "clips": [
+            "pumpjack_linkage"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.224699848384715
+        }
+      ],
+      "maxGuardM": 0.224699848384715,
+      "largestEnvelope": {
+        "node": "polished_rod",
+        "c": [
+          1.9,
+          4.122,
+          0
+        ],
+        "s": [
+          4.508,
+          10.745,
+          0.708
+        ],
+        "volume": 34.29442968
+      }
+    },
+    {
+      "id": "mining_conveyor",
+      "dynamicBoxes": 40,
+      "groups": [
+        {
+          "node": "conveyor_cleat_0",
+          "clips": [
+            "conveyor_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.835351469991196
+        },
+        {
+          "node": "conveyor_cleat_1",
+          "clips": [
+            "conveyor_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.83764466564482
+        },
+        {
+          "node": "conveyor_cleat_2",
+          "clips": [
+            "conveyor_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.8392064589018237
+        },
+        {
+          "node": "conveyor_cleat_3",
+          "clips": [
+            "conveyor_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.8356064137031937
+        },
+        {
+          "node": "conveyor_cleat_4",
+          "clips": [
+            "conveyor_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.8373807233175606
+        },
+        {
+          "node": "conveyor_cleat_5",
+          "clips": [
+            "conveyor_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.8355417395608807
+        },
+        {
+          "node": "conveyor_cleat_6",
+          "clips": [
+            "conveyor_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.839107488390913
+        },
+        {
+          "node": "conveyor_cleat_7",
+          "clips": [
+            "conveyor_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.8377255269098193
+        },
+        {
+          "node": "conveyor_cleat_8",
+          "clips": [
+            "conveyor_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.8352900085009983
+        },
+        {
+          "node": "conveyor_cleat_9",
+          "clips": [
+            "conveyor_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.8387110964010297
+        },
+        {
+          "node": "conveyor_cleat_10",
+          "clips": [
+            "conveyor_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.8380866236911647
+        },
+        {
+          "node": "conveyor_cleat_11",
+          "clips": [
+            "conveyor_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.8357665760793248
+        },
+        {
+          "node": "conveyor_cleat_12",
+          "clips": [
+            "conveyor_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.8367065352233072
+        },
+        {
+          "node": "conveyor_cleat_13",
+          "clips": [
+            "conveyor_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.8338136438144276
+        },
+        {
+          "node": "conveyor_cleat_14",
+          "clips": [
+            "conveyor_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.8361122776627499
+        },
+        {
+          "node": "conveyor_cleat_15",
+          "clips": [
+            "conveyor_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.8376777522952835
+        },
+        {
+          "node": "conveyor_cleat_16",
+          "clips": [
+            "conveyor_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.8340691943122148
+        },
+        {
+          "node": "conveyor_cleat_17",
+          "clips": [
+            "conveyor_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.8358477113459218
+        },
+        {
+          "node": "conveyor_cleat_18",
+          "clips": [
+            "conveyor_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.8340043802241939
+        },
+        {
+          "node": "conveyor_cleat_19",
+          "clips": [
+            "conveyor_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.8375785627137909
+        },
+        {
+          "node": "conveyor_cleat_20",
+          "clips": [
+            "conveyor_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.8361933435989944
+        },
+        {
+          "node": "conveyor_cleat_21",
+          "clips": [
+            "conveyor_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.8337520499034368
+        },
+        {
+          "node": "conveyor_cleat_22",
+          "clips": [
+            "conveyor_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.8371812376067557
+        },
+        {
+          "node": "conveyor_cleat_23",
+          "clips": [
+            "conveyor_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.836555292870358
+        },
+        {
+          "node": "conveyor_cleat_24",
+          "clips": [
+            "conveyor_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.8336309901292516
+        },
+        {
+          "node": "conveyor_cleat_25",
+          "clips": [
+            "conveyor_drive"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.8389774538258218
+        },
+        {
+          "node": "conveyor_roller_-3.7",
+          "clips": [
+            "conveyor_roller_-3.7_spin"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.11718614682871965
+        },
+        {
+          "node": "conveyor_roller_3.7",
+          "clips": [
+            "conveyor_roller_3.7_spin"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.11718614682871965
+        }
+      ],
+      "maxGuardM": 0.8392064589018237,
+      "largestEnvelope": {
+        "node": "conveyor_cleat_25",
+        "c": [
+          0,
+          2.2,
+          0
+        ],
+        "s": [
+          5.008,
+          3.032,
+          10.431
+        ],
+        "volume": 158.38697433599998
+      }
+    },
+    {
+      "id": "river_lock",
+      "dynamicBoxes": 32,
+      "groups": [
+        {
+          "node": "lock_gate_left",
+          "clips": [
+            "lock_gate_left_swing"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 1.0511831159595342
+        },
+        {
+          "node": "lock_gate_right",
+          "clips": [
+            "lock_gate_right_swing"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 1.0511831159595342
+        }
+      ],
+      "maxGuardM": 1.0511831159595342,
+      "largestEnvelope": {
+        "node": "lock_gate_left",
+        "c": [
+          -2.622,
+          2.24,
+          2.32
+        ],
+        "s": [
+          7.349,
+          5.816,
+          7.256
+        ],
+        "volume": 310.134384704
+      }
+    },
+    {
+      "id": "mountain_cable_car",
+      "dynamicBoxes": 19,
+      "groups": [
+        {
+          "node": "cable_hanger",
+          "clips": [
+            "mountain_shuttle"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.5908131254766903
+        },
+        {
+          "node": "gondola_shell",
+          "clips": [
+            "mountain_shuttle"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.5939042610928629
+        }
+      ],
+      "maxGuardM": 0.5939042610928629,
+      "largestEnvelope": {
+        "node": "gondola_shell",
+        "c": [
+          -0.088,
+          7.163,
+          0
+        ],
+        "s": [
+          22.518,
+          2.991,
+          3.238
+        ],
+        "volume": 218.083632444
+      }
+    },
+    {
+      "id": "combine_harvester",
+      "dynamicBoxes": 64,
+      "groups": [
+        {
+          "node": "harvester_wheel_-1_-1.0",
+          "clips": [
+            "harvester_wheel_-1_-1.0_spin"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.07670153732508163
+        },
+        {
+          "node": "harvester_wheel_-1_2.0",
+          "clips": [
+            "harvester_wheel_-1_2.0_spin"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.054439055424551845
+        },
+        {
+          "node": "harvester_wheel_1_-1.0",
+          "clips": [
+            "harvester_wheel_1_-1.0_spin"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.07670153732508163
+        },
+        {
+          "node": "harvester_wheel_1_2.0",
+          "clips": [
+            "harvester_wheel_1_2.0_spin"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.054439055424551845
+        },
+        {
+          "node": "header_reel",
+          "clips": [
+            "header_reel_spin"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.19743777224417447
+        },
+        {
+          "node": "unload_auger",
+          "clips": [
+            "auger_fold"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.479138332153068
+        }
+      ],
+      "maxGuardM": 0.479138332153068,
+      "largestEnvelope": {
+        "node": "header_reel",
+        "c": [
+          0,
+          1.8,
+          -3.8
+        ],
+        "s": [
+          5.762,
+          2.502,
+          2.502
+        ],
+        "volume": 36.07014304799999
+      }
+    },
+    {
+      "id": "irrigation_pump",
+      "dynamicBoxes": 19,
+      "groups": [
+        {
+          "node": "pump_flywheel",
+          "clips": [
+            "pump_drive_cycle"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.084383358904194
+        },
+        {
+          "node": "pump_piston",
+          "clips": [
+            "pump_drive_cycle"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.02857000223795573
+        },
+        {
+          "node": "pump_connecting_rod",
+          "clips": [
+            "pump_drive_cycle"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.05539071436631653
+        }
+      ],
+      "maxGuardM": 0.084383358904194,
+      "largestEnvelope": {
+        "node": "pump_connecting_rod",
+        "c": [
+          1.178,
+          1.263,
+          -0.525
+        ],
+        "s": [
+          3.271,
+          2.64,
+          1.42
+        ],
+        "volume": 12.2623248
+      }
+    },
+    {
+      "id": "hanok_workshop",
+      "dynamicBoxes": 17,
+      "groups": [
+        {
+          "node": "loom_warp_beam",
+          "clips": [
+            "loom_warp_beam_spin"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.13972639511511611
+        },
+        {
+          "node": "loom_heddle",
+          "clips": [
+            "loom_weaving_cycle"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.0163887996673584
+        },
+        {
+          "node": "loom_shuttle",
+          "clips": [
+            "loom_weaving_cycle"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.0968345363140108
+        }
+      ],
+      "maxGuardM": 0.13972639511511611,
+      "largestEnvelope": {
+        "node": "loom_warp_beam",
+        "c": [
+          0,
+          1.8,
+          1.2
+        ],
+        "s": [
+          4.378,
+          1.25,
+          1.251
+        ],
+        "volume": 6.8460975
+      }
+    },
+    {
+      "id": "temple_bell_pavilion",
+      "dynamicBoxes": 22,
+      "groups": [
+        {
+          "node": "bronze_bell",
+          "clips": [
+            "temple_bell_ringing"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.03874847671482803
+        },
+        {
+          "node": "temple_clapper",
+          "clips": [
+            "temple_bell_ringing"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.07744847033191644
+        }
+      ],
+      "maxGuardM": 0.07744847033191644,
+      "largestEnvelope": {
+        "node": "bronze_bell",
+        "c": [
+          0,
+          3.624,
+          -1.323
+        ],
+        "s": [
+          1.872,
+          0.822,
+          1.159
+        ],
+        "volume": 1.7834506559999999
+      }
+    },
+    {
+      "id": "radar_station",
+      "dynamicBoxes": 16,
+      "groups": [
+        {
+          "node": "radar_dish",
+          "clips": [
+            "radar_dish_spin"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.23276930882093075
+        }
+      ],
+      "maxGuardM": 0.23276930882093075,
+      "largestEnvelope": {
+        "node": "radar_dish",
+        "c": [
+          0,
+          7.36,
+          0
+        ],
+        "s": [
+          7.362,
+          1.877,
+          7.362
+        ],
+        "volume": 101.73160558800001
+      }
+    },
+    {
+      "id": "hangar_door_module",
+      "dynamicBoxes": 30,
+      "groups": [
+        {
+          "node": "hangar_door_left",
+          "clips": [
+            "hangar_door_left_slide"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.7145001460314145
+        },
+        {
+          "node": "hangar_door_right",
+          "clips": [
+            "hangar_door_right_slide"
+          ],
+          "phaseCombinations": 49,
+          "guardMaxM": 0.7145001460314145
+        }
+      ],
+      "maxGuardM": 0.7145001460314145,
+      "largestEnvelope": {
+        "node": "hangar_door_left",
+        "c": [
+          -5.85,
+          3.88,
+          0
+        ],
+        "s": [
+          12.893,
+          8.633,
+          1.592
+        ],
+        "volume": 177.197988248
+      }
+    }
+  ],
+  "method": "Independent relevant ancestor-clip phases + full source hierarchy + analytic velocity guard",
+  "proxyBytes": 1510005,
+  "modelsDirectoryBytes": 26295815,
+  "existingStaticAndDynamicFieldsPreserved": true,
+  "catalogAndGeometryExportsUnchanged": true
+}
