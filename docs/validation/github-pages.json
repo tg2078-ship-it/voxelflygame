@@ -1,0 +1,59 @@
+{
+  "version": "8.0.1",
+  "testedSourceCommit": "c6dad771c58debf8bef8b9882452326b4c9bc667",
+  "target": "GitHub Pages /voxelflygame/",
+  "typecheck": "passed",
+  "gameLint": "passed",
+  "sitesBuild": "passed",
+  "staticBuild": {
+    "version": "8.0.1",
+    "type": "standalone-static",
+    "requiresServer": false,
+    "basePath": "/voxelflygame/",
+    "files": 1785,
+    "bytes": 252946324,
+    "largestFileBytes": 15127210,
+    "models": 403,
+    "aircraft": 22,
+    "clips": 891,
+    "cloudflareWranglerLimitsPassed": true,
+    "dashboardDragDropSupported": false
+  },
+  "routeCases": 10,
+  "assetReliability": {
+    "assetReliabilityChecks": 39,
+    "gpuVerified": false,
+    "status": "passed"
+  },
+  "workerRegression": {
+    "workerChecks": 19,
+    "realWorkerCases": 3,
+    "gpuVerified": false,
+    "status": "passed"
+  },
+  "browser": {
+    "type": "standalone production build at GitHub Pages subpath",
+    "softwareGPU": true,
+    "profileFixture": "Existing fresh pilot; native UI interactions, no injected flight state.",
+    "status": "passed",
+    "nativeLaunchPauseEnd": true,
+    "savedRuns": 1,
+    "javascriptErrors": [],
+    "httpFailures": [],
+    "resourceRequests": 103,
+    "modelRequests": 86,
+    "audioRequests": 9
+  },
+  "publicDeploymentVerified": false,
+  "hardwareFPSMeasured": false,
+  "sourceHashes": {
+    "app/airrun/asset-url.ts": "bcce1f04614fc17aae64b2f0575e55e840324de01eb3a04ee94d741943d88371",
+    "app/airrun/assets.ts": "930cbbc693290a9d21a5a511eb85ab165e5dd85f03fa7f0915ebe57b459b63c9",
+    "app/airrun/audio.ts": "a54fb13aef68f959df42da7affbfd0f637388d32abffce7b3b0d9ad81ff60046",
+    "app/airrun/trick-worker.ts": "a4143cd11cb584686b3dafd098edcd5275d4310c308cb4ffede27556d0963956",
+    "standalone/index.html": "fbc4f5ff5be97e199700ee3c13cf40cf03cdf0f7d67919615fa99441e7d1cfba",
+    "standalone/entry.tsx": "6628ce6999e0b1c305cde77fd94cbdce26866a298c6f7e94368a53ae24110313",
+    "standalone/image.tsx": "60f3ec9fa875ea94836e71ce2c098c9c2d2b839f837b7326ea0a9cd14acb7ff1",
+    "scripts/build-static.mjs": "f2fafd93577f6a373c4915e6f69d7bfa04a97568d66223b40ad7189b20e35f93"
+  }
+}

@@ -1,0 +1,53 @@
+name: Deploy VOXEL AIRRUN
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Install locked dependencies
+        run: npx --yes pnpm@11.25.0 install --frozen-lockfile
+      - name: Check source
+        run: npm run typecheck && npm run lint:game
+      - name: Build complete model delivery
+        run: npm run build
+      - name: Build GitHub Pages site
+        env:
+          AIRRUN_BASE_PATH: /${{ github.event.repository.name }}/
+        run: npm run build:static
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist-static
+          retention-days: 1
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/configure-pages@v5
+      - name: Publish game
+        id: deployment
+        uses: actions/deploy-pages@v4
