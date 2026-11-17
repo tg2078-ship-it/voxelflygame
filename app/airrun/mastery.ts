@@ -1,4 +1,4 @@
-import { baseSpeed } from './data';
+import { COURSE_EDITION, baseSpeed } from './data';
 import type { Difficulty } from './encounter-director';
 import type { RunResult, Vec } from './types';
 
@@ -90,7 +90,7 @@ export function replayPose(replay: FlightReplay, time: number): (Vec & { roll: n
 }
 export interface ReplayIdentity { seed: number; plane: string; level: number; difficulty: Difficulty; contractId: ContractId }
 export function personalRival(runs: RunResult[], identity: ReplayIdentity): RunResult | undefined {
-    return runs.filter(run => run.mode === 'sortie' && run.sortie?.completed && !run.interrupted && !run.eUsed && run.replay
+    return runs.filter(run => run.courseEdition === COURSE_EDITION && run.mode === 'sortie' && run.sortie?.completed && !run.interrupted && !run.eUsed && run.replay
         && run.seed === identity.seed && run.planeId === identity.plane && run.level === identity.level
         && run.difficulty === identity.difficulty && run.contract?.id === identity.contractId)
         .sort((a, b) => b.score - a.score)[0];

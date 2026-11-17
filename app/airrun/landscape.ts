@@ -14,10 +14,12 @@ export function landscapePlacements(index: number, theme: ThemeId, variant: numb
     if ((theme === 'forest' || theme === 'waterfall') && catalog.has('mountain_peak')) pool.push('mountain_peak');
     const wood = pool.filter(model => /pine|tree|fir|orchard/.test(model));
     const stone = pool.filter(model => /rock|stack|glacier|ice|mesa|spire|peak|basalt/.test(model));
+    const tierCounts = [0, 0, 0, 0, 0, 0];
     const placements: Placement[] = [], footprints: { x: number; z: number; radius: number }[] = [];
     const heightAt = (x: number, z: number) => renderedTerrainHeight(x, z, theme, seed, variant, profile.terrainCell);
     for (let attempt = 0; attempt < profile.landscapePlacements * 9 && placements.length < profile.landscapePlacements; attempt++) {
         const grove = attempt % 6, salt = seed + index * 7919 + grove * 1049;
+        if (tierCounts[grove] >= Math.ceil(profile.landscapePlacements / 6)) continue;
         const distant = grove === 3 || grove === 5, middle = grove === 2 || grove === 4;
         const centreZ = index * 128 + 20 + hash(salt + 53) * 88;
         const z = Math.max(index * 128 + 2, Math.min(index * 128 + 126, centreZ + (hash(salt + attempt * 43) - .5) * 66));
@@ -27,7 +29,8 @@ export function landscapePlacements(index: number, theme: ThemeId, variant: numb
         const meta = catalog.get(model); if (!meta) continue;
         const woody = /pine|tree|fir|orchard/.test(model), rock = /rock|stack|glacier|ice|mesa|spire|peak/.test(model);
         let scale = (woody ? .9 : distant ? 1.55 : .85) + hash(salt + attempt * 89) * (woody ? .8 : distant ? 1.5 : .95);
-        scale = Math.min(scale, (woody ? middle || distant ? 38 : 20 : distant ? 100 : 54) / Math.max(1, meta.bounds.size[1]));
+        if (distant && stone.includes(model)) scale = (95 + hash(salt + attempt * 89) * 65) / Math.max(1, meta.bounds.size[1]);
+        scale = Math.min(scale, (woody ? middle || distant ? 38 : 20 : distant ? 160 : 54) / Math.max(1, meta.bounds.size[1]));
         const yaw = (hash(salt + attempt * 197) - .5) * Math.PI * 2;
         const reachX = (Math.abs(Math.cos(yaw)) * meta.bounds.size[0] + Math.abs(Math.sin(yaw)) * meta.bounds.size[2]) * scale * .5;
         const reachZ = (Math.abs(Math.sin(yaw)) * meta.bounds.size[0] + Math.abs(Math.cos(yaw)) * meta.bounds.size[2]) * scale * .5;
@@ -43,6 +46,7 @@ export function landscapePlacements(index: number, theme: ThemeId, variant: numb
         if (footprints.some(p => Math.hypot(p.x - x, p.z - z) < radius + p.radius)) continue;
         const y = contact - meta.bounds.min[1] * scale - Math.min(.65, meta.bounds.size[1] * scale * .025);
         placements.push({ model, x, y, z, sx: scale, sy: scale, sz: scale, yaw, collision: false, role: 'landscape' });
+        tierCounts[grove]++;
         footprints.push({ x, z, radius });
     }
     return placements;

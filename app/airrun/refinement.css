@@ -1,0 +1,77 @@
+/* 8.1 — readable instruments and a responsive live paint studio. */
+.airrun { --line: #9bbdc62b; }
+.airrun button { transition: background-color .18s, border-color .18s, box-shadow .18s, transform .18s; }
+.airrun button:focus-visible, .airrun select:focus-visible { outline: 2px solid #a4efdd; outline-offset: 4px; }
+.airrun button:active:not(:disabled) { transform: translateY(1px) scale(.98); }
+.airrun .airport-nav { background: linear-gradient(90deg,#071c26e8,#071c2699); border-right: 1px solid #c3e1e515; }
+.airrun .airport-nav button.active { background: linear-gradient(90deg,#a1e7d927,#a1e7d908); box-shadow: inset 3px 0 #b5f0dd; color: #e0fff4; }
+.airrun .airport-panel:not(.livery) { background: linear-gradient(135deg,#102b38f5,#091c28f5); box-shadow: 0 24px 90px #0005; }
+.airrun .panel-heading { padding-bottom: 20px; border-bottom: 1px solid var(--line); margin-bottom: 22px; }
+.airrun .panel-heading h1 { letter-spacing: -.045em; }
+.airrun .quest-card, .airrun .atlas-card { border-radius: 10px; }
+.airrun .ops-departure-board { background: linear-gradient(155deg,#173640f2,#0c202ef5); border-color: #b7d8dd30; }
+.airrun .ops-launch { background: linear-gradient(110deg,#d9efce,#9bddcb); color: #102e32; box-shadow: 0 6px 30px #81d5b526; }
+.airrun .aviation-loader { background: radial-gradient(ellipse at 15% 30%,#244c58 0,transparent 55%),#091d29; }
+.airrun .loader-expedition-map { filter: drop-shadow(0 24px 40px #0004); }
+.airrun .expedition-course { animation: none; transition: stroke-dashoffset .5s ease; }
+.airrun .loading-bar { height: 5px; border-radius: 6px; overflow: hidden; background: #c0e6e01a; }
+.airrun .loading-bar i { background: linear-gradient(90deg,#80c9ba,#dcf5d7); box-shadow: 0 0 20px #a1eed986; transition: width .35s; }
+.loader-flight-tip { display:flex; gap:12px; align-items:center; margin:20px 0; padding:14px 16px; border:1px solid #b5dbd926; border-radius:8px; color:#d4eee6; font-size:11px; line-height:1.6; background:#081c2955; }
+.loader-flight-tip svg { flex-shrink:0; color:#a1d6c7; }
+.loader-flight-tip small { display:block; color:#95b2bc; font-size:10px; margin-top:4px; }
+.airrun .airport-panel.livery { display:flex; flex-direction:column; padding-bottom:16px; background:transparent; -webkit-backdrop-filter:none; backdrop-filter:none; border-color:transparent; box-shadow:none; }
+.airrun .airport-panel.livery .panel-heading { flex-shrink:0; margin-bottom:14px; }
+.paint-studio { display:grid; grid-template-columns:minmax(0,1fr) 300px; gap:24px; flex:1; min-height:0; }
+.paint-showroom { display:flex; flex-direction:column; min-width:0; min-height:0; }
+.paint-showroom header { padding:10px 16px; background:linear-gradient(90deg,#0a202de8,#0a202d00); border-left:2px solid #c6e4cf; }
+.paint-showroom h2 { margin:7px 0 10px; font-size:clamp(20px,2.6vw,38px); letter-spacing:-.04em; }
+.paint-current { display:flex; align-items:center; gap:8px; font-size:11px; color:#d4e8e9; }
+.paint-current i { width:12px; height:12px; border-radius:50%; border:1px solid #ffffff55; }
+.paint-viewport { position:relative; flex:1; min-height:120px; cursor:grab; touch-action:none; }
+.paint-viewport:active { cursor:grabbing; }
+.paint-viewport-caption { position:absolute; bottom:16px; left:50%; transform:translateX(-50%); display:flex; gap:8px; align-items:center; white-space:nowrap; font-size:10px; padding:8px 12px; background:#092633d9; border:1px solid #c7e5de26; border-radius:20px; pointer-events:none; }
+.paint-model-status { position:absolute; inset:0; display:grid; place-items:center; background:#102b3877; font-size:12px; }
+.paint-camera { display:flex; gap:6px; justify-content:center; flex-wrap:wrap; background:#09212cbf; padding:10px; border-radius:10px; }
+.paint-camera .compact { font-size:10px; min-height:32px; padding:6px 12px; }
+.paint-camera .icon-button { width:32px; height:32px; }
+.paint-workbench { min-height:0; overflow:auto; border:1px solid #a6d8d22b; padding:20px; border-radius:12px; background:linear-gradient(145deg,#183844f5,#0c202cf9); }
+.paint-workbench h2 { font-size:24px; letter-spacing:-.04em; margin:8px 0 20px; }
+.paint-workbench label { display:grid; gap:8px; font-size:10px; color:#adc8cd; }
+.paint-workbench select { width:100%; color:#f0f5eb; background:#0a202b; border:1px solid #95b9bd40; padding:10px; border-radius:6px; font-size:12px; }
+.paint-workbench p { font-size:11px; color:#9fbbc3; line-height:1.8; margin:14px 0; }
+.paint-finishes { display:grid; gap:8px; }
+.paint-finishes button { display:flex; align-items:center; text-align:left; gap:12px; padding:10px; background:#cde8dc05; border:1px solid #91b9bc25; border-radius:8px; min-height:62px; }
+.paint-finishes button.selected { border-color:#c9e7b4; background:#b2e1bd12; box-shadow:inset 3px 0 #c9e7b4; }
+.paint-finishes button>i { width:45px; height:38px; border-radius:6px; flex-shrink:0; background:linear-gradient(145deg,var(--paint) 0 58%,var(--accent) 59% 76%,var(--paint) 77%); box-shadow:inset 0 1px 1px #ffffff55; }
+.paint-finishes button>span { flex:1; }
+.paint-finishes b { display:block; font-size:12px; }
+.paint-finishes small { display:block; font-size:9px; color:#a1bec4; margin-top:5px; }
+.paint-checkout { position:sticky; bottom:-20px; padding:18px 0 12px; margin-top:10px; background:#102a36; }
+.paint-checkout>span { display:flex; justify-content:space-between; font-size:10px; color:#a1bec4; margin-bottom:12px; }
+.paint-checkout b { color:#e0efe3; }
+.paint-checkout .primary { width:100%; min-height:42px; font-size:12px; }
+@media(max-width:900px) { .paint-studio { grid-template-columns:minmax(0,1fr) 240px; gap:12px; } .paint-workbench { padding:12px; } .paint-camera { gap:3px; } .paint-camera .compact { padding:5px 8px; } }
+@media(max-width:600px) and (orientation:portrait) { .airrun .airport-panel.livery { overflow:auto; } .paint-studio { display:flex; flex-direction:column; min-height:600px; flex:none; } .paint-showroom { min-height:320px; } .paint-workbench { overflow:visible; } .paint-finishes { grid-template-columns:1fr 1fr; } }
+@media(max-height:550px) and (orientation:landscape) { .airrun .airport-panel.livery .panel-heading { padding-bottom:8px; margin-bottom:8px; } .paint-showroom header { padding:4px 10px; } .paint-showroom h2 { font-size:18px; margin:3px 0; } .paint-showroom .eyebrow { display:none; } .paint-viewport { min-height:70px; } .paint-viewport-caption { bottom:6px; font-size:8px; padding:4px 8px; } .paint-camera { padding:4px; } .paint-camera .compact,.paint-camera .icon-button { min-height:25px; height:25px; } .loader-flight-tip { margin:8px 0; padding:8px; } }
+@media(prefers-reduced-motion:reduce) { .airrun button,.airrun .loading-bar i,.airrun .expedition-course { transition:none; } }
+.airrun.reduced-motion button,.airrun.reduced-motion .loading-bar i,.airrun.reduced-motion .expedition-course { transition:none; }
+
+/* Compact flight-deck screens reserve most of the bay for the actual aircraft. */
+@media(max-height:550px) and (orientation:landscape) {
+ .airrun.airrun-six .airport-panel.livery { top:76px; left:62px; right:18px; bottom:12px; padding:8px 10px; }
+ .airrun .airport-panel.livery .panel-heading { min-height:32px; padding:0; margin:0 0 6px; }
+ .airrun .airport-panel.livery .panel-heading .eyebrow { display:none; }
+ .airrun .airport-panel.livery .panel-heading h1 { font-size:20px; margin:0; }
+ .airrun .airport-panel.livery .panel-heading .icon-button { width:30px; height:30px; }
+ .paint-viewport { min-height:100px; }
+ .paint-workbench { display:flex; flex-direction:column; padding:10px; }
+ .paint-workbench>.eyebrow,.paint-workbench>h2,.paint-workbench>p,.paint-checkout>span { display:none; }
+ .paint-workbench label { gap:4px; flex-shrink:0; font-size:9px; margin-bottom:8px; }
+ .paint-workbench select { padding:6px; font-size:10px; }
+ .paint-finishes { display:flex; flex-direction:column; overflow:auto; min-height:0; gap:5px; flex:1; }
+ .paint-finishes button { min-height:44px; padding:6px; gap:8px; flex-shrink:0; }
+ .paint-finishes button>i { width:34px; height:27px; }
+ .paint-finishes b { font-size:10px; }.paint-finishes small { margin-top:2px; font-size:8px; }
+ .paint-checkout { position:static; padding:8px 0 0; margin:0; flex-shrink:0; }
+ .paint-checkout .primary { min-height:32px; padding:6px; font-size:10px; }
+}

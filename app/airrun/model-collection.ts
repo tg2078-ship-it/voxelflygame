@@ -75,7 +75,7 @@ export function populateThemeCollection(encounter: Encounter, catalog: Map<strin
     // the path with repeated landmark displays.
     const firstRoute = encounter.route[0], lastRoute = encounter.route.at(-1)!;
     const knots = [{ ...(encounter.entry ?? firstRoute), z: encounter.start }, ...encounter.route.flatMap(point => [{ x: point.x, y: point.y, z: point.z - 62 }, { x: point.x, y: point.y, z: point.z + 62 }]), { x: lastRoute.x, y: lastRoute.y, z: encounter.start + encounter.length }];
-    const reserved = encounter.placements.filter(p => p.course && p.collision).map(p => bounds(p, catalog));
+    const reserved = encounter.placements.filter(p => (p.course || p.role === 'route shoulder') && p.collision).map(p => bounds(p, catalog));
     const added: Box[] = [], water = isWaterLandscape(encounter.theme, encounter.variant);
     let count = 0;
     for (const meta of deck.filter(meta => !seen.has(meta.id))) {
@@ -119,7 +119,7 @@ export function populateThemeCollection(encounter: Encounter, catalog: Map<strin
             if (boxes.some(box => reserved.some(r => overlaps(box, r)) || added.some(r => overlaps(box, r)) || knots.slice(1).some((to, i) => !!sweepAABB(knots[i], to, box, { x: span * .34 + 2.4, y: 5.5, z: 12 })))) continue;
             const removed = new Set<string>();
             encounter.placements = encounter.placements.filter(old => {
-                if (old.course || old.role === 'collection') return true;
+                if (old.course || old.role === 'route shoulder' || old.role === 'collection') return true;
                 const hit = boxes.some(box => overlaps(box, bounds(old, catalog)));
                 if (hit && old.group) removed.add(old.group);
                 return !hit;

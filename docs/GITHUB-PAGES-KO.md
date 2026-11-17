@@ -31,7 +31,7 @@ AIRRUN_BASE_PATH=/voxelflygame/ npm run build:static
 
 Cloudflare Pages의 직접 업로드는 파일 수 때문에 Wrangler CLI를 사용합니다. 공식 제한은 CLI 20,000개/파일당 25MiB이며, 대시보드 드래그 업로드는 1,000개입니다. 빌드 스크립트는 CLI 제한을 검사합니다. 출처: https://developers.cloudflare.com/pages/get-started/direct-upload/
 
-원본 공개 자산과 기존 8.0.1 게임 기능을 보존합니다. 새 주소에서는 브라우저 저장 공간이 달라지므로 기존 게임 설정에서 기록을 내보내고 새 주소에서 가져오면 됩니다.
+원본 공개 자산과 기존 게임 기능을 보존합니다. 새 주소에서는 브라우저 저장 공간이 달라지므로 기존 게임 설정에서 기록을 내보내고 새 주소에서 가져오면 됩니다.
 
 ## configure-pages에서 Not Found가 나올 때
 

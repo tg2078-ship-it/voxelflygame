@@ -180,7 +180,8 @@ export class AirportView {
         const outline = [[-48, 43], [81, 43], [85, -65], [60, -135], [38, -165], [8, -178], [-34, -163], [-49, -126], [-45, -48]];
         const shape = new T.Shape(outline.map(([x, z]) => new T.Vector2(x, -z)));
         const sideGeometry = new T.ExtrudeGeometry(shape, { depth: 3.8, bevelEnabled: false, steps: 1 }); sideGeometry.rotateX(-Math.PI / 2);
-        const side = new T.Mesh(sideGeometry, soil); side.position.y = -3.54; side.receiveShadow = true; this.geometry.add(sideGeometry); this.root.add(side);
+        // Keep the soil cap below the grass; a 5 mm gap caused stripes at flight-camera distances.
+        const side = new T.Mesh(sideGeometry, soil); side.position.y = -3.64; side.receiveShadow = true; this.geometry.add(sideGeometry); this.root.add(side);
         const topGeometry = new T.ShapeGeometry(shape); topGeometry.rotateX(-Math.PI / 2);
         const top = new T.Mesh(topGeometry, grass); top.position.y = .265; top.receiveShadow = true; this.geometry.add(topGeometry); this.root.add(top);
     }

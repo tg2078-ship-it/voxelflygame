@@ -338,6 +338,31 @@ export function buildEncounter(p: Pattern, start: number, seed: number, catalog:
         if (overlap) { placements.splice(begin); return undefined; }
         return placed;
     };
+    // Keep the opening physically legible at flight altitude. Low houses alone
+    // never form a slalom, even if the abstract waypoints suggest one.
+    const pillarModels: Record<ThemeId, string> = {
+        coast: 'sea_stacks', village: 'bell_tower', city: 'tower_block', ice: 'jagged_ice_spire',
+        desert: 'sandstone_spire', forest: 'rocky_ridge', farm: 'grain_silo',
+        korea: variant === 0 ? 'tower_block' : variant === 3 ? 'sea_stacks' : 'rocky_ridge',
+        river: 'rocky_ridge', landmark: 'rocky_ridge', aurora: 'jagged_ice_spire',
+        volcano: 'sea_stacks', waterfall: 'waterfall_cliff',
+    };
+    const pillar = catalog.byId.get(pillarModels[k]);
+    if (pillar) for (const point of route) {
+        if (point.role === 'orientation') continue;
+        const pressure = p.generation?.difficulty === 'expert' ? 1 : p.generation?.difficulty === 'relaxed' ? 0 : .55;
+        const scale = Math.min((38 + pressure * 10) / pillar.bounds.size[1], 58 / pillar.bounds.size[0], 44 / pillar.bounds.size[2]);
+        const clearance = Math.max(span * .34 + 3.8, 8.5 - pressure * 1.5);
+        for (const side of [-1, 1]) {
+            // Account for asymmetric authored bounds, not just nominal width.
+            const edge = side > 0 ? pillar.bounds.min[0] : pillar.bounds.max[0];
+            // Preserve the optional gold lane as well as the mint centre line.
+            const laneClearance = Math.max(clearance, side * (point.dangerX - point.x) + span * .34 + 2.4);
+            const x = point.x + side * laneClearance - edge * scale;
+            const inside = side > 0 ? x + pillar.bounds.min[0] * scale < AIRSPACE.halfWidth : x + pillar.bounds.max[0] * scale > -AIRSPACE.halfWidth;
+            if (inside) plot(pillar.id, x, point.z, scale, 'route shoulder');
+        }
+    }
     const village = k === 'village' || k === 'korea' && variant === 1;
     // Architecture is grouped into recognisable places with deliberate breathing
     // room. Opposing, evenly spaced exhibition rows flatten the entire world.
@@ -352,7 +377,7 @@ export function buildEncounter(p: Pattern, start: number, seed: number, catalog:
         }
         return placed;
     };
-    const clusters = serial === 1 ? 4 : 3;
+    const clusters = Math.max(4, Math.min(18, Math.ceil(length / 145)));
     for (let cluster = 0; cluster < clusters; cluster++) {
         const centre = start + 90 + cluster * (length - 190) / clusters;
         // Every other cluster is set back, so built-up areas open onto a plaza,
@@ -364,7 +389,7 @@ export function buildEncounter(p: Pattern, start: number, seed: number, catalog:
             const model = place.buildings[(cluster + n + serial) % place.buildings.length];
             const z = centre + n * (city ? 26 : 30) + (rand() - .5) * 9;
             const x = frontage + side * (n % 3 === 2 ? 9 : 0) + (rand() - .5) * 2;
-            placeBuilding(model, x, z, city ? 15 : 13, city ? 23 : 22, city ? 48 : 19, 'district', side < 0 ? Math.PI : 0);
+            placeBuilding(model, x, z, city ? 19 : 18, city ? 29 : 28, city ? 58 : 30, 'district', side < 0 ? Math.PI : 0);
         }
         if (cluster % 2 === 0 || !coastal) {
             const model = place.working[(cluster + serial) % place.working.length];

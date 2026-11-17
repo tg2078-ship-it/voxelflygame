@@ -117,6 +117,7 @@ export function validateResult(value: unknown): value is RunResult {
         return false;
     if (v.reasonEn !== undefined && (typeof v.reasonEn !== 'string' || v.reasonEn.length > 256))
         return false;
+    if (v.courseEdition !== undefined && (!Number.isSafeInteger(v.courseEdition) || v.courseEdition < 1 || v.courseEdition > 10000)) return false;
     if (v.seed !== undefined && (!Number.isInteger(v.seed) || v.seed < 0 || v.seed > 0xffffffff)) return false;
     if (v.level !== undefined && (!Number.isInteger(v.level) || v.level < 1 || v.level > 20)) return false;
     if (v.contract !== undefined && (v.mode !== 'sortie' || !validContract(v.contract, { perfect: v.debrief?.perfectPasses ?? 0, boost: v.metrics.boost, risk: v.metrics.near + v.metrics.narrow }) || v.contract.bonus + (v.sortie?.bonus ?? 0) + (v.debrief?.operationBonus ?? 0) + (v.debrief?.precisionBonus ?? 0) + (v.debrief?.flowBonus ?? 0) > v.bonus)) return false;

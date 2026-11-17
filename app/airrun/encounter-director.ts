@@ -26,12 +26,12 @@ export const DIFFICULTIES: Record<Difficulty, DifficultyProfile> = {
     standard: {
         label: '정밀 비행', en: 'STANDARD', description: '첫 구간부터 좌우·상하를 연결하는 기본 도전.',
         descriptionEn: 'Link lateral and vertical decisions from the very first section.',
-        xAmplitude: 34, altitudeDelta: 11, spacing: 210, initialLead: 540, lead: 160, speedMultiplier: 1,
+        xAmplitude: 34, altitudeDelta: 11, spacing: 185, initialLead: 420, lead: 125, speedMultiplier: 1,
     },
     expert: {
         label: '극한 비행', en: 'EXPERT', description: '짧은 판단 간격과 큰 경로 변화. 정확한 감속·회피가 필요합니다.',
         descriptionEn: 'Shorter decision gaps and stronger route changes. Brake and dodge precisely.',
-        xAmplitude: 38, altitudeDelta: 15, spacing: 182, initialLead: 480, lead: 145, speedMultiplier: 1.12,
+        xAmplitude: 38, altitudeDelta: 15, spacing: 160, initialLead: 360, lead: 105, speedMultiplier: 1.12,
     },
 };
 

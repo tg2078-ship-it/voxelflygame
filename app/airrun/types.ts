@@ -118,6 +118,7 @@ export interface Metrics {
     time: number;
 }
 export interface RunResult {
+    courseEdition?: number;
     seed?: number;
     level?: number;
     contract?: import('./mastery').ContractResult;
