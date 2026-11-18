@@ -1,0 +1,124 @@
+{
+  "version": "9.0.0",
+  "status": "passed",
+  "regression": {
+    "suiteCount": 53,
+    "execution": "Initial full run resumed after fixes; all constituent suites passed.",
+    "batches": {
+      "nativeAssets": 1,
+      "coreAndPersistence": 5,
+      "endlessAutopilot": 1,
+      "streamingThroughWorldRevision": 10,
+      "interfaceThroughAce": 36
+    }
+  },
+  "endlessControlledFlights": 66,
+  "sortieControlledFlights": 12,
+  "rush": {
+    "aceChecks": 145,
+    "rushFlights": [
+      {
+        "seed": 10,
+        "regions": [
+          "coast",
+          "village",
+          "city",
+          "forest"
+        ],
+        "uses": 4,
+        "rushDistance": 1578
+      },
+      {
+        "seed": 11,
+        "regions": [
+          "coast",
+          "village",
+          "city",
+          "ice"
+        ],
+        "uses": 4,
+        "rushDistance": 1577
+      },
+      {
+        "seed": 12,
+        "regions": [
+          "coast",
+          "village",
+          "city",
+          "desert"
+        ],
+        "uses": 4,
+        "rushDistance": 1600
+      },
+      {
+        "seed": 13,
+        "regions": [
+          "coast",
+          "village",
+          "city",
+          "river"
+        ],
+        "uses": 4,
+        "rushDistance": 1601
+      },
+      {
+        "seed": 14,
+        "regions": [
+          "coast",
+          "village",
+          "city",
+          "waterfall"
+        ],
+        "uses": 4,
+        "rushDistance": 1559
+      }
+    ],
+    "humanFunVerified": false,
+    "status": "passed"
+  },
+  "browser": {
+    "type": "standalone production build at GitHub Pages subpath",
+    "softwareGPU": true,
+    "profileFixture": "Existing fresh pilot; native UI interactions, no injected flight state.",
+    "mobileTouchLayout": {
+      "viewport": [
+        844,
+        390
+      ],
+      "navigationOverlapsInstruments": false,
+      "rushOverlapsInstruments": false,
+      "compactViewport": [
+        736,
+        320
+      ],
+      "centralAircraftViewOpen": true
+    },
+    "status": "passed",
+    "nativeLaunchPauseEnd": true,
+    "savedRuns": 1,
+    "javascriptErrors": [],
+    "httpFailures": [],
+    "resourceRequests": 109,
+    "modelRequests": 92,
+    "audioRequests": 9
+  },
+  "typecheck": "passed",
+  "gameLint": "passed",
+  "frameworkBuild": "passed",
+  "staticBuild": {
+    "version": "9.0.0",
+    "type": "standalone-static",
+    "requiresServer": false,
+    "basePath": "/voxelflygame/",
+    "files": 1785,
+    "bytes": 252976363,
+    "largestFileBytes": 15127210,
+    "models": 403,
+    "aircraft": 22,
+    "clips": 891,
+    "cloudflareWranglerLimitsPassed": true,
+    "dashboardDragDropSupported": false
+  },
+  "hardwareFPSVerified": false,
+  "humanFunVerified": false
+}

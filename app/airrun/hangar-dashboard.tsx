@@ -7,6 +7,7 @@ import { AIRCRAFT, clamp, distance, fmt, stats, upgradeCost } from './data';
 import { CAREER, CHAPTERS, QUESTS } from './progression';
 import { dailyBest, dailyRoute } from './daily-route';
 import { PilotBriefing } from './interface';
+import { JourneyBriefing } from './ace-ui';
 import { ContractSelector } from './mastery-ui';
 import { SORTIE_STAGES, SORTIE_DURATION, SORTIE_COMPLETION_BONUS } from './sortie';
 import type { Panel } from './types';
@@ -66,7 +67,7 @@ export function HangarDashboard({ state, ko, launching, onLaunch, onPanel, onVie
             <div className="ops-sortie-objective"><div><Target size={17}/><span>{t('첫 작전', 'OPENING OPERATION')}<b>{t('안내 경로 두 개를 통과하세요.', 'Cross two marked passages.')}</b></span></div><button type="button" onClick={() => setBriefingOpen(true)}><Keyboard size={16}/>{t('비행 안내', 'BRIEFING')}</button></div>
             <div className="ops-mode-selector" aria-label={t('비행 모드 선택', 'Select flight mode')}><button className={mode === 'sortie' ? 'selected sortie' : 'sortie'} aria-pressed={mode === 'sortie'} onClick={() => state.setFlightMode('sortie')}><Timer size={21}/><span><b>{t('3분 출격', 'THREE-MINUTE SORTIE')}<em>03:00</em></b><small>{t('다섯 단계의 항로 · 완주에 도전', 'FIVE STAGES · REACH THE FINISH')}</small></span>{mode === 'sortie' && <Check size={16}/>}</button><button className={mode === 'endless' ? 'selected' : ''} aria-pressed={mode === 'endless'} onClick={() => state.setFlightMode('endless')}><Compass size={20}/><span><b>{t('무한 항로', 'ENDLESS FLIGHT')}</b><small>{t('생존 · 탐험 · 새로운 기록', 'SURVIVE · EXPLORE · GO FURTHER')}</small></span>{mode === 'endless' && <Check size={16}/>}</button><button className={mode === 'daily' ? 'selected daily' : 'daily'} aria-pressed={mode === 'daily'} onClick={() => state.setFlightMode('daily')}><FlagIcon/><span><b>{t('오늘의 항로', 'DAILY ROUTE')}</b><small>{t('매일 새 항로 · 나의 최고 기록', 'ONE DAILY ROUTE · YOUR PERSONAL BEST')}</small></span>{mode === 'daily' && <Check size={16}/>}</button></div>
             {mode === 'sortie' && <div className="sortie-briefing" aria-label={t('3분 출격 계획', 'Three-minute sortie plan')}>
-                <ContractSelector selected={state.contractId ?? 'precision'} onSelect={state.setContractId} ko={ko}/><div className="sortie-briefing-head"><Flag size={16}/><span>{t('끝까지 날아, 출격을 완수하세요.', 'Fly the full route. Bring it home.')}<small>{t('완주 보너스', 'COMPLETION BONUS')} <b>+{fmt(SORTIE_COMPLETION_BONUS)} PTS</b></small></span></div>
+                <JourneyBriefing ko={ko}/><ContractSelector selected={state.contractId ?? 'precision'} onSelect={state.setContractId} ko={ko}/><div className="sortie-briefing-head"><Flag size={16}/><span>{t('끝까지 날아, 출격을 완수하세요.', 'Fly the full route. Bring it home.')}<small>{t('완주 보너스', 'COMPLETION BONUS')} <b>+{fmt(SORTIE_COMPLETION_BONUS)} PTS</b></small></span></div>
                 <ol className="sortie-stage-plan">{SORTIE_STAGES.map(stage => <li key={stage.id}><i/><span>{ko ? stage.label : stage.en}</span></li>)}</ol>
                 <p>{t(`수동 비행 ${SORTIE_DURATION}초를 채우면 자동 정산합니다. E 연출·일시정지 중에는 출격 시간이 멈춥니다.`, `${SORTIE_DURATION} seconds of manual flight, then automatic settlement. Hyper Trick and pause stop the sortie clock.`)}</p>
             </div>}

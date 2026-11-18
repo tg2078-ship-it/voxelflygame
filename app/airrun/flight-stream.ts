@@ -1,6 +1,5 @@
 import { residentModelLOD } from './graphics';
 import { scenicDistrict, encounterFamily } from './environment-palette';
-import { themeAt } from './data';
 import type { ModelLibrary } from './assets';
 import type { FlightSimulation } from './simulation';
 import type { AssetMeta, ThemeId } from './types';
@@ -34,10 +33,12 @@ export class FlightStream {
         if (this.disposed || !force && this.lastQuality === sim.config.settings.quality && sim.time - this.lastUpdate < 1) return;
         this.lastUpdate = sim.time;
         this.lastQuality = sim.config.settings.quality;
-        const current = sim.config.practice ? { theme: { id: sim.config.practice.theme }, variant: sim.config.practice.variant } : themeAt(sim.config.seed, Math.floor(sim.time / 180));
+        const current = sim.sortie ? { theme: { id: sim.theme }, variant: sim.variant } : sim.courseTheme(sim.z);
         // The next full theme gets 45 seconds of background download time, rather
         // than being discovered by the renderer two seconds before a collision.
-        const next = sim.config.practice ? current : themeAt(sim.config.seed, Math.floor((sim.time + 45) / 180));
+        // Start downloading the next region once airborne; departure only waits for its visible course.
+        const lookahead = sim.time > 1 ? 45 : 0;
+        const next = sim.courseTheme(sim.z + sim.speed * lookahead, sim.time + lookahead);
         const ids = new Set([...flightDeckAssets(current.theme.id, current.variant, this.library.byId), ...flightDeckAssets(next.theme.id, next.variant, this.library.byId)]);
         for (const e of sim.encounters) for (const p of e.placements) if (p.z > sim.z - 180) ids.add(p.model);
         const keys = new Set<string>(); this.proxyIds = ids;

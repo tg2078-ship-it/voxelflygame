@@ -109,6 +109,7 @@ export class AirrunRenderer {
     cleanupListeners: (() => void)[] = [];
     pmrem: T.WebGLRenderTarget;
     lastSkin = '';
+    lobbyFit: { key: string; fit: ReturnType<typeof inspectionFit> } | null = null;
     lastScreenshotKey = '';
     scrubSaving = false;
     modelLoading = false;
@@ -257,6 +258,7 @@ export class AirrunRenderer {
                     s.resume();
                 return;
             }
+            if (code === 'KeyQ' && !e.repeat && s.phase === 'flying' && !this.sim?.eRemaining) { e.preventDefault(); input.rush = true; return; }
             if (code === 'KeyF' && !e.repeat && s.phase === 'flying') {
                 e.preventDefault(); s.bankFlow(); return;
             }
@@ -532,10 +534,10 @@ export class AirrunRenderer {
             await this.selectPlane(sim.plane.id, true);
             if (!this.planeId.startsWith(sim.plane.id + ':'))
                 throw new Error(useAirrun.getState().modelError || 'Selected aircraft unavailable');
-            useAirrun.setState({ progress: .08, loadingLabel: '첫 테마 전체 모델과 충돌 자료 준비' });
+            useAirrun.setState({ progress: .08, loadingLabel: useAirrun.getState().save.settings.language === 'ko' ? '첫 출격 지역 준비' : 'Preparing the first region' });
             await this.world?.stream.prepare(sim, (ready, total) => {
                 if (!this.disposed && generation === this.warmGeneration)
-                    useAirrun.setState({ progress: .08 + .45 * ready / Math.max(1, total), loadingLabel: `첫 테마 준비 ${ready} / ${total}` });
+                    useAirrun.setState({ progress: .08 + .45 * ready / Math.max(1, total), loadingLabel: (useAirrun.getState().save.settings.language === 'ko' ? '출격 지역 준비 ' : 'Preparing your departure ') + `${ready} / ${total}` });
             });
             const ids = [...new Set(sim.encounters.flatMap(e => e.placements).filter(p => p.collision && p.z > sim.z - 30 && p.z < sim.z + Math.max(1050, sim.speed * 8)).map(p => p.model))];
             let done = 0;
@@ -553,7 +555,7 @@ export class AirrunRenderer {
                 throw new Error((failures[0] as PromiseRejectedResult).reason?.message ?? 'Flight scenery unavailable');
             if (this.disposed || generation !== this.warmGeneration || this.sim !== sim || useAirrun.getState().phase !== 'preflight')
                 return;
-            useAirrun.setState({ progress: .78, loadingLabel: useAirrun.getState().save.settings.language === 'ko' ? '지형과 모델 결합 준비' : 'Preparing terrain and model batches' });
+            useAirrun.setState({ progress: .78, loadingLabel: useAirrun.getState().save.settings.language === 'ko' ? '풍경과 비행 경로 정리' : 'Preparing the horizon' });
             await this.world?.prepare(sim, useAirrun.getState().save.settings.quality);
             await this.warmFlightGPU(generation);
             if (this.disposed || generation !== this.warmGeneration || this.sim !== sim || useAirrun.getState().phase !== 'preflight') return;
@@ -582,7 +584,7 @@ export class AirrunRenderer {
         for (const batch of world.batches.values()) if (batch.root.visible) collect(batch.root);
         for (const instance of world.animated.values()) collect(instance.root);
         if (this.plane) collect(this.plane.root);
-        useAirrun.setState({ progress: .92, loadingLabel: useAirrun.getState().save.settings.language === 'ko' ? '텍스처와 비행 셰이더 준비' : 'Preparing textures and flight shaders' });
+        useAirrun.setState({ progress: .92, loadingLabel: useAirrun.getState().save.settings.language === 'ko' ? '마지막 출격 점검' : 'Final departure checks' });
         let n = 0;
         for (const texture of textures) {
             if (this.disposed || generation !== this.warmGeneration || world !== this.world) return;
@@ -949,9 +951,16 @@ export class AirrunRenderer {
         this.orbit.yawVelocity = damp(this.orbit.yawVelocity, 0, 9, dt);
         this.orbit.pitchVelocity = damp(this.orbit.pitchVelocity, 0, 9, dt);
         const width = this.renderer.domElement.clientWidth, height = this.renderer.domElement.clientHeight;
-        const center = this.silhouette.length ? new T.Box3().setFromPoints(this.silhouette).getCenter(new T.Vector3()) : new T.Vector3(0, 1.8, 0);
-        const direction = new T.Vector3(Math.sin(this.orbit.yaw) * Math.cos(this.orbit.pitch), Math.sin(this.orbit.pitch), -Math.cos(this.orbit.yaw) * Math.cos(this.orbit.pitch));
-        const { target, center: worldCenter, fov } = inspectionFit(this.silhouette, center, direction, width / height, rect.height / height * .80, rect.width / width * .88, baseY, this.orbit.zoom);
+        // Thousands of silhouette points need refitting only after the camera,
+        // aircraft or viewport changes, not on every idle animation frame.
+        const fitKey = [this.planeId, this.silhouette.length, width, height, rect.width, rect.height,
+            this.orbit.yaw.toFixed(5), this.orbit.pitch.toFixed(5), this.orbit.zoom, baseY].join(':');
+        if (!this.lobbyFit || this.lobbyFit.key !== fitKey) {
+            const center = this.silhouette.length ? new T.Box3().setFromPoints(this.silhouette).getCenter(new T.Vector3()) : new T.Vector3(0, 1.8, 0);
+            const direction = new T.Vector3(Math.sin(this.orbit.yaw) * Math.cos(this.orbit.pitch), Math.sin(this.orbit.pitch), -Math.cos(this.orbit.yaw) * Math.cos(this.orbit.pitch));
+            this.lobbyFit = { key: fitKey, fit: inspectionFit(this.silhouette, center, direction, width / height, rect.height / height * .80, rect.width / width * .88, baseY, this.orbit.zoom) };
+        }
+        const { target, center: worldCenter, fov } = this.lobbyFit.fit;
         this.camera.setViewOffset(width, height, width / 2 - rect.x - rect.width / 2, height / 2 - rect.y - rect.height / 2, width, height);
         this.camera.position.lerp(target, 1 - Math.exp(-dt * 7));
         this.camera.lookAt(worldCenter);

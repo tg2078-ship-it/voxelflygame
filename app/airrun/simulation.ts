@@ -1,4 +1,6 @@
 import { COURSE_EDITION, AIRCRAFT, baseSpeed, stats, themeAt, THEMES, damp, clamp, smooth, mix, GEAR_RATIOS, hash, emptyMetrics } from './data';
+import { journeyTheme, journeyThemes, JOURNEY_MARKS } from './journey';
+import { RushDrive } from './rush';
 import { buildEncounter, validateReachability } from './patterns';
 import { proceduralPattern, DIFFICULTIES, type Difficulty } from './encounter-director';
 import { populateThemeCollection, themeCollection } from './model-collection';
@@ -78,6 +80,8 @@ export class FlightSimulation {
     shake = 0;
     boost = 0;
     boostHeat = 0;
+    rush = new RushDrive();
+    sectorEnteredAt = 0;
     boosting = false;
     message = '';
     messageEn = '';
@@ -139,11 +143,24 @@ export class FlightSimulation {
         return { time: this.time, distance: this.z, speed: this.speed, altitude: this.y - groundAt(this.x, this.z, this.theme, this.config.seed, this.variant), controlling: steering, boosting: this.boosting, hyper, theme: this.theme, weather: this.weather.kind, availablePassages, availableRings, availableCoins };
     }
     notify(ko: string, en: string, kind = 'notice') { this.message = ko; this.messageEn = en; this.messageUntil = this.time + 2.1; this.config.onEvent?.(kind, { x: this.x, y: this.y, z: this.z }); }
+    courseTheme(distance: number, elapsed = this.time) {
+        if (this.config.practice) return { theme: THEMES.find(t => t.id === this.config.practice!.theme)!, variant: this.config.practice.variant };
+        return this.sortie ? journeyTheme(this.config.seed, courseClock(distance, this.performance.speed)) : themeAt(this.config.seed, Math.floor(elapsed / 180));
+    }
+    private rushCredit(source: string, amount: number) {
+        if (!this.eRemaining && this.rush.credit(source, amount)) this.notify('러시 준비 · Q로 발동', 'RUSH READY · PRESS Q', 'rush-ready');
+    }
+    journeyHUD() {
+        if (!this.sortie || this.config.practice) return undefined;
+        const themes = journeyThemes(this.config.seed), index = Math.max(0, themes.indexOf(this.theme));
+        const clock = courseClock(this.z, this.performance.speed), start = JOURNEY_MARKS[index], end = JOURNEY_MARKS[index + 1] ?? 180;
+        return { themes, index, progress: clamp((clock - start) / (end - start), 0, 1), arrival: this.time - this.sectorEnteredAt < 3.2 };
+    }
     generate(required = 0) {
         const ahead = Math.max(1050, this.speed * 8, required);
         while (this.nextStart < this.z + ahead) {
             const courseSpeed = this.sortie ? baseSpeed(this.nextStart) * this.performance.speed * 1.6875 : this.speed;
-            const { theme, variant } = this.config.practice ? { theme: THEMES.find(t => t.id === this.config.practice!.theme)!, variant: this.config.practice.variant } : themeAt(this.config.seed, Math.floor((this.sortie ? courseClock(this.nextStart, this.performance.speed) : this.time + (this.nextStart - this.z) / Math.max(40, courseSpeed)) / 180));
+            const { theme, variant } = this.courseTheme(this.nextStart, this.time + (this.nextStart - this.z) / Math.max(40, courseSpeed));
             let pattern = proceduralPattern(theme.id, variant, this.config.seed, this.serial, this.nextStart, 0, this.difficulty);
             const build = (p: typeof pattern) => {
                 if (this.sortie) {
@@ -158,7 +175,7 @@ export class FlightSimulation {
                     lead: Math.max(p.generation.lead, courseSpeed * (.9 + 2 / this.performance.handling)),
                     spacing: Math.max(p.generation.spacing, courseSpeed * (.65 + 2.4 / this.performance.handling)),
                 } } : p;
-                return buildEncounter(paced, this.nextStart, this.config.seed, { byId: this.config.catalog }, this.plane.span, this.serial + 1, this.lastRequired);
+                return buildEncounter(paced, this.nextStart, this.config.seed, { byId: this.config.catalog }, this.plane.span, this.serial + 1, this.lastRequired, !!this.sortie);
             };
             let e = build(pattern);
             const feasible = validateReachability(e, courseSpeed, this.performance.handling, this.plane.span, { ...this.lastRequired, z: this.nextStart });
@@ -274,6 +291,8 @@ export class FlightSimulation {
         if (this.config.settings.control === 'gear' && !(input.boost && input.brake))
             input.gear = clamp(input.gear + (input.pendingGear ?? 0), 1, 5);
         input.pendingGear = 0;
+        if (input.rush && !this.eRemaining && this.rush.activate()) { this.boostHeat = 0; this.notify('러시 · 5초 가속 + 코인 자석', 'RUSH · 5s BOOST + COIN MAGNET', 'rush'); }
+        input.rush = false;
         const old = { x: this.x, y: this.y, z: this.z };
         this.time += dt;
         this.shake = Math.max(0, this.shake - dt * 2);
@@ -289,9 +308,11 @@ export class FlightSimulation {
         }
         const slow = this.effects.has('slow') ? .65 : 1;
         this.motionTime += dt * slow;
-        const selected = this.config.practice ? { theme: THEMES.find(t => t.id === this.config.practice!.theme)!, variant: this.config.practice.variant } : themeAt(this.config.seed, Math.floor((this.sortie ? courseClock(this.z, this.performance.speed) : this.time) / 180));
+        const sector = this.sortie ? this.encounters.find(e => this.z >= e.start && this.z < e.start + e.length) : undefined;
+        const selected = sector ? { theme: THEMES.find(t => t.id === sector.theme)!, variant: sector.variant } : this.courseTheme(this.z);
         const nextTheme = selected.theme.id;
         if (nextTheme !== this.theme || selected.variant !== this.variant) {
+            this.sectorEnteredAt = this.time;
             this.theme = nextTheme;
             this.variant = selected.variant;
             this.notify(selected.theme.name + ' 진입', selected.theme.en + ' · ENTERING', 'theme');
@@ -299,11 +320,12 @@ export class FlightSimulation {
         this.weather = this.weatherController.get(this.time, dt, this.theme, this.config.seed, this.config.practice);
         const w = this.weather;
         const baseline = baseSpeed(this.z) * this.performance.speed, control = this.config.settings.control === 'gear' ? GEAR_RATIOS[clamp(input.gear, 1, 5) - 1] : input.boost === input.brake ? 1 : input.boost ? 1.35 : .70;
-        this.boosting = control > 1 && !(input.boost && input.brake);
+        const rushing = this.rush.hud().remaining > 0 && !this.eRemaining;
+        this.boosting = (control > 1 || rushing && control >= 1) && !(input.boost && input.brake);
         this.boost = damp(this.boost, this.boosting ? 1 : 0, this.boosting ? 3.5 : 5, dt);
         this.boostHeat = damp(this.boostHeat, this.boosting ? 1 : 0, this.boosting ? .36 : 1.5, dt);
         const activeE = this.eRemaining > 0;
-        const modifier = activeE ? 1.2 : control * (this.effects.has('turbo') ? 1.25 : 1) * slow;
+        const modifier = activeE ? 1.2 : control * Math.max(this.effects.has('turbo') ? 1.25 : 1, rushing && control >= 1 ? 1.18 : 1) * slow;
         const target = baseline * modifier;
         const speedK = activeE ? 4 : (target < this.speed ? 4.2 : 2.2) * this.performance.accel;
         this.speed = damp(this.speed, target, speedK, dt);
@@ -347,6 +369,7 @@ export class FlightSimulation {
         this.metrics.distance = this.z;
         this.metrics.time = this.time;
         const dz = this.z - old.z;
+        this.rush.advance(dt, dz, activeE);
         const ground = groundAt(this.x, this.z, this.theme, this.config.seed, this.variant);
         this.adventure.advance(this.adventureFrame(input, activeE, old));
         const key = this.theme === 'korea' ? `korea:${this.variant}` : this.theme;
@@ -459,7 +482,7 @@ export class FlightSimulation {
             if (p.collected || p.z < old.z - radius.z || p.z > this.z + radius.z)
                 continue;
             const t = clamp((p.z - old.z) / (this.z - old.z || 1), 0, 1), x = mix(old.x, this.x, t), y = mix(old.y, this.y, t);
-            if (Math.hypot(x - p.x, y - p.y) > (p.kind === 'ring' ? p.radius : Math.max(p.radius, 3)))
+            if (Math.hypot(x - p.x, y - p.y) > (p.kind === 'ring' ? p.radius : Math.max(p.radius, rushing && p.kind === 'coin' ? 8 : 3)))
                 continue;
             if (activeE && p.kind !== 'coin')
                 continue;
@@ -488,6 +511,7 @@ export class FlightSimulation {
                         if (this.adventure.routeChoice(candidate.id, ROUTE_CHOICE_BONUS))
                             this.config.onEvent?.('choice', { x: crossingX, y: crossingY, z: r.z });
                     }
+                    this.rushCredit(`route:${e.start}:${i}`, dx < r.width * .18 && dy < r.height * .22 ? 14 : 5);
                     this.metrics.directionPass++;
                     if (control < .95)
                         this.metrics.brakePass++;
@@ -594,10 +618,11 @@ export class FlightSimulation {
             this.metrics.coins++;
             this.metrics.weatherCoins[this.weather.kind] = (this.metrics.weatherCoins[this.weather.kind] ?? 0) + 1;
             this.config.onEvent?.('coin');
-            if (source && !this.eRemaining) this.adventure.event('coin', source);
+            if (source && !this.eRemaining) { this.adventure.event('coin', source); this.rushCredit(source, .6); }
             return;
         }
         if (kind === 'ring') {
+            if (source) this.rushCredit(source, perfect ? 18 : 8);
             this.metrics.rings++;
             if (this.weather.night > .5)
                 this.metrics.nightRings++;
@@ -639,7 +664,7 @@ export class FlightSimulation {
         this.hp -= amount;
         this.metrics.damage += amount;
         this.damageCount++;
-        this.adventure.damage();
+        this.adventure.damage(); this.rush.damage();
         this.snowCleanDistance = 0;
         this.lastDamageZ = this.z;
         this.combo = 0;
@@ -649,7 +674,7 @@ export class FlightSimulation {
         if (this.hp <= 0)
             this.fail('기체 내구도 소진', 'AIRFRAME DESTROYED', { x: this.x, y: this.y, z: this.z });
     }
-    fail(ko: string, en: string, at: Vec) { this.adventure?.crash(); this.failed = true; this.reason = ko; this.reasonEn = en; this.impact = at; this.shake = 1; this.config.onEvent?.('crash', at); }
+    fail(ko: string, en: string, at: Vec) { this.adventure?.crash(); this.rush.damage(); this.failed = true; this.reason = ko; this.reasonEn = en; this.impact = at; this.shake = 1; this.config.onEvent?.('crash', at); }
     observeLandmark(id: string, real: boolean) {
         if (this.config.practice || this.failed || this.completed)
             return;
@@ -746,6 +771,6 @@ export class FlightSimulation {
         this.pitch = damp(this.pitch, 0, 6, dt);
         this.yaw = damp(this.yaw, 0, 6, dt);
     }
-    hud(input: Input): HUD { const ghost = this.config.rival ? replayPose(this.config.rival.replay, this.time) : null; const choice = this.upcomingChoice(); const next = this.encounters.flatMap(e => e.route).find(point => point.z > this.z + 5); return { difficulty: this.difficulty, contract: this.contract?.result(), ghost: ghost && !this.eUsed ? { delta: this.z - ghost.z, score: this.config.rival!.score } : undefined, sortie: this.sortie?.hud(), choice: choice ? choiceHUD(choice, { x: this.x, y: this.y, z: this.z }, ROUTE_CHOICE_BONUS * (this.effects.has('multiplier') ? 2 : 1)) : undefined, adventure: this.adventure.hud(), collection: { found: themeCollection(this.theme, this.config.catalog).filter(meta => this.discoveredModels.has(meta.id)).length, total: themeCollection(this.theme, this.config.catalog).length, latest: this.latestModel }, navigation: next ? { distance: next.z - this.z, dx: next.x - this.x, dy: next.y - this.y, role: next.role } : undefined, distance: this.z, score: Math.floor(this.z) + this.bonus, bonus: this.bonus, coins: this.coins, combo: this.combo, maxCombo: this.metrics.maxCombo, speed: this.speed * 3.6, hp: Math.max(0, this.hp), maxHp: this.maxHp, altitude: this.y - groundAt(this.x, this.z, this.theme, this.config.seed, this.variant), time: this.time, theme: this.theme, variant: this.variant, weather: this.weather, gear: input.gear, boost: this.boost, heat: this.boostHeat, eUsed: this.eUsed, eRemaining: this.eRemaining, effects: [...this.effects].map(([kind, remaining]) => ({ kind, remaining })), message: this.message, messageEn: this.messageEn, messageUntil: this.messageUntil, route: this.encounters.find(e => e.start + e.length > this.z)?.title ?? '', routeEn: this.encounters.find(e => e.start + e.length > this.z)?.en ?? '', fps: 0, draws: 0, triangles: 0, metrics: { ...this.metrics } }; }
-    result(interrupted = false, settleVault = false): RunResult { const secure = settleVault && !this.failed, extra = secure ? this.adventure.hud()?.vault?.pending ?? 0 : 0; const distance = Math.floor(this.z), bonus = this.bonus + extra, practice = !!this.config.practice; return { courseEdition: COURSE_EDITION, difficulty: this.difficulty, ...(this.sortie ? { seed: this.config.seed >>> 0, level: this.config.level, contract: this.contract?.result(), ...(this.completed && !this.eUsed && !interrupted ? { replay: this.recorder.result() } : {}) } : {}), ...(this.sortie ? { sortie: { ...this.sortie.result(), operations: this.adventure.debrief().operationsCompleted, perfectPasses: this.adventure.debrief().perfectPasses } } : {}), mode: this.config.mode ?? 'endless', ...(this.config.dailyKey ? { dailyKey: this.config.dailyKey } : {}), debrief: this.adventure.debrief(secure), id: this.config.id, date: new Date().toISOString(), planeId: this.plane.id, distance, bonus, score: distance + bonus, coins: this.coins, reward: practice ? 0 : Math.floor(distance / 30) + Math.floor(bonus / 180) + this.coins, maxCombo: this.metrics.maxCombo, eUsed: this.eUsed, practice, interrupted, reason: this.reason || '비행 종료', reasonEn: this.reasonEn || 'FLIGHT ENDED', metrics: structuredClone({ ...this.metrics, distance, bonus }), discoveryImages: { ...this.discoveryImages }, discoveredModels: [...this.discoveredModels] }; }
+    hud(input: Input): HUD { const ghost = this.config.rival ? replayPose(this.config.rival.replay, this.time) : null; const choice = this.upcomingChoice(); const next = this.encounters.flatMap(e => e.route).find(point => point.z > this.z + 5); return { rush: this.rush.hud(), journey: this.journeyHUD(), difficulty: this.difficulty, contract: this.contract?.result(), ghost: ghost && !this.eUsed ? { delta: this.z - ghost.z, score: this.config.rival!.score } : undefined, sortie: this.sortie?.hud(), choice: choice ? choiceHUD(choice, { x: this.x, y: this.y, z: this.z }, ROUTE_CHOICE_BONUS * (this.effects.has('multiplier') ? 2 : 1)) : undefined, adventure: this.adventure.hud(), collection: { found: themeCollection(this.theme, this.config.catalog).filter(meta => this.discoveredModels.has(meta.id)).length, total: themeCollection(this.theme, this.config.catalog).length, latest: this.latestModel }, navigation: next ? { distance: next.z - this.z, dx: next.x - this.x, dy: next.y - this.y, role: next.role } : undefined, distance: this.z, score: Math.floor(this.z) + this.bonus, bonus: this.bonus, coins: this.coins, combo: this.combo, maxCombo: this.metrics.maxCombo, speed: this.speed * 3.6, hp: Math.max(0, this.hp), maxHp: this.maxHp, altitude: this.y - groundAt(this.x, this.z, this.theme, this.config.seed, this.variant), time: this.time, theme: this.theme, variant: this.variant, weather: this.weather, gear: input.gear, boost: this.boost, heat: this.boostHeat, eUsed: this.eUsed, eRemaining: this.eRemaining, effects: [...this.effects].map(([kind, remaining]) => ({ kind, remaining })), message: this.message, messageEn: this.messageEn, messageUntil: this.messageUntil, route: this.encounters.find(e => e.start + e.length > this.z)?.title ?? '', routeEn: this.encounters.find(e => e.start + e.length > this.z)?.en ?? '', fps: 0, draws: 0, triangles: 0, metrics: { ...this.metrics } }; }
+    result(interrupted = false, settleVault = false): RunResult { const secure = settleVault && !this.failed, extra = secure ? this.adventure.hud()?.vault?.pending ?? 0 : 0; const distance = Math.floor(this.z), bonus = this.bonus + extra, practice = !!this.config.practice; return { rush: { ...this.rush.result(), distance: Math.min(distance, this.rush.result().distance) }, courseEdition: COURSE_EDITION, difficulty: this.difficulty, ...(this.sortie ? { seed: this.config.seed >>> 0, level: this.config.level, contract: this.contract?.result(), ...(this.completed && !this.eUsed && !interrupted ? { replay: this.recorder.result() } : {}) } : {}), ...(this.sortie ? { sortie: { ...this.sortie.result(), operations: this.adventure.debrief().operationsCompleted, perfectPasses: this.adventure.debrief().perfectPasses } } : {}), mode: this.config.mode ?? 'endless', ...(this.config.dailyKey ? { dailyKey: this.config.dailyKey } : {}), debrief: this.adventure.debrief(secure), id: this.config.id, date: new Date().toISOString(), planeId: this.plane.id, distance, bonus, score: distance + bonus, coins: this.coins, reward: practice ? 0 : Math.floor(distance / 30) + Math.floor(bonus / 180) + this.coins, maxCombo: this.metrics.maxCombo, eUsed: this.eUsed, practice, interrupted, reason: this.reason || '비행 종료', reasonEn: this.reasonEn || 'FLIGHT ENDED', metrics: structuredClone({ ...this.metrics, distance, bonus }), discoveryImages: { ...this.discoveryImages }, discoveredModels: [...this.discoveredModels] }; }
 }

@@ -4,6 +4,7 @@ import { fmt } from './data';
 import { DIFFICULTIES } from './encounter-director';
 import { debriefInsight, FLIGHT_COACH } from './debrief-insight';
 import { ContractDebrief } from './mastery-ui';
+import { JourneyDebrief, RushDebrief } from './ace-ui';
 import { SORTIE_STAGES } from './sortie';
 
 export function FlightDebrief({ result, ko }: { result: RunResult; ko: boolean }) {
@@ -19,7 +20,8 @@ export function FlightDebrief({ result, ko }: { result: RunResult; ko: boolean }
         [t('정밀 통과', 'PRECISION'), d.precisionBonus],
         [t('확정한 플로우', 'SECURED FLOW'), d.flowBonus],
     ] as const;
-    return <><SortieDebrief result={result} ko={ko}/>{result.contract && <ContractDebrief contract={result.contract} ko={ko}/>}<section className={'flight-debrief debrief-seven medal-' + d.medal} aria-label={t('비행 평가', 'Flight debrief')}>
+    return <>{result.mode === 'sortie' && result.seed !== undefined && (result.courseEdition ?? 1) >= 3 && <JourneyDebrief seed={result.seed} times={result.metrics.themeTime} ko={ko}/>}
+        {result.rush && <RushDebrief result={result.rush} ko={ko}/>}<SortieDebrief result={result} ko={ko}/>{result.contract && <ContractDebrief contract={result.contract} ko={ko}/>}<section className={'flight-debrief debrief-seven medal-' + d.medal} aria-label={t('비행 평가', 'Flight debrief')}>
         <div className="debrief-medal"><Award size={32}/><span>{d.medal.toUpperCase()}<small>{medals[d.medal][ko ? 0 : 1]} · {ko ? DIFFICULTIES[result.difficulty ?? 'standard'].label : DIFFICULTIES[result.difficulty ?? 'standard'].en}</small></span><b>{Math.round(d.rating)}<small>/100</small></b></div>
         <div className="debrief-skills"><div><Target size={15}/><b>{d.operationsCompleted}</b><span>{t('작전 완수', 'OPERATIONS')}</span></div><div><Crosshair size={15}/><b>{d.perfectPasses}</b><span>{t('정밀 통과', 'PERFECT PASSES')}</span></div><div><Flame size={15}/><b>{d.bestFlow}</b><span>{t('최고 연속', 'BEST FLOW')}</span></div></div>
         <div className="debrief-next-level">

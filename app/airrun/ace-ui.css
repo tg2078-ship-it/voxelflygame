@@ -1,0 +1,62 @@
+/* 09: clear instruments, earned momentum, and a visible journey. */
+.airrun-nine { --accent:#d9f0b4; --muted:#a9c2cd; }
+.airrun-nine .airport-header { background:linear-gradient(#061724b8,transparent); }
+.airrun-nine .ops-showcase-heading h1 { font-weight:550; letter-spacing:-.055em; }
+.airrun-nine .ops-grade { border-radius:10px; background:#0c263bbf; }
+.airrun-nine .ops-departure-board { border-radius:14px; background:linear-gradient(150deg,#173849f5,#081b2af5); }
+.airrun-nine .ops-flight-console-tabs>button.selected { color:#e7f7c3; border-color:#bbdf97; }
+.airrun-nine .ops-mode-selector>button { border-radius:8px; }
+.airrun-nine .ops-mode-selector>button.selected { background:linear-gradient(120deg,#a5dcae20,#88bce719); border-color:#b8d6ad8c; }
+.airrun-nine .ops-launch { border-radius:10px; background:linear-gradient(110deg,#e0f2b7,#93decf); }
+.airrun-nine .ops-fleet-dock { border-radius:12px; background:linear-gradient(160deg,#102c3ae8,#0b1f2ce8); }
+.airrun-nine .aircraft-selector>button { border-radius:9px; overflow:hidden; }
+.airrun-nine .airport-panel:not(.livery) { border-radius:14px; }
+.journey-brief { padding:12px; margin:0 0 14px; border:1px solid #acd5d52e; border-radius:10px; background:radial-gradient(ellipse at top right,#42757540,transparent 70%),#091e2c; }
+.journey-brief header { display:flex; align-items:center; gap:7px; font-size:11px; color:#d7e9c8; }.journey-brief header b { margin-left:auto; font-size:7px; letter-spacing:.1em; color:#98cbb6; }
+.journey-brief ol { display:grid; grid-template-columns:repeat(4,1fr); padding:14px 0 8px; margin:0; list-style:none; gap:5px; }
+.journey-brief li { display:grid; justify-items:center; gap:7px; border-right:1px solid #b9e0de20; }.journey-brief li:last-child { border:0; }.journey-brief li>svg { color:#a2d7d4; }.journey-brief li span { font-size:9px; }.journey-brief li small { font-size:7px; color:#83a4b5; }
+.journey-brief p { font-size:10px!important; line-height:1.7; color:#a7bfca; margin:8px 0 0!important; }
+.journey-ribbon { position:absolute; z-index:2; top:88px; left:50%; transform:translateX(-50%); display:flex; width:380px; max-width:45vw; gap:6px; padding:0; margin:0; list-style:none; }
+.journey-ribbon li { position:relative; display:flex; align-items:center; gap:5px; padding:7px 8px; flex:1; min-width:0; font-size:8px; border:1px solid #d7e8e62b; border-radius:5px; background:#0b2535ae; color:#b2c6cf; overflow:hidden; }
+.journey-ribbon li>i { display:grid; place-items:center; font-size:8px; font-style:normal; }.journey-ribbon li>span { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }.journey-ribbon .current { color:#ecf7d7; border-color:#cae6aa9c; }.journey-ribbon .cleared { color:#9ce4c7; }.journey-ribbon li>b { position:absolute; bottom:0; left:0; height:2px; background:#cfedb1; }
+.sector-arrival { position:absolute; top:140px; left:50%; transform:translateX(-50%); text-align:center; text-shadow:0 2px 14px #07192a; pointer-events:none; animation:sector-arrive 3.2s both; }
+.sector-arrival>span { font-size:9px; letter-spacing:.28em; color:#d9efba; }.sector-arrival h2 { font-size:clamp(26px,3vw,44px); font-weight:500; letter-spacing:-.05em; margin:8px 0; }.sector-arrival p { font-size:10px; letter-spacing:.03em; color:#dce9e4; }
+@keyframes sector-arrive { 0% {opacity:0;translate:0 6px} 16%,76% {opacity:1;translate:0 0} 100% {opacity:0;translate:0 -4px} }
+.rush-control { position:absolute; z-index:3; right:28px; bottom:200px; pointer-events:auto; display:flex; align-items:center; gap:11px; width:260px; padding:12px; min-height:70px; border:1px solid #99d4ee66; border-radius:10px; color:#d9effb; background:linear-gradient(125deg,#102e44ed,#071b2aed); box-shadow:0 8px 28px #0717283b; }
+.airrun-nine .rush-control:disabled { opacity:1; cursor:default; }.rush-key { display:grid; justify-items:center; gap:6px; color:#8cdbe9; }.rush-key kbd { font:9px system-ui; border:1px solid #aadbe85c; border-radius:3px; min-width:16px; }.rush-copy { flex:1; min-width:0; text-align:left; }.rush-copy>b { display:block; font-size:11px; }.rush-copy>small { display:block; font-size:8px; color:#a2becd; margin:5px 0 9px; }.rush-control>strong { font-size:22px; font-variant-numeric:tabular-nums; }.rush-control strong>small { display:block; font-size:8px; text-align:center; font-weight:400; color:#95bfcb; }
+.rush-meter { display:block; height:3px; background:#c2e4f324; overflow:hidden; border-radius:3px; }.rush-meter>i { display:block; height:100%; background:linear-gradient(90deg,#78b2ff,#9affde); transition:width .15s; }.rush-control.ready { border-color:#b2f2d1; background:linear-gradient(110deg,#25494fed,#123c4fed); box-shadow:0 0 24px #6ce6da26; }.rush-control.active { border-color:#8ac9ff; background:#153e5edb; }.rush-active:after { content:''; position:absolute; inset:0; pointer-events:none; box-shadow:inset 0 0 75px #55adff24; border:2px solid #99d9ff26; }
+.airrun-nine .f6-distance>strong { font-size:42px; }.airrun-nine .f6-distance { top:116px; }.airrun-nine .contract-hud { border-radius:10px; background:linear-gradient(140deg,#0d2a3cdb,#102b36d9); }.airrun-nine .f6-airframe { border-radius:10px; background:#102c3bce; }.airrun-nine .f6-flow { text-shadow:0 2px 8px #001d2b; }.airrun-nine .route-choice-card { border-radius:9px; }.airrun-nine .f6-coach { bottom:112px; background:#0a2535df; border-radius:20px; }
+.rush-debrief { display:flex; align-items:center; gap:14px; padding:17px 19px; margin:18px 0; border:1px solid #9ecee84d; border-radius:10px; background:linear-gradient(120deg,#164258,#102635); color:#a3dbea; }.rush-debrief>span { flex:1; }.rush-debrief b { font-size:13px; display:block; color:#e0f1ec; }.rush-debrief small { display:block; font-size:9px; color:#a8c5cf; margin-top:5px; }.rush-debrief strong { font-size:23px; text-align:center; }.rush-debrief strong small { font-size:8px; }
+.airrun-nine .aviation-loader { background:radial-gradient(ellipse at 15% 25%,#24536a 0,transparent 58%),linear-gradient(140deg,#102b3d,#071722); }.airrun-nine .loader-brand>strong { letter-spacing:.09em; }.airrun-nine .loader-map-caption { border-color:#aed8ce38; }.airrun-nine .loading-copy h1 { letter-spacing:-.05em; }.airrun-nine .loading-bar i { background:linear-gradient(90deg,#77b2e9,#bbecd0); }
+@media(max-width:1000px) { .rush-control { width:225px; right:20px; bottom:190px; }.journey-ribbon { top:85px; width:330px; }.sector-arrival { top:130px; } }
+@media(max-height:550px) and (orientation:landscape) { .rush-control { left:50%; right:auto; bottom:122px; transform:translateX(-50%); width:182px; min-height:37px; padding:5px 8px; gap:7px; }.rush-key>svg { width:13px; height:13px; }.rush-key kbd { display:none; }.rush-copy>b { font-size:9px; }.rush-copy>small { display:none; }.rush-meter { margin-top:5px; height:2px; }.rush-control>strong { font-size:15px; }.rush-control strong>small { font-size:6px; }.journey-ribbon { top:65px; width:220px; gap:3px; }.journey-ribbon li { padding:4px; font-size:7px; }.sector-arrival { top:96px; }.sector-arrival h2 { font-size:24px; margin:3px 0; }.sector-arrival p { display:none; }.airrun-nine .f6-distance { top:65px; }.airrun-nine .f6-distance>strong { font-size:27px; }.airrun-nine .f6-coach { bottom:73px; }.journey-brief { padding:8px; }.journey-brief ol { padding:8px 0; }.journey-brief p { font-size:9px!important; } }
+@media(max-width:600px) and (orientation:portrait) { .rush-control { width:205px; bottom:250px; right:14px; }.journey-ribbon { top:90px; width:300px; max-width:85vw; }.sector-arrival { top:130px; }.sector-arrival p { width:280px; }.airrun-nine .f6-distance { top:125px; }.airrun-nine .f6-distance>strong { font-size:32px; } }
+@media(prefers-reduced-motion:reduce) { .sector-arrival { animation:none; }.rush-meter>i { transition:none; } }
+.reduced-motion .sector-arrival { animation:none; }.reduced-motion .rush-meter>i { transition:none; }
+
+.journey-debrief { margin:18px 0; padding:18px; border:1px solid #c4dfba42; border-radius:10px; background:linear-gradient(130deg,#1b353d,#0e2634); }.journey-debrief header { display:flex; align-items:center; gap:10px; font-size:11px; color:#d9eacb; }.journey-debrief header>b { margin-left:auto; font-size:15px; }.journey-debrief ol { list-style:none; padding:16px 0 0; margin:0; display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }.journey-debrief li { position:relative; border:1px dashed #b9d4d133; border-radius:8px; padding:13px 10px; color:#8da7b1; }.journey-debrief li.visited { background:#b0e9c00c; border:1px solid #b9d8a654; color:#e3f0d4; }.journey-debrief li>span { display:block; font-size:8px; letter-spacing:.18em; color:#8babae; }.journey-debrief li>b { display:block; font-size:13px; margin:9px 0; }.journey-debrief li>small { font-size:8px; }.journey-debrief li>svg { position:absolute; top:9px; right:9px; color:#b5e7b4; }
+.airrun-nine .sortie-briefing .sortie-stage-plan { display:none; }
+@media(max-width:600px) { .journey-debrief { padding:12px; }.journey-debrief ol { grid-template-columns:repeat(2,1fr); }.journey-debrief li>b { font-size:12px; } }
+
+/* Small flight decks reserve separate bands for navigation, abilities and touch controls. */
+@media(pointer:coarse) and (orientation:landscape),(max-height:450px) {
+    .airrun-nine .flight-bottom { top:94px; bottom:auto; left:50%; right:auto; transform:translateX(-50%); width:min(260px,40vw); justify-content:center; }
+    .airrun-nine .flight-bottom .route-director { width:100%; min-width:0; padding:6px 9px; }
+    .airrun-nine .route-director>div { min-width:0; }
+    .airrun-nine .route-director>div>small { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:8px; }
+    .airrun-nine .flight-bottom .route-choice-card { width:100%; }
+    .airrun-nine .f6-instruments { left:50%; bottom:10px; transform:translateX(-50%); min-width:0; padding:6px 0; gap:12px; }
+    .airrun-nine .f6-instruments strong { font-size:21px; }
+    .airrun-nine .f6-instruments>div>span { font-size:6px; }
+    .airrun-nine .f6-instruments small { font-size:6px; }
+    .airrun-nine .f6-coach { display:none; }
+    .airrun-nine .rush-control { left:auto; right:20px; top:222px; bottom:auto; transform:none; width:160px; min-height:44px; }
+    .airrun-nine .sector-arrival { top:126px; right:20px; left:auto; transform:none; text-align:right; animation:none; }
+    .airrun-nine .sector-arrival>span, .airrun-nine .sector-arrival>p { display:none; }
+    .airrun-nine .sector-arrival h2 { margin:0; font-size:11px; line-height:14px; max-width:138px; }
+}
+@media(max-height:360px) and (orientation:landscape) {
+    .airrun-nine .rush-control { top:150px; }
+    .airrun-nine .f6-flow { padding:0; border:0; }
+    .airrun-nine .f6-flow>header, .airrun-nine .f6-flow>div, .airrun-nine .f6-flow>p { display:none; }
+}

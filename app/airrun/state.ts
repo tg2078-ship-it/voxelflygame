@@ -11,7 +11,7 @@ import { validDebrief } from './adventure';
 import { DIFFICULTIES } from './encounter-director';
 import { sortieBestKey, validSortieResult } from './sortie';
 export const input: Input = { x: 0, y: 0, boost: false, brake: false, gear: 3 };
-export function releaseInput() { input.x = 0; input.y = 0; input.boost = false; input.brake = false; input.gear = 3; input.pendingGear = 0; }
+export function releaseInput() { input.x = 0; input.y = 0; input.boost = false; input.brake = false; input.gear = 3; input.pendingGear = 0; delete input.rush; }
 export const EMPTY_HUD: HUD = { distance: 0, score: 0, bonus: 0, coins: 0, combo: 0, maxCombo: 0, speed: 144, hp: 100, maxHp: 100, altitude: 23, time: 0, theme: 'coast', variant: 0, weather: { kind: 'clear', cloud: .15, rain: 0, fog: 0, wind: 0, wet: 0, night: 0, lightning: 0, snow: false }, gear: 3, boost: 0, heat: 0, eUsed: false, eRemaining: 0, effects: [], message: '', messageEn: '', messageUntil: 0, route: '', routeEn: '', fps: 0, draws: 0, triangles: 0, metrics: emptyMetrics() };
 let connection: Promise<IDBDatabase> | null = null;
 function database() {
@@ -117,6 +117,7 @@ export function validateResult(value: unknown): value is RunResult {
         return false;
     if (v.reasonEn !== undefined && (typeof v.reasonEn !== 'string' || v.reasonEn.length > 256))
         return false;
+    if (v.rush !== undefined && (!isObject(v.rush) || !Number.isSafeInteger(v.rush.uses) || v.rush.uses < 0 || v.rush.uses > 100000 || !Number.isSafeInteger(v.rush.distance) || v.rush.distance < 0 || v.rush.distance > v.distance)) return false;
     if (v.courseEdition !== undefined && (!Number.isSafeInteger(v.courseEdition) || v.courseEdition < 1 || v.courseEdition > 10000)) return false;
     if (v.seed !== undefined && (!Number.isInteger(v.seed) || v.seed < 0 || v.seed > 0xffffffff)) return false;
     if (v.level !== undefined && (!Number.isInteger(v.level) || v.level < 1 || v.level > 20)) return false;
@@ -268,7 +269,7 @@ function tagRun(result: RunResult, state: Pick<GameState, 'runId' | 'flightMode'
     return { ...result, mode: state.flightMode, ...(state.flightMode === 'daily' && state.dailyKey ? { dailyKey: state.dailyKey } : {}) };
 }
 function mutate(fn: (s: Save) => Save) { const s = fn(structuredClone(useAirrun.getState().save)); useAirrun.setState({ save: s }); void persistSave(s).catch(() => useAirrun.setState({ saveError: '기록 저장에 실패했습니다. 백업을 내보내 주세요.' })); }
-export const useAirrun = create<GameState>((set, get) => ({ phase: 'loading', panel: 'hangar', save: ensureQuests(freshSave()), progress: 0, loadingLabel: '격납고 준비 중', notice: '', saveError: '', renderError: '', modelBusy: false, modelError: '', celebration: null, ready: false, assetsReady: false, runId: '', seed: 1, runLevel: null, contractId: 'precision', flightMode: 'endless', dailyKey: null, practice: null, comparisonLevel: null, hud: { ...EMPTY_HUD }, result: null, resumeCountdown: 0, pausedPhase: 'flying', eRequest: 0, bankRequest: 0, maintenanceAt: 0, tracked: 'career', skinPreview: null, backupPreview: null, recoveryData: null, previewImages: {},
+export const useAirrun = create<GameState>((set, get) => ({ phase: 'loading', panel: 'hangar', save: ensureQuests(freshSave()), progress: 0, loadingLabel: '격납고 준비 중', notice: '', saveError: '', renderError: '', modelBusy: false, modelError: '', celebration: null, ready: false, assetsReady: false, runId: '', seed: 1, runLevel: null, contractId: 'precision', flightMode: 'sortie', dailyKey: null, practice: null, comparisonLevel: null, hud: { ...EMPTY_HUD }, result: null, resumeCountdown: 0, pausedPhase: 'flying', eRequest: 0, bankRequest: 0, maintenanceAt: 0, tracked: 'career', skinPreview: null, backupPreview: null, recoveryData: null, previewImages: {},
     load: async () => {
         try {
             const raw = await readStored(), hasRaw = raw !== null && raw !== undefined, s = hasRaw ? parseSave(raw) : null;

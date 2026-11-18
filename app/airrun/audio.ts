@@ -109,7 +109,7 @@ export class GameAudio {
         set(this.music, settings.music * (paused ? .25 : 1));
         set(this.sfx, settings.sfx * (paused ? .15 : 1));
         const flow = sim?.adventure.hud()?.flow.value ?? 0;
-        const musicIntensity = sim ? Math.min(1, Math.max((sim.speed - 40) / 75, sim.combo / 18, flow / 100 * .85)) : .05;
+        const musicIntensity = sim ? Math.min(1, Math.max((sim.speed - 40) / 75, sim.combo / 18, flow / 100 * .85, sim.rush.hud().remaining > 0 ? 1 : 0)) : .05;
         set(this.streams.get('horizon')?.gain, sim ? .34 : .22);
         set(this.streams.get('velocity')?.gain, sim ? (musicIntensity * .3 + (sim.eRemaining > 0 ? .32 : 0)) : 0);
         set(this.layers.get('rain')?.gain, sim ? sim.weather.rain * .45 : 0);
@@ -134,7 +134,7 @@ export class GameAudio {
             return;
         if (kind === 'coin')
             this.lastCoin = now;
-        const pitches: Record<string, number[]> = { coin: [1046, 1568], crystal: [1318, 1975], ring: [784, 1175, 1568], repair: [523, 659, 784], shield: [440, 880], risk: [330, 660], theme: [523, 784, 1046], discover: [659, 880, 1318], 'sortie-complete': [392, 523, 659, 784, 1046, 1318, 1568], 'sortie-stage': [523, 784, 1046], choice: [784, 1175, 1568], 'operation-complete': [392, 587, 784, 988, 1175, 1568], precision: [1175, 1568, 2349], 'flow-bank': [659, 988, 1318, 1975], 'e-start': [110, 220, 440, 880], 'e-end': [880, 659, 523], damage: [80, 51], crash: [47, 32], pass: [587], ui: [740, 988], approval: [523, 659, 784, 1046], reward: [523, 659, 784, 1046, 1318, 1568], upgrade: [392, 523, 659, 784, 1046], notice: [] };
+        const pitches: Record<string, number[]> = { 'rush-ready': [659, 988, 1318], rush: [196, 392, 784, 1568], coin: [1046, 1568], crystal: [1318, 1975], ring: [784, 1175, 1568], repair: [523, 659, 784], shield: [440, 880], risk: [330, 660], theme: [523, 784, 1046], discover: [659, 880, 1318], 'sortie-complete': [392, 523, 659, 784, 1046, 1318, 1568], 'sortie-stage': [523, 784, 1046], choice: [784, 1175, 1568], 'operation-complete': [392, 587, 784, 988, 1175, 1568], precision: [1175, 1568, 2349], 'flow-bank': [659, 988, 1318, 1975], 'e-start': [110, 220, 440, 880], 'e-end': [880, 659, 523], damage: [80, 51], crash: [47, 32], pass: [587], ui: [740, 988], approval: [523, 659, 784, 1046], reward: [523, 659, 784, 1046, 1318, 1568], upgrade: [392, 523, 659, 784, 1046], notice: [] };
         const notes = pitches[kind] ?? [];
         for (let i = 0; i < notes.length; i++) {
             const o = c.createOscillator(), g = c.createGain();

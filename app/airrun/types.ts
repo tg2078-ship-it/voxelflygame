@@ -118,6 +118,7 @@ export interface Metrics {
     time: number;
 }
 export interface RunResult {
+    rush?: import('./rush').RushResult;
     courseEdition?: number;
     seed?: number;
     level?: number;
@@ -219,6 +220,7 @@ export interface Input {
     brake: boolean;
     gear: number;
     pendingGear?: number;
+    rush?: boolean;
 }
 export interface Weather {
     kind: WeatherKind;
@@ -232,6 +234,8 @@ export interface Weather {
     snow: boolean;
 }
 export interface HUD {
+    rush?: import('./rush').RushHUD;
+    journey?: import('./journey').JourneyHUD;
     contract?: import('./mastery').ContractResult;
     ghost?: { delta: number; score: number };
     sortie?: import('./sortie').SortieHUD;

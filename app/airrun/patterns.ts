@@ -132,11 +132,14 @@ export function aperture(meta: AssetMeta) {
         return { center: [0, meta.bounds.min[1] - 10, 0], size: [meta.bounds.size[0] * .65, 18, Math.max(5, meta.bounds.size[2])], axis: 'Z' };
     return { center: c.c, size: c.s, axis: c.axis };
 }
-export function buildEncounter(p: Pattern, start: number, seed: number, catalog: Catalog, span: number, serial: number, from = { x: 0, y: 24 }): Encounter {
+export function buildEncounter(p: Pattern, start: number, seed: number, catalog: Catalog, span: number, serial: number, from = { x: 0, y: 24 }, alignChunks = false): Encounter {
     const rand = rng(seed + serial * 8341), route: RoutePoint[] = [], placements: Placement[] = [], pickups: Pickup[] = [];
     const k = p.theme, variant = p.variant, patternIndex = Math.max(0, Number(p.id.split(':').at(-1)) - 1);
     const family = encounterFamily(k, variant, serial, catalog.byId, patternIndex), place = scenicDistrict(k, variant, patternIndex);
-    const lead = p.generation?.lead ?? (serial === 1 ? 800 : 155), spacing = p.generation?.spacing ?? Math.max(170, p.spacing * .82), length = lead + 2 * spacing + 125;
+    const lead = p.generation?.lead ?? (serial === 1 ? 800 : 155), spacing = p.generation?.spacing ?? Math.max(170, p.spacing * .82);
+    // Distance-based sorties change terrain at encounter boundaries. Preserve
+    // continuous-flight pacing, whose weather and geography use elapsed time.
+    const rawLength = lead + 2 * spacing + 125, length = alignChunks ? Math.ceil(rawLength / 128) * 128 : rawLength;
     const city = k === 'city' || k === 'korea' && variant === 0;
     const coastal = k === 'coast' || k === 'korea' && variant === 3;
     let id = serial * 1000;

@@ -4,17 +4,19 @@ import { THEMES, distance, fmt, clamp } from './data';
 import type { HUD } from './types';
 import { ContractHUD } from './mastery-ui';
 import { FlightGuidance } from './flight-guidance';
+import { JourneyRibbon, RushControl } from './ace-ui';
 import { SORTIE_STAGES } from './sortie';
 
-export function FlightDeck({ hud, ko, hyper, onPause, onBank }: { hud: HUD; ko: boolean; hyper: ReactNode; onPause: () => void; onBank?: () => void }) {
+export function FlightDeck({ hud, ko, hyper, onPause, onBank, onRush }: { hud: HUD; ko: boolean; hyper: ReactNode; onPause: () => void; onBank?: () => void; onRush?: () => void }) {
     const theme = THEMES.find(theme => theme.id === hud.theme)!;
     const integrity = clamp(hud.hp / Math.max(1, hud.maxHp), 0, 1), adventure = hud.adventure;
     const operation = adventure?.operation, flow = adventure?.flow, vault = adventure?.vault, sortie = hud.sortie;
     const remaining = Math.ceil(sortie?.remaining ?? 0), sortieClock = `${Math.floor(remaining / 60)}:${String(remaining % 60).padStart(2, '0')}`;
     const t = (a: string, b: string) => ko ? a : b;
     const flowLabel = !flow || flow.tier === 0 ? 'FIND YOUR FLOW' : flow.tier >= 3 ? 'SKY MASTER' : flow.tier === 2 ? 'IN THE ZONE' : 'ON A ROLL';
-    return <div className={'flight-deck flightdeck-six ' + (hud.eRemaining > 0 ? 'hyper-active ' : '') + (sortie ? 'sortie-active' : '')} style={{ '--sector-color': theme.color, '--engine': hud.boost, '--integrity': integrity } as CSSProperties}>
-        <FlightGuidance hud={hud} ko={ko}/>
+    return <div className={'flight-deck flightdeck-six ' + (hud.eRemaining > 0 ? 'hyper-active ' : '') + (sortie ? 'sortie-active ' : '') + (hud.rush?.remaining ? 'rush-active' : '')} style={{ '--sector-color': theme.color, '--engine': hud.boost, '--integrity': integrity } as CSSProperties}>
+        <FlightGuidance hud={hud} ko={ko}/>{hud.journey && <JourneyRibbon journey={hud.journey} ko={ko}/>}
+        {hud.rush && <RushControl rush={hud.rush} ko={ko} disabled={hud.eRemaining > 0} onActivate={onRush}/>}
         <header className="f6-topbar">
             <div className="f6-brand"><button type="button" onClick={onPause} aria-label={t('일시정지', 'Pause')}><Pause size={16}/></button><Plane size={22}/><span>AIRRUN<small>{sortie ? 'SORTIE / 03:00' : `EXPEDITION / ${String(Math.floor(hud.time / 180) + 1).padStart(2, '0')}`} · {(hud.difficulty ?? 'standard').toUpperCase()}</small></span></div>
             {sortie ? <section className={'sortie-flight-progress stage-' + sortie.stage.id + (hud.eRemaining > 0 ? ' clock-held' : '')} aria-label={t('출격 진행', 'Sortie progress')}>

@@ -16,7 +16,10 @@ for (const panel of ['hangar','challenges','atlas','collection','livery','record
     check(!html.includes('연습 비행') && !html.includes('PRACTICE'), 'public practice is removed from ' + panel);
     if (panel === 'hangar') {
         check(html.includes('data-hangar-stage'), 'interactive aircraft stage');
-        check(html.includes('무한 비행 출격'), 'departure action');
+        check(base.flightMode === 'sortie' && html.includes('3분 출격 시작'), 'new pilots depart on the three-minute journey');
+        Object.assign(base, { flightMode: 'endless' });
+        check(renderToStaticMarkup(<Game/>).includes('무한 비행 출격'), 'endless departure remains selectable');
+        Object.assign(base, { flightMode: 'sortie' });
         const cards = [...html.matchAll(/data-aircraft-id="([^"]+)"/g)].map(match => match[1]);
         check(cards.length === AIRCRAFT.length && new Set(cards).size === AIRCRAFT.length, 'every fleet card is independently discoverable for lazy native previews');
         check(cards.every((id, index) => id === AIRCRAFT[index].id), 'fleet preview identities match the actual ordered aircraft catalog');
@@ -26,7 +29,7 @@ for (const panel of ['hangar','challenges','atlas','collection','livery','record
         const withPreview = renderToStaticMarkup(<Game/>);
         check(withPreview.includes('src="' + nativePreview + '"'), 'an unselected fleet card displays its captured preview without selecting that plane');
 
-        check(html.includes('ops-mode-selector') && html.includes('오늘의 항로') && html.includes('무한 항로'), 'hangar offers two real flight modes with route briefing');
+        check(html.includes('ops-mode-selector') && html.includes('오늘의 항로') && html.includes('무한 항로'), 'hangar retains daily and endless alternatives with route briefing');
         check(html.includes('ops-fleet-filters') && html.includes('기체 업그레이드') && html.includes('다음 조종사 목표'), 'hangar connects collection filtering, upgrades, and saved career goals');
         const dailySave = structuredClone(save); dailySave.settings.difficulty = 'expert';
         Object.assign(base, { save: dailySave, flightMode: 'daily' });
