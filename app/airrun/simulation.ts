@@ -172,6 +172,7 @@ export class FlightSimulation {
                 // As speed grows without a cap, retain time to react and steer.
                 // Stretch the generated geography before moving physical openings.
                 const paced = courseSpeed > 65 ? { ...p, generation: { ...p.generation,
+                    minimumSpacing: courseSpeed * (.65 + 2.4 / this.performance.handling),
                     lead: Math.max(p.generation.lead, courseSpeed * (.9 + 2 / this.performance.handling)),
                     spacing: Math.max(p.generation.spacing, courseSpeed * (.65 + 2.4 / this.performance.handling)),
                 } } : p;

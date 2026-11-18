@@ -122,7 +122,7 @@ export default function Game() {
         }
     };
     const isFlight = ['flying', 'paused', 'crashing', 'takeoff', 'preflight'].includes(state.phase), lobby = ['hangar', 'opening'].includes(state.phase), hud = state.hud;
-    return <main className={'airrun airrun-six airrun-seven airrun-eight airrun-nine phase-' + state.phase + ' panel-' + state.panel + (state.save.settings.reducedMotion ? ' reduced-motion' : '')} lang={ko ? 'ko' : 'en'} onPointerDownCapture={e => {
+    return <main className={'airrun airrun-six airrun-seven airrun-eight airrun-nine airrun-clear phase-' + state.phase + ' panel-' + state.panel + (state.save.settings.reducedMotion ? ' reduced-motion' : '')} lang={ko ? 'ko' : 'en'} onPointerDownCapture={e => {
             const button = (e.target as Element).closest('button');
             if (!button || button.disabled)
                 return;

@@ -139,7 +139,9 @@ export function buildEncounter(p: Pattern, start: number, seed: number, catalog:
     const lead = p.generation?.lead ?? (serial === 1 ? 800 : 155), spacing = p.generation?.spacing ?? Math.max(170, p.spacing * .82);
     // Distance-based sorties change terrain at encounter boundaries. Preserve
     // continuous-flight pacing, whose weather and geography use elapsed time.
-    const rawLength = lead + 2 * spacing + 125, length = alignChunks ? Math.ceil(rawLength / 128) * 128 : rawLength;
+    const intervals = (p.generation?.beats ?? [1, 1]).map(beat => Math.max(p.generation?.minimumSpacing ?? 150, spacing * beat));
+    const rawLength = lead + intervals[0] + intervals[1] + (p.generation ? 95 : 125), length = alignChunks ? Math.ceil(rawLength / 128) * 128 : rawLength;
+    const rewardStep = Math.floor(hash(seed + serial * 277) * 3);
     const city = k === 'city' || k === 'korea' && variant === 0;
     const coastal = k === 'coast' || k === 'korea' && variant === 3;
     let id = serial * 1000;
@@ -200,7 +202,7 @@ export function buildEncounter(p: Pattern, start: number, seed: number, catalog:
     let previous = from;
     for (let j = 0; j < 3; j++) {
         const stepFamily = family;
-        const [action, safeX, safeY] = p.steps[j], z = start + lead + j * spacing;
+        const [action, safeX, safeY] = p.steps[j], z = start + lead + (j > 0 ? intervals[0] : 0) + (j > 1 ? intervals[1] : 0);
         const x = safeX * .53 + (rand() - .5) * 2;
         let y = Math.min(AIRSPACE.ceiling - 5, safeY), width = Math.max(span * 1.65, 25), height = 18;
         let floor = 5, ceiling = AIRSPACE.ceiling - 3;
@@ -280,9 +282,12 @@ export function buildEncounter(p: Pattern, start: number, seed: number, catalog:
         }
         for (let n = 0; n < 8; n++)
             pickups.push({ id: ++id, kind: 'coin', x: mix(previous.x, x, n / 7), y: mix(previous.y, y, n / 7), z: z - 145 + n * 18, radius: 2.8, collected: false, risk: false });
-        pickups.push({ id: ++id, kind: 'ring', x: riskX, y: riskY, z: z + 2, radius: Math.max(5.5, span * .6), collected: false, risk: true });
-        for (let n = 0; n < 3; n++)
-            pickups.push({ id: ++id, kind: 'crystal', x: riskX, y: riskY, z: z + 36 + n * 20, radius: 2.5, collected: false, risk: true });
+        // One deliberate reward line, rather than a ring on every obstacle.
+        if (j === rewardStep) {
+            pickups.push({ id: ++id, kind: 'ring', x: riskX, y: riskY, z: z + 2, radius: Math.max(5.5, span * .6), collected: false, risk: true });
+            for (let n = 0; n < 3; n++)
+                pickups.push({ id: ++id, kind: 'crystal', x: riskX, y: riskY, z: z + 36 + n * 20, radius: 2.5, collected: false, risk: true });
+        }
         if (j === 1) {
             const kinds: ItemKind[] = ['shield', 'multiplier', 'slow', 'turbo', 'repair'];
             pickups.push({ id: ++id, kind: kinds[Math.floor(rand() * 5)], x: clamp(x - 8, -AIRSPACE.softEdge, AIRSPACE.softEdge), y: Math.min(AIRSPACE.ceiling - 2, y + 5), z: z + 100, radius: 3.5, collected: false, risk: true });
@@ -303,7 +308,7 @@ export function buildEncounter(p: Pattern, start: number, seed: number, catalog:
                 const t = n / 7;
                 pickups.push({ id: ++id, kind: 'coin', x: mix(previous.x, point.x, t), y: mix(previous.y, point.y, t), z: mix(previous.z, point.z, t), radius: 2.8, collected: false, risk: false });
             }
-            pickups.push({ id: ++id, kind: 'ring', ...point, radius: Math.max(6, span * .6), collected: false, risk: false });
+            if (point !== orientation[1]) pickups.push({ id: ++id, kind: 'ring', ...point, radius: Math.max(6, span * .6), collected: false, risk: false });
             previous = point;
         }
     }
@@ -382,17 +387,17 @@ export function buildEncounter(p: Pattern, start: number, seed: number, catalog:
     };
     const clusters = Math.max(4, Math.min(18, Math.ceil(length / 145)));
     for (let cluster = 0; cluster < clusters; cluster++) {
-        const centre = start + 90 + cluster * (length - 190) / clusters;
-        // Every other cluster is set back, so built-up areas open onto a plaza,
-        // working basin, field or water instead of continuing a wall of props.
-        const side = coastal ? 1 : cluster % 2 ? -1 : 1;
-        const frontage = coastal ? 32 : side * 30;
-        const count = coastal ? 4 : city ? 5 : village ? 4 : 3;
+        const centre = start + 45 + (cluster + .15 + rand() * .6) * (length - 160) / clusters;
+        // Vary frontage and density so districts open onto working basins,
+        // fields or water instead of repeating a straight wall of props.
+        const side = coastal ? 1 : rand() < .5 ? -1 : 1;
+        const frontage = side * (28 + rand() * 9);
+        const count = (city ? 3 : 2) + Math.floor(rand() * 3);
         for (let n = 0; n < count; n++) {
-            const model = place.buildings[(cluster + n + serial) % place.buildings.length];
-            const z = centre + n * (city ? 26 : 30) + (rand() - .5) * 9;
-            const x = frontage + side * (n % 3 === 2 ? 9 : 0) + (rand() - .5) * 2;
-            placeBuilding(model, x, z, city ? 19 : 18, city ? 29 : 28, city ? 58 : 30, 'district', side < 0 ? Math.PI : 0);
+            const model = place.buildings[Math.floor(rand() * place.buildings.length)];
+            const z = Math.min(start + length - 24, centre + n * (20 + rand() * 15));
+            const x = frontage + side * (rand() * 10);
+            placeBuilding(model, x, z, 14 + rand() * 7, 20 + rand() * 11, city ? 40 + rand() * 24 : 21 + rand() * 13, 'district', (side < 0 ? Math.PI : 0) + (rand() - .5) * .16);
         }
         if (cluster % 2 === 0 || !coastal) {
             const model = place.working[(cluster + serial) % place.working.length];
@@ -422,6 +427,19 @@ export function buildEncounter(p: Pattern, start: number, seed: number, catalog:
             placeBuilding('covered_well', side * 25, centre + 105, 7, 7, 8, 'village square');
             placeBuilding('decorative_tree', side * 27, centre + 125, 7, 8, 10, 'village square');
         }
+    }
+    // Connect sparse district edges with landscape, never an extra compulsory
+    // obstacle or another reward chain. Global cells prevent segment seams.
+    if (pillar) for (let cell = Math.ceil(start / 160); cell * 160 < start + length; cell++) {
+        const z = Math.min(start + length - 12, cell * 160 + hash(seed + cell * 79) * 45);
+        const nearby = placements.some(o => Math.abs(o.z - z) < 85 && o.role !== 'foundation' && catalog.byId.get(o.model)!.bounds.size[1] * o.sy > 20);
+        if (nearby) continue;
+        const side = hash(seed + cell * 109) < .5 ? -1 : 1;
+        const naturalModel = catalog.byId.get(coastal ? 'sea_stacks' : k === 'ice' || k === 'aurora' ? 'jagged_ice_spire' : k === 'desert' || k === 'volcano' ? 'sandstone_spire' : 'rocky_ridge');
+        if (!naturalModel) continue;
+        const scale = Math.min((23 + hash(seed + cell * 173) * 15) / naturalModel.bounds.size[1], 24 / naturalModel.bounds.size[0], 35 / naturalModel.bounds.size[2]);
+        const landscape = rooted(naturalModel.id, side * (AIRSPACE.halfWidth + 27), z, scale, 'landscape transition', hash(seed + cell * 31) * .4, false);
+        landscape.collision = false;
     }
     if (city) {
         const track = catalog.byId.get('rail_track');

@@ -184,11 +184,14 @@ export class FlightFX {
         this.rainGeometry.setDrawRange(0, GRAPHICS[quality].rainDrops);
         this.environment.update(sim, placements, motionTime, emitter.z);
         const object = this.object;
+        const ringHorizon = Math.min(650, Math.max(240, sim.speed * 4));
+        const visibleRings = new Set(sim.pickups.filter(p => p.kind === 'ring' && !p.collected && p.z >= sim.z - 10 && p.z <= sim.z + ringHorizon).sort((a, b) => a.z - b.z).slice(0, 2));
         for (const [kind, mesh] of this.items) {
             let n = 0;
             for (const p of sim.pickups) {
                 if (p.kind !== kind || p.collected || p.z > sim.z + 1000 || p.z < sim.z - 10 || n >= 220)
                     continue;
+                if (kind === 'ring' && !visibleRings.has(p)) continue;
                 object.position.set(p.x, p.y, sim.z - p.z);
                 object.rotation.set(kind === 'coin' ? Math.PI / 2 : 0, kind === 'ring' ? 0 : sim.time * 1.6 + p.id, kind === 'ring' ? sim.time * .12 : 0);
                 const size = kind === 'ring' ? p.radius : 1;

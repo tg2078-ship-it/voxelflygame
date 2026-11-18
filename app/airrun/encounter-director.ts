@@ -41,6 +41,8 @@ export interface ProceduralGeneration {
     intensity: number;
     lead: number;
     spacing: number;
+    beats?: [number, number];
+    minimumSpacing?: number;
 }
 export type ProceduralPattern = Pattern & { generation: ProceduralGeneration };
 
@@ -148,6 +150,7 @@ export function proceduralPattern(theme: ThemeId, variant: number, seed: number,
         name: `${themeInfo.name} · ${labels.map(label => label[0]).join(' → ')}`,
         en: `${themeInfo.en} · ${labels.map(label => label[1]).join(' → ')}`,
         steps, spacing,
-        generation: { procedural: true, difficulty, intensity, lead, spacing },
+        generation: { procedural: true, difficulty, intensity, lead, spacing,
+            beats: choose<[number, number]>([[.88, 1.18], [1.24, .92], [1.08, 1.32], [.96, 1.12]]) },
     };
 }

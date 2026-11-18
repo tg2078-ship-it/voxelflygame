@@ -1,0 +1,95 @@
+{
+  "version": "9.1.0",
+  "status": "passed",
+  "regression": {
+    "suiteCount": 19,
+    "suites": [
+      "core",
+      "interface",
+      "procedural-director",
+      "difficulty",
+      "audit-route",
+      "audit-course",
+      "sortie-flight",
+      "ace",
+      "refinement",
+      "theme-coverage",
+      "streaming",
+      "continuous-flight",
+      "flight-effects",
+      "mastery",
+      "scoring-integrity",
+      "commercial-ui",
+      "sortie-ui",
+      "endless-rhythm",
+      "audit-autopilot"
+    ],
+    "scope": "Targeted regression; the full 54-suite catalog was not rerun for this patch.",
+    "execution": "Initial targeted run stopped at the renamed endless-button assertion. The assertion was updated and sortie-ui passed on rerun. Endless-rhythm and refinement passed after the final scenery change; audit-autopilot passed separately."
+  },
+  "courseRhythm": {
+    "checks": 787,
+    "themes": 13,
+    "sections": 156,
+    "rewardRings": 156,
+    "distinctRhythms": 76,
+    "distinctDistricts": 156,
+    "landscapeConnectors": 148,
+    "status": "passed"
+  },
+  "endlessControlledFlights": {
+    "count": 66,
+    "secondsEach": 240,
+    "earlyFailures": []
+  },
+  "sortieControlledFlights": {
+    "count": 12,
+    "secondsEach": 180
+  },
+  "rushControlledFlights": 5,
+  "browser": {
+    "type": "Standalone production build served locally at the GitHub Pages subpath",
+    "profileFixture": "Fresh QA pilot; native UI interactions, no injected flight state.",
+    "version": "9.1.0",
+    "softwareGPU": true,
+    "nativeUI": true,
+    "flightStateInjected": false,
+    "status": "passed",
+    "mainMode": "endless",
+    "allModesSelectable": true,
+    "detailsToggleWorks": true,
+    "touchViewports": [
+      [
+        844,
+        390
+      ],
+      [
+        736,
+        320
+      ]
+    ],
+    "savedRuns": 1,
+    "javascriptErrors": [],
+    "httpFailures": [],
+    "resourceRequests": 112
+  },
+  "typecheck": "passed",
+  "gameLint": "passed",
+  "frameworkBuild": "passed",
+  "staticBuild": {
+    "version": "9.1.0",
+    "type": "standalone-static",
+    "requiresServer": false,
+    "basePath": "/voxelflygame/",
+    "files": 1785,
+    "bytes": 252982844,
+    "largestFileBytes": 15127210,
+    "models": 403,
+    "aircraft": 22,
+    "clips": 891,
+    "cloudflareWranglerLimitsPassed": true,
+    "dashboardDragDropSupported": false
+  },
+  "hardwareFPSVerified": false,
+  "humanFunVerified": false
+}

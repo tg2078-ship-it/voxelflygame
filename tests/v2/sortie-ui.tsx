@@ -21,7 +21,7 @@ for (const ko of [true, false]) {
     check(html.includes(ko ? '3분 출격 시작' : 'START YOUR SORTIE'), 'Departure button names the selected finite mode');
     check(html.includes(ko ? 'E 연출·일시정지 중에는 출격 시간이 멈춥니다.' : 'Hyper Trick and pause stop the sortie clock.'), 'Briefing explains that cinematic and pause time do not complete the sortie');
     check(html.includes('1,200') && html.includes('PTS'), 'Finish reward is points and not falsely advertised as currency');
-    check(html.includes(ko ? '무한 항로' : 'ENDLESS FLIGHT') && html.includes(ko ? '오늘의 항로' : 'DAILY ROUTE'), 'Existing modes remain reachable alongside sorties');
+    check(html.includes(ko ? '무한 비행 · 메인' : 'ENDLESS · MAIN') && html.includes(ko ? '오늘의 항로' : 'DAILY ROUTE'), 'Existing modes remain reachable alongside sorties');
     for (const label of ko ? ['출격 항로', '흐름 연결', '재정비 구간', '최종 도전', '귀환 항로'] : ['DEPARTURE', 'BUILD FLOW', 'BREATHER', 'FINAL CHALLENGE', 'EXTRACTION']) check(html.includes(label), 'The plan exposes every actual sortie stage');
 }
 const endless = renderToStaticMarkup(<HangarDashboard {...props} state={{ ...state, flightMode: 'endless' }}/>);

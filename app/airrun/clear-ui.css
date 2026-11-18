@@ -1,0 +1,40 @@
+/* 9.1: the world is the main view; a pilot can expand the full instruments. */
+.airrun-clear .ops-mode-selector { display:flex; flex-direction:column; gap:8px; }
+.airrun-clear .ops-mode-selector>button.endless { width:100%; min-height:76px; }
+.ops-other-modes { border-top:1px solid #b9d5d32b; padding-top:10px; }
+.ops-other-modes summary { cursor:pointer; color:#b9cdd5; font-size:12px; padding:8px 0; }
+.ops-other-modes>button { display:flex; width:100%; gap:10px; align-items:center; margin:7px 0; padding:12px; text-align:left; color:#c9dcd9; border:1px solid #adc7ca33; border-radius:8px; background:#102b39; }
+.ops-other-modes>button.selected { border-color:#b9dca2; background:#254349; }
+.ops-other-modes>button>span { flex:1; }.ops-other-modes b { display:flex; justify-content:space-between; font-size:12px; }.ops-other-modes em { font-size:10px; font-style:normal; }.ops-other-modes small { display:block; font-size:10px; margin-top:5px; }
+.airrun-clear .ops-departure-title h2 { font-size:23px; }
+.airrun-clear .ops-sortie-objective { justify-content:flex-end; border:0; padding:0; margin:8px 0; background:none; }
+.airrun-clear .ops-sortie-objective>div,.airrun-clear .ops-inline-milestone,.airrun-clear .ops-route-map { display:none; }
+.airrun-clear .ops-route-briefing { display:block; padding-top:12px; }.airrun-clear .ops-route-briefing p { line-height:1.7; }
+.airrun-clear .ops-briefing-record { margin-top:12px; }
+.deck-detail-toggle { position:absolute; z-index:5; pointer-events:auto; left:32px; bottom:20px; padding:7px 10px; border:1px solid #c0ddd242; border-radius:6px; background:#102b3cba; color:#c6dcd9; font-size:10px; cursor:pointer; }
+.deck-detail .deck-detail-toggle { left:50%; transform:translateX(-50%); }
+.airrun-clear:has(.deck-clean) .flight-bottom { display:none; }
+.deck-clean .journey-ribbon,.deck-clean .sector-arrival,.deck-clean .f6-sector>div,.deck-clean .f6-sector>small,.deck-clean .f6-distance>span,.deck-clean .f6-distance em,.deck-clean .f6-risk,.deck-clean .f6-coach { display:none; }
+.airrun-clear .deck-clean .f6-distance { top:100px; }.airrun-clear .deck-clean .f6-distance>strong { font-size:38px; }
+.airrun-clear .deck-clean .f6-operation { top:196px; width:220px; padding:10px 12px; border-radius:7px; }
+.deck-clean .f6-operation>header,.deck-clean .f6-operation>p { display:none; }.deck-clean .f6-operation h2 { font-size:12px; margin:0 0 8px; }.deck-clean .f6-operation footer { font-size:8px; margin-top:7px; }
+.airrun-clear .deck-clean .f6-airframe { top:108px; width:142px; padding:9px 11px; }.deck-clean .f6-airframe>p { display:none; }.deck-clean .f6-hp { margin:8px 0 0; }
+.deck-clean .f6-flow.flow-idle { display:none; }.airrun-clear .deck-clean .f6-flow { top:180px; width:160px; padding-top:0; border:0; }.deck-clean .f6-flow>header,.deck-clean .f6-flow>p,.deck-clean .f6-flow-track { display:none; }.deck-clean .f6-flow b { font-size:24px; }.deck-clean .f6-flow strong { font-size:18px; }
+.airrun-clear .deck-clean .rush-control { width:170px; min-height:46px; right:32px; bottom:66px; top:auto; padding:8px 10px; gap:8px; }
+.deck-clean .rush-copy>small,.deck-clean .rush-key>svg { display:none; }.deck-clean .rush-key kbd { display:block; }.deck-clean .rush-copy>b { font-size:10px; }.deck-clean .rush-meter { margin-top:7px; }.deck-clean .rush-control>strong { font-size:17px; }
+.airrun-clear .deck-clean .f6-instruments { bottom:64px; min-width:0; padding:8px 0; gap:14px; }.deck-clean .f6-instruments strong { font-size:23px; }.deck-clean .f6-throttle,.deck-clean .f6-instruments>i:nth-of-type(2) { display:none; }
+.deck-clean .contract-hud>p,.deck-clean .contract-hud>header { display:none; }.deck-clean .contract-hud { padding:11px 13px; }.deck-clean .contract-hud h2 { margin:0 0 8px; font-size:13px; }
+@media(pointer:coarse) and (orientation:landscape),(max-height:450px) {
+    .deck-detail-toggle,.deck-detail .deck-detail-toggle { left:20px; top:48px; bottom:auto; transform:none; padding:5px 7px; font-size:8px; min-height:24px; }
+    .airrun-clear .deck-clean .f6-distance { top:78px; }.airrun-clear .deck-clean .f6-distance>strong { font-size:26px; }
+    .airrun-clear .deck-clean .f6-operation,.airrun-clear .deck-clean .contract-hud { top:139px; left:20px; width:165px; padding:7px 9px; }
+    .deck-clean .f6-operation h2 { font-size:10px; margin:0 0 5px; }.deck-clean .f6-operation footer { margin-top:5px; font-size:7px; }
+    .airrun-clear .deck-clean .f6-airframe { top:65px; width:128px; padding:7px 9px; }
+    .airrun-clear .deck-clean .f6-flow { top:126px; width:140px; }.deck-clean .f6-flow>div { display:flex; }.deck-clean .f6-flow .f6-flow-track { display:none; }.deck-clean .f6-flow b { font-size:19px; }.deck-clean .f6-flow strong { font-size:15px; }
+    .airrun-clear .deck-clean .rush-control { right:20px; left:auto; top:174px; bottom:auto; width:150px; min-height:44px; }
+    .airrun-clear .deck-clean .f6-instruments { left:50%; bottom:12px; padding:6px 0; transform:translateX(-50%); }.deck-clean .f6-instruments strong { font-size:21px; }
+    .deck-clean .rush-copy>b { font-size:9px; }
+}
+@media(max-width:600px) and (orientation:portrait) {
+    .deck-detail-toggle { left:20px; bottom:222px; }.airrun-clear .deck-clean .f6-airframe { top:190px; }.airrun-clear .deck-clean .f6-instruments { bottom:140px; }.airrun-clear .deck-clean .rush-control { bottom:225px; right:20px; }
+}

@@ -33,6 +33,6 @@ const files = directory => readdirSync(directory, { withFileTypes: true }).flatM
 const all = files(output), largest = Math.max(...all.map(p => statSync(p).size));
 if (all.length > 20000 || largest > 25 * 1024 * 1024) throw Error('Cloudflare Pages CLI limits exceeded.');
 mkdirSync(path.join(root, 'docs/validation'), { recursive: true });
-const report = { version: '9.0.0', type: 'standalone-static', requiresServer: false, basePath: base, files: all.length, bytes: all.reduce((n,p)=>n+statSync(p).size,0), largestFileBytes: largest, models: delivery.assets.length, aircraft: delivery.delivery.highestNativeDetailAircraft, clips: delivery.delivery.clips, cloudflareWranglerLimitsPassed: true, dashboardDragDropSupported: all.length <= 1000 };
+const report = { version: '9.1.0', type: 'standalone-static', requiresServer: false, basePath: base, files: all.length, bytes: all.reduce((n,p)=>n+statSync(p).size,0), largestFileBytes: largest, models: delivery.assets.length, aircraft: delivery.delivery.highestNativeDetailAircraft, clips: delivery.delivery.clips, cloudflareWranglerLimitsPassed: true, dashboardDragDropSupported: all.length <= 1000 };
 writeFileSync(path.join(root, 'docs/validation/static-delivery.json'), JSON.stringify(report,null,2)+'\n');
 console.log(JSON.stringify(report));
