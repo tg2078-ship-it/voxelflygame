@@ -61,3 +61,19 @@
 .record-distance { display: block; margin-top: 4px; font-size: 11px; color: #ffe198; }
 .formation-debrief p.formation-finish { color: #a3eacf; margin-bottom: 8px; }
 .formation-target { font-size: 10px; color: var(--signal); }
+@media (max-height:450px), (pointer:coarse) and (orientation:landscape) {
+    .f6-distance .record-distance {
+        position: absolute;
+        top: 3px;
+        left: 100%;
+        margin: 0 0 0 8px;
+        padding: 2px 5px;
+        border-radius: 4px;
+        background: #102a39de;
+        white-space: nowrap;
+    }
+}
+@media (pointer:coarse) {
+    .formation-panel button { justify-content: center; white-space: nowrap; }
+    .formation-panel button kbd { display: none; }
+}
