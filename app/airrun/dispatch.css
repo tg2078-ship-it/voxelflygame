@@ -95,3 +95,10 @@
 .dispatch-home .aircraft-selector .aircraft-photo { width:100%; height:auto; aspect-ratio:16/9; display:block; object-fit:contain; border:0; }
 .dispatch-home .aircraft-selector .fleet-card-copy { gap:3px; padding:5px 8px 7px; }.dispatch-home .fleet-card-copy b { min-height:0; }
 @media (max-height:470px) { .dispatch-home .aircraft-selector { grid-auto-columns:114px; }.dispatch-home .fleet-card-copy>span { display:none; } }
+.airrun-eleven .f6-sector {
+    width:min(220px,25vw); padding:5px 13px;
+    border-radius:4px; background:linear-gradient(90deg,#1329338a,#132933d9 24%,#132933d9 76%,#1329338a);
+    color:#fff4d8; text-shadow:0 1px 2px #0f1d23;
+}
+.airrun-eleven .f6-sector small { color:#f1f1df; }
+@media (max-height:470px) { .airrun-eleven .f6-sector { padding:3px 8px; } }

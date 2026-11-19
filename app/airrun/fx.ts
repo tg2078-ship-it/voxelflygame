@@ -81,7 +81,7 @@ export class FlightFX {
             T.BufferGeometry,
             string,
             number
-        ][] = [['coin', new T.CylinderGeometry(1, 1, .20, 12), '#ffd176', .45], ['crystal', new T.OctahedronGeometry(1.2), '#b3edff', .65], ['ring', new T.TorusGeometry(1, .065, 8, 48), '#ffcc63', 1.2], ['shield', new T.IcosahedronGeometry(1.5, 0), '#54e7dc', .8], ['multiplier', new T.OctahedronGeometry(1.7), '#ffd47a', .7], ['slow', new T.TorusGeometry(1.3, .32, 4, 12), '#95b7ff', .75], ['turbo', new T.ConeGeometry(1.1, 2.8, 4), '#ff9856', .75], ['repair', new T.BoxGeometry(1.6, 1.6, 1.6), '#8fe7ac', .75]];
+        ][] = [['coin', new T.CylinderGeometry(1, 1, .20, 12), '#ffd176', .45], ['crystal', new T.OctahedronGeometry(1.2), '#b3edff', .65], ['ring', new T.TorusGeometry(1, .083, 12, 48), '#ffcc63', 1.2], ['shield', new T.IcosahedronGeometry(1.5, 0), '#54e7dc', .8], ['multiplier', new T.OctahedronGeometry(1.7), '#ffd47a', .7], ['slow', new T.TorusGeometry(1.3, .32, 4, 12), '#95b7ff', .75], ['turbo', new T.ConeGeometry(1.1, 2.8, 4), '#ff9856', .75], ['repair', new T.BoxGeometry(1.6, 1.6, 1.6), '#8fe7ac', .75]];
         for (const [kind, geometry, color, glow] of specs) {
             let shape = geometry;
             if (kind === 'repair') {
@@ -98,7 +98,10 @@ export class FlightFX {
                 for (let i = 0; i < pos.count; i++) {
                     const angle = Math.atan2(pos.getY(i), pos.getX(i));
                     const band = Math.cos(4 * angle);
-                    const tint = band > .88 ? ivory : band > .72 ? edge : gold;
+                    // A continuous dark lip outlines the gold band against dawn,
+                    // snow and sunlit cloud, even between the four timing marks.
+                    const rim = Math.abs(Math.hypot(pos.getX(i), pos.getY(i)) - 1) > .064;
+                    const tint = rim ? edge : band > .88 ? ivory : band > .72 ? edge : gold;
                     colors.push(tint.r, tint.g, tint.b);
                 }
                 shape.setAttribute('color', new T.Float32BufferAttribute(colors, 3));
