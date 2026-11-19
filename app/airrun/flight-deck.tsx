@@ -1,4 +1,5 @@
 import type { ReactNode, CSSProperties } from 'react';
+import { FormationPanel } from './formation-panel';
 import { useState } from 'react';
 import { Pause, Plane, Coins, Wind, CloudRain, ShieldCheck, Zap, Target, Check, Timer, Flame, ScanLine, Navigation } from 'lucide-react';
 import { THEMES, distance, fmt, clamp } from './data';
@@ -8,7 +9,7 @@ import { FlightGuidance } from './flight-guidance';
 import { JourneyRibbon, RushControl } from './ace-ui';
 import { SORTIE_STAGES } from './sortie';
 
-export function FlightDeck({ hud, ko, hyper, onPause, onBank, onRush }: { hud: HUD; ko: boolean; hyper: ReactNode; onPause: () => void; onBank?: () => void; onRush?: () => void }) {
+export function FlightDeck({ hud, ko, hyper, onPause, onBank, onRush, onTransmit }: { hud: HUD; ko: boolean; hyper: ReactNode; onPause: () => void; onBank?: () => void; onRush?: () => void; onTransmit?: () => void }) {
     const [details, setDetails] = useState(false);
     const theme = THEMES.find(theme => theme.id === hud.theme)!;
     const integrity = clamp(hud.hp / Math.max(1, hud.maxHp), 0, 1), adventure = hud.adventure;
@@ -29,9 +30,11 @@ export function FlightDeck({ hud, ko, hyper, onPause, onBank, onRush }: { hud: H
             </section> : <div className="f6-sector"><span>{theme.en}</span><div><i style={{ width: hud.time % 180 / 180 * 100 + '%' }}/></div><small>{ko ? hud.route : hud.routeEn}</small></div>}
             <div className="f6-actions"><span><Coins size={15}/>{fmt(hud.coins)}</span><div className="f6-hyper">{hyper}<span>{hud.eRemaining > 0 ? t('무적 비행', 'HYPER ACTIVE') : hud.eUsed ? t('하이퍼 사용 완료', 'HYPER EXPENDED') : 'HYPER TRICK'}<small>{hud.eRemaining > 0 ? hud.eRemaining.toFixed(1) + ' SEC' : hud.eUsed ? '01 / 01' : t('E · 한 판 1회', 'E · ONCE PER FLIGHT')}</small></span></div></div>
         </header>
-        <section className="f6-distance" aria-label={t('비행 기록', 'Flight record')}><span>{sortie ? t('완주를 향한 비행', 'FLY IT HOME') : t('지평선까지, 더 멀리', 'CHASE YOUR HORIZON')}</span><strong>{distance(hud.distance)}</strong><div><b>{fmt(hud.score)}</b><small>PTS</small>{adventure && adventure.completed > 0 && <em><Check size={11}/>{adventure.completed} {t('작전 성공', 'OPS COMPLETE')}</em>}</div>{hud.ghost && <small className={'mastery-ghost '+(hud.ghost.delta<0?'behind':'ahead')}>{t('내 최고 비행','PERSONAL GHOST')} · {hud.ghost.delta>=0?'+':'−'}{Math.round(Math.abs(hud.ghost.delta))}m {hud.ghost.delta>=0?t('앞섬','AHEAD'):t('뒤처짐','BEHIND')}</small>}</section>
+        <section className="f6-distance" aria-label={t('비행 기록', 'Flight record')}><span>{sortie ? t('완주를 향한 비행', 'FLY IT HOME') : t('지평선까지, 더 멀리', 'CHASE YOUR HORIZON')}</span><strong>{distance(hud.distance)}</strong><div><b>{fmt(hud.score)}</b><small>PTS</small>{adventure && adventure.completed > 0 && <em><Check size={11}/>{adventure.completed} {t('작전 성공', 'OPS COMPLETE')}</em>}</div>{hud.recordLine !== undefined && hud.recordLine > hud.distance && hud.recordLine - hud.distance < Math.max(320, hud.speed / 3.6 * 10) &&
+                <small className="record-distance">{t('개인 기록까지', 'RECORD AHEAD')} {Math.ceil(hud.recordLine - hud.distance)} m</small>}{hud.ghost && <small className={'mastery-ghost '+(hud.ghost.delta<0?'behind':'ahead')}>{t('내 최고 비행','PERSONAL GHOST')} · {hud.ghost.delta>=0?'+':'−'}{Math.round(Math.abs(hud.ghost.delta))}m {hud.ghost.delta>=0?t('앞섬','AHEAD'):t('뒤처짐','BEHIND')}</small>}</section>
         {hud.contract && <ContractHUD contract={hud.contract} ko={ko}/>}
-        {operation && !hud.contract && <section className={'f6-operation ' + operation.status} aria-label={t('현재 비행 작전', 'Current flight operation')}>
+        {hud.formation && <FormationPanel flight={hud.formation} ko={ko} onSend={onTransmit}/>}
+        {operation && !hud.contract && !hud.formation && <section className={'f6-operation ' + operation.status} aria-label={t('현재 비행 작전', 'Current flight operation')}>
             <header><span><Target size={13}/>{t('비행 작전', 'FLIGHT OPERATION')} <i>{operation.id.replace('OP-', '').padStart(2, '0')}</i></span><b><Timer size={11}/>{Math.max(0, Math.ceil(operation.remaining))}s</b></header>
             <h2>{ko ? operation.title : operation.titleEn}</h2><p>{ko ? operation.instruction : operation.instructionEn}</p>
             <div className="f6-operation-progress" role="progressbar" aria-valuemin={0} aria-valuemax={operation.target} aria-valuenow={Math.min(operation.target, operation.progress)} aria-label={ko ? operation.title : operation.titleEn}><i style={{ width: clamp(operation.progress / Math.max(1, operation.target), 0, 1) * 100 + '%' }}/></div>

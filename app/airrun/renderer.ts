@@ -258,6 +258,11 @@ export class AirrunRenderer {
                     s.resume();
                 return;
             }
+            if (code === 'KeyR' && !e.repeat && s.phase === 'flying' && this.sim?.formation?.hud()?.offer) {
+                e.preventDefault();
+                input.transmit = true;
+                return;
+            }
             if (code === 'KeyQ' && !e.repeat && s.phase === 'flying' && !this.sim?.eRemaining) { e.preventDefault(); input.rush = true; return; }
             if (code === 'KeyF' && !e.repeat && s.phase === 'flying') {
                 e.preventDefault(); s.bankFlow(); return;
@@ -478,7 +483,9 @@ export class AirrunRenderer {
         this.camera.clearViewOffset();
         const plane = s.save.selected, level = s.runLevel ?? s.save.levels[plane] ?? 1;
         const rival = s.flightMode === 'sortie' ? personalRival(s.save.runs, { seed: s.seed, plane, level, difficulty: s.save.settings.difficulty ?? 'standard', contractId: s.contractId }) : undefined;
-        this.sim = new FlightSimulation({ id: s.runId, seed: s.seed, mode: s.flightMode, dailyKey: s.dailyKey ?? undefined, plane, level, contractId: s.contractId, rival: rival?.replay ? { replay: rival.replay, score: rival.score } : undefined, practice: null, settings: s.save.settings, catalog: this.library.byId, proxies: this.library.proxies, onEvent: (kind, p) => {
+        this.sim = new FlightSimulation({
+            personalDistances: { manual: s.save.bests.all?.distance ?? 0, hyper: s.save.bests.allE?.distance ?? 0 },
+            id: s.runId, seed: s.seed, mode: s.flightMode, dailyKey: s.dailyKey ?? undefined, plane, level, contractId: s.contractId, rival: rival?.replay ? { replay: rival.replay, score: rival.score } : undefined, practice: null, settings: s.save.settings, catalog: this.library.byId, proxies: this.library.proxies, onEvent: (kind, p) => {
                 if (kind === 'e-end') {
                     this.held.clear();
                     releaseInput();

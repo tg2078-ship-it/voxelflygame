@@ -124,6 +124,10 @@ export function applyRun(s: Save, r: RunResult): Save {
     if (r.practice || s.settled.includes(r.id))
         return s.checkpoint?.id === r.id ? { ...s, checkpoint: null } : s;
     const next = structuredClone(s);
+    if (r.mode === 'endless' && r.formation && r.formation.transmissions[2] > 0) {
+        const finishes = next.skins[r.planeId] ?? [];
+        if (!finishes.includes('courier')) next.skins[r.planeId] = [...finishes, 'courier'];
+    }
     next.coins += r.reward;
     next.checkpoint = null;
     next.settled = [...s.settled, r.id];

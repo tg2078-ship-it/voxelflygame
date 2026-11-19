@@ -1,5 +1,5 @@
 import type { Aircraft, Theme, Settings, PracticeConfig, Metrics, Save, ThemeId, WeatherKind } from './types';
-export const VERSION = '9.1.0';
+export const VERSION = '10.0.0';
 export const COURSE_EDITION = 4;
 export const WORLD_IMAGE_REVISION = 'v91-endless';
 export const AIRCRAFT: Aircraft[] = [
@@ -401,7 +401,8 @@ export const KOREA_VARIANTS = ['현대 도심·한강', '한옥·궁궐·성곽'
 export const KOREA_VARIANTS_EN = ['River skyline', 'Palace & hanok', 'Mountain village', 'Coastal harbour'];
 export const DEFAULT_SETTINGS: Settings = { difficulty: 'standard', control: 'hold', quality: 'high', resolutionScale: 1.25, volume: .75, music: .45, sfx: .8, sensitivity: 1, reducedMotion: false, skipTakeoff: false, leftHanded: false, language: 'ko', targetFPS: 60, adaptiveResolution: false };
 export const DEFAULT_PRACTICE: PracticeConfig = { theme: 'coast', variant: 0, night: false, weather: 'clear', plane: 'skyhawk', level: 1 };
-export const SKINS = [{ id: 'default', name: '오리지널', en: 'ORIGINAL', price: 0, color: '#e8e7df', accent: '#c63d32' }, { id: 'ocean', name: '오션 블루', en: 'OCEAN BLUE', price: 600, color: '#e7eef0', accent: '#138ac7' }, { id: 'sunrise', name: '선라이즈 오렌지', en: 'SUNRISE ORANGE', price: 600, color: '#f2d0a2', accent: '#ed672f' }, { id: 'midnight', name: '미드나이트 블랙', en: 'MIDNIGHT BLACK', price: 800, color: '#283343', accent: '#d3b873' }];
+export const SKINS = [{ id: 'default', name: '오리지널', en: 'ORIGINAL', price: 0, color: '#e8e7df', accent: '#c63d32' }, { id: 'ocean', name: '오션 블루', en: 'OCEAN BLUE', price: 600, color: '#e7eef0', accent: '#138ac7' }, { id: 'sunrise', name: '선라이즈 오렌지', en: 'SUNRISE ORANGE', price: 600, color: '#f2d0a2', accent: '#ed672f' }, { id: 'midnight', name: '미드나이트 블랙', en: 'MIDNIGHT BLACK', price: 800, color: '#283343', accent: '#d3b873' },
+    { id: 'courier', name: '오로라 윙', en: 'AURORA WING', price: 0, color: '#24545c', accent: '#84ffe1' }];
 export const GEAR_RATIOS = [.70, .85, 1, 1.15, 1.35];
 export const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
 export const mix = (a: number, b: number, t: number) => a + (b - a) * t;

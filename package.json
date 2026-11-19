@@ -1,6 +1,6 @@
 {
   "name": "voxel-airrun",
-  "version": "9.1.0",
+  "version": "10.0.0",
   "private": true,
   "engines": {
     "node": ">=22.13.0"

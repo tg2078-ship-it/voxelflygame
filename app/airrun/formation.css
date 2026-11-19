@@ -1,0 +1,63 @@
+.formation-panel {
+    --signal: #8cebdd;
+    position: absolute;
+    top: 196px;
+    left: 32px;
+    width: 220px;
+    padding: 12px;
+    border: 1px solid #bfeee83b;
+    border-left: 3px solid var(--signal);
+    border-radius: 7px;
+    background: #102a39ee;
+    color: #f0faf5;
+}
+.pattern-weave { --signal: #e5bbef; }
+.pattern-swell { --signal: #f5d180; }
+.formation-heading, .formation-panel button, .formation-debrief header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.formation-heading { font-size: 13px; }
+.formation-heading svg, .formation-heading time { color: var(--signal); }
+.formation-heading time, .formation-panel kbd { margin-left: auto; }
+.formation-meter { display: flex; gap: 3px; margin: 8px 0; }
+.formation-meter i { flex: 1; height: 4px; background: #bfd8d430; overflow: hidden; }
+.formation-meter b { display: block; height: 100%; background: var(--signal); }
+.formation-panel > span { font-size: 11px; color: #d7e5e1; }
+.formation-panel button {
+    pointer-events: auto;
+    width: 100%;
+    min-height: 44px;
+    border: 1px solid #c7efde70;
+    border-radius: 4px;
+    padding: 5px 9px;
+    background: #b1edda;
+    color: #102f39;
+    font-weight: 700;
+}
+.formation-panel button:active { background: white; }
+.formation-panel kbd { font: inherit; opacity: .72; }
+.formation-debrief { margin: 16px 0; padding: 17px; background: #152e3b; border: 1px solid #94dbc94a; border-radius: 9px; color: #d9efe7; }
+.formation-debrief header > strong { margin-left: auto; color: #a3eacf; }
+.formation-debrief h2 { margin: 0; font-size: 16px; }
+.formation-debrief small { font-size: 10px; }
+.formation-debrief ol { display: flex; padding: 0; gap: 8px; list-style: none; }
+.formation-debrief li { flex: 1; display: grid; gap: 5px; padding: 8px; border-left: 2px solid #719095; font-size: 11px; }
+.formation-debrief li.secured { border-color: #acf0d5; background: #29605555; }
+.formation-debrief li b { font-size: 21px; }
+.formation-debrief p { margin: 0; line-height: 1.6; color: #c0d4d3; font-size: 12px; }
+@media (pointer:coarse) and (orientation:landscape), (max-height:450px) {
+    .formation-panel { top: 132px; left: 20px; width: 165px; padding: 5px 8px; }
+    .formation-heading { font-size: 11px; }
+    .formation-meter { margin: 4px 0; }
+    .formation-panel > span { font-size: 10px; }
+    .formation-panel:has(button) { padding-bottom: 0; }
+    .formation-panel button { min-height: 44px; font-size: 11px; }
+}
+@media (max-width: 650px) and (orientation:portrait) {
+    .formation-panel { top: 160px; left: 16px; width: min(45vw, 190px); }
+}
+.record-distance { display: block; margin-top: 4px; font-size: 11px; color: #ffe198; }
+.formation-debrief p.formation-finish { color: #a3eacf; margin-bottom: 8px; }
+.formation-target { font-size: 10px; color: var(--signal); }

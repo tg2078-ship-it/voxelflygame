@@ -2,9 +2,11 @@ import * as T from 'three';
 import { GRAPHICS } from './graphics';
 import { hash, clamp } from './data';
 import type { FlightSimulation } from './simulation';
-import type { AssetMeta, ItemKind, Vec, Settings } from './types';
+import type { AssetMeta, ItemKind, Pickup, Vec, Settings } from './types';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { EnvironmentFX } from './environment-fx';
+import { makeRecordLine } from './record-line';
+import { FormationVisual } from './formation-visual';
 import { FlightWake } from './flight-wake';
 import { ParticleTrace } from './particle-trace';
 import type { Placement } from './types';
@@ -28,6 +30,8 @@ export class FlightFX {
     rainMaterial: T.ShaderMaterial;
     trails: T.Mesh[] = [];
     wake = new FlightWake();
+    private recordLine = makeRecordLine();
+    private formation = new FormationVisual();
     trailHistory: {
         left: T.Vector3;
         right: T.Vector3;
@@ -68,6 +72,7 @@ export class FlightFX {
     environment: EnvironmentFX;
     constructor(scene: T.Scene, catalog?: Map<string, AssetMeta>) {
         scene.add(this.root);
+        this.root.add(this.formation.root, this.recordLine);
         this.environment = new EnvironmentFX(this.root, catalog);
         const specs: [
             ItemKind,
@@ -181,17 +186,30 @@ export class FlightFX {
         const emitter = renderPose ?? { x: sim.x, y: sim.y, z: sim.z };
         const localZ = sim.z - emitter.z;
         this.time += dt;
+        const line = sim.recordLine;
+        this.recordLine.visible = line !== undefined && line > emitter.z - 35 && line < emitter.z + Math.max(320, sim.speed * 10);
+        if (this.recordLine.visible) this.recordLine.position.z = sim.z - line!;
+        this.formation.update(sim.formation, emitter.z, sim.z, sim.speed, dt, sim.config.settings.reducedMotion);
         this.rainGeometry.setDrawRange(0, GRAPHICS[quality].rainDrops);
         this.environment.update(sim, placements, motionTime, emitter.z);
         const object = this.object;
         const ringHorizon = Math.min(650, Math.max(240, sim.speed * 4));
-        const visibleRings = new Set(sim.pickups.filter(p => p.kind === 'ring' && !p.collected && p.z >= sim.z - 10 && p.z <= sim.z + ringHorizon).sort((a, b) => a.z - b.z).slice(0, 2));
+        let nearest: Pickup | undefined, second: Pickup | undefined;
+        for (const pickup of sim.pickups) {
+            if (pickup.kind !== 'ring' || pickup.collected || pickup.z < sim.z - 10 || pickup.z > sim.z + ringHorizon) continue;
+            if (!nearest || pickup.z < nearest.z) {
+                second = nearest;
+                nearest = pickup;
+            } else if (!second || pickup.z < second.z) {
+                second = pickup;
+            }
+        }
         for (const [kind, mesh] of this.items) {
             let n = 0;
             for (const p of sim.pickups) {
                 if (p.kind !== kind || p.collected || p.z > sim.z + 1000 || p.z < sim.z - 10 || n >= 220)
                     continue;
-                if (kind === 'ring' && !visibleRings.has(p)) continue;
+                if (kind === 'ring' && p !== nearest && p !== second) continue;
                 object.position.set(p.x, p.y, sim.z - p.z);
                 object.rotation.set(kind === 'coin' ? Math.PI / 2 : 0, kind === 'ring' ? 0 : sim.time * 1.6 + p.id, kind === 'ring' ? sim.time * .12 : 0);
                 const size = kind === 'ring' ? p.radius : 1;

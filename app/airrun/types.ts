@@ -118,6 +118,7 @@ export interface Metrics {
     time: number;
 }
 export interface RunResult {
+    formation?: import('./formation').FormationLog;
     rush?: import('./rush').RushResult;
     courseEdition?: number;
     seed?: number;
@@ -220,6 +221,7 @@ export interface Input {
     brake: boolean;
     gear: number;
     pendingGear?: number;
+    transmit?: boolean;
     rush?: boolean;
 }
 export interface Weather {
@@ -234,6 +236,8 @@ export interface Weather {
     snow: boolean;
 }
 export interface HUD {
+    recordLine?: number;
+    formation?: import('./formation').FormationHUD;
     rush?: import('./rush').RushHUD;
     journey?: import('./journey').JourneyHUD;
     contract?: import('./mastery').ContractResult;

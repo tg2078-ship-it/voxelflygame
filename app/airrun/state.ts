@@ -7,11 +7,12 @@ import type { RunResult as LegacyRunResult } from '../game/data';
 import type { Save, Settings, Phase, Panel, PracticeConfig, RunResult, HUD, Input, Celebration } from './types';
 import type { FlightMode } from './types';
 import { dailyBest, dailyRoute, validDailyKey, validDailyRecords } from './daily-route';
+import { validFormation } from './formation';
 import { validDebrief } from './adventure';
 import { DIFFICULTIES } from './encounter-director';
 import { sortieBestKey, validSortieResult } from './sortie';
 export const input: Input = { x: 0, y: 0, boost: false, brake: false, gear: 3 };
-export function releaseInput() { input.x = 0; input.y = 0; input.boost = false; input.brake = false; input.gear = 3; input.pendingGear = 0; delete input.rush; }
+export function releaseInput() { input.x = 0; input.y = 0; input.boost = false; input.brake = false; input.gear = 3; input.pendingGear = 0; delete input.rush; delete input.transmit; }
 export const EMPTY_HUD: HUD = { distance: 0, score: 0, bonus: 0, coins: 0, combo: 0, maxCombo: 0, speed: 144, hp: 100, maxHp: 100, altitude: 23, time: 0, theme: 'coast', variant: 0, weather: { kind: 'clear', cloud: .15, rain: 0, fog: 0, wind: 0, wet: 0, night: 0, lightning: 0, snow: false }, gear: 3, boost: 0, heat: 0, eUsed: false, eRemaining: 0, effects: [], message: '', messageEn: '', messageUntil: 0, route: '', routeEn: '', fps: 0, draws: 0, triangles: 0, metrics: emptyMetrics() };
 let connection: Promise<IDBDatabase> | null = null;
 function database() {
@@ -117,6 +118,8 @@ export function validateResult(value: unknown): value is RunResult {
         return false;
     if (v.reasonEn !== undefined && (typeof v.reasonEn !== 'string' || v.reasonEn.length > 256))
         return false;
+    if (v.formation !== undefined && (v.mode !== 'endless' || v.practice || !validFormation(v.formation, v.debrief?.manualSeconds ?? 0) ||
+        v.formation.points + (v.debrief?.operationBonus ?? 0) + (v.debrief?.precisionBonus ?? 0) + (v.debrief?.flowBonus ?? 0) > v.bonus)) return false;
     if (v.rush !== undefined && (!isObject(v.rush) || !Number.isSafeInteger(v.rush.uses) || v.rush.uses < 0 || v.rush.uses > 100000 || !Number.isSafeInteger(v.rush.distance) || v.rush.distance < 0 || v.rush.distance > v.distance)) return false;
     if (v.courseEdition !== undefined && (!Number.isSafeInteger(v.courseEdition) || v.courseEdition < 1 || v.courseEdition > 10000)) return false;
     if (v.seed !== undefined && (!Number.isInteger(v.seed) || v.seed < 0 || v.seed > 0xffffffff)) return false;
@@ -340,6 +343,7 @@ export const useAirrun = create<GameState>((set, get) => ({ phase: 'loading', pa
         if (!skin || !s.owned.includes(p))
             return;
         const owned = id === 'default' || s.skins[p]?.includes(id);
+        if (!owned && id === 'courier') return;
         if (!owned && s.coins < skin.price) {
             set({ notice: '코인이 부족합니다. / Not enough coins.' });
             return;
