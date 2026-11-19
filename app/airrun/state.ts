@@ -120,6 +120,7 @@ export function validateResult(value: unknown): value is RunResult {
         return false;
     if (v.formation !== undefined && (v.mode !== 'endless' || v.practice || !validFormation(v.formation, v.debrief?.manualSeconds ?? 0) ||
         v.formation.points + (v.debrief?.operationBonus ?? 0) + (v.debrief?.precisionBonus ?? 0) + (v.debrief?.flowBonus ?? 0) > v.bonus)) return false;
+    if (v.bestRingStreak !== undefined && (!Number.isSafeInteger(v.bestRingStreak) || v.bestRingStreak < 0 || v.bestRingStreak > (v.metrics?.rings ?? 0))) return false;
     if (v.rush !== undefined && (!isObject(v.rush) || !Number.isSafeInteger(v.rush.uses) || v.rush.uses < 0 || v.rush.uses > 100000 || !Number.isSafeInteger(v.rush.distance) || v.rush.distance < 0 || v.rush.distance > v.distance)) return false;
     if (v.courseEdition !== undefined && (!Number.isSafeInteger(v.courseEdition) || v.courseEdition < 1 || v.courseEdition > 10000)) return false;
     if (v.seed !== undefined && (!Number.isInteger(v.seed) || v.seed < 0 || v.seed > 0xffffffff)) return false;
@@ -296,10 +297,10 @@ export const useAirrun = create<GameState>((set, get) => ({ phase: 'loading', pa
             set({ ready: true, saveError: '브라우저 저장소를 사용할 수 없습니다. 백업으로 기록을 보관할 수 있습니다.' });
         }
     },
-    profile: name => { mutate(s => ({ ...s, nickname: name.trim().slice(0, 16) || 'PILOT' })); set({ phase: 'airport', panel: 'hangar' }); },
+    profile: name => { mutate(s => ({ ...s, nickname: name.trim().slice(0, 16) || 'PILOT' })); set({ phase: 'hangar', panel: 'hangar' }); },
     openHangar: () => {
         if (get().phase === 'airport')
-            set({ phase: 'opening' });
+            set({ phase: 'hangar' });
     }, setPanel: panel => {
         if (inLobby())
             set({ panel, skinPreview: null });

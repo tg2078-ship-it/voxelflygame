@@ -58,9 +58,7 @@ equal(lesson.metrics.directionPass, 1, 'Lesson also progresses its direction goa
 equal(lesson.adventure.debrief().perfectPasses, 1, 'One physical lesson earns one precision award');
 equal(lesson.adventure.debrief().flowActions, 1, 'Coincident markers cannot manufacture a flow chain');
 
-// Real frame progression collects a ring with the aircraft's body radius
-// before its centre crosses the marker. generate() prunes collected pickups
-// between these moments; that must not resurrect a second skill award.
+// Approach, cross and depart at real simulation speed. The camera trails the aircraft.
 for (const seed of [13, 42, 731]) {
     const early = createSim({ seed });
     const marker = early.encounters[0].route.find(point => point.role === 'orientation')!;
@@ -72,11 +70,30 @@ for (const seed of [13, 42, 731]) {
         early.step(1 / 60, controls());
         if (early.metrics.rings === 1 && early.z < marker.z) collectedBeforeCentre = true;
     }
-    check(collectedBeforeCentre, 'Real ring collection precedes centre crossing across frames');
+    check(!collectedBeforeCentre, 'A ring cannot disappear or score before the centre crosses');
+    equal(early.metrics.rings, 1, 'Crossing pays exactly once');
+    check(early.pickups.some(p => p.collected && p.kind === 'ring'), 'The chase camera can still see the crossed hoop');
     equal(early.metrics.directionPass, 1, 'Later route-plane crossing still progresses its direction goal');
     equal(early.adventure.debrief().perfectPasses, 1, 'Pruned ring cannot produce a second perfect award');
     equal(early.adventure.debrief().flowActions, 1, 'Pruned ring cannot produce a second flow action');
 }
+
+// Fly a string of measured passes in clear air. A miss or a rim crossing
+// breaks the sequence, and coincident scoring frames cannot repeat its payout.
+const series = createSim({ seed: 42 });
+series.nextStart = 1e9;
+series.pickups = [0, 0, 0, 7, 0, 5, 0].map((offset, index) => ({
+    id: 900 + index, kind: 'ring', x: offset, y: 24, z: 2 + index * 3, radius: 6, collected: false, risk: true,
+}));
+const credits: number[] = [];
+for (let frame = 0; series.z < 24 && frame < 120; frame++) {
+    const previous = series.metrics.rings;
+    series.step(1 / 60, controls());
+    if (series.metrics.rings > previous) credits.push(series.hud(controls()).ringPass!.award);
+}
+equal(credits, [0, 0, 300, 0, 0, 0], 'Three consecutive central hits pay one measured bonus');
+equal(series.result().bestRingStreak, 3, 'Debrief records the best measured central streak');
+equal(series.hud(controls()).ringPass?.streak, 1, 'A rim pass resets the streak');
 
 // A real generated bridge's risky line remains valid, pays once, and does not
 // also emit a near-miss for the same physical feature.

@@ -12,6 +12,13 @@ export function landscapePlacements(index: number, theme: ThemeId, variant: numb
     const snowy = theme === 'ice' || theme === 'aurora';
     if (['forest', 'river', 'waterfall', 'volcano'].includes(theme) && catalog.has('columnar_basalt_outcrop')) pool.push('columnar_basalt_outcrop');
     if ((theme === 'forest' || theme === 'waterfall') && catalog.has('mountain_peak')) pool.push('mountain_peak');
+    const features: Partial<Record<ThemeId, string[]>> = {
+        coast: ['weathered_coastal_arch', 'stormworn_sea_cave'], forest: ['fern_basalt_grotto', 'cedar_canopy_arch'],
+        desert: ['striped_slot_canyon', 'red_mesa_sky_arch'], ice: ['ice_shelf_tunnel', 'icy_cave_gate'],
+        aurora: ['ice_shelf_tunnel'], river: ['fern_basalt_grotto'], waterfall: ['alpine_waterfall_traverse'],
+        volcano: ['layered_rocks', 'red_mesa_sky_arch'], farm: ['apple_orchard_terraces'],
+    };
+    for (const id of features[theme] ?? []) if (catalog.has(id)) pool.push(id);
     const wood = pool.filter(model => /pine|tree|fir|orchard/.test(model));
     const stone = pool.filter(model => /rock|stack|glacier|ice|mesa|spire|peak|basalt/.test(model));
     const tierCounts = [0, 0, 0, 0, 0, 0];
@@ -23,13 +30,13 @@ export function landscapePlacements(index: number, theme: ThemeId, variant: numb
         const distant = grove === 3 || grove === 5, middle = grove === 2 || grove === 4;
         const centreZ = index * 128 + 20 + hash(salt + 53) * 88;
         const z = Math.max(index * 128 + 2, Math.min(index * 128 + 126, centreZ + (hash(salt + attempt * 43) - .5) * 66));
-        const preferred = distant && stone.length ? stone : !middle && wood.length ? wood : pool;
+        const preferred = distant && stone.length && index % 4 !== 1 ? stone : !middle && wood.length && index % 3 !== 0 ? wood : pool;
         let model = preferred[Math.min(preferred.length - 1, Math.floor(hash(salt + attempt * 307) * preferred.length))];
         if (['pine_cluster', 'decorative_tree', 'orchard_windbreak'].includes(model) && !middle && !distant && !snowy && catalog.has('pine_tree_single')) model = 'pine_tree_single';
         const meta = catalog.get(model); if (!meta) continue;
         const woody = /pine|tree|fir|orchard/.test(model), rock = /rock|stack|glacier|ice|mesa|spire|peak/.test(model);
         let scale = (woody ? .9 : distant ? 1.55 : .85) + hash(salt + attempt * 89) * (woody ? .8 : distant ? 1.5 : .95);
-        if (distant && stone.includes(model)) scale = (95 + hash(salt + attempt * 89) * 65) / Math.max(1, meta.bounds.size[1]);
+        if (distant && stone.includes(model)) scale = (24 + 104 * Math.max(0, Math.sin(index * .42 + hash(seed + grove) * 6.28)) ** 2 + hash(salt + attempt * 89) * 22) / Math.max(1, meta.bounds.size[1]);
         scale = Math.min(scale, (woody ? middle || distant ? 38 : 20 : distant ? 160 : 54) / Math.max(1, meta.bounds.size[1]));
         const yaw = (hash(salt + attempt * 197) - .5) * Math.PI * 2;
         const reachX = (Math.abs(Math.cos(yaw)) * meta.bounds.size[0] + Math.abs(Math.sin(yaw)) * meta.bounds.size[2]) * scale * .5;

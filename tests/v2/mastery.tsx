@@ -30,7 +30,7 @@ for(const plane of ['skyhawk','falcon','amphibian']){
     const a=createSim({mode:'sortie',plane,seed:71}),b=createSim({mode:'sortie',plane,seed:71});
     a.generate(9000); b.time=97;b.speed=190;b.generate(9000);
     assert.deepEqual(a.encounters,b.encounters);checks++;
-    check(a.encounters.every(e=>e.route.length>=3),'Seeded rematches retain actual procedural geometry');
+    check(a.encounters.every(e=>{const n=e.route.filter(p=>p.role!=='orientation').length;return n>=2&&n<=5;}),'Seeded rematches retain actual procedural geometry');
 }
 const time=courseClock(10000,1);courseClock(50000,1.5);check(courseClock(10000,1)===time&&courseClock(10000,2)===time/2,'Cruise clock is independent of call order and live controls');
 const recorder=new ReplayRecorder();

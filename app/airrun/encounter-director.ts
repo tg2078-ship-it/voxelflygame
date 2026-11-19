@@ -41,7 +41,7 @@ export interface ProceduralGeneration {
     intensity: number;
     lead: number;
     spacing: number;
-    beats?: [number, number];
+    beats?: number[];
     minimumSpacing?: number;
 }
 export type ProceduralPattern = Pattern & { generation: ProceduralGeneration };
@@ -124,15 +124,18 @@ export function proceduralPattern(theme: ThemeId, variant: number, seed: number,
     const verticalAction = VERTICAL.has(first) ? first : second;
     const third = choose(vocabulary.filter(action => action !== first && action !== second
         && (!CLIMB.has(verticalAction) || !CLIMB.has(action)) && (!DESCEND.has(verticalAction) || !DESCEND.has(action))));
-    const actions = [first, second, third];
+    const actionCount = counter === 0 ? 3 : 2 + Math.floor(random() * 4);
+    const actions = [first, second, third].slice(0, actionCount);
+    while (actions.length < actionCount) actions.push(choose(vocabulary.filter(action => !actions.includes(action))));
     const direction = random() < .5 ? -1 : 1;
     const turnStyle = Math.floor(random() * 3);
     const signs = turnStyle === 0 ? [direction, -direction, direction] : turnStyle === 1 ? [direction, direction, -direction] : [direction, -direction, -direction];
+    while (signs.length < actionCount) signs.push(random() < .48 ? direction : -direction);
     const amplitude = profile.xAmplitude * (1 + intensity * .08);
     const vertical = profile.altitudeDelta * (1 + intensity * .2);
     let previousY = random() < .5 ? 24 : 32;
     const steps: Pattern['steps'] = actions.map((action, index) => {
-        const magnitude = .74 + random() * .26;
+        const magnitude = (counter === 0 && index === 0 ? .68 : .29) + random() * (counter === 0 && index === 0 ? .32 : .71);
         const x = Math.round(signs[index] * amplitude * magnitude * 10) / 10;
         const lift = vertical * (.7 + random() * .3);
         const y = CLIMB.has(action) ? 28 + lift : DESCEND.has(action) ? 28 - lift
@@ -141,7 +144,7 @@ export function proceduralPattern(theme: ThemeId, variant: number, seed: number,
         return [action, x, Math.round(previousY * 10) / 10];
     });
     const spacing = Math.round(Math.max(150, profile.spacing * (1 - intensity * .16) * (.94 + random() * .12)));
-    const lead = Math.round((counter === 0 ? profile.initialLead : profile.lead * (1 - intensity * .12)) * (.97 + random() * .06));
+    const lead = Math.round((counter === 0 ? profile.initialLead : profile.lead * (1 - intensity * .12)) * (.84 + random() * .36));
     const district = 1 + Math.floor(random() * 12);
     const labels = actions.map(action => THEME_LABELS[theme]?.[action] ?? LABELS[action]);
     return {
@@ -151,6 +154,6 @@ export function proceduralPattern(theme: ThemeId, variant: number, seed: number,
         en: `${themeInfo.en} · ${labels.map(label => label[1]).join(' → ')}`,
         steps, spacing,
         generation: { procedural: true, difficulty, intensity, lead, spacing,
-            beats: choose<[number, number]>([[.88, 1.18], [1.24, .92], [1.08, 1.32], [.96, 1.12]]) },
+            beats: actions.slice(1).map((_, i) => (i % 2 === turnStyle % 2 ? .82 : 1.12) + random() * .32) },
     };
 }

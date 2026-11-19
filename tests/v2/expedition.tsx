@@ -46,7 +46,7 @@ for (const theme of homes) for (const seed of [13, 42]) for (const span of [11, 
     for (; count < 12; count++) {
         const encounter = buildEncounter(pool[count % pool.length], start, seed, { byId: catalog }, span, count + 1, from);
         populateThemeCollection(encounter, catalog, seed, cycle, span);
-        check(encounter.placements.filter(p => p.role === 'collection').length <= 2, 'discovery details cannot overwhelm the authored district');
+        check(encounter.placements.filter(p => p.role === 'collection').length <= 4, 'discovery details cannot overwhelm the authored district');
         const knots = encounter.route.flatMap(point => [{ x: point.x, y: point.y, z: point.z - 62 }, { x: point.x, y: point.y, z: point.z + 62 }]);
         for (const p of encounter.placements) {
             if (deck.some(meta => meta.id === p.model)) observed.add(p.model);

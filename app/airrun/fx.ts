@@ -2,7 +2,7 @@ import * as T from 'three';
 import { GRAPHICS } from './graphics';
 import { hash, clamp } from './data';
 import type { FlightSimulation } from './simulation';
-import type { AssetMeta, ItemKind, Pickup, Vec, Settings } from './types';
+import type { AssetMeta, ItemKind, Vec, Settings } from './types';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { EnvironmentFX } from './environment-fx';
 import { makeRecordLine } from './record-line';
@@ -30,6 +30,8 @@ export class FlightFX {
     rainMaterial: T.ShaderMaterial;
     trails: T.Mesh[] = [];
     wake = new FlightWake();
+    private readonly ringWhite = new T.Color(0xffffff);
+    private readonly ringPassed = new T.Color('#9ee7c2');
     private recordLine = makeRecordLine();
     private formation = new FormationVisual();
     trailHistory: {
@@ -79,7 +81,7 @@ export class FlightFX {
             T.BufferGeometry,
             string,
             number
-        ][] = [['coin', new T.CylinderGeometry(1, 1, .20, 12), '#ffd176', .45], ['crystal', new T.OctahedronGeometry(1.2), '#b3edff', .65], ['ring', new T.TorusGeometry(1, .095, 4, 28), '#ffcc63', 1.2], ['shield', new T.IcosahedronGeometry(1.5, 0), '#54e7dc', .8], ['multiplier', new T.OctahedronGeometry(1.7), '#ffd47a', .7], ['slow', new T.TorusGeometry(1.3, .32, 4, 12), '#95b7ff', .75], ['turbo', new T.ConeGeometry(1.1, 2.8, 4), '#ff9856', .75], ['repair', new T.BoxGeometry(1.6, 1.6, 1.6), '#8fe7ac', .75]];
+        ][] = [['coin', new T.CylinderGeometry(1, 1, .20, 12), '#ffd176', .45], ['crystal', new T.OctahedronGeometry(1.2), '#b3edff', .65], ['ring', new T.TorusGeometry(1, .065, 8, 48), '#ffcc63', 1.2], ['shield', new T.IcosahedronGeometry(1.5, 0), '#54e7dc', .8], ['multiplier', new T.OctahedronGeometry(1.7), '#ffd47a', .7], ['slow', new T.TorusGeometry(1.3, .32, 4, 12), '#95b7ff', .75], ['turbo', new T.ConeGeometry(1.1, 2.8, 4), '#ff9856', .75], ['repair', new T.BoxGeometry(1.6, 1.6, 1.6), '#8fe7ac', .75]];
         for (const [kind, geometry, color, glow] of specs) {
             let shape = geometry;
             if (kind === 'repair') {
@@ -89,7 +91,19 @@ export class FlightFX {
                 for (const b of bars)
                     b.dispose();
             }
-            const material = new T.MeshStandardMaterial({ color, emissive: color, emissiveIntensity: glow, roughness: kind === 'coin' ? .22 : .38, metalness: kind === 'coin' ? .82 : .3 });
+            if (kind === 'ring') {
+                const pos = shape.getAttribute('position');
+                const colors: number[] = [];
+                const gold = new T.Color('#ffbf48'), ivory = new T.Color('#fff4c5'), edge = new T.Color('#82502c');
+                for (let i = 0; i < pos.count; i++) {
+                    const angle = Math.atan2(pos.getY(i), pos.getX(i));
+                    const band = Math.cos(4 * angle);
+                    const tint = band > .88 ? ivory : band > .72 ? edge : gold;
+                    colors.push(tint.r, tint.g, tint.b);
+                }
+                shape.setAttribute('color', new T.Float32BufferAttribute(colors, 3));
+            }
+            const material = kind === 'ring' ? new T.MeshBasicMaterial({ vertexColors: true, toneMapped: false }) : new T.MeshStandardMaterial({ color, emissive: color, emissiveIntensity: glow, roughness: kind === 'coin' ? .22 : .38, metalness: kind === 'coin' ? .82 : .3 });
             const mesh = new T.InstancedMesh(shape, material, 220);
             mesh.frustumCulled = false;
             this.items.set(kind, mesh);
@@ -193,23 +207,12 @@ export class FlightFX {
         this.rainGeometry.setDrawRange(0, GRAPHICS[quality].rainDrops);
         this.environment.update(sim, placements, motionTime, emitter.z);
         const object = this.object;
-        const ringHorizon = Math.min(650, Math.max(240, sim.speed * 4));
-        let nearest: Pickup | undefined, second: Pickup | undefined;
-        for (const pickup of sim.pickups) {
-            if (pickup.kind !== 'ring' || pickup.collected || pickup.z < sim.z - 10 || pickup.z > sim.z + ringHorizon) continue;
-            if (!nearest || pickup.z < nearest.z) {
-                second = nearest;
-                nearest = pickup;
-            } else if (!second || pickup.z < second.z) {
-                second = pickup;
-            }
-        }
         for (const [kind, mesh] of this.items) {
             let n = 0;
             for (const p of sim.pickups) {
-                if (p.kind !== kind || p.collected || p.z > sim.z + 1000 || p.z < sim.z - 10 || n >= 220)
+                if (p.kind !== kind || (p.collected && kind !== 'ring') || p.z > sim.z + 1000 || p.z < sim.z - (kind === 'ring' ? 65 : 10) || n >= mesh.instanceMatrix.count)
                     continue;
-                if (kind === 'ring' && p !== nearest && p !== second) continue;
+
                 object.position.set(p.x, p.y, sim.z - p.z);
                 object.rotation.set(kind === 'coin' ? Math.PI / 2 : 0, kind === 'ring' ? 0 : sim.time * 1.6 + p.id, kind === 'ring' ? sim.time * .12 : 0);
                 const size = kind === 'ring' ? p.radius : 1;
@@ -217,8 +220,10 @@ export class FlightFX {
                 if (kind === 'turbo')
                     object.rotation.z = -Math.PI / 2;
                 object.updateMatrix();
+                if (kind === 'ring') mesh.setColorAt(n, p.collected ? this.ringPassed : this.ringWhite);
                 mesh.setMatrixAt(n++, object.matrix);
             }
+            if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
             mesh.count = n;
             mesh.visible = n > 0;
             mesh.instanceMatrix.needsUpdate = true;

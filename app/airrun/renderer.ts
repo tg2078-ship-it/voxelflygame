@@ -89,8 +89,6 @@ export class AirrunRenderer {
     cloudClock: 'flight' | 'lobby' | '' = '';
     gearRetraction = 0;
     lastQuality = '';
-    airportOpen = 0;
-    openingTime = 0;
     takeoffTime = 0;
     crashTime = 0;
     lastPhase: Phase = 'loading';
@@ -227,7 +225,7 @@ export class AirrunRenderer {
     completeLoading() {
         const s = useAirrun.getState();
         if (this.initialized && s.ready && s.phase === 'loading')
-            useAirrun.setState({ phase: s.save.nickname ? 'airport' : 'registration' });
+            useAirrun.setState({ phase: s.save.nickname ? 'hangar' : 'registration' });
     }
     bind() {
         const resize = () => {
@@ -376,17 +374,11 @@ export class AirrunRenderer {
         if (!this.studio || ms - this.lastFleetPreview < 350 && this.lastPreviewPanel === s.panel) return;
         this.lastFleetPreview = ms; this.lastPreviewPanel = s.panel;
         const wanted: string[] = [];
-        const aircraft = (id: string) => { wanted.push('aircraft:' + id); this.requestPreview('aircraft:' + id, () => this.studio!.requestAircraft(id)); };
         const theme = (id: string, variant?: number) => {
             if (!THEMES.some(t => t.id === id)) return;
             const resolvedVariant = id === 'korea' ? variant ?? 0 : undefined, key = id === 'korea' ? 'korea:' + resolvedVariant : id;
             wanted.push('theme:' + key); this.requestPreview(key, () => this.studio!.requestTheme(id as typeof THEMES[number]['id'], resolvedVariant));
         };
-        if (s.panel === 'hangar' || s.panel === 'livery') {
-            aircraft(s.save.selected);
-            if (s.panel === 'hangar') for (const card of document.querySelectorAll<HTMLElement>('.aircraft-selector [data-aircraft-id]'))
-                if (card.dataset.aircraftId && previewVisible(card)) aircraft(card.dataset.aircraftId);
-        }
         if (s.panel === 'atlas') {
             const selected = document.querySelector<HTMLElement>('.atlas-detail[data-theme-id]');
             if (selected?.dataset.themeId) theme(selected.dataset.themeId, selected.dataset.themeVariant === undefined ? undefined : Number(selected.dataset.themeVariant));
@@ -502,7 +494,6 @@ export class AirrunRenderer {
         this.world = new WorldView(this.scene, this.library);
         this.sim.config.isObstacleVisible = obstacle => this.world?.canCollide(obstacle) ?? false;
         this.fx = new FlightFX(this.scene, this.library.byId);
-        this.airportOpen = 1;
         this.world.update(this.sim, 0, s.save.settings.quality);
         this.world.root.visible = this.fx.root.visible = false;
         this.lastScreenshotKey = '';
@@ -724,8 +715,6 @@ export class AirrunRenderer {
         }
         if (s.phase !== this.lastPhase) {
             if (s.phase === 'flying' && this.lastPhase === 'paused' && document.activeElement instanceof HTMLElement) document.activeElement.blur();
-            if (s.phase === 'opening')
-                this.openingTime = 0;
             if (s.phase === 'paused') {
                 this.held.clear();
                 releaseInput();
@@ -741,12 +730,6 @@ export class AirrunRenderer {
                 this.sim = null;
             }
             this.lastPhase = s.phase;
-        }
-        if (s.phase === 'opening') {
-            this.openingTime += dt;
-            this.airportOpen = smooth(this.openingTime / 1.5);
-            if (this.openingTime >= 1.5)
-                useAirrun.setState({ phase: 'hangar' });
         }
         if (s.phase === 'paused' && s.resumeCountdown > 0) {
             this.resumeTime += dt;
@@ -849,7 +832,7 @@ export class AirrunRenderer {
         }
         else {
             void this.selectPlane(sim && s.phase === 'takeoff' ? sim.plane.id : s.save.selected);
-            this.airport?.update(s.phase === 'paused' ? 0 : dt, this.airportOpen);
+            this.airport?.update(s.phase === 'paused' ? 0 : dt);
             if (s.phase !== 'paused')
                 this.hangarCamera(dt, s.phase);
             this.livery();
@@ -944,6 +927,7 @@ export class AirrunRenderer {
         }
         const stage = document.querySelector<HTMLElement>('[data-hangar-stage]'), rect = phase === 'hangar' ? stage?.getBoundingClientRect() : null;
         if (!rect || rect.width < 10 || rect.height < 10) {
+            this.lobbyFit = null;
             this.camera.clearViewOffset();
             this.camera.position.lerp(new T.Vector3(30, 14, -55), 1 - Math.exp(-dt * 4));
             this.camera.lookAt(0, 8, -20);
@@ -962,6 +946,7 @@ export class AirrunRenderer {
         // aircraft or viewport changes, not on every idle animation frame.
         const fitKey = [this.planeId, this.silhouette.length, width, height, rect.width, rect.height,
             this.orbit.yaw.toFixed(5), this.orbit.pitch.toFixed(5), this.orbit.zoom, baseY].join(':');
+        const firstView = !this.lobbyFit;
         if (!this.lobbyFit || this.lobbyFit.key !== fitKey) {
             const center = this.silhouette.length ? new T.Box3().setFromPoints(this.silhouette).getCenter(new T.Vector3()) : new T.Vector3(0, 1.8, 0);
             const direction = new T.Vector3(Math.sin(this.orbit.yaw) * Math.cos(this.orbit.pitch), Math.sin(this.orbit.pitch), -Math.cos(this.orbit.yaw) * Math.cos(this.orbit.pitch));
@@ -969,9 +954,9 @@ export class AirrunRenderer {
         }
         const { target, center: worldCenter, fov } = this.lobbyFit.fit;
         this.camera.setViewOffset(width, height, width / 2 - rect.x - rect.width / 2, height / 2 - rect.y - rect.height / 2, width, height);
-        this.camera.position.lerp(target, 1 - Math.exp(-dt * 7));
+        this.camera.position.lerp(target, firstView ? 1 : 1 - Math.exp(-dt * 7));
         this.camera.lookAt(worldCenter);
-        this.camera.fov = damp(this.camera.fov, fov, 5, dt);
+        this.camera.fov = firstView ? fov : damp(this.camera.fov, fov, 5, dt);
         this.camera.updateProjectionMatrix();
     }
     flightCamera(sim: FlightSimulation, dt: number, phase: Phase) {

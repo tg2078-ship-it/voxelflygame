@@ -139,9 +139,13 @@ export function buildEncounter(p: Pattern, start: number, seed: number, catalog:
     const lead = p.generation?.lead ?? (serial === 1 ? 800 : 155), spacing = p.generation?.spacing ?? Math.max(170, p.spacing * .82);
     // Distance-based sorties change terrain at encounter boundaries. Preserve
     // continuous-flight pacing, whose weather and geography use elapsed time.
-    const intervals = (p.generation?.beats ?? [1, 1]).map(beat => Math.max(p.generation?.minimumSpacing ?? 150, spacing * beat));
-    const rawLength = lead + intervals[0] + intervals[1] + (p.generation ? 95 : 125), length = alignChunks ? Math.ceil(rawLength / 128) * 128 : rawLength;
-    const rewardStep = Math.floor(hash(seed + serial * 277) * 3);
+    const offsets = [0];
+    for (let i = 1; i < p.steps.length; i++) {
+        const beat = p.generation?.beats?.[i - 1] ?? 1;
+        offsets.push(offsets[i - 1] + Math.max(p.generation?.minimumSpacing ?? 150, spacing * beat));
+    }
+    const rawLength = lead + offsets[offsets.length - 1] + (p.generation ? 95 : 125), length = alignChunks ? Math.ceil(rawLength / 128) * 128 : rawLength;
+    const rewardStep = Math.floor(hash(seed + serial * 277) * p.steps.length);
     const city = k === 'city' || k === 'korea' && variant === 0;
     const coastal = k === 'coast' || k === 'korea' && variant === 3;
     let id = serial * 1000;
@@ -200,10 +204,12 @@ export function buildEncounter(p: Pattern, start: number, seed: number, catalog:
         }
     };
     let previous = from;
-    for (let j = 0; j < 3; j++) {
+    for (let j = 0; j < p.steps.length; j++) {
         const stepFamily = family;
-        const [action, safeX, safeY] = p.steps[j], z = start + lead + (j > 0 ? intervals[0] : 0) + (j > 1 ? intervals[1] : 0);
+        const [action, safeX, safeY] = p.steps[j], z = start + lead + offsets[j];
         const x = safeX * .53 + (rand() - .5) * 2;
+        // Keep a wing-safe lane even when the course marker is near the centre.
+        const opposite = x - Math.sign(x || 1) * Math.max(2 * Math.abs(x), span * .34 + 22);
         let y = Math.min(AIRSPACE.ceiling - 5, safeY), width = Math.max(span * 1.65, 25), height = 18;
         let floor = 5, ceiling = AIRSPACE.ceiling - 3;
         if (['arch', 'tunnel', 'under', 'bridge'].includes(action)) {
@@ -238,21 +244,21 @@ export function buildEncounter(p: Pattern, start: number, seed: number, catalog:
             const roofTop = building.y + catalog.byId.get(building.model)!.bounds.max[1] * building.sy;
             y = Math.max(roofTop + 6, Math.min(y, roofTop + 14));
             floor = roofTop + 3;
-            hero(family.wall, -x, z - 16, 28, 62, 24, 'wall');
+            hero(family.wall, opposite, z - 16, 28, 62, 24, 'wall');
         }
         else if (action === 'crane') {
             hero(family.crane, x + (x > 0 ? -45 : 45), z, 40, Math.max(32, y + 10), 24, 'crane', x > 0 ? Math.PI : 0);
-            hero(family.wall, -x, z + 25, 26, 60, 22, 'wall');
+            hero(family.wall, opposite, z + 25, 26, 60, 22, 'wall');
         }
         else if (action === 'mover' || action === 'cross') {
-            mover(-x, Math.max(15, y - 8), z, rand() * 6);
-            hero(family.wall, -x, z + 40, 27, 60, 22, 'wall');
+            mover(opposite, Math.max(15, y - 8), z, rand() * 6);
+            hero(family.wall, opposite, z + 40, 27, 60, 22, 'wall');
         }
         else {
             // Slalom is a changing passage between local structures, not three
             // copies of the district's landmark. Keep a single focal silhouette.
             const obstacle = action === 'slalom' ? family.wall : family.spire;
-            hero(obstacle, coastal && obstacle === 'lighthouse' ? 33 : -x, z, 28, 62, 24, 'spire');
+            hero(obstacle, coastal && obstacle === 'lighthouse' ? 33 : opposite, z, 28, 62, 24, 'spire');
             if (action === 'slalom') {
                 hero(family.wall, x + Math.sign(x) * 23, z - 75, 17, 54, 19, 'course flank');
                 hero(family.wall, -x * .65, z + 80, 18, 54, 19, 'course flank');
@@ -284,13 +290,13 @@ export function buildEncounter(p: Pattern, start: number, seed: number, catalog:
             pickups.push({ id: ++id, kind: 'coin', x: mix(previous.x, x, n / 7), y: mix(previous.y, y, n / 7), z: z - 145 + n * 18, radius: 2.8, collected: false, risk: false });
         // One deliberate reward line, rather than a ring on every obstacle.
         if (j === rewardStep) {
-            pickups.push({ id: ++id, kind: 'ring', x: riskX, y: riskY, z: z + 2, radius: Math.max(5.5, span * .6), collected: false, risk: true });
+            pickups.push({ id: ++id, kind: 'ring', x: mix(x, riskX, .55), y: mix(y, riskY, .55), z: z - 46, radius: Math.max(5.5, span * .6), collected: false, risk: true });
             for (let n = 0; n < 3; n++)
                 pickups.push({ id: ++id, kind: 'crystal', x: riskX, y: riskY, z: z + 36 + n * 20, radius: 2.5, collected: false, risk: true });
         }
         if (j === 1) {
             const kinds: ItemKind[] = ['shield', 'multiplier', 'slow', 'turbo', 'repair'];
-            pickups.push({ id: ++id, kind: kinds[Math.floor(rand() * 5)], x: clamp(x - 8, -AIRSPACE.softEdge, AIRSPACE.softEdge), y: Math.min(AIRSPACE.ceiling - 2, y + 5), z: z + 100, radius: 3.5, collected: false, risk: true });
+            pickups.push({ id: ++id, kind: kinds[Math.floor(rand() * 5)], x: clamp(x - 8, -AIRSPACE.softEdge, AIRSPACE.softEdge), y: Math.min(AIRSPACE.ceiling - 2, y + 5), z: Math.min(z + 100, start + length - 10), radius: 3.5, collected: false, risk: true });
         }
         previous = { x, y };
     }
@@ -298,8 +304,9 @@ export function buildEncounter(p: Pattern, start: number, seed: number, catalog:
         // Learn the controls through optional scored lines before the first
         // lethal structure. A generous grace period must still feel like play.
         const direction = hash(seed + 1709) < .5 ? -1 : 1;
-        const orientation = [.22, .43, .65].map((fraction, i) => ({ z: start + lead * fraction,
-            x: direction * (i % 2 ? -1 : 1) * (6 + hash(seed + i * 8191) * 6),
+        const lessonStyle = hash(seed + 679) < .5 ? [1, -.4, -1] : [-.45, 1, .48];
+        const orientation = [.18 + hash(seed + 431) * .09, .40 + hash(seed + 789) * .09, .64 + hash(seed + 73) * .08].map((fraction, i) => ({ z: start + lead * fraction,
+            x: direction * lessonStyle[i] * (7 + hash(seed + i * 8191) * 6),
             y: 21 + hash(seed + i * 1777 + 71) * 10 }));
         route.unshift(...orientation.map(point => ({ ...point, width: Math.max(20, span * 1.4), height: 10, dangerX: point.x, dangerY: point.y, role: 'orientation' })));
         let previous = { x: from.x, y: from.y, z: start };
@@ -355,20 +362,27 @@ export function buildEncounter(p: Pattern, start: number, seed: number, catalog:
         river: 'rocky_ridge', landmark: 'rocky_ridge', aurora: 'jagged_ice_spire',
         volcano: 'sea_stacks', waterfall: 'waterfall_cliff',
     };
-    const pillar = catalog.byId.get(pillarModels[k]);
-    if (pillar) for (const point of route) {
+    const shoulderDeck = [pillarModels[k], family.wall, family.spire];
+    for (const point of route) {
         if (point.role === 'orientation') continue;
         const pressure = p.generation?.difficulty === 'expert' ? 1 : p.generation?.difficulty === 'relaxed' ? 0 : .55;
-        const scale = Math.min((38 + pressure * 10) / pillar.bounds.size[1], 58 / pillar.bounds.size[0], 44 / pillar.bounds.size[2]);
         const clearance = Math.max(span * .34 + 3.8, 8.5 - pressure * 1.5);
         for (const side of [-1, 1]) {
+            // A bend can have a tall inside landmark, a staggered shoulder or a pair.
+            // Keep inhabited capes to one lighthouse per district.
+            const roll = hash(seed + point.z * .37 + side * 311);
+            if (side * point.x < 0 && roll < .35) continue;
+            const id = shoulderDeck[Math.floor(roll * shoulderDeck.length)];
+            const pillar = catalog.byId.get(id === 'lighthouse' ? pillarModels[k] : id);
+            if (!pillar) continue;
+            const scale = Math.min((34 + pressure * 10 + roll * 14) / pillar.bounds.size[1], 58 / pillar.bounds.size[0], 44 / pillar.bounds.size[2]);
             // Account for asymmetric authored bounds, not just nominal width.
             const edge = side > 0 ? pillar.bounds.min[0] : pillar.bounds.max[0];
             // Preserve the optional gold lane as well as the mint centre line.
             const laneClearance = Math.max(clearance, side * (point.dangerX - point.x) + span * .34 + 2.4);
             const x = point.x + side * laneClearance - edge * scale;
             const inside = side > 0 ? x + pillar.bounds.min[0] * scale < AIRSPACE.halfWidth : x + pillar.bounds.max[0] * scale > -AIRSPACE.halfWidth;
-            if (inside) plot(pillar.id, x, point.z, scale, 'route shoulder');
+            if (inside) plot(pillar.id, x, point.z + (roll - .5) * 36, scale, 'route shoulder');
         }
     }
     const village = k === 'village' || k === 'korea' && variant === 1;
@@ -385,18 +399,22 @@ export function buildEncounter(p: Pattern, start: number, seed: number, catalog:
         }
         return placed;
     };
-    const clusters = Math.max(4, Math.min(18, Math.ceil(length / 145)));
+    // A market gathers around one square, a headland has scattered outposts,
+    // and a working quay follows the water in a line of short terraces.
+    const layout = patternIndex % 4;
+    const blockLength = [190, 124, 160, 210][layout];
+    const clusters = Math.max(3, Math.min(18, Math.ceil(length / blockLength)));
     for (let cluster = 0; cluster < clusters; cluster++) {
         const centre = start + 45 + (cluster + .15 + rand() * .6) * (length - 160) / clusters;
         // Vary frontage and density so districts open onto working basins,
         // fields or water instead of repeating a straight wall of props.
         const side = coastal ? 1 : rand() < .5 ? -1 : 1;
-        const frontage = side * (28 + rand() * 9);
-        const count = (city ? 3 : 2) + Math.floor(rand() * 3);
+        const frontage = 25.5 + rand() * 4;
+        const count = (city || layout === 1 ? 3 : 2) + Math.floor(rand() * 3);
         for (let n = 0; n < count; n++) {
             const model = place.buildings[Math.floor(rand() * place.buildings.length)];
-            const z = Math.min(start + length - 24, centre + n * (20 + rand() * 15));
-            const x = frontage + side * (rand() * 10);
+            const z = Math.min(start + length - 24, centre + (layout === 1 ? Math.floor(n / 2) * 32 : n * (19 + rand() * 19)));
+            const x = side * (frontage + (layout === 1 ? (n % 2) * 8 : layout === 3 ? n * 2 : rand() * 9));
             placeBuilding(model, x, z, 14 + rand() * 7, 20 + rand() * 11, city ? 40 + rand() * 24 : 21 + rand() * 13, 'district', (side < 0 ? Math.PI : 0) + (rand() - .5) * .16);
         }
         if (cluster % 2 === 0 || !coastal) {
@@ -410,12 +428,12 @@ export function buildEncounter(p: Pattern, start: number, seed: number, catalog:
                 placeBuilding('cargo_container', 30, centre + 105, 7, 12, 6, 'quay cargo');
                 placeBuilding('cargo_container', 37, centre + 109, 7, 12, 6, 'quay cargo');
             }
-            const boat = cluster % 2 ? 'fishing_boat' : family.mover;
+            const boat = [family.mover, 'fishing_boat', 'rescue_tug', 'coastal_rescue_patrol_boat'][Math.floor(rand() * 4)];
             if (isWatercraft(boat)) {
                 const native = catalog.byId.get(boat);
                 if (native) {
                     const scale = Math.min(1.15, 12 / native.bounds.size[0], 24 / native.bounds.size[2]);
-                    const placed = put(boat, -23 + (rand() - .5) * 3, WATER_LEVEL, centre + 55, scale, scale, scale,
+                    const placed = put(boat, -21 - rand() * 26, WATER_LEVEL, centre + 55, scale, scale, scale,
                         'harbour traffic', cluster % 2 ? Math.PI : 0, false,
                         { axis: 'z', amplitude: 16, frequency: .11, phase: rand() * Math.PI * 2 });
                     if (placed && !corridorClear(placed)) placements.pop();
@@ -430,7 +448,7 @@ export function buildEncounter(p: Pattern, start: number, seed: number, catalog:
     }
     // Connect sparse district edges with landscape, never an extra compulsory
     // obstacle or another reward chain. Global cells prevent segment seams.
-    if (pillar) for (let cell = Math.ceil(start / 160); cell * 160 < start + length; cell++) {
+    for (let cell = Math.ceil(start / 160); cell * 160 < start + length; cell++) {
         const z = Math.min(start + length - 12, cell * 160 + hash(seed + cell * 79) * 45);
         const nearby = placements.some(o => Math.abs(o.z - z) < 85 && o.role !== 'foundation' && catalog.byId.get(o.model)!.bounds.size[1] * o.sy > 20);
         if (nearby) continue;

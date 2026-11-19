@@ -10,11 +10,10 @@ import { routePosition } from '../../app/airrun/trick-path';
 import { AIRSPACE } from '../../app/airrun/graphics';
 import { isWatercraft } from '../../app/airrun/model-kind';
 import { groundAt, WATER_LEVEL } from '../../app/airrun/world-ground';
-import { AIRCRAFT, themeAt } from '../../app/airrun/data';
+import { AIRCRAFT, THEMES, themeAt } from '../../app/airrun/data';
 import type { ModelLibrary } from '../../app/airrun/assets';
-import type { ThemeId } from '../../app/airrun/types';
 const cases = [], matrix = new T.Matrix4(), transform = new T.Object3D(); let checks = 0;
-for (const theme of ['coast', 'village', 'city', 'ice', 'desert', 'forest', 'farm', 'korea'] as ThemeId[])
+for (const { id: theme } of THEMES)
     for (const variant of theme === 'korea' ? [0, 1, 2, 3] : [0]) for (const seed of [13, 42]) for (const plane of ['skyhawk', 'transport']) {
         const sim = createSim({ seed, plane, practice: { theme, variant, plane, level: 1, night: false, weather: 'clear' } });
         const inventory = themeCollection(theme, catalog);
@@ -45,7 +44,7 @@ for (const theme of ['coast', 'village', 'city', 'ice', 'desert', 'forest', 'far
                 }
             }
             for (const encounter of sim.encounters) {
-                assert(encounter.placements.filter(p => p.role === 'collection').length <= 2, 'a district has at most two discovery accents'); checks++;
+                assert(encounter.placements.filter(p => p.role === 'collection').length <= 4, 'a district has at most four discovery accents'); checks++;
                 assert(!encounter.placements.some(p => p.role === 'collection' && /^(airport_|runway|taxiway|aeroway_)/.test(p.model)), 'airport exhibition pieces do not leak into the local district'); checks++;
             }
         }

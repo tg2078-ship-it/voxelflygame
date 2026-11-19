@@ -4,12 +4,13 @@ export interface CloudCell { cloud: number; x: number; y: number; z: number; sx:
 function formation(seed: number, cloud: number) {
     const salt = seed + cloud * 7919, anvil = cloud % 4 === 3;
     const near = cloud % 8 === 0;
+    const shelf = !near && !anvil && hash(salt + 201) < .36;
     return {
         x: (hash(salt + 239) - .5) * (near ? 460 : 1500),
         z: near ? 1550 + hash(salt + 631) * 320 : 100 + hash(salt + 631) * 1700,
         y: (anvil ? 248 : 156) + hash(salt + 97) * (anvil ? 74 : 92),
-        rx: (anvil ? 78 : 30) + hash(salt + 773) * (anvil ? 60 : 44),
-        ry: (anvil ? 58 : 64) + hash(salt + 881) * (anvil ? 34 : 38),
+        rx: (anvil || shelf ? 78 : 30) + hash(salt + 773) * (anvil ? 60 : 44),
+        ry: (shelf ? 48 : anvil ? 58 : 64) + hash(salt + 881) * (anvil ? 34 : 38),
         rz: 38 + hash(salt + 913) * 57, anvil,
     };
 }

@@ -1,0 +1,97 @@
+/* Field guide photographs are small, local renders shared by both loading paths. */
+.dispatch-loader {
+    position:absolute; inset:0; z-index:40; isolation:isolate; overflow:hidden;
+    display:flex; flex-direction:column; align-items:flex-start; justify-content:flex-end;
+    padding:clamp(24px,5vw,82px); color:#fcf7e8; background:#193444;
+}
+.dispatch-photo { position:absolute; inset:0; z-index:-2; background-position:center; background-size:cover; }
+.dispatch-loader::before {
+    content:""; position:absolute; inset:0; z-index:-1; pointer-events:none;
+    background:linear-gradient(0deg,#061621f7 0%,#091d28c7 16%,transparent 78%),linear-gradient(90deg,#132b328a,transparent 65%);
+}
+.dispatch-loader>header { position:absolute; top:6%; display:flex; align-items:center; gap:10px; letter-spacing:.1em; text-shadow:0 1px 6px #07141d; }
+.dispatch-loader>header small { color:#ecddc0; font-size:11px; letter-spacing:0; }
+.dispatch-copy h1 { margin:5px 0; font-size:clamp(36px,6vw,91px); line-height:1.1; letter-spacing:-.055em; color:#fff7e5; }
+.dispatch-copy>p { color:#f5e9d4; margin:9px 0 15px; font-size:clamp(13px,1.2vw,18px); }
+.dispatch-copy .dispatch-index { color:#ffda99; letter-spacing:.16em; font-size:12px; font-weight:600; }
+.dispatch-copy nav { display:flex; flex-wrap:wrap; gap:8px; }
+.dispatch-copy nav button,.dispatch-tool,.dispatch-view summary {
+    cursor:pointer; border:1px solid #d6e8db56; border-radius:5px; background:#132936ed; color:#ddede6;
+    padding:10px 14px; font:inherit; font-size:13px;
+}
+.dispatch-copy nav button[aria-pressed=true],.dispatch-tool[aria-expanded=true] { border-color:#e4c18b; color:#ffdc9f; background:#263c41; }
+.dispatch-transfer { margin-top:clamp(16px,4vh,45px); width:min(530px,100%); }
+.dispatch-transfer .loader-status { margin:0; }.dispatch-transfer .loader-status p { color:#e1ece7; font-size:13px; }
+.dispatch-transfer .loader-status b { margin-left:auto; font-size:24px; }.dispatch-transfer .loading-bar { margin:8px 0; }
+.airrun-eleven .dispatch-home { position:absolute; inset:100px 3.2vw 23px; display:block; padding:0; overflow:visible; }
+.dispatch-home .ops-showcase { position:absolute; inset:0 0 87px; min-height:0; }
+.dispatch-home .ops-showcase-heading { left:6px; right:6px; }
+.dispatch-home .ops-model-stage.hangar-stage { inset:68px 0 0; min-height:0; }
+.dispatch-home .ops-bay-label { display:none; }
+.dispatch-home .ops-stage-footer { pointer-events:none; }
+.dispatch-view { pointer-events:auto; position:relative; }
+.dispatch-view summary { display:list-item; padding:7px 12px; }
+.dispatch-view .inspection-controls { position:absolute; right:0; bottom:100%; padding:7px; display:flex; flex-wrap:nowrap; background:#132936f5; }
+.dispatch-home .ops-launch-dock { position:absolute; inset:auto 0 0; display:flex; align-items:center; justify-content:flex-start; gap:10px; padding:12px 0 0; z-index:8; }
+.dispatch-tool { display:inline-flex; align-items:center; gap:8px; min-height:44px; white-space:nowrap; }
+.dispatch-home .ops-launch { margin-left:auto; }
+.dispatch-home .ops-fleet-dock,.dispatch-home .ops-right-stack {
+    position:absolute; z-index:7; bottom:84px; max-height:calc(100% - 84px); overflow:auto;
+    padding:12px; background:#102633f7; border:1px solid #8fafa65c; border-radius:8px; box-shadow:0 10px 32px #05132066;
+}
+.dispatch-home .ops-right-stack { right:0; width:min(370px,100%); top:auto; }
+.dispatch-home .ops-fleet-dock { left:0; right:0; }
+.dispatch-home [hidden] { display:none!important; }
+.airrun-eleven .airport-header { padding-left:52px; }
+.airrun-eleven .mobile-menu { display:grid; place-items:center; position:absolute; top:20px; left:24px; right:auto; width:40px; height:40px; z-index:26; border:1px solid #bbd1c04a; background:#16313cf0; color:#e0e9df; border-radius:5px; }
+.airrun-eleven .airport-nav { display:none; }
+.airrun-eleven .airport-nav.expanded { display:grid; grid-template-columns:1fr 1fr; position:absolute; inset:68px auto auto 20px; width:min(300px,90%); max-height:calc(100% - 82px); overflow-y:auto; z-index:25; padding:9px; gap:4px; background:#102632fa; border:1px solid #9bb5a64d; border-radius:6px; }
+.airrun-eleven .airport-nav.expanded button { min-height:44px; justify-content:flex-start; }
+.airrun-eleven .airport-nav .nav-footer { display:none; }
+.airrun-eleven .deck-clean .f6-sector>div,.airrun-eleven .deck-clean .f6-sector>small,.airrun-eleven .deck-clean .f6-operation>p { display:block; }
+.airrun-eleven .deck-clean .f6-sector>div { margin:5px 0; }
+.airrun-eleven .deck-clean .f6-airframe>p,.airrun-eleven .deck-clean .f6-operation>header { display:flex; }
+.airrun-eleven .deck-clean .f6-operation h2 { margin:6px 0; }
+.airrun-eleven .deck-clean .f6-operation p { margin:4px 0 8px; font-size:11px; line-height:1.45; }
+.airrun-eleven .deck-clean .f6-throttle,.airrun-eleven .deck-clean .f6-instruments>i:nth-of-type(2) { display:block; }
+.airrun-eleven .deck-clean .f6-airframe { background:#102632c9; }
+@media (max-height:470px),(max-width:740px) {
+    .airrun-eleven .airport-header { padding-left:46px; }.airrun-eleven .mobile-menu { left:15px; top:10px; width:36px; height:36px; }
+    .airrun-eleven .airport-nav.expanded { top:50px; max-height:calc(100% - 56px); }
+    .airrun-eleven .dispatch-home { inset:62px 16px 10px; }
+    .dispatch-home .ops-showcase { inset:0 0 56px; }
+    .dispatch-home .ops-model-stage.hangar-stage { inset:38px 0 0; }
+    .dispatch-home .ops-launch-dock { gap:6px; padding:4px 0 0; }
+    .dispatch-tool { padding:6px 9px; gap:5px; font-size:11px; }
+    .dispatch-home .ops-launch { min-width:0; min-height:44px; }
+    .dispatch-home .ops-launch-number { min-height:40px; height:auto; }
+    .dispatch-home .ops-fleet-dock,.dispatch-home .ops-right-stack { max-height:calc(100% - 55px); bottom:55px; }
+    .dispatch-home .ops-departure-status { display:none; }
+    .dispatch-home .ops-stage-footer { bottom:0; }
+    .dispatch-home .ops-stage-footer>span { font-size:9px; }
+    .airrun-eleven .deck-clean .f6-sector { top:0; }
+    .airrun-eleven .deck-clean .f6-sector small { font-size:8px; }
+    .airrun-eleven .deck-clean .f6-operation p { font-size:9px; margin:2px 0 4px; }
+}
+@media (max-height:390px) {
+    .dispatch-loader { padding:18px 4vw; }.dispatch-copy h1 { font-size:32px; }
+    .dispatch-copy>p { margin:3px 0 8px; }.dispatch-transfer { margin-top:8px; }
+    .airrun-eleven .deck-clean .f6-operation { top:118px; }
+}
+@media (max-width:490px) {
+    .dispatch-home .dispatch-tool { flex-direction:column; gap:2px; font-size:10px; }
+    .dispatch-home .ops-launch { flex:1; }
+    .dispatch-home .ops-fleet-heading { flex-wrap:wrap; gap:4px; }
+    .dispatch-home .ops-fleet-filters { margin-left:0; }
+}
+@media (prefers-reduced-motion:no-preference) {
+    .airrun-eleven:not(.reduced-motion) .dispatch-photo { animation:dispatch-photo-in .55s ease-out; }
+    @keyframes dispatch-photo-in { from { opacity:.2; transform:scale(1.018); } to { opacity:1; transform:scale(1); } }
+}
+.dispatch-ring-pass { position:absolute; left:50%; top:19%; transform:translateX(-50%); display:flex; align-items:center; gap:9px; padding:7px 12px; border-bottom:2px solid #f2c271; border-radius:4px; background:#122731e6; color:#e6eae0; font-size:11px; pointer-events:none; white-space:nowrap; }
+.dispatch-ring-pass b,.dispatch-ring-pass strong,.dispatch-ring-best { color:#ffda93; }
+@media (max-height:470px) { .dispatch-ring-pass { top:16%; padding:4px 9px; font-size:9px; } }
+.dispatch-home .aircraft-selector>button { grid-template-columns:minmax(0,1fr); height:auto; }
+.dispatch-home .aircraft-selector .aircraft-photo { width:100%; height:auto; aspect-ratio:16/9; display:block; object-fit:contain; border:0; }
+.dispatch-home .aircraft-selector .fleet-card-copy { gap:3px; padding:5px 8px 7px; }.dispatch-home .fleet-card-copy b { min-height:0; }
+@media (max-height:470px) { .dispatch-home .aircraft-selector { grid-auto-columns:114px; }.dispatch-home .fleet-card-copy>span { display:none; } }

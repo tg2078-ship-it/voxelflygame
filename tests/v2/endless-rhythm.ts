@@ -14,14 +14,14 @@ for(let seed=0;seed<32;seed++)for(let slot=0;slot<48;slot++)seen.add(themeAt(see
 check(THEMES.length===13&&THEMES.every(t=>seen.has(t.id)),'All thirteen original themes remain reachable in endless rotation');
 const sim=createSim({mode:'endless'});
 check(sim.courseTheme(0,179.99).theme.id==='coast'&&sim.courseTheme(0,180).theme.id==='village'&&sim.courseTheme(0,359.99).theme.id==='village','Main mode gives each region three minutes');
-const gaps=new Set<string>(),districts=new Set<string>();
+const sizes=new Set<number>(),gaps=new Set<string>(),districts=new Set<string>();
 let rings=0,landscapes=0;
 for(const theme of THEMES)for(let seed=0;seed<12;seed++){
  const pattern=proceduralPattern(theme.id,0,seed,3,4000);
  const e=buildEncounter(pattern,3000,seed,{byId:catalog},11,4);
  const ds=e.route.slice(1).map((point,i)=>point.z-e.route[i].z);
  check(ds.every(gap=>gap>=150&&gap<400),'Rhythm variation remains within readable approach distances');
- check(Math.abs(ds[0]-ds[1])>1,'Each section avoids a metronomic three-gate cadence');
+ sizes.add(e.route.length);
  gaps.add(ds.map(n=>Math.round(n)).join(','));
  const reward=e.pickups.filter(p=>p.kind==='ring');rings+=reward.length;
  check(reward.length===1,'One reward ring is a deliberate optional line, not every obstacle');
@@ -30,14 +30,15 @@ for(const theme of THEMES)for(let seed=0;seed<12;seed++){
  check(landscape.every(p=>!p.collision&&Math.abs(p.x)>40),'Gap scenery never adds unseen collision targets');
  districts.add(e.placements.filter(p=>p.role==='district').map(p=>`${p.model}:${Math.round(p.x)}:${Math.round(p.z)}`).join('|'));
 }
+check([...sizes].sort().join(',')==='2,3,4,5','Later regions vary the number of manoeuvres');
 check(gaps.size>40&&districts.size>100,'Seeds vary timing and district geography, not only model names');
 const intro=createSim({mode:'endless'}).encounters[0];
 check(intro.pickups.filter(p=>p.kind==='ring').length===3,'Opening has two learning rings and one structural reward');
 sim.pickups=[230,900,35,130,70].map((z,id)=>({id,z,kind:'ring' as const,x:0,y:24,radius:6,collected:false,risk:true}));
 const fx=new FlightFX(new T.Scene());fx.update(sim,1/60,new T.Group(),[],'balanced');
-const mesh=fx.items.get('ring')!;check(mesh.count===2,'Only two nearby reward rings are rendered');
+const mesh=fx.items.get('ring')!;check(mesh.count===5,'All five in-range rings are rendered together');
 const matrix=new T.Matrix4(),positions=[];
 for(let i=0;i<mesh.count;i++){mesh.getMatrixAt(i,matrix);positions.push(-matrix.elements[14]);}
-check(positions.sort((a,b)=>a-b).join(',')==='35,70','Nearest rings win even when pickup generation order differs');
+check(positions.sort((a,b)=>a-b).join(',')==='35,70,130,230,900','Every ring stays at its simulated position independent of generation order');
 fx.dispose();
 console.log(JSON.stringify({checks,themes:seen.size,sections:156,rewardRings:rings,distinctRhythms:gaps.size,distinctDistricts:districts.size,landscapeConnectors:landscapes,status:'passed'}));

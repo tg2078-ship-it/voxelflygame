@@ -62,29 +62,43 @@ export function curatedDistrictModels(theme: ThemeId, variant: number, patternIn
         'civic-square': /civic|library|clock|plaza|parking|billboard/,
     };
     const incidental = themeCollection(theme, catalog).filter(meta =>
-        !/^(airport_|modular_|runway|taxiway|danger_gate|aeroway_|repair_|warning_bollard|retro_)/.test(meta.id) &&
+        !/^(airport_|airrun_waypoint_ring|landing_pad_marker_kit|modular_|runway|taxiway|danger_gate|aeroway_|repair_|warning_bollard|retro_)/.test(meta.id) &&
         (!affinity[place.id] || affinity[place.id].test(meta.id)));
     return [...new Map([...incidental, ...[...explicit].flatMap(id => catalog.has(id) ? [catalog.get(id)!] : [])].map(meta => [meta.id, meta])).values()];
 }
 export function populateThemeCollection(encounter: Encounter, catalog: Map<string, AssetMeta>, seed: number, seen: Set<string>, span: number) {
     const patternIndex = Math.max(0, Number(encounter.id.split(':').at(-1)) - 1);
-    const deck = curatedDistrictModels(encounter.theme, encounter.variant, patternIndex, catalog).sort((a, b) => hash(seed + encounter.start + [...a.id].reduce((n, c) => n * 31 + c.charCodeAt(0) | 0, 0)) - hash(seed + encounter.start + [...b.id].reduce((n, c) => n * 31 + c.charCodeAt(0) | 0, 0)));
-    for (const p of encounter.placements) if (deck.some(meta => meta.id === p.model)) seen.add(p.model);
-    // A new session/seed chooses a different compatible detail. Once the current
-    // district inventory is exhausted, keep its authored scene instead of filling
-    // the path with repeated landmark displays.
+    const local = curatedDistrictModels(encounter.theme, encounter.variant, patternIndex, catalog);
+    const inventory = themeCollection(encounter.theme, catalog);
+    const airfield = /^(airport_|runway|taxiway|aeroway_|hangar_|hero_airfield_|airrun_waypoint_ring|landing_pad_marker_kit)/;
+    const suitable = (meta: AssetMeta) => !airfield.test(meta.id) && !(encounter.theme === 'korea'
+        && (encounter.variant === 1 || encounter.variant === 2) && /seoul_tower|gwangan_bridge|riverside_apartments|harbor_structure/.test(meta.id));
+    const present = new Set(encounter.placements.map(p => p.model));
+    const ranked = (items: AssetMeta[]) => items.filter(suitable).map(meta => {
+        let idHash = 0;
+        for (const letter of meta.id) idHash = Math.imul(idHash, 31) + letter.charCodeAt(0) | 0;
+        return { meta, rank: hash(seed + encounter.start + idHash) };
+    }).sort((a, b) => a.rank - b.rank).map(item => item.meta);
+    const eligible = ranked(inventory), district = ranked(local);
+    for (const meta of eligible) if (present.has(meta.id)) seen.add(meta.id);
+    if (eligible.length && eligible.every(meta => seen.has(meta.id))) seen.clear();
+    const fresh = eligible.filter(meta => !seen.has(meta.id));
+    // Some native models cannot fit this coastline or this aircraft's safety
+    // envelope. Keep the district populated even late in a very long flight.
+    const deck = new Set([...fresh.slice(0, 1), ...district.filter(meta => !seen.has(meta.id)), ...fresh, ...district, ...eligible]);
     const firstRoute = encounter.route[0], lastRoute = encounter.route.at(-1)!;
     const knots = [{ ...(encounter.entry ?? firstRoute), z: encounter.start }, ...encounter.route.flatMap(point => [{ x: point.x, y: point.y, z: point.z - 62 }, { x: point.x, y: point.y, z: point.z + 62 }]), { x: lastRoute.x, y: lastRoute.y, z: encounter.start + encounter.length }];
     const reserved = encounter.placements.filter(p => (p.course || p.role === 'route shoulder') && p.collision).map(p => bounds(p, catalog));
     const added: Box[] = [], water = isWaterLandscape(encounter.theme, encounter.variant);
     let count = 0;
-    for (const meta of deck.filter(meta => !seen.has(meta.id))) {
-        if (count >= 2) break;
+    for (const meta of deck) {
+        if (present.has(meta.id)) continue;
+        if (count >= 4) break;
         const natural = /rock|cliff|arch|tree|pine|ice|glacier|peak|mesa|spire|boulder|cactus/.test(meta.id);
         const flying = /airship|blimp|balloon|banner_plane|bird|drone/.test(meta.id);
         const vessel = isWatercraft(meta.id);
         const variation = .82 + hash(seed + encounter.start + meta.id.length * 271) * .36;
-        const widthCap = vessel && encounter.theme === 'korea' ? 7.5 : 11;
+        const widthCap = vessel && encounter.theme === 'korea' ? 7.5 : natural || flying ? 14 : 16;
         const scale = Math.min(1.5 * variation, widthCap * variation / Math.max(.1, meta.bounds.size[0]), 26 * variation / Math.max(.1, meta.bounds.size[1]), 31 * variation / Math.max(.1, meta.bounds.size[2]));
         const first = Math.floor(hash(seed + meta.id.length * 937 + encounter.start) * 24);
         for (let attempt = 0; attempt < 48; attempt++) {

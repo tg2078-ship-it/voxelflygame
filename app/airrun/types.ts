@@ -118,6 +118,7 @@ export interface Metrics {
     time: number;
 }
 export interface RunResult {
+    bestRingStreak?: number;
     formation?: import('./formation').FormationLog;
     rush?: import('./rush').RushResult;
     courseEdition?: number;
@@ -236,6 +237,7 @@ export interface Weather {
     snow: boolean;
 }
 export interface HUD {
+    ringPass?: { offset: number; award: number; streak: number };
     recordLine?: number;
     formation?: import('./formation').FormationHUD;
     rush?: import('./rush').RushHUD;

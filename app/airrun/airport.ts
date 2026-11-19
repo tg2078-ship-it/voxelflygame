@@ -1,12 +1,11 @@
 import * as T from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { ModelLibrary, type ModelInstance } from './assets';
-import { smooth } from './data';
 import { DEPARTURE } from './flight-presentation';
 /** A solid maintenance hangar, independent of all flight water and terrain. */
 export class AirportView {
     root = new T.Group();
-    door = new T.Group();
+    readonly doorLeaves: T.Mesh[] = [];
     lights: T.Light[] = [];
     instances: ModelInstance[] = [];
     disposed = false;
@@ -115,6 +114,26 @@ export class AirportView {
         for (const x of [-20, 20])
             for (let z = DEPARTURE.runwayStart - 4; z > DEPARTURE.runwayEnd; z -= 18)
                 box(x, .45, z, .2, .25, .5, led);
+        // Folded door panels park under a fixed rail at either side of the aperture.
+        box(0, 20.9, -34.3, 83, .55, 1.1, rib);
+        const glazing = make('#9cb8b5', .28, .28, '#434f49');
+        for (const side of [-1, 1]) {
+            for (let leaf = 0; leaf < 3; leaf++) {
+                const panelGeometry = new T.BoxGeometry(6.2, 20, .32);
+                const panel = new T.Mesh(panelGeometry, steel);
+                panel.position.set(side * (36 + leaf * .85), 10.5, -34.7 + leaf * .44);
+                panel.castShadow = true;
+                this.geometry.add(panelGeometry);
+                this.doorLeaves.push(panel);
+                this.root.add(panel);
+            }
+            box(side * 32.9, 10.5, -34.46, .19, 20, .48, gold);
+            for (let z = -25; z <= 25; z += 10) {
+                box(side * 40.33, 14.6, z, .18, 3.7, 8.4, rib);
+                box(side * 40.17, 14.6, z, .16, 3.2, 7.9, glazing);
+                box(side * 40.04, 14.6, z, .13, 3.25, .16, steel);
+            }
+        }
         for (const [m, list] of batches) {
             const g = mergeGeometries(list, false)!;
             this.geometry.add(g);
@@ -135,21 +154,6 @@ export class AirportView {
         circle.position.y = .495;
         this.geometry.add(circleGeometry);
         this.root.add(circle);
-        this.door.position.set(0, 10.85, -34.3);
-        const panelGeometry = new T.BoxGeometry(79, 20.8, .6), panel = new T.Mesh(panelGeometry, steel);
-        this.geometry.add(panelGeometry);
-        panel.castShadow = true;
-        this.door.add(panel);
-        const slatGeometry = new T.BoxGeometry(78.8, .07, .66);
-        this.geometry.add(slatGeometry);
-        const slats = new T.InstancedMesh(slatGeometry, rib, 26), dummy = new T.Object3D();
-        for (let i = 0; i < 26; i++) {
-            dummy.position.set(0, -9.9 + i * .8, 0);
-            dummy.updateMatrix();
-            slats.setMatrixAt(i, dummy.matrix);
-        }
-        this.door.add(slats);
-        this.root.add(this.door);
         for (const [x, color] of [[-15, '#ffe5bb'], [17, '#b3d3ee']] as const) {
             const light = new T.SpotLight(color, 190, 60, Math.PI / 3, .7, 2);
             light.position.set(x, 19, 6);
@@ -166,10 +170,10 @@ export class AirportView {
         this.lights.push(fill);
         const sign = this.sign('AIRRUN   /   FLIGHT OPERATIONS   /   BAY 01', 1536, 128, 42);
         sign.position.set(0, 18.8, -34.65);
-        sign.rotation.y = Math.PI;
         this.root.add(sign);
         const rear = this.sign('AIRRUN   •   ENGINEERING DIVISION', 1024, 128, 24);
         rear.position.set(0, 9, 33.91);
+        rear.rotation.y = Math.PI;
         this.root.add(rear);
         const mark = this.sign('01   /   AIRFRAME INSPECTION', 1024, 128, 12);
         mark.rotation.x = -Math.PI / 2;
@@ -246,8 +250,9 @@ export class AirportView {
             this.instances.push(instance);
         }));
     }
-    update(dt: number, open: number) { this.door.position.y = 10.85 + smooth(open) * 23.5; this.door.visible = open < .995; for (const i of this.instances)
-        i.mixer.update(dt); }
+    update(dt: number) {
+        for (const instance of this.instances) instance.mixer.update(dt);
+    }
     dispose() {
         this.disposed = true;
         this.root.traverse(n => { if (n instanceof T.InstancedMesh)

@@ -17,7 +17,7 @@ export const isWaterLandscape = (theme: ThemeId, variant = 0) => {
 /** Geographic districts stay fixed in world metres as chunks stream past. */
 export function harborAt(z: number, seed: number) {
     const block = Math.floor(Math.max(0, z) / 640);
-    return block < 2 || hash(block * 271 + seed) > .26;
+    return block === 0 ? hash(seed + 271) > .38 : hash(block * 271 + seed) > .45;
 }
 export function shorelineAt(z: number, seed: number) {
     const phase = hash(seed) * Math.PI * 2;

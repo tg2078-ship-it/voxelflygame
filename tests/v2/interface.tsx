@@ -47,7 +47,7 @@ for (const panel of ['hangar','challenges','atlas','collection','livery','record
 Object.assign(base, snapshot);
 const loading = renderToStaticMarkup(<LoadingScreen progress={.5} label="TEST" ko/>);
 check(loading.includes('50') && loading.includes('aria-valuenow="50"'), 'actual loading progress is visible and accessible');
-check(loading.includes('EXPEDITION CHART') && loading.includes('01 / COAST') && loading.includes('03 / CITY'), 'entry introduces the authored world sequence as a flight chart');
+check(loading.includes('/dispatch/coast.jpg') && loading.includes('풍경 선택') && loading.includes('오로라'), 'loader offers three photographs from native game scenes');
 check(renderToStaticMarkup(<PilotRegistration ko reduced={false} initialName="PILOT" onApprove={() => {}} onSound={() => {}}/>).includes('승인 요청'), 'registration sequence entry');
 check(renderToStaticMarkup(<RewardCeremony ko reduced={false} reward={{ id:'test', kind:'quest', title:'TEST',titleEn:'TEST',coins:45,tier:1 }} onClose={() => {}}/>).includes('CONTRACT') === false, 'Korean reward presentation');
 console.log(JSON.stringify({ interfaceContracts: checks, browserOrLayoutVerified: false, gpuVerified: false, status: 'passed' }));

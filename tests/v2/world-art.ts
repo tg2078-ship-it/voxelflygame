@@ -4,7 +4,7 @@ import { THEMES } from '../../app/airrun/data';
 import { GRAPHICS, AIRSPACE } from '../../app/airrun/graphics';
 import { terrainGeometry } from '../../app/airrun/terrain';
 import { terrainSurfaceColor } from '../../app/airrun/terrain-palette';
-import { offshoreIslandX, terrainElevation, renderedTerrainHeight, WATER_LEVEL } from '../../app/airrun/world-ground';
+import { harborAt, offshoreIslandX, terrainElevation, renderedTerrainHeight, WATER_LEVEL } from '../../app/airrun/world-ground';
 import { landscapePlacements } from '../../app/airrun/landscape';
 import { catalog } from './fixtures';
 
@@ -55,7 +55,9 @@ check(snow.b > snow.r && sand.r > sand.b * 2, 'glacial banks use cold material i
 const coast = landscapePlacements(1, 'coast', 0, 42, 'high', catalog);
 check(coast.some(p => p.x > 0 && p.x < 110) && coast.some(p => p.x > 110 && p.x < 220) && coast.some(p => p.x > 220) && coast.some(p => p.x < -112), 'coastal art occupies foreground, midground, far ridges and offshore islands');
 // A quay must have one physical top face, not two coplanar depth competitors.
-const quayGeometry = terrainGeometry(0, 'coast', 42, 0, 8), quayMaterial = new T.MeshBasicMaterial({ side: T.DoubleSide });
+const quaySeed = [13, 42, 731, 44171].find(seed => harborAt(0, seed))!;
+check(quaySeed !== undefined, 'sample includes an actual working quay');
+const quayGeometry = terrainGeometry(0, 'coast', quaySeed, 0, 8), quayMaterial = new T.MeshBasicMaterial({ side: T.DoubleSide });
 const quayMesh = new T.Mesh(quayGeometry, quayMaterial); quayMesh.updateMatrixWorld(true);
 for (let x = 26.3; x < 70; x += 1.3) for (let z = 1.1; z < 127; z += 3.7) {
     const hits = new T.Raycaster(new T.Vector3(x, 10, -z), new T.Vector3(0, -1, 0), 0, 20).intersectObject(quayMesh);

@@ -27,8 +27,11 @@ const scene = new T.Scene(), airport = new AirportView(scene, library);
 const floor = new T.Box3().setFromObject(airport.root);
 check(floor.min.y <= 0 && floor.max.y >= 21, 'complete grounded hangar structure');
 check(airport.lights.filter(l => l instanceof T.SpotLight && l.castShadow).length === 2, 'contact shadow lights');
-airport.update(1, 0); const closedHeight = airport.door.position.y;
-airport.update(1, 1); check(!airport.door.visible && airport.door.position.y > closedHeight + 20, 'sliding door opens overhead');
+airport.update(1);
+check(airport.doorLeaves.length === 6 && airport.doorLeaves.every(leaf => {
+    const b = new T.Box3().setFromObject(leaf);
+    return b.max.x < -32 || b.min.x > 32;
+}), 'parked door panels leave a 64-metre runway opening');
 airport.dispose(); check(airport.root.parent === null, 'airport disposal releases scene');
 
 const viewports = [
