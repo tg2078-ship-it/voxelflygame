@@ -99,7 +99,9 @@ export function populateThemeCollection(encounter: Encounter, catalog: Map<strin
         const vessel = isWatercraft(meta.id);
         const variation = .82 + hash(seed + encounter.start + meta.id.length * 271) * .36;
         const widthCap = vessel && encounter.theme === 'korea' ? 7.5 : natural || flying ? 14 : 16;
-        const scale = Math.min(1.5 * variation, widthCap * variation / Math.max(.1, meta.bounds.size[0]), 26 * variation / Math.max(.1, meta.bounds.size[1]), 31 * variation / Math.max(.1, meta.bounds.size[2]));
+        const nativeLength = Math.max(...meta.bounds.size, 1);
+        const displayScale = nativeLength <= 12 ? Math.min(3.6, 1.75 + 5 / nativeLength) : 1.5;
+        const scale = Math.min(displayScale * variation, widthCap * variation / Math.max(.1, meta.bounds.size[0]), 26 * variation / Math.max(.1, meta.bounds.size[1]), 31 * variation / Math.max(.1, meta.bounds.size[2]));
         const first = Math.floor(hash(seed + meta.id.length * 937 + encounter.start) * 24);
         for (let attempt = 0; attempt < 48; attempt++) {
             const slot = (first + attempt) % 24, coastal = encounter.theme === 'coast' || encounter.theme === 'korea' && encounter.variant === 3;

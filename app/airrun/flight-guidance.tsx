@@ -15,6 +15,7 @@ export function FlightGuidance({ hud, ko }: { hud: HUD; ko: boolean }) {
         })}
     </>;
     if (!next || !screen?.visible || hud.eRemaining > 0) return null;
+    if (hud.ringSight && !hud.ringSight.edge && Math.abs(hud.ringSight.distance-next.distance)<2) return null;
     const aligned = Math.abs(next.dx) < 4 && Math.abs(next.dy) < 3;
     return <div className={'flight-guidance ' + (aligned ? 'aligned' : '')} style={{ left: screen.x + '%', top: screen.y + '%' }} aria-hidden="true">
         <svg viewBox="0 0 60 40"><path d="M14 2H3v10M46 2h11v10M3 28v10h11M57 28v10H46"/><path className="guidance-centre" d="M23 20h5m4 0h5M30 16v8"/></svg>

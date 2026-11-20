@@ -102,3 +102,62 @@
 }
 .airrun-eleven .f6-sector small { color:#f1f1df; }
 @media (max-height:470px) { .airrun-eleven .f6-sector { padding:3px 8px; } }
+
+.aviation-loader .expedition-course,.aviation-loader .expedition-chart-plane { animation:none; }
+.aviation-loader .loader-expedition-map { filter:drop-shadow(0 18px 35px #0005); }
+.aviation-loader .expedition-chart-plane { stroke:#25454c; stroke-width:.9; }
+.bay-brief {
+    position:absolute; z-index:4; right:0; top:26%; width:202px; overflow:hidden;
+    color:#eaf0e5; border:1px solid #a8bcb36b; border-top:3px solid #dfba7b;
+    background:linear-gradient(140deg,#253b42f5,#101e2bed); box-shadow:0 8px 30px #07162452;
+    padding:16px; border-radius:3px 3px 11px 3px; pointer-events:auto;
+}
+.bay-brief header,.bay-brief dl div,.bay-brief button span,.formation-call {display:flex;align-items:center;gap:8px;}
+.bay-brief header { color:#f4d8a4; }.bay-brief header h2 { margin:0; font-size:16px; }
+.bay-brief dl { margin:13px 0; }.bay-brief dl div { justify-content:space-between; border-top:1px solid #b3cfc521; padding:6px 0; font-size:12px; }
+.bay-brief dt {color:#b7cac4;}.bay-brief dd {margin:0;font-variant-numeric:tabular-nums;font-weight:650;}
+.bay-brief button {width:100%;color:#f7ebd7;background:#0f252cc2;border:1px solid #94b0a64a;padding:10px;text-align:left;border-radius:4px;cursor:pointer;}
+.bay-brief button span {color:#a5d0bf;font-size:11px;}.bay-brief button span svg:last-child {margin-left:auto;}
+.bay-brief button b {display:block;font-size:12px;margin:7px 0;line-height:1.4;}.bay-brief button i,.bay-brief button em {display:block;height:3px;background:#78948d4a;}.bay-brief button em {background:#dfc78b;}
+@media(min-width:900px) and (min-height:520px) { .dispatch-home:has(.bay-brief) .ops-model-stage.hangar-stage { right:216px; } }
+@media(max-width:899px),(max-height:519px) {
+    .bay-brief {top:3px;right:58px;width:auto;padding:4px 8px;border-top-width:1px;}
+    .bay-brief header,.bay-brief button,.bay-brief dl div:last-child {display:none;}
+    .bay-brief dl {display:flex;gap:8px;margin:0;}.bay-brief dl div {padding:1px 0;border:0;}.bay-brief dt {display:none;}.bay-brief dd {font-size:10px;}
+}
+@media(max-width:460px) { .bay-brief {top:43px;right:0;} }
+.gate-sight { --ink:#ffdf91;position:absolute;z-index:6;pointer-events:none;color:var(--ink);
+    transform:translate(-50%,-50%);display:grid;place-items:center;width:19px;height:19px;filter:drop-shadow(0 1px 1px #0b2029);}
+.gate-sight.speed {--ink:#8bffdb;}
+.gate-sight i {width:100%;height:100%;border:2px solid var(--ink);border-radius:50%;box-shadow:0 0 0 1px #243945;
+    mask-image:conic-gradient(transparent 0 18deg,black 19deg 72deg,transparent 73deg 108deg,black 109deg 162deg,transparent 163deg 198deg,black 199deg 252deg,transparent 253deg 288deg,black 289deg 342deg,transparent 343deg);}
+.gate-sight.edge i { mask-image:none; width:13px;height:13px;border:0;border-top:3px solid;border-right:3px solid;border-radius:0;box-shadow:none;transform:rotate(calc(var(--bearing) + 45deg)); }
+.gate-sight span {position:absolute;top:100%;margin-top:3px;white-space:nowrap;font-size:10px;letter-spacing:.04em;padding:2px 5px;border-radius:2px;background:#0b1b25db;line-height:1.2;}
+.gate-sight b {color:white;font-variant-numeric:tabular-nums;}
+.formation-call {position:absolute;left:50%;top:20%;transform:translateX(-50%);padding:7px 10px;max-width:82%;color:#cff9e8;background:#102b34df;border:1px solid #92e0cb80;border-left:3px solid #9fe5c3;font-size:11px;pointer-events:none;z-index:4;}
+.formation-call b {font-variant-numeric:tabular-nums;color:white;}
+.airrun-eleven .f6-instruments {border-top:2px solid #83ada7;background:linear-gradient(125deg,#19323bea,#0d202cf2);box-shadow:0 5px 18px #05131e45;}
+.airrun-eleven .f6-instruments strong {font-variant-numeric:tabular-nums;}
+.airrun-eleven .f6-operation,.airrun-eleven .f6-airframe {border-left:2px solid var(--sector-color,#9ad5b8);}
+.airrun-eleven .hyper-caption>span {color:#a9f9f2;letter-spacing:.12em;}
+@media(max-height:460px) { .formation-call {top:17%;padding:4px 7px;font-size:9px;} .gate-sight span {font-size:9px;} }
+.airrun-eleven .f6-instruments .bank-instrument {display:flex;align-items:center;gap:8px;padding-right:10px;border-right:1px solid #d4eee329;}
+.bank-dial {position:relative;width:31px;height:31px;overflow:hidden;border:1px solid #cfddcb;border-radius:50%;background:#507587;flex-shrink:0;}
+.bank-dial i {position:absolute;inset:-32%;background:linear-gradient(to bottom,#578399 49%,#dae0c2 49% 51%,#856f58 51%);}
+.bank-dial b {position:absolute;left:17%;right:17%;top:50%;height:2px;background:#ffdc87;box-shadow:0 1px 1px #514630;}
+@media(max-height:490px),(max-width:810px){.airrun-eleven .f6-instruments .bank-instrument{display:none;}}
+.aviation-loader .chart-layout {position:absolute;inset:clamp(88px,17vh,138px) 5% clamp(52px,9vh,94px);display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);align-items:center;gap:clamp(18px,4vw,72px);max-width:1480px;margin:auto;}
+.chart-layout .loader-expedition-map,.aviation-loader .chart-layout .loading-copy {position:static;inset:auto;transform:none;width:100%;max-width:none;height:auto;margin:0;}
+.chart-layout .loader-expedition-map>svg {display:block;width:100%;height:auto;aspect-ratio:860/360;}
+.chart-layout .loader-map-caption {padding:10px 0 0;gap:6px;flex-wrap:wrap;}
+.chart-layout .loader-map-caption>span:last-child {display:none;}
+.aviation-loader .chart-layout h1 {margin:8px 0 18px;font-size:clamp(22px,3.1vw,44px);}
+@media(max-aspect-ratio:6/5){
+    .aviation-loader .chart-layout {inset:clamp(85px,14vh,142px) 7% max(58px,9vh);grid-template-columns:1fr;align-content:center;gap:clamp(12px,3vh,30px);}
+    .chart-layout .loader-expedition-map {max-width:min(100%,70vh);justify-self:center;}
+}
+@media(max-height:430px) and (min-aspect-ratio:6/5){
+    .aviation-loader .chart-layout {inset:52px 4% 35px;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:18px;}
+    .aviation-loader .loader-topline,.chart-layout .loader-map-caption,.chart-layout .loader-flight-tip small {display:none;}
+    .aviation-loader .chart-layout h1 {font-size:20px;margin:4px 0 8px;}
+}

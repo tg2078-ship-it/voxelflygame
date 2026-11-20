@@ -5,6 +5,8 @@ import { DEPARTURE } from './flight-presentation';
 /** A solid maintenance hangar, independent of all flight water and terrain. */
 export class AirportView {
     root = new T.Group();
+    private doorTime = 2.8;
+    get entryReveal() { return 1 - T.MathUtils.smoothstep(this.doorTime,.24,2.8); }
     readonly doorLeaves: T.Mesh[] = [];
     lights: T.Light[] = [];
     instances: ModelInstance[] = [];
@@ -119,15 +121,21 @@ export class AirportView {
         const glazing = make('#9cb8b5', .28, .28, '#434f49');
         for (const side of [-1, 1]) {
             for (let leaf = 0; leaf < 3; leaf++) {
-                const panelGeometry = new T.BoxGeometry(6.2, 20, .32);
+                const panelGeometry = new T.BoxGeometry(13.32, 20, .32);
                 const panel = new T.Mesh(panelGeometry, steel);
-                panel.position.set(side * (36 + leaf * .85), 10.5, -34.7 + leaf * .44);
+                panel.position.set(side * (39.6 + leaf * .85), 10.5, -34.7 + leaf * .44);
+                const braces = [new T.BoxGeometry(.22, 19.7, .12), new T.BoxGeometry(12.6, .18, .13), new T.BoxGeometry(11.8, 1.3, .12)];
+                for (const [i,geometry] of braces.entries()) {
+                    this.geometry.add(geometry);
+                    const fitting = new T.Mesh(geometry, [gold,rib,glazing][i]);
+                    fitting.position.set(i === 0 ? -side*6.48 : 0, [0,-3,4.3][i], .20);
+                    panel.add(fitting);
+                }
                 panel.castShadow = true;
                 this.geometry.add(panelGeometry);
                 this.doorLeaves.push(panel);
                 this.root.add(panel);
             }
-            box(side * 32.9, 10.5, -34.46, .19, 20, .48, gold);
             for (let z = -25; z <= 25; z += 10) {
                 box(side * 40.33, 14.6, z, .18, 3.7, 8.4, rib);
                 box(side * 40.17, 14.6, z, .16, 3.2, 7.9, glazing);
@@ -250,7 +258,22 @@ export class AirportView {
             this.instances.push(instance);
         }));
     }
+    openBay(reducedMotion: boolean) {
+        this.doorTime = reducedMotion ? 2.8 : 0;
+        this.positionDoors();
+    }
+    private positionDoors() {
+        this.doorLeaves.forEach((panel, index) => {
+            const leaf = index % 3, side = index < 3 ? -1 : 1;
+            const phase = T.MathUtils.smoothstep(this.doorTime, .09 * (2 - leaf), 1.85 + leaf * .09);
+            panel.position.x = side * T.MathUtils.lerp(6.66 + leaf * 13.32, 39.6 + leaf * .85, phase);
+        });
+    }
     update(dt: number) {
+        if (this.doorTime < 2.8) {
+            this.doorTime = Math.min(2.8, this.doorTime + dt);
+            this.positionDoors();
+        }
         for (const instance of this.instances) instance.mixer.update(dt);
     }
     dispose() {

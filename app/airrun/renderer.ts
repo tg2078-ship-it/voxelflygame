@@ -1,6 +1,6 @@
 import { CourseBeacons } from './course-beacons';
 import { personalRival } from './mastery';
-import { projectGuidance } from './guidance-projection';
+import { projectGuidance, projectRingSight } from './guidance-projection';
 import * as T from 'three';
 import { isPaintMaterial, isPaintVertex } from './livery-surface';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
@@ -715,6 +715,8 @@ export class AirrunRenderer {
         }
         if (s.phase !== this.lastPhase) {
             if (s.phase === 'flying' && this.lastPhase === 'paused' && document.activeElement instanceof HTMLElement) document.activeElement.blur();
+            if (s.phase === 'hangar') this.airport?.openBay(s.save.settings.reducedMotion);
+            if (s.phase === 'preflight' || s.phase === 'takeoff') this.airport?.openBay(true);
             if (s.phase === 'paused') {
                 this.held.clear();
                 releaseInput();
@@ -775,20 +777,6 @@ export class AirrunRenderer {
                     break;
                 }
             }
-            if (sim.time - this.lastHUD > .10) {
-                const hud = sim.hud(input);
-                if (hud.navigation) {
-                    const next = hud.navigation;
-                    next.screen = projectGuidance(this.camera, { x: sim.x + next.dx, y: sim.y + next.dy, z: sim.z + next.distance }, this.renderPose?.z ?? sim.z, this.flightOffset, sim.speed);
-                }
-                if (hud.choice) for (const lane of [hud.choice.safe, hud.choice.risk])
-                    lane.screen = projectGuidance(this.camera, { x: lane.x, y: lane.y, z: sim.z + hud.choice.distance }, this.renderPose?.z ?? sim.z, this.flightOffset, sim.speed);
-                hud.fps = this.fps;
-                hud.draws = this.renderer.info.render.calls;
-                hud.triangles = this.renderer.info.render.triangles;
-                useAirrun.setState({ hud });
-                this.lastHUD = sim.time;
-            }
             if (sim.time - sim.lastCheckpoint >= 10) {
                 sim.lastCheckpoint = sim.time;
                 s.checkpoint(sim.result(true));
@@ -827,6 +815,28 @@ export class AirrunRenderer {
                 this.world?.update(sim, dt, s.save.settings.quality, pose?.motionTime ?? sim.motionTime);
             if (s.phase === 'flying' || s.phase === 'crashing')
                 this.flightCamera(sim, dt, s.phase);
+            if (s.phase === 'flying' && !this.hyperPreparing && sim.time - this.lastHUD > .10) {
+                const hud = sim.hud(input);
+                if (!sim.eRemaining) {
+                    let nearest;
+                    for (const pickup of sim.pickups) {
+                        if (pickup.kind !== 'ring' || pickup.collected || pickup.z < sim.z || pickup.z - sim.z > Math.min(480, Math.max(160, sim.speed * 5.5))) continue;
+                        if (!nearest || pickup.z < nearest.z) nearest = pickup;
+                    }
+                    if (nearest) hud.ringSight = projectRingSight(this.camera, nearest, pose?.z ?? sim.z, this.flightOffset, nearest.z - sim.z);
+                }
+                if (hud.navigation) {
+                    const next = hud.navigation;
+                    next.screen = projectGuidance(this.camera, { x: sim.x + next.dx, y: sim.y + next.dy, z: sim.z + next.distance }, pose?.z ?? sim.z, this.flightOffset, sim.speed);
+                }
+                if (hud.choice) for (const lane of [hud.choice.safe, hud.choice.risk])
+                    lane.screen = projectGuidance(this.camera, { x: lane.x, y: lane.y, z: sim.z + hud.choice.distance }, pose?.z ?? sim.z, this.flightOffset, sim.speed);
+                hud.fps = this.fps;
+                hud.draws = this.renderer.info.render.calls;
+                hud.triangles = this.renderer.info.render.triangles;
+                useAirrun.setState({ hud });
+                this.lastHUD = sim.time;
+            }
             if (s.phase === 'flying' || s.phase === 'crashing')
                 this.fx?.update(sim, s.phase === 'crashing' ? dt * .28 : dt, this.planeRoot, this.world?.modelPlacements, s.save.settings.quality, pose ?? undefined, pose?.motionTime ?? sim.motionTime, this.camera);
         }
@@ -954,7 +964,15 @@ export class AirrunRenderer {
         }
         const { target, center: worldCenter, fov } = this.lobbyFit.fit;
         this.camera.setViewOffset(width, height, width / 2 - rect.x - rect.width / 2, height / 2 - rect.y - rect.height / 2, width, height);
-        this.camera.position.lerp(target, firstView ? 1 : 1 - Math.exp(-dt * 7));
+        const reveal = this.airport?.entryReveal ?? 0;
+        let view = target;
+        if (reveal > 0) {
+            const offset = target.clone().sub(worldCenter);
+            const radius = Math.hypot(offset.x,offset.z)*(1+.13*reveal);
+            const bearing = Math.atan2(offset.x,offset.z)-1.55*reveal;
+            view = new T.Vector3(worldCenter.x+radius*Math.sin(bearing),target.y+1.6*reveal,worldCenter.z+radius*Math.cos(bearing));
+        }
+        this.camera.position.lerp(view, firstView ? 1 : 1 - Math.exp(-dt * 7));
         this.camera.lookAt(worldCenter);
         this.camera.fov = firstView ? fov : damp(this.camera.fov, fov, 5, dt);
         this.camera.updateProjectionMatrix();
@@ -969,9 +987,10 @@ export class AirrunRenderer {
         if (sim.eRemaining > 0 && !reduced) {
             const t = sim.eTime;
             const entry = smooth((t - .7) / 1.5), exit = 1 - smooth((t - 12.5) / 2.4), side = entry * exit;
-            offset.x = Math.sin(t * .25 + .3) * frame.orbitWidth * side;
+            const turn = sim.ePath[65]?.x >= sim.eStart.x ? 1 : -1;
+            offset.x = turn * Math.sin(t * .36 - .55) * frame.orbitWidth * side;
             offset.z = mix(frame.distance, frame.orbitDistance, side);
-            offset.y = mix(frame.height, frame.height + Math.sin(t * .45) * 3, side);
+            offset.y += side * (1.7 - Math.cos(t * .65) * 2.7);
             look.z = mix(-23, -5, side) + flightOffset;
         }
         const cameraTarget = new T.Vector3(pose.x * .94 + offset.x, pose.y + offset.y, offset.z + flightOffset);

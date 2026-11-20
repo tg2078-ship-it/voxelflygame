@@ -30,7 +30,8 @@ export class FlightFX {
     rainMaterial: T.ShaderMaterial;
     trails: T.Mesh[] = [];
     wake = new FlightWake();
-    private readonly ringWhite = new T.Color(0xffffff);
+    private readonly ringGold = new T.Color('#ffd667');
+    private readonly speedGateColor = new T.Color('#51ffe2');
     private readonly ringPassed = new T.Color('#9ee7c2');
     private recordLine = makeRecordLine();
     private formation = new FormationVisual();
@@ -94,7 +95,7 @@ export class FlightFX {
             if (kind === 'ring') {
                 const pos = shape.getAttribute('position');
                 const colors: number[] = [];
-                const gold = new T.Color('#ffbf48'), ivory = new T.Color('#fff4c5'), edge = new T.Color('#82502c');
+                const gold = new T.Color('#e1e1de'), ivory = new T.Color('#ffffff'), edge = new T.Color('#735e53');
                 for (let i = 0; i < pos.count; i++) {
                     const angle = Math.atan2(pos.getY(i), pos.getX(i));
                     const band = Math.cos(4 * angle);
@@ -137,7 +138,16 @@ export class FlightFX {
             for (let i = 0; i < 179; i++)
                 indices.push(i * 2, i * 2 + 1, i * 2 + 2, i * 2 + 1, i * 2 + 3, i * 2 + 2);
             geometry.setIndex(indices);
-            const material = new T.ShaderMaterial({ transparent: true, depthWrite: false, side: T.DoubleSide, blending: T.AdditiveBlending, uniforms: { uStrength: { value: 0 } }, vertexShader: `varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`, fragmentShader: `varying vec2 vUv;uniform float uStrength;void main(){float a=(1.-vUv.x)*(1.-smoothstep(.06,.5,abs(vUv.y-.5)));gl_FragColor=vec4(vec3(.09,.5,1.)*(1.3+a),a*uStrength);}` });
+            const material = new T.ShaderMaterial({ transparent: true, depthWrite: false, side: T.DoubleSide, blending: T.AdditiveBlending, uniforms: { uStrength: { value: 0 }, uDisplay: { value: 0 }, uWing: { value: new T.Color(side ? '#ffd28c' : '#74fbe9') } }, vertexShader: `varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`, fragmentShader: `varying vec2 vUv;
+                uniform float uStrength, uDisplay;
+                uniform vec3 uWing;
+                void main() {
+                    float crossSection=abs(vUv.y-.5);
+                    float a=(1.-vUv.x)*(1.-smoothstep(.06,.5,crossSection));
+                    vec3 paint=mix(vec3(.09,.5,1.),uWing,uDisplay);
+                    paint=mix(paint,vec3(.9,1.,1.),(1.-smoothstep(0.,.16,crossSection))*uDisplay*.72);
+                    gl_FragColor=vec4(paint*(1.3+a),a*uStrength);
+                }` });
             const mesh = new T.Mesh(geometry, material);
             mesh.frustumCulled = false;
             this.trails.push(mesh);
@@ -206,7 +216,7 @@ export class FlightFX {
         const line = sim.recordLine;
         this.recordLine.visible = line !== undefined && line > emitter.z - 35 && line < emitter.z + Math.max(320, sim.speed * 10);
         if (this.recordLine.visible) this.recordLine.position.z = sim.z - line!;
-        this.formation.update(sim.formation, emitter.z, sim.z, sim.speed, dt, sim.config.settings.reducedMotion);
+        this.formation.update(sim.eRemaining ? undefined : sim.formation, emitter.z, sim.z, sim.speed, dt, sim.config.settings.reducedMotion);
         this.rainGeometry.setDrawRange(0, GRAPHICS[quality].rainDrops);
         this.environment.update(sim, placements, motionTime, emitter.z);
         const object = this.object;
@@ -223,7 +233,7 @@ export class FlightFX {
                 if (kind === 'turbo')
                     object.rotation.z = -Math.PI / 2;
                 object.updateMatrix();
-                if (kind === 'ring') mesh.setColorAt(n, p.collected ? this.ringPassed : this.ringWhite);
+                if (kind === 'ring') mesh.setColorAt(n, p.collected ? this.ringPassed : p.speedGate ? this.speedGateColor : this.ringGold);
                 mesh.setMatrixAt(n++, object.matrix);
             }
             if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
@@ -292,7 +302,7 @@ export class FlightFX {
         for (let side = 0; side < 2; side++) {
             const mesh = this.trails[side], pos = mesh.geometry.getAttribute('position'), uv = mesh.geometry.getAttribute('uv'), count = this.trailHistory.length;
             for (let i = 0; i < count; i++) {
-                const h = this.trailHistory[i], p = side === 0 ? h.left : h.right, age = clamp((this.time - h.time) / 3, 0, 1), width = .36 * (1 - age);
+                const h = this.trailHistory[i], p = side === 0 ? h.left : h.right, age = clamp((this.time - h.time) / 3, 0, 1), width = (sim.eRemaining > 0 ? .65 : .36) * (1 - age);
                 pos.setXYZ(i * 2, p.x - width, p.y, sim.z - h.z + p.z);
                 pos.setXYZ(i * 2 + 1, p.x + width, p.y, sim.z - h.z + p.z);
                 uv.setXY(i * 2, age, 0);
@@ -302,6 +312,7 @@ export class FlightFX {
             uv.needsUpdate = true;
             mesh.geometry.setDrawRange(0, Math.max(0, count - 1) * 6);
             mesh.visible = count > 1;
+            (mesh.material as T.ShaderMaterial).uniforms.uDisplay.value = sim.eRemaining > 0 ? 1 : 0;
             (mesh.material as T.ShaderMaterial).uniforms.uStrength.value = sim.eRemaining > 0 ? 1.1 : .25 + sim.boost * .4;
         }
         let n = 0;

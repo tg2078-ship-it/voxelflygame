@@ -49,6 +49,8 @@ export class FormationFlight {
     private transmissions: [number, number, number] = [0, 0, 0];
     pattern: FormationPattern = 'trail';
     constructor(private seed: number, private difficulty: Difficulty) {}
+    get approachIn() { return !this.active && this.cooldown > 0 && this.cooldown <= 3 ? this.cooldown : undefined; }
+    get joinSide() { return (this.seed + this.contacts) % 2 ? -1 : 1; }
     get active() { return this.remaining > 0; }
     addRoute(points: Vec[]) {
         for (const point of points) {

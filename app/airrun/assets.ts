@@ -5,6 +5,7 @@ import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 import { gunzipSync } from 'three/addons/libs/fflate.module.js';
 import { clone as skeletonClone } from 'three/addons/utils/SkeletonUtils.js';
 import type { AssetMeta } from './types';
+import { fitCompactScenery } from './compact-scenery';
 import { updateModelPose } from './model-pose';
 import { compatibleModelLOD, resolveModelLOD } from './graphics';
 import { normalizeModelSurfaces, smoothAuditedStoneBasePalette } from './model-surface';
@@ -186,6 +187,7 @@ export class ModelLibrary {
                     normalizeModelSurfaces(gltf.scene);
                     smoothAuditedStoneBasePalette(gltf.scene, id, true);
                     updateModelPose(gltf.scene);
+                    fitCompactScenery(gltf.scene, id, meta.category, lod);
                     const registeredMaterials = new Set<THREE.Material>();
                     gltf.scene.traverse(node => {
                         if (node instanceof THREE.Mesh) {

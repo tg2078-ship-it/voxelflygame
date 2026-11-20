@@ -3,8 +3,7 @@ import { useEffect, useId, useRef, useState, type CSSProperties } from 'react';
 import { Award, Plane, Check, ArrowUpRight, LoaderCircle, ShieldCheck, Coins, Wrench, X, Compass, Gauge, LockKeyhole, Keyboard, ArrowRight } from 'lucide-react';
 import type { Celebration, Settings } from './types';
 import { DisplayQualityControls } from './display-quality-controls';
-import { assetUrl } from './asset-url';
-import { VERSION, AIRCRAFT, THEMES, fmt, stats, upgradeCost } from './data';
+import { VERSION, AIRCRAFT, fmt, stats, upgradeCost } from './data';
 export function AircraftBlueprint() {
     return <svg className="aircraft-blueprint" viewBox="0 0 780 470" aria-hidden="true"><defs><linearGradient id="blueprintLine"><stop stopColor="#506c77"/><stop offset=".5" stopColor="#e6d4a9"/><stop offset="1" stopColor="#506c77"/></linearGradient></defs><g className="blueprint-guides"><path d="M40 235H740M390 30V440M90 80H690M90 390H690M80 60V415M700 60V415"/><circle cx="390" cy="235" r="177"/><circle cx="390" cy="235" r="183"/></g><g className="blueprint-airframe"><path d="m390 68-13 42-7 95-268 48-8 22 282-7 5 108-70 23v13l79-8 79 8v-13l-70-23 5-108 282 7-8-22-268-48-7-95Z"/><path d="m377 127 13-10 13 10 5 64h-36Z M373 211h34M372 237h36M381 323h18M390 119v277M112 263l260-27M668 263l-260-27 M303 250v20M477 250v20"/><path d="M142 251v23M208 239v32M275 225v45M638 251v23M572 239v32M505 225v45"/></g><g className="blueprint-measures"><path d="M103 326h574M103 315v22M677 315v22M452 68v340M441 68h22M441 408h22"/><text x="348" y="345">11.00 M / WINGSPAN</text><text x="474" y="225" transform="rotate(90 474 225)">8.52 M / AIRFRAME</text><text x="74" y="50">SKYHAWK • FLIGHT SYSTEMS</text><text x="577" y="425">AR / ENGINEERING 01</text></g></svg>;
 }
@@ -17,23 +16,24 @@ export function LoadingScreen({ progress, label, ko, preflight = false, onCancel
 }) {
     const t = (a: string, b: string) => ko ? a : b;
     const value = Number.isFinite(progress) ? Math.max(0, Math.min(1, progress)) : 0;
-    const [location, setLocation] = useState(0);
-    const fields = ['coast', 'desert', 'aurora'];
-    const theme = THEMES.find(item => item.id === fields[location])!;
-    return <section className="dispatch-loader" aria-label={t('비행 준비', 'Flight preparation')}>
-        <div className="dispatch-photo" key={theme.id} style={{ backgroundImage: 'url(' + assetUrl('/dispatch/' + theme.id + '.jpg') + ')' }} aria-hidden="true"/>
-        <header><Plane size={25}/><strong>VOXEL AIRRUN</strong><small>v{VERSION}</small></header>
-        <div className="dispatch-copy"><p className="dispatch-index">{t('비행 도감', 'FIELD GUIDE')} / {String(location + 1).padStart(2, '0')}</p>
-            <h1>{ko ? theme.name : theme.en}</h1><p>{ko ? theme.landmarks : theme.descriptionEn}</p>
-            <nav aria-label={t('풍경 선택', 'Choose a landscape')}>{fields.map((id, i) => {
-                const field = THEMES.find(item => item.id === id)!;
-                return <button key={id} type="button" aria-pressed={i === location} onClick={() => setLocation(i)}>{ko ? field.name : field.en}</button>;
-            })}</nav>
-        </div><div className="dispatch-transfer">
+    const points = [[97,255],[210,180],[335,176],[446,113],[578,112],[705,64]];
+    const lengths = points.slice(1).map(([x,y], i) => Math.hypot(x-points[i][0], y-points[i][1]));
+    let remaining = value * lengths.reduce((sum,n) => sum+n, 0), segment = 0;
+    while (segment < lengths.length-1 && remaining > lengths[segment]) remaining -= lengths[segment++];
+    const ratio = remaining/lengths[segment], [sx,sy] = points[segment], [ex,ey] = points[segment+1];
+    const px = sx+(ex-sx)*ratio, py = sy+(ey-sy)*ratio;
+    const steps = [t('기체 정비', 'AIRFRAME'), t('공항 시스템', 'AIRFIELD'), t('비행 경로', 'FLIGHT PATH')];
+    return <section className={'loading-screen aviation-loader ' + (preflight ? 'preflight-loader' : '')} aria-label={t('비행 준비', 'Flight preparation')} aria-busy={value < 1}>
+        <div className="loader-brand"><Plane size={22}/><strong>AIRRUN</strong><span>FLIGHT OPERATIONS</span><small>V{VERSION}</small></div>
+        <div className="loader-topline"><span><i className="live-dot"/> AIRRUN FLIGHT SYSTEMS</span><span>{preflight ? 'DEPARTURE / 01' : 'PREFLIGHT / 01'}</span></div>
+        <div className="chart-layout"><div className="loader-expedition-map" aria-hidden="true"><svg viewBox="0 0 860 360"><defs><linearGradient id="chartSea" x2="1" y2="1"><stop stopColor="#284952"/><stop offset="1" stopColor="#153039"/></linearGradient><linearGradient id="chartLand" x2="1" y2="1"><stop stopColor="#7a9981"/><stop offset="1" stopColor="#375e53"/></linearGradient></defs><rect x="8" y="8" width="844" height="344" rx="4" fill="url(#chartSea)"/><g className="expedition-grid"><path d="M8 65h844M8 122h844M8 180h844M8 237h844M8 295h844M92 8v344M177 8v344M262 8v344M346 8v344M430 8v344M515 8v344M599 8v344M684 8v344M768 8v344"/></g><path className="expedition-land" d="M860 0H300l-20 32-36 12-10 28 15 22-16 22-59 14-9 24 22 32-26 20-45 7-24 39-71 13-21 24v72h860Z" fill="url(#chartLand)"/><path className="expedition-shore" d="m300 0-20 32-36 12-10 28 15 22-16 22-59 14-9 24 22 32-26 20-45 7-24 39-71 13-21 24"/><g className="expedition-contours"><path d="m367 10-10 44-59 35-12 70-46 38-44 46-10 73M492 9l-20 60-43 33-30 54-5 72-60 48-15 64M642 6l-58 69-38 10-14 60 12 39-48 57-6 94M805 5l-15 82-67 34-30 54-46 7-8 51 16 45-24 58"/></g><g className="expedition-city"><path d="M560 170v-29h19v29m10 0v-40h23v40m11 0v-23h15v23m14 0v-54h26v54m11 0v-33h19v33M564 191h144M564 200h144M575 181v32m35-32v32m35-32v32m35-32v32"/><path d="M319 190v-20l16-14 16 14v20m13 3v-18l13-12 13 12v18m16-39v-21l18-15 18 15v21M62 258l82-40m-73 58 81-40"/></g><path className="expedition-course-shadow" d="M97 255 210 180 335 176 446 113 578 112 705 64"/><path className="expedition-course" pathLength="1" style={{ strokeDasharray: 1, strokeDashoffset: 1 - value }} d="M97 255 210 180 335 176 446 113 578 112 705 64"/><g className="expedition-pins"><circle cx="97" cy="255" r="7"/><circle cx="335" cy="176" r="7"/><circle cx="578" cy="112" r="7"/><circle cx="705" cy="64" r="4"/></g><g className="expedition-labels"><text x="65" y="302">01 / COAST</text><text x="300" y="226">02 / VILLAGE</text><text x="548" y="86">03 / CITY</text><text x="34" y="42">AIRRUN / EXPEDITION CHART</text><text x="641" y="315">A NEW WORLD AWAITS</text></g><g data-chart-aircraft="" transform={`translate(${px} ${py}) rotate(${90+Math.atan2(ey-sy,ex-sx)*180/Math.PI}) translate(-205 -181)`}><g className="expedition-chart-plane"><path d="m204 164-3 11-16 7v4l17-2 1 10-5 3v2l7-1 7 1v-2l-5-3 1-10 17 2v-4l-16-7-3-11Z"/></g></g></svg><div className="loader-map-caption"><span>01 — ENDLESS EXPEDITION</span><b>{t('민트색 게이트에서 부스트하면 +250점', 'Boost through mint gates for +250 points')}</b><span>COAST / VILLAGE / CITY / BEYOND</span></div></div>
+        <div className="loading-copy"><span className="eyebrow">{preflight ? 'DEPARTURE CLEARANCE' : 'VOXEL AIRRUN / FLIGHT DISPATCH'}</span><h1>{t(preflight ? '하늘로 향할 준비.' : '더 대담하게. 더 멀리.', preflight ? 'Ready for your next horizon.' : 'Bolder lines. Bigger horizons.')}</h1>
             <div className="loader-status"><span className="live-dot"/><p role="status">{ko ? label : preflight ? 'Preparing your aircraft and flight sector' : 'Preparing aircraft, airfield and flight systems'}</p><b aria-hidden="true">{Math.round(value * 100).toString().padStart(2, '0')}<small>%</small></b></div>
             <div className="loading-bar" role="progressbar" aria-label={t('준비 진행률', 'Preparation progress')} aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(value * 100)}><i style={{ width: value * 100 + '%' }}/></div>
+            <div className="loader-flight-tip"><Keyboard size={17}/><span>{t('정밀 통과로 러시 충전 · Q 발동 · Space 감속', 'PRECISION CHARGES RUSH · Q TO ACTIVATE · SPACE TO BRAKE')}<small>{t('민트 경로로 흐름을 익히고, 금빛 경로에서 더 큰 보상을 노리세요.', 'Learn the mint line, then chase the gold route for bigger rewards.')}</small></span></div><div className="loader-stages">{steps.map((step, i) => <div key={step} className={value > (i + 1) / 3 - .015 ? 'complete' : value >= i / 3 ? 'current' : ''}><span>{value > (i + 1) / 3 - .015 ? <Check size={12}/> : String(i + 1).padStart(2, '0')}</span>{step}</div>)}</div>
             {onCancel && <button className="text-button" onClick={onCancel}>{t('격납고로 돌아가기', 'RETURN TO HANGAR')}</button>}
-        </div>
+        </div></div>
+        <footer className="loading-foot"><span>{AIRCRAFT.length} AIRCRAFT / 13 WORLDS</span><span>{t('비행의 모든 순간이, 새로운 발견.', 'EVERY FLIGHT IS A NEW DISCOVERY.')}</span><span>VOXEL AVIATION</span></footer>
     </section>;
 }
 export function PilotRegistration({ ko, reduced, initialName = '', onApprove, onSound }: {

@@ -6,6 +6,7 @@ import * as T from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 import { gunzipSync } from 'node:zlib';
+import { fitCompactScenery } from '../../app/airrun/compact-scenery';
 import { catalog, suppliedAssets } from './fixtures';
 const loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
 const assetRoot = process.env.AIRRUN_ASSET_ROOT ?? 'public';
@@ -23,6 +24,10 @@ for (const asset of catalog.values())
         const textures = await gltf.parser.getDependencies('texture') as T.Texture[];
         assert(textures.every(texture => texture instanceof T.Texture && ((texture.image as { width?: number })?.width ?? 0) > 0), asset.id + ' all referenced images decode');
         assert.equal(gltf.animations.length, asset.animationsByLod?.[lod as 'lod0']?.length ?? asset.animations.length, asset.id + ' ' + lod + ' clips');
+        if (asset.category !== 'aircraft' && Math.max(...asset.bounds.size)<=12) {
+            const groups = fitCompactScenery(gltf.scene,asset.id,asset.category,Number(lod.slice(3)));
+            assert(groups>0, asset.id+'/'+lod+' has native surface geometry with a matching parent');
+        }
         count++;
         clips += gltf.animations.length;
         if (asset.category === 'traffic' && asset.moving) {

@@ -90,6 +90,12 @@ export class WorldView {
         for (const key of this.animated.keys()) visible.add(key);
         for (const key of visible) {
             const p = this.placementByKey.get(key); if (!p) continue;
+            // A static fallback cannot represent the moving parts of a rig.
+            // Reapply the approach window when its visible animation becomes available.
+            if (this.catalog.proxies.get(p.model)?.dynamic.length && !this.animated.has(key)) {
+                this.collisionApproach.delete(key);
+                continue;
+            }
             // A model that only arrives in the player's face cannot suddenly arm a collider.
             if (this.preparingScene || !this.collisionApproach.has(key))
                 this.collisionApproach.set(key, this.preparingScene || p.z - sim.z > Math.max(55, sim.speed * 1.3));
@@ -311,11 +317,17 @@ export class WorldView {
         this.wanted = animatedKeys;
         let animatedCount = 0, animatedDraws = 0, heroTriangles = 0;
         const focus = { x: sim.x, y: sim.y, z: sim.z, speed: sim.speed, span: sim.plane.span };
-        const isHero = (p: Placement) => p.collision && !!this.catalog.byId.get(p.model) && requiresHeroSurface(this.catalog.byId.get(p.model)!, p, focus, this.quality);
-        for (const p of [...placements].sort((a, b) => Number(isHero(b)) - Number(isHero(a)) || Number(b.collision) - Number(a.collision) || Math.abs(a.z - sim.z) - Math.abs(b.z - sim.z))) {
+        const ranked = placements.flatMap(p => {
             const meta = this.catalog.byId.get(p.model);
-            if (!meta) continue;
-            const dist = p.z - sim.z, hero = !!isHero(p);
+            if (!meta) return [];
+            const dist = p.z - sim.z;
+            const hero = requiresHeroSurface(meta,p,focus,this.quality);
+            const nearActor = meta.moving && dist > -30 && dist < Math.max(125,sim.speed*2.5);
+            return [{p,meta,dist,hero,priority:Number(hero)*4 + Number(nearActor)*2 + Number(p.collision)}];
+        });
+        const heroPlacements = new Set(ranked.filter(row => row.hero).map(row => row.p));
+        ranked.sort((a,b) => b.priority-a.priority || Math.abs(a.dist)-Math.abs(b.dist));
+        for (const {p,meta,dist,hero} of ranked) {
             const highestLOD = this.catalog.resolveLOD(p.model, 0), highestKey = this.catalog.cacheKey(p.model, 0);
             let requestedLOD = flightModelLOD(meta, p, focus, this.quality);
             if (requestedLOD === 0) {
@@ -457,7 +469,7 @@ export class WorldView {
         for (const [key, ps] of grouped) {
             const split = key.lastIndexOf(':'), id = key.slice(0, split), lod = +key.slice(split + 1) as 0 | 1 | 2 | 3;
             let drawKey = key;
-            let compiled = this.compile(id, lod, lod === 0 && ps.some(p => p.collision && isHero(p)));
+            let compiled = this.compile(id, lod, lod === 0 && ps.some(p => heroPlacements.has(p)));
             if (!compiled) {
                 // Keep the previous compatible silhouette while a noncritical LOD
                 // waits for its compile slot. Rebase its matrices too; never blink out.

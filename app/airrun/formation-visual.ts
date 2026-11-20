@@ -33,11 +33,12 @@ function courierGeometry() {
  * sampler drives the flight test and the visible trail at every speed. */
 export class FormationVisual {
     root = new T.Group();
-    private aircraft = new T.Mesh(courierGeometry(), new T.MeshBasicMaterial({ vertexColors: true }));
+    private aircraft = new T.Mesh(courierGeometry(), new T.MeshBasicMaterial({ vertexColors: true, transparent: true }));
     private ribbons: T.Mesh<T.BufferGeometry, T.MeshBasicMaterial>;
     private positions = new T.BufferAttribute(new Float32Array((segments + 1) * 4 * 3), 3).setUsage(T.DynamicDrawUsage);
     private departure = new T.Vector3();
-    private departingTime = 1;
+    private departingTime = 2.8;
+    private side = 1;
     private tracking = false;
     private centre = { x: 0, y: 0, z: 0 };
     private nose = { x: 0, y: 0, z: 0 };
@@ -59,28 +60,31 @@ export class FormationVisual {
         this.root.visible = false;
     }
     update(formation: FormationFlight | undefined, z: number, worldOrigin: number, speed: number, dt = 0, reducedMotion = false) {
-        if (!formation?.active) {
+        const arrival = formation?.approachIn;
+        if (!formation || (!formation.active && arrival === undefined)) {
             if (this.tracking) {
                 this.departure.copy(this.aircraft.position);
                 this.departingTime = 0;
                 this.tracking = false;
             }
-            this.departingTime = Math.min(1, this.departingTime + dt);
-            this.root.visible = this.departingTime < 1 && !reducedMotion;
+            this.departingTime = Math.min(2.8, this.departingTime + dt);
+            this.root.visible = this.departingTime < 2.8;
             this.ribbons.visible = false;
             if (this.root.visible) {
-                const arc = this.departingTime ** 2;
+                const u = this.departingTime/2.8, arc = u*u;
                 this.aircraft.position.copy(this.departure);
-                this.aircraft.position.x += 18 * arc;
-                this.aircraft.position.y += 16 * arc;
-                this.aircraft.position.z -= 42 * this.departingTime;
-                this.aircraft.rotation.z = -.42 * Math.sin(Math.PI * this.departingTime);
-                this.aircraft.scale.setScalar(1 - arc);
+                this.aircraft.position.x += this.side * 92 * arc;
+                this.aircraft.position.y += 36 * arc;
+                this.aircraft.position.z -= (45*u + 180*arc);
+                this.aircraft.rotation.z = reducedMotion ? 0 : -this.side*.56*Math.sin(Math.PI*u);
+                this.aircraft.material.opacity = 1 - T.MathUtils.smoothstep(u,.55,1);
             }
             return;
         }
         this.tracking = true;
-        this.root.visible = this.ribbons.visible = true;
+        this.root.visible = true;
+        this.ribbons.visible = formation.active;
+        this.aircraft.material.opacity = arrival === undefined ? 1 : 1 - T.MathUtils.smoothstep(arrival,2,3);
         this.aircraft.scale.setScalar(1);
         const lead = Math.min(54, Math.max(27, speed * .60));
         const tint = skins[formation.pattern];
@@ -100,7 +104,14 @@ export class FormationVisual {
         const head = this.centre;
         formation.sample(head.z + 3, this.nose);
         this.aircraft.position.set(head.x, head.y, worldOrigin - head.z);
+        if (arrival !== undefined) {
+            this.side = formation.joinSide;
+            const u = arrival/3, arc = u*u;
+            this.aircraft.position.x += this.side * 83 * arc;
+            this.aircraft.position.y += 31 * arc;
+            this.aircraft.position.z -= 165 * arc;
+        }
         const yaw = Math.atan2(head.x - this.nose.x, 3);
-        this.aircraft.rotation.set(Math.atan2(this.nose.y - head.y, 3), yaw, yaw * .7, 'YXZ');
+        this.aircraft.rotation.set(Math.atan2(this.nose.y - head.y, 3), yaw, yaw * .7 + (arrival && !reducedMotion ? this.side*.45*Math.sin(Math.PI*arrival/3) : 0), 'YXZ');
     }
 }

@@ -237,7 +237,10 @@ export interface Weather {
     snow: boolean;
 }
 export interface HUD {
-    ringPass?: { offset: number; award: number; streak: number };
+    ringPass?: { offset: number; award: number; streak: number; speedBonus?: number };
+    formationIncoming?: number;
+    attitude?: {bank:number; pitch:number; climb:number};
+    ringSight?: { x: number; y: number; angle: number; edge: boolean; distance: number; speedGate: boolean };
     recordLine?: number;
     formation?: import('./formation').FormationHUD;
     rush?: import('./rush').RushHUD;
@@ -316,6 +319,7 @@ export interface Obstacle {
     proxy?: Box[];
 }
 export interface Pickup {
+    speedGate?: boolean;
     id: number;
     kind: ItemKind;
     x: number;

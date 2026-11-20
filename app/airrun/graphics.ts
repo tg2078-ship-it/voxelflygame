@@ -95,7 +95,7 @@ export function flightModelLOD(meta: AssetMeta, p: Placement, focus: FlightFocus
 }
 export function nativeAnimationDistance(meta: AssetMeta, lod: 0 | 1 | 2 | 3, quality: Settings['quality'], preparedDraws?: number) {
     const draws = preparedDraws ?? meta.renderCosts?.[('lod' + lod) as 'lod0' | 'lod1' | 'lod2' | 'lod3']?.draws ?? 12;
-    return Math.min(GRAPHICS[quality].animationDistance, draws > 140 ? 65 : draws > 65 ? 115 : draws > 30 ? 180 : Infinity);
+    return Math.min(GRAPHICS[quality].animationDistance, draws > 140 ? 90 : draws > 65 ? 145 : draws > 30 ? 210 : Infinity);
 }
 
 /** Unbounded flight speed must not create an unbounded render scene. */

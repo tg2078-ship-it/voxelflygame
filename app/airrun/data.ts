@@ -1,7 +1,7 @@
 import type { Aircraft, Theme, Settings, PracticeConfig, Metrics, Save, ThemeId, WeatherKind } from './types';
-export const VERSION = '11.0.0';
-export const COURSE_EDITION = 5;
-export const WORLD_IMAGE_REVISION = 'v11-field';
+export const VERSION = '12.0.0';
+export const COURSE_EDITION = 6;
+export const WORLD_IMAGE_REVISION = 'v12-airshow';
 export const AIRCRAFT: Aircraft[] = [
     {
         "id": "skyhawk",

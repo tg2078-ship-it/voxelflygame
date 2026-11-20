@@ -93,6 +93,12 @@ export function createWater() {
                 col+=sunColor*(sparkle*.95+lightPath)*(1.-uNight)*(1.-uRain*.82);
                 float coastWave=sin(p.y*.13-uTime*1.65)*1.55;
                 float shoreFoam=exp(-abs(p.x-shore+coastWave)/2.8)*uCoastal;
+                // Sweep broken combers towards the beach in world coordinates.
+                float reach=shore-p.x;
+                float surfZone=smoothstep(1.,5.,reach)*(1.-smoothstep(8.,24.,reach))*uCoastal;
+                float crest=sin(reach*.85+uTime*1.48+broad*4.+sin(p.y*.09)*.82);
+                float comb=smoothstep(.76,.98,crest)*smoothstep(.27,.69,detail)*surfZone;
+                col=mix(col,vec3(.54,.81,.74),comb*.62);
                 float openFoam=smoothstep(.78,.96,detail)*smoothstep(.51,.89,broad)*.10;
                 col+=vec3(.36,.66,.63)*(shoreFoam*(.28+detail*.27)+openFoam);
                 if(uRain>.001){

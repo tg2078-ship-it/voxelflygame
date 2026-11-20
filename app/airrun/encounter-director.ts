@@ -26,12 +26,12 @@ export const DIFFICULTIES: Record<Difficulty, DifficultyProfile> = {
     standard: {
         label: '정밀 비행', en: 'STANDARD', description: '첫 구간부터 좌우·상하를 연결하는 기본 도전.',
         descriptionEn: 'Link lateral and vertical decisions from the very first section.',
-        xAmplitude: 34, altitudeDelta: 11, spacing: 185, initialLead: 420, lead: 125, speedMultiplier: 1,
+        xAmplitude: 36, altitudeDelta: 12, spacing: 185, initialLead: 420, lead: 125, speedMultiplier: 1,
     },
     expert: {
         label: '극한 비행', en: 'EXPERT', description: '짧은 판단 간격과 큰 경로 변화. 정확한 감속·회피가 필요합니다.',
         descriptionEn: 'Shorter decision gaps and stronger route changes. Brake and dodge precisely.',
-        xAmplitude: 38, altitudeDelta: 15, spacing: 160, initialLead: 360, lead: 105, speedMultiplier: 1.12,
+        xAmplitude: 40, altitudeDelta: 16, spacing: 160, initialLead: 360, lead: 105, speedMultiplier: 1.15,
     },
 };
 
@@ -128,18 +128,25 @@ export function proceduralPattern(theme: ThemeId, variant: number, seed: number,
     const actions = [first, second, third].slice(0, actionCount);
     while (actions.length < actionCount) actions.push(choose(vocabulary.filter(action => !actions.includes(action))));
     const direction = random() < .5 ? -1 : 1;
-    const turnStyle = Math.floor(random() * 3);
-    const signs = turnStyle === 0 ? [direction, -direction, direction] : turnStyle === 1 ? [direction, direction, -direction] : [direction, -direction, -direction];
-    while (signs.length < actionCount) signs.push(random() < .48 ? direction : -direction);
+    // Draw a bend, then allow it to tighten, reverse or hold a bank.
+    // Approach lengths are sampled separately from lateral directions.
+    const signs = [direction];
+    let turnBias = .22 + random() * .53;
+    for (let i = 1; i < actionCount; i++) {
+        const reverse = counter === 0 && i === 2 && signs[1] === direction || random() < turnBias;
+        signs.push(reverse ? -signs[i - 1] : signs[i - 1]);
+        turnBias = reverse ? .20 + random() * .45 : Math.min(.92, turnBias + .23);
+    }
     const amplitude = profile.xAmplitude * (1 + intensity * .08);
     const vertical = profile.altitudeDelta * (1 + intensity * .2);
     let previousY = random() < .5 ? 24 : 32;
     const steps: Pattern['steps'] = actions.map((action, index) => {
-        const magnitude = (counter === 0 && index === 0 ? .68 : .29) + random() * (counter === 0 && index === 0 ? .32 : .71);
+        const magnitude = index === 0 && counter === 0 ? .74 + random() * .26 : random() < .65 ? .67 + random() * .33 : .32 + random() * .35;
         const x = Math.round(signs[index] * amplitude * magnitude * 10) / 10;
         const lift = vertical * (.7 + random() * .3);
         const y = CLIMB.has(action) ? 28 + lift : DESCEND.has(action) ? 28 - lift
-            : previousY >= 28 ? 28 - lift : 28 + lift;
+            : counter === 0 ? (previousY >= 28 ? 28 - lift : 28 + lift)
+            : previousY + (random() - .46) * vertical * 1.95;
         previousY = clamp(y, 14, 46);
         return [action, x, Math.round(previousY * 10) / 10];
     });
@@ -154,6 +161,6 @@ export function proceduralPattern(theme: ThemeId, variant: number, seed: number,
         en: `${themeInfo.en} · ${labels.map(label => label[1]).join(' → ')}`,
         steps, spacing,
         generation: { procedural: true, difficulty, intensity, lead, spacing,
-            beats: actions.slice(1).map((_, i) => (i % 2 === turnStyle % 2 ? .82 : 1.12) + random() * .32) },
+            beats: actions.slice(1).map(() => .73 + random() ** 1.45 * .95) },
     };
 }

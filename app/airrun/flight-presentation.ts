@@ -16,9 +16,11 @@ export function readFlightPose(p: FlightPose): FlightPose {
 }
 export function interpolateFlightPose(previous: FlightPose, current: FlightPose, alpha: number): FlightPose {
     const pose = { ...current }, t = clamp(alpha, 0, 1);
-    // Trick rotations are authored as continuous turns, so never wrap them to a shorter arc.
-    for (const key of Object.keys(pose) as (keyof FlightPose)[])
-        pose[key] = mix(previous[key], current[key], t);
+    for (const key of Object.keys(pose) as (keyof FlightPose)[]) {
+        const delta = current[key] - previous[key];
+        pose[key] = key.startsWith('trick') && current[key] === 0 && Math.abs(Math.abs(delta) - 2*Math.PI) < .05
+            ? previous[key] + Math.atan2(Math.sin(delta),Math.cos(delta))*t : mix(previous[key], current[key], t);
+    }
     return pose;
 }
 export function presentsFlight(phase: Phase, streamResume: boolean) {
