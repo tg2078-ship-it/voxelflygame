@@ -2,7 +2,7 @@ import { clamp, hash, mix, smooth } from './data';
 import type { Difficulty } from './encounter-director';
 import type { Vec } from './types';
 
-const ENVELOPE_WIDTH = { relaxed: 12, standard: 9.5, expert: 7.5 } as const;
+const ENVELOPE_WIDTH = { relaxed: 12, rookie: 9.5, standard: 8.7, expert: 7.5 } as const;
 export const SIGNAL_SECONDS = [4, 8, 12] as const;
 export const SIGNAL_POINTS = [240, 600, 1100] as const;
 export const FLIGHT_PATTERNS = ['trail', 'weave', 'swell'] as const;

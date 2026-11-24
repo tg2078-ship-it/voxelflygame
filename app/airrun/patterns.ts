@@ -207,16 +207,17 @@ export function buildEncounter(p: Pattern, start: number, seed: number, catalog:
     for (let j = 0; j < p.steps.length; j++) {
         const stepFamily = j === 0 ? family : encounterFamily(k, variant, serial + j, catalog.byId, patternIndex + Math.floor(hash(seed + (serial * 31 + j) * 479) * 12));
         const [action, safeX, safeY] = p.steps[j], z = start + lead + offsets[j];
-        const x = safeX * .53 + (rand() - .5) * 2;
+        const technical = p.generation?.difficulty === 'standard' || p.generation?.difficulty === 'expert';
+        const x = safeX * (technical ? (k === 'coast' ? .56 : .62) : .53) + (rand() - .5) * 2;
         // Keep a wing-safe lane even when the course marker is near the centre.
         const opposite = x - Math.sign(x || 1) * Math.max(2 * Math.abs(x), span * .34 + 22);
-        let y = Math.min(AIRSPACE.ceiling - 5, safeY), width = Math.max(span * 1.65, 25), height = 18;
+        let y = Math.min(AIRSPACE.ceiling - 5, safeY), width = Math.max(span * (technical ? 1.47 : 1.65), technical ? 21 : 25), height = technical && k !== 'coast' ? 15 : 18;
         let floor = 5, ceiling = AIRSPACE.ceiling - 3;
         if (['arch', 'tunnel', 'under', 'bridge'].includes(action)) {
             const model = action === 'bridge' || action === 'under' ? stepFamily.bridge : stepFamily.gate;
             const meta = catalog.byId.get(model)!, ap = aperture(meta), base = groundAt(x, z, k, seed, variant);
             const rotated = ap.axis === 'X', openingWidth = ap.size[rotated ? 2 : 0];
-            const targetWidth = Math.max(span * 1.65, 18), targetHeight = 7;
+            const targetWidth = Math.max(span * (technical ? 1.5 : 1.65), 18), targetHeight = 7;
             const scale = Math.max(targetWidth / Math.max(.1, openingWidth), targetHeight / Math.max(.1, ap.size[1]), (12 - base) / Math.max(1, ap.center[1] - meta.bounds.min[1]), 1);
             const realOpening = (meta.clearances.length > 0 || !!PORTAL_PROFILES[model]) && model !== 'canyon_bridge' && scale <= 2.7 && ap.size[1] > 0 && base + (ap.center[1] - meta.bounds.min[1]) * scale < AIRSPACE.ceiling - 4;
             if (realOpening) {
@@ -335,11 +336,11 @@ export function buildEncounter(p: Pattern, start: number, seed: number, catalog:
             box.min[placement.move.axis] -= placement.move.amplitude;
             box.max[placement.move.axis] += placement.move.amplitude;
         }
-        return knots.slice(1).every((to, i) => !sweepAABB(knots[i], to, box, { x: span * .34 + 2.4, y: 5.5, z: 12 }));
+        return knots.slice(1).every((to, i) => !sweepAABB(knots[i], to, box, { x: span * .34 + (placement.role === 'course divider' ? 6 : 2.4), y: 5.5, z: 12 }));
     };
     // Decorative slalom flanks must leave the entire bend open, including the
     // space after a route marker where the pilot starts changing direction.
-    const rejectedFlanks = new Set(placements.filter(o => ['course flank', 'moving', 'light hazard'].includes(o.role) && !corridorClear(o)));
+    const rejectedFlanks = new Set(placements.filter(o => ['course flank', 'course divider', 'moving', 'light hazard'].includes(o.role) && !corridorClear(o)));
     const rejectedGroups = new Set([...rejectedFlanks].map(o => o.group).filter(Boolean));
     for (let i = placements.length - 1; i >= 0; i--)
         if (rejectedFlanks.has(placements[i]) || placements[i].group && rejectedGroups.has(placements[i].group)) placements.splice(i, 1);

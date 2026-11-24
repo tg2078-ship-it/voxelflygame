@@ -71,7 +71,7 @@ const other = AIRCRAFT.find(plane => !save.owned.includes(plane.id))!;
 const locked = { ...state, save: { ...save, selected: other.id } };
 check(renderToStaticMarkup(<HangarDashboard {...props} state={locked}/>).includes('이 기체 해금하기'), 'Locked aircraft has a real unlock action rather than a dead-end disabled launch');
 const upgraded = renderToStaticMarkup(<RewardCeremony ko reduced reward={{ id: 'upgrade', kind: 'upgrade', title: AIRCRAFT[0].name, titleEn: AIRCRAFT[0].name, coins: 0, tier: 1, detail: 'Lv. 1 → 2' }} onClose={() => {}}/>);
-check(upgraded.includes('실제 기체 성능 변화') && upgraded.includes('106 HP') && upgraded.includes(stats(AIRCRAFT[0], 2).handling.toFixed(2)), 'The reward uses actual upgraded aircraft stats');
+check(upgraded.includes('실제 기체 성능 변화') && upgraded.includes(stats(AIRCRAFT[0], 2).hp + ' HP') && upgraded.includes(stats(AIRCRAFT[0], 2).handling.toFixed(2)), 'The reward uses actual upgraded aircraft stats');
 const impossible = renderToStaticMarkup(<RewardCeremony ko reduced reward={{ id: 'invalid-upgrade', kind: 'upgrade', title: AIRCRAFT[0].name, titleEn: AIRCRAFT[0].name, coins: 0, tier: 1, detail: 'Lv. 1 → 20' }} onClose={() => {}}/>);
 check(!impossible.includes('실제 기체 성능 변화'), 'An unsupported reward detail does not manufacture a stat comparison');
 console.log(JSON.stringify({ commercialUI: checks, oldBackupsPreserved: true, settledScoreReconciles: true, actualBrowserValidated: false, status: 'passed' }));

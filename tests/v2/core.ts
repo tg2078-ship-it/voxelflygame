@@ -19,12 +19,12 @@ eq(catalog.size, 407, '403 supplied +4 traffic assets');
 eq(QUESTS.length, 64, '64 quest conditions');
 eq(CAREER.length, 20, '20 career missions');
 eq(ACHIEVEMENTS.length, 40, '40 achievement tiers');
-eq(baseSpeed(0), 40, 'initial speed');
+eq(baseSpeed(0)*stats(AIRCRAFT[0],1).speed, 46, 'standard starter cruise');
 check(baseSpeed(100000) > baseSpeed(50000), 'unbounded base speed');
 const max = stats(AIRCRAFT[0], 20);
-eq(max.hp, 214, 'level20 durability');
-check(Math.abs(max.handling - 1.76) < 1e-10, 'level20 handling +76%');
-check(Math.abs(max.accel - 1.855) < 1e-10, 'level20 acceleration +85.5%');
+eq(max.hp, 262, 'level20 durability');
+check(Math.abs(max.handling - 2.045) < 1e-10, 'level20 handling +104.5%');
+check(Math.abs(max.accel - 2.425) < 1e-10, 'level20 acceleration +142.5%');
 eq(upgradeCost(AIRCRAFT[0], 1), 45, 'first C upgrade');
 eq(upgradeCost(AIRCRAFT[7], 19), 5230, 'S level19 upgrade');
 for (const p of PATTERNS) {
@@ -116,11 +116,11 @@ const input = controls();
 input.boost = true;
 for (let i = 0; i < 120; i++)
     sim.step(1 / 60, input);
-check(sim.speed > baseSpeed(sim.z) * 1.2, 'held boost');
+check(sim.speed > baseSpeed(sim.z) * sim.performance.speed * 1.2, 'held boost');
 input.boost = false;
 for (let i = 0; i < 120; i++)
     sim.step(1 / 60, input);
-check(Math.abs(sim.speed / baseSpeed(sim.z) - 1) < .03, 'released boost returns');
+check(Math.abs(sim.speed / (baseSpeed(sim.z)*sim.performance.speed) - 1) < .03, 'released boost returns');
 sim.collect('slow');
 sim.collect('turbo');
 check(!sim.effects.has('slow') && sim.effects.has('turbo'), 'speed items replace');

@@ -122,17 +122,22 @@ export function validateResult(value: unknown): value is RunResult {
         v.formation.points + (v.debrief?.operationBonus ?? 0) + (v.debrief?.precisionBonus ?? 0) + (v.debrief?.flowBonus ?? 0) > v.bonus)) return false;
     if (v.bestRingStreak !== undefined && (!Number.isSafeInteger(v.bestRingStreak) || v.bestRingStreak < 0 || v.bestRingStreak > (v.metrics?.rings ?? 0))) return false;
     if (v.rush !== undefined && (!isObject(v.rush) || !Number.isSafeInteger(v.rush.uses) || v.rush.uses < 0 || v.rush.uses > 100000 || !Number.isSafeInteger(v.rush.distance) || v.rush.distance < 0 || v.rush.distance > v.distance)) return false;
+    if (v.relayClears !== undefined && (!Number.isSafeInteger(v.relayClears) || v.relayClears < 0 || v.relayClears*3>v.metrics.directionPass || v.relayClears*450>v.bonus)) return false;
     if (v.courseEdition !== undefined && (!Number.isSafeInteger(v.courseEdition) || v.courseEdition < 1 || v.courseEdition > 10000)) return false;
     if (v.seed !== undefined && (!Number.isInteger(v.seed) || v.seed < 0 || v.seed > 0xffffffff)) return false;
     if (v.level !== undefined && (!Number.isInteger(v.level) || v.level < 1 || v.level > 20)) return false;
     if (v.contract !== undefined && (v.mode !== 'sortie' || !validContract(v.contract, { perfect: v.debrief?.perfectPasses ?? 0, boost: v.metrics.boost, risk: v.metrics.near + v.metrics.narrow }) || v.contract.bonus + (v.sortie?.bonus ?? 0) + (v.debrief?.operationBonus ?? 0) + (v.debrief?.precisionBonus ?? 0) + (v.debrief?.flowBonus ?? 0) > v.bonus)) return false;
     if (v.contract !== undefined && v.level !== undefined) {
-        const speed = baseSpeed(0) * stats(AIRCRAFT.find(p => p.id === v.planeId)!, v.level).speed * (DIFFICULTIES[v.difficulty ?? 'standard']?.speedMultiplier ?? 1);
+        const plane = AIRCRAFT.find(p => p.id === v.planeId)!;
+        // Historical contracts were signed against the aircraft and speed table of that edition.
+        const speed = (v.courseEdition ?? 1) <= 6
+            ? 40 * plane.speed * (1+.015*(v.level-1)) * (v.difficulty === 'expert' ? (v.courseEdition === 6 ? 1.15 : 1.12) : v.difficulty === 'relaxed' ? .88 : 1)
+            : baseSpeed(0) * stats(plane, v.level).speed * (DIFFICULTIES[v.difficulty ?? 'standard']?.speedMultiplier ?? 1);
         if (JSON.stringify(v.contract.targets) !== JSON.stringify(contractTargets(v.contract.id, speed, v.difficulty ?? 'standard'))) return false;
     }
     if (v.replay !== undefined && (v.mode !== 'sortie' || !v.sortie?.completed || v.eUsed || v.interrupted || v.seed === undefined || v.level === undefined || !validReplay(v.replay, v.metrics.time, v.distance))) return false;
     if (v.mode !== undefined && v.mode !== 'endless' && v.mode !== 'daily' && v.mode !== 'sortie') return false;
-    if (v.difficulty !== undefined && !['relaxed', 'standard', 'expert'].includes(v.difficulty)) return false;
+    if (v.difficulty !== undefined && !['relaxed', 'rookie', 'standard', 'expert'].includes(v.difficulty)) return false;
     if (v.mode === 'daily' && v.difficulty !== undefined && v.difficulty !== 'standard') return false;
     if (v.mode === 'daily' ? v.practice || !validDailyKey(v.dailyKey) : v.dailyKey !== undefined) return false;
     if (v.debrief !== undefined && (!validDebrief(v.debrief)
@@ -175,10 +180,12 @@ export function parseSave(value: unknown): Save | null {
     if (input.schema !== 3 || typeof input.nickname !== 'string' || input.nickname.length > 16 || !Number.isSafeInteger(input.coins) || input.coins < 0 || !Array.isArray(input.owned) || !input.owned.includes('skyhawk') || new Set(input.owned).size !== input.owned.length || !input.owned.every((id) => AIRCRAFT.some(p => p.id === id)) || !isObject(input.levels) || !input.owned.every((id: string) => Number.isInteger(input.levels[id]) && input.levels[id] >= 1 && input.levels[id] <= 20) || !AIRCRAFT.some(p => p.id === input.selected) || !isObject(input.settings))
         return null;
     const legacyDisplay = input.settings.resolutionScale === undefined;
-    const se = { ...input.settings, difficulty: input.settings.difficulty ?? 'standard' as const, resolutionScale: legacyDisplay ? 1.25 as const : input.settings.resolutionScale };
-    if (!['relaxed', 'standard', 'expert'].includes(se.difficulty)) return null;
+    const oldStandard = input.balanceEdition === undefined && (input.settings.difficulty ?? 'standard') === 'standard';
+    const se = { ...input.settings, difficulty: oldStandard ? 'rookie' as const : input.settings.difficulty ?? 'standard' as const, resolutionScale: legacyDisplay ? 1.25 as const : input.settings.resolutionScale };
+    if (!['relaxed', 'rookie', 'standard', 'expert'].includes(se.difficulty)) return null;
     if (![1, 1.25, 1.5].includes(se.resolutionScale) || !['hold', 'gear'].includes(se.control) || !['balanced', 'high', 'ultra'].includes(se.quality) || !['ko', 'en'].includes(se.language) || ![30, 60].includes(se.targetFPS) || !(['volume', 'music', 'sfx'] as const).every(k => typeof se[k] === 'number' && se[k] >= 0 && se[k] <= 1) || !(['reducedMotion', 'skipTakeoff', 'leftHanded', 'adaptiveResolution'] as const).every(k => typeof se[k] === 'boolean') || !nonnegative(se.sensitivity) || se.sensitivity < .5 || se.sensitivity > 1.5)
         return null;
+    if (se.flightCoach !== undefined && !['on','done','off'].includes(se.flightCoach)) return null;
     if (!Array.isArray(input.quests) || input.quests.length !== 6 || !input.quests.every((q) => isObject(q) && typeof q.uid === 'string' && QUESTS.some(x => x.id === q.id) && nonnegative(q.progress) && isObject(q.detail) && Object.values(q.detail).every(nonnegative) && q.progress <= QUESTS.find(x => x.id === q.id)!.target && typeof q.acceptedAt === 'number' && Number.isSafeInteger(q.acceptedAt)) || new Set(input.quests.map((q) => q.uid)).size !== 6 || !Number.isInteger(input.questSerial) || input.questSerial < 1 || !Number.isInteger(input.tickets) || input.tickets < 0 || input.tickets > 3 || !Number.isInteger(input.career) || input.career < 0 || input.career > 20 || !nonnegative(input.careerProgress) || !isObject(input.careerDetail))
         return null;
     if (!Array.isArray(input.achievements) || !input.achievements.every((id) => ACHIEVEMENTS.some(a => a.id === id)) || new Set(input.achievements).size !== input.achievements.length || !Array.isArray(input.legacyPaid) || !input.legacyPaid.every(id => typeof id === 'string') || !Array.isArray(input.runs) || input.runs.length > 20 || !input.runs.every(validateResult) || !Array.isArray(input.settled) || !input.settled.every((id) => typeof id === 'string') || new Set(input.settled).size !== input.settled.length || !(input.checkpoint === null || validateResult(input.checkpoint)))
@@ -202,7 +209,7 @@ export function parseSave(value: unknown): Save | null {
         se.adaptiveResolution = false;
         if (se.quality === 'balanced') se.quality = 'high';
     }
-    return structuredClone({ ...input, settings: se });
+    return structuredClone({ ...input, balanceEdition: 7, settings: se });
 }
 interface GameState {
     phase: Phase;
@@ -354,7 +361,7 @@ export const useAirrun = create<GameState>((set, get) => ({ phase: 'loading', pa
     },
     settings: patch => {
         const next = { ...get().save.settings, ...patch };
-        if (next.difficulty !== undefined && !['relaxed', 'standard', 'expert'].includes(next.difficulty)) return;
+        if (next.difficulty !== undefined && !['relaxed', 'rookie', 'standard', 'expert'].includes(next.difficulty)) return;
         if (![1, 1.25, 1.5].includes(next.resolutionScale) || !['hold', 'gear'].includes(next.control) || !['balanced', 'high', 'ultra'].includes(next.quality) || !['ko', 'en'].includes(next.language) || ![30, 60].includes(next.targetFPS) || !['volume', 'music', 'sfx'].every(k => Number.isFinite(next[k as 'volume']) && next[k as 'volume'] >= 0 && next[k as 'volume'] <= 1) || !Number.isFinite(next.sensitivity) || next.sensitivity < .5 || next.sensitivity > 1.5 || !['reducedMotion', 'skipTakeoff', 'leftHanded', 'adaptiveResolution'].every(k => typeof next[k as 'reducedMotion'] === 'boolean'))
             return;
         mutate(s => ({ ...s, settings: next }));

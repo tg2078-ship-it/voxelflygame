@@ -78,6 +78,11 @@ export class WorldView {
     disposed = false;
     beacons: BeaconFX;
     constructor(scene: T.Scene, catalog: ModelLibrary) { this.scene = scene; this.catalog = catalog; this.stream = new FlightStream(catalog); scene.add(this.root); this.beacons = new BeaconFX(this.root); }
+    canObstructCamera(obstacle: Obstacle) {
+        const p = obstacle.home ?? obstacle.position;
+        const key=this.placementKey({model:obstacle.model,x:p.x,z:p.z} as Placement);
+        return this.presented.has(key) && this.catalog.proxies.has(obstacle.model);
+    }
     canCollide(obstacle: Obstacle) {
         const home = obstacle.home ?? obstacle.position;
         const key = this.placementKey({ model: obstacle.model, x: home.x, z: home.z } as Placement);

@@ -33,6 +33,7 @@ export function FlightDebrief({ result, ko }: { result: RunResult; ko: boolean }
                 <span>{requirement.kind === 'rating' ? t('평가', 'RATING') : requirement.kind === 'manualSeconds' ? t('수동 비행', 'MANUAL FLIGHT') : t('작전', 'OPERATIONS')}<b>{requirement.current === null ? '—' : fmt(Math.floor(requirement.current))} / {requirement.target}{requirement.kind === 'manualSeconds' ? t('초', 's') : ''}</b></span>
             </li>)}</ul>}
         </div>
+        {!!result.relayClears && <div className="relay-log"><Flag size={15}/>{t('항로 릴레이 완주','Route relays completed')} <b>×{result.relayClears}</b></div>}
         <details className="debrief-analysis">
             <summary><Lightbulb size={15}/><span>{coach[ko ? 0 : 1]}<small>{t('점수 분석과 다음 비행의 힌트', 'SCORE BREAKDOWN & YOUR NEXT MOVE')}</small></span><ChevronDown size={16}/></summary>
             <div className="debrief-analysis-body"><p>{coach[ko ? 2 : 3]}</p>

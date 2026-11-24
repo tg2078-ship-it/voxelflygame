@@ -191,7 +191,7 @@ export class FlightFX {
         if (!sim)
             return;
         const p = position ?? { x: sim.x, y: sim.y, z: sim.z };
-        const success = kind === 'operation-complete' || kind === 'precision' || kind === 'flow-bank' || kind === 'choice' || kind === 'sortie-complete';
+        const success = kind === 'relay' || kind === 'operation-complete' || kind === 'precision' || kind === 'flow-bank' || kind === 'choice' || kind === 'sortie-complete';
         if (['crash', 'damage', 'repair', 'shield', 'risk', 'e-start', 'ring', 'crystal'].includes(kind) || success) {
             const reduced = sim.config.settings.reducedMotion;
             const count = Math.ceil((kind === 'crash' ? 110 : kind === 'e-start' ? 64 : kind === 'flow-bank' ? 32 : kind === 'damage' ? 30 : kind === 'operation-complete' ? 24 : 16) * (reduced ? .35 : 1));
@@ -216,7 +216,7 @@ export class FlightFX {
         const line = sim.recordLine;
         this.recordLine.visible = line !== undefined && line > emitter.z - 35 && line < emitter.z + Math.max(320, sim.speed * 10);
         if (this.recordLine.visible) this.recordLine.position.z = sim.z - line!;
-        this.formation.update(sim.eRemaining ? undefined : sim.formation, emitter.z, sim.z, sim.speed, dt, sim.config.settings.reducedMotion);
+        this.formation.update(sim.eRemaining || sim.training ? undefined : sim.formation, emitter.z, sim.z, sim.speed, dt, sim.config.settings.reducedMotion);
         this.rainGeometry.setDrawRange(0, GRAPHICS[quality].rainDrops);
         this.environment.update(sim, placements, motionTime, emitter.z);
         const object = this.object;

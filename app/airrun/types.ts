@@ -44,6 +44,7 @@ export interface Theme {
     obstacles: string;
 }
 export interface Settings {
+    flightCoach?: 'on' | 'done' | 'off';
     /** Optional for backups made before the 6.0 flight director. */
     difficulty?: import('./encounter-director').Difficulty;
     control: 'hold' | 'gear';
@@ -118,6 +119,7 @@ export interface Metrics {
     time: number;
 }
 export interface RunResult {
+    relayClears?: number;
     bestRingStreak?: number;
     formation?: import('./formation').FormationLog;
     rush?: import('./rush').RushResult;
@@ -184,6 +186,7 @@ export interface Best {
 export interface Save {
     dailyRecords?: Record<string, DailyRouteRecord>;
     schema: 3;
+    balanceEdition?: number;
     nickname: string;
     coins: number;
     owned: string[];
@@ -238,6 +241,10 @@ export interface Weather {
 }
 export interface HUD {
     ringPass?: { offset: number; award: number; streak: number; speedBonus?: number };
+    coach?: import('./flight-school').CoachHUD;
+    module?: import('./airframe-systems').ModuleHUD;
+    regionEntry?: boolean;
+    relay?: {chain:number; clears:number; lastAward:number; reveal:boolean};
     formationIncoming?: number;
     attitude?: {bank:number; pitch:number; climb:number};
     ringSight?: { x: number; y: number; angle: number; edge: boolean; distance: number; speedGate: boolean };

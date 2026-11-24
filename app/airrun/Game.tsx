@@ -76,6 +76,10 @@ export default function Game() {
             return;
         void engine.current?.audio.unlock().then(() => { engine.current?.audio.update(useAirrun.getState().save.settings, null, false); engine.current?.audio.event(state.celebration!.kind === 'upgrade' ? 'upgrade' : 'reward'); });
     }, [state.celebration]);
+    const coachLesson = state.hud.coach?.lesson;
+    useEffect(() => {
+        if (coachLesson==='complete' && useAirrun.getState().save.settings.flightCoach!=='done') useAirrun.getState().settings({flightCoach:'done'});
+    },[coachLesson]);
     const inspectModel = useCallback((active: boolean) => { if (engine.current) engine.current.inspectorActive = active; }, []);
     const previewModel = useCallback((id: string) => { void engine.current?.studio?.requestModel(id); }, []);
     const unlock = () => { void engine.current?.audio.unlock(); };
@@ -174,7 +178,11 @@ export default function Game() {
   </>}
   {state.phase === 'takeoff' && <div className="takeoff-overlay"><span className="eyebrow">CLEARED FOR TAKEOFF</span><h2>{t('새로운 기록을 향해.', 'Your next record awaits.')}</h2><button className="secondary" onClick={() => state.skipTakeoff()}>{t('이륙 건너뛰기', 'SKIP TAKEOFF')}<ArrowRight size={16}/></button></div>}
   {['flying', 'paused', 'crashing'].includes(state.phase) && <>
-   <FlightDeck onTransmit={() => { if (state.phase === 'flying') input.transmit = true; }} hud={hud} ko={ko} hyper={<HyperButton state={state} ko={ko}/>} onRush={() => { if (state.phase === 'flying') input.rush = true; }} onBank={() => state.bankFlow()} onPause={() => state.pause()}/>
+   <FlightDeck gearControl={state.save.settings.control==='gear'} onCloseCoach={()=>{
+       if (engine.current?.sim) engine.current.sim.coach=undefined;
+       state.settings({flightCoach:coachLesson==='complete'?'done':'off'});
+       useAirrun.setState({hud:{...useAirrun.getState().hud,coach:undefined}});
+   }} onTransmit={() => { if (state.phase === 'flying') input.transmit = true; }} hud={hud} ko={ko} hyper={<HyperButton state={state} ko={ko}/>} onRush={() => { if (state.phase === 'flying') input.rush = true; }} onBank={() => state.bankFlow()} onPause={() => state.pause()}/>
    <div className="hud-effects">{hud.effects.map(e => <div key={e.kind} className={'effect ' + e.kind}><Shield size={14}/><span>{effectLabels[e.kind]?.[ko ? 0 : 1]} <b>{e.remaining.toFixed(1)}s</b></span></div>)}</div>
    <div className="flight-bottom"><div className="world-label"><span className="live-dot"/><div><b>{ko ? THEMES.find(t => t.id === hud.theme)!.name : THEMES.find(t => t.id === hud.theme)!.en}</b><small>{hud.theme === 'korea' ? (ko ? KOREA_VARIANTS[hud.variant] : KOREA_VARIANTS_EN[hud.variant]) + ' · ' : ''}{hud.weather.snow && hud.weather.rain > .1 ? t('눈', 'SNOW') : WEATHER_NAMES[hud.weather.kind][ko ? 0 : 1]} · {lightAt(hud.time).phase === 'dawn' ? t('일출', 'DAWN') : lightAt(hud.time).phase === 'sunset' ? t('노을', 'SUNSET') : hud.weather.night > .5 ? t('밤', 'NIGHT') : t('낮', 'DAY')} · {duration(hud.time)}</small></div></div><TrackedQuest state={state} ko={ko}/><FlightRoute hud={hud} ko={ko}/></div>
    {hud.time < hud.messageUntil && <div className="flight-message" key={hud.messageUntil}>{ko ? hud.message : hud.messageEn}</div>}

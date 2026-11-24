@@ -32,7 +32,7 @@ for (const difficulty of Object.keys(DIFFICULTIES) as Difficulty[])
                 }
             }
         }
-check(fingerprints.size === 9, 'Different seeds and profiles create different first routes');
+check(fingerprints.size === Object.keys(DIFFICULTIES).length*3, 'Different seeds and profiles create different first routes');
 const easy = createSim({ settings: { ...DEFAULT_SETTINGS, difficulty: 'relaxed' } });
 const expert = createSim({ settings: { ...DEFAULT_SETTINGS, difficulty: 'expert' } });
 check(easy.speed < expert.speed && easy.encounters[0].length > expert.encounters[0].length, 'Relaxed provides slower speed and more reaction distance');
@@ -52,5 +52,5 @@ check(useAirrun.getState().save.settings.difficulty === 'relaxed', 'Unsupported 
 // until the next run, preventing midflight speed or generation exploits.
 easy.config.settings.difficulty = 'expert';
 easy.generate(2200);
-check(easy.difficulty === 'relaxed' && easy.performance.speed === stats(easy.plane, 1).speed * .88, 'Midflight settings cannot relabel or accelerate a run');
-console.log(JSON.stringify({ difficultyChecks: checks, sampledOpenings: 198, distinctFirstRoutes: fingerprints.size, gpuVerified: false, status: 'passed' }));
+check(easy.difficulty === 'relaxed' && easy.performance.speed === stats(easy.plane, 1).speed * DIFFICULTIES.relaxed.speedMultiplier, 'Midflight settings cannot relabel or accelerate a run');
+console.log(JSON.stringify({ difficultyChecks: checks, sampledOpenings: AIRCRAFT.length*3*Object.keys(DIFFICULTIES).length, distinctFirstRoutes: fingerprints.size, gpuVerified: false, status: 'passed' }));

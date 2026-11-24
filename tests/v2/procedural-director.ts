@@ -27,7 +27,7 @@ for (const theme of THEMES) {
         check(first.steps.every(([, x, y]) => Math.abs(x * .53) + 1 < 23 && y >= 14 && y <= 46), 'requested waypoints respect corridor and altitude margins');
         const heights = first.steps.map(([, , y]) => y);
         check(Math.max(...heights) - Math.min(...heights) >= DIFFICULTIES[mode].altitudeDelta, 'every generated route contains an actual altitude rhythm');
-        check(first.generation.spacing === first.spacing && first.spacing >= 150 && first.generation.lead > first.spacing, 'generation contains physical opening and spacing metadata');
+        check(first.generation.spacing === first.spacing && first.spacing >= (mode==='expert' ? 133 : mode==='standard' ? 142 : 150) && first.generation.lead > first.spacing, 'generation contains physical opening and spacing metadata');
         check(first.generation.difficulty === mode && first.generation.intensity === 0, 'profile is frozen into the generated route');
         check(Number(first.id.split(':').at(-1)) >= 1 && Number(first.id.split(':').at(-1)) <= 12, 'procedural district remains compatible with art indexing');
         check(first.name.includes(theme.name) && first.en.includes(theme.en) && first.name.includes('→'), 'briefing names describe the actual action sequence');
@@ -48,9 +48,9 @@ for (const theme of THEMES) {
 check(firstSignatures.size >= 16 && firstActions.size >= 7 && directions.size === 2 && altitudes.size >= 20, 'the first coastal segment actually varies in grammar, side and height across seeds');
 for (let seed = 0; seed < 64; seed++) {
     const routes = modes.map(mode => proceduralPattern('coast', 0, seed, 3, 12000, 0, mode));
-    const [relaxed, standard, expert] = routes;
-    equal(routes.map(route => route.steps.map(([action]) => action)), [relaxed, relaxed, relaxed].map(route => route.steps.map(([action]) => action)), 'difficulty preserves seeded route vocabulary for fair profile comparison');
-    check(relaxed.spacing > standard.spacing && standard.spacing > expert.spacing, 'difficulty materially changes physical decision intervals');
+    const [relaxed, rookie, standard, expert] = routes;
+    equal(routes.map(route => route.steps.map(([action]) => action)), modes.map(() => relaxed.steps.map(([action]) => action)), 'difficulty preserves seeded route vocabulary for fair profile comparison');
+    check(relaxed.spacing > rookie.spacing && rookie.spacing > standard.spacing && standard.spacing > expert.spacing, 'difficulty materially changes physical decision intervals');
     check(Math.abs(relaxed.steps[0][1]) < Math.abs(standard.steps[0][1]) && Math.abs(standard.steps[0][1]) < Math.abs(expert.steps[0][1]), 'difficulty materially changes lateral displacement');
     check(relaxed.generation.lead > standard.generation.lead && standard.generation.lead > expert.generation.lead, 'difficulty materially changes encounter breathing room');
 }

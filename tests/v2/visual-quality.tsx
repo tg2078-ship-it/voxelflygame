@@ -133,7 +133,7 @@ const lighting = Object.assign(Object.create(AirrunRenderer.prototype), {
     camera: new T.PerspectiveCamera(), scene: new T.Scene(), sky, water,
     sun: new T.DirectionalLight(), hemi: new T.HemisphereLight(), headlight: new T.SpotLight(),
     renderer: {}, grade: { uniforms: { uSpeed: {}, uBoost: {}, uDamage: {}, uE: {}, uRain: {}, uReduced: {} } },
-    library: { environment: () => {} }, clouds: { mesh: new T.Object3D(), update: () => {}, drift: () => {} },
+    library: { flightLensClearance: { value: 0 }, environment: () => {} }, clouds: { mesh: new T.Object3D(), update: () => {}, drift: () => {} },
     lastCloud: -1, cloudClock: '', flightOffset: 0,
 });
 lighting.scene.fog = new T.FogExp2('#ffffff'); let dayEnvironment = 0;

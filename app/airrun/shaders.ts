@@ -7,7 +7,7 @@ export function createSky() {
     const uniforms = { uTime: { value: 0 }, uNight: { value: 0 }, uCloud: { value: 0 }, uWarm: { value: 0 }, uDawn: { value: 0 }, uAurora: { value: 0 }, uFlash: { value: 0 }, uSky: { value: new T.Color('#389fc8') }, uSun: { value: new T.Vector3(-.5, .65, -.3).normalize() } };
     const material = new T.ShaderMaterial({ side: T.BackSide, depthWrite: false, uniforms,
         vertexShader: `varying vec3 vDirection;
-            void main(){vDirection=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
+            void main(){vDirection=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);gl_Position.z=gl_Position.w;}`,
         fragmentShader: `
             varying vec3 vDirection;
             uniform float uTime,uNight,uCloud,uAurora,uFlash,uWarm,uDawn;
@@ -37,7 +37,8 @@ export function createSky() {
                 float stars=step(.9984,starSeed)*pow(h,.4);
                 col+=mix(vec3(.49,.72,1.),vec3(1.,.75,.48),hash(floor(d*580.)+11.))*stars*uNight*(1.-uCloud*.92)*(.68+.22*sin(uTime*.7+starSeed*413.));
                 float curtain=sin(d.x*9.+d.z*4.+uTime*.09)*.12+.38;
-                float aurora=exp(-pow((h-curtain)*15.,2.))*max(0.,sin(d.x*21.+sin(d.z*8.)+uTime*.12));
+                float curtainOffset=(h-curtain)*15.;
+                float aurora=exp(-curtainOffset*curtainOffset)*max(0.,sin(d.x*21.+sin(d.z*8.)+uTime*.12));
                 col+=mix(vec3(.055,.61,.34),vec3(.36,.11,.67),sin(d.x*4.)*.5+.5)*aurora*uAurora*(.2+.8*uNight);
                 col+=uFlash*.55;gl_FragColor=vec4(max(col,vec3(0.)),1.);
             }` });
@@ -104,7 +105,8 @@ export function createWater() {
                 if(uRain>.001){
                     vec2 cell=floor(p*.24),drop=vec2(hash(cell),hash(cell+19.));
                     float age=fract(uTime*.82+hash(cell+7.));
-                    float ring=exp(-pow((length(fract(p*.24)-drop)-age*.69)*25.,2.))*(1.-age);
+                    float rim=(length(fract(p*.24)-drop)-age*.69)*25.;
+                    float ring=exp(-rim*rim)*(1.-age);
                     col+=vec3(.13,.23,.25)*ring*uRain*.20;
                 }
                 // Preserve moonlit surface variation instead of crushing the

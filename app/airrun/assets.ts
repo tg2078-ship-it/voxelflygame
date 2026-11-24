@@ -42,6 +42,7 @@ export class ModelLibrary {
     cache = new Map<string, GLTF>();
     textures = new ModelTexturePool();
     textureAnisotropy = 1;
+    readonly flightLensClearance = { value: 0 };
     animationDraws = new Map<string, number>();
     animationPending = new Map<string, Promise<RigidPlan>>();
     proxyPending = new Map<string, Promise<void>>();
@@ -198,6 +199,20 @@ export class ModelLibrary {
                             for (const material of materials)
                                 if (material instanceof THREE.MeshStandardMaterial && !registeredMaterials.has(material)) {
                                     registeredMaterials.add(material);
+                                    if (meta.category !== 'aircraft') {
+                                        material.onBeforeCompile = shader => {
+                                            shader.uniforms.uLensClearance = this.flightLensClearance;
+                                            shader.fragmentShader = 'uniform float uLensClearance;\n' + shader.fragmentShader.replace('#include <clipping_planes_fragment>', `
+                                                #include <clipping_planes_fragment>
+                                                if (uLensClearance > 0. && vViewPosition.z < uLensClearance) {
+                                                    float visibility = smoothstep(.65,uLensClearance,vViewPosition.z);
+                                                    // Ordered coverage opens a local window around the lens.
+                                                    vec2 pixel = mod(floor(gl_FragCoord.xy),4.);
+                                                    float rank = mod(pixel.x*2.+pixel.y*3.,4.)*4.+pixel.x;
+                                                    if (visibility <= (rank+.5)/16.) discard;
+                                                }`);
+                                        };
+                                    }
                                     material.envMapIntensity = .58;
                                     material.userData.baseRoughness = material.roughness;
                                     material.userData.baseMetalness = material.metalness;

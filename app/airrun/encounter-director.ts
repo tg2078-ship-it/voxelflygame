@@ -2,7 +2,7 @@ import { clamp, rng, THEMES } from './data';
 import type { Action, Pattern } from './patterns';
 import type { ThemeId } from './types';
 
-export type Difficulty = 'relaxed' | 'standard' | 'expert';
+export type Difficulty = 'relaxed' | 'rookie' | 'standard' | 'expert';
 export interface DifficultyProfile {
     label: string;
     en: string;
@@ -21,17 +21,22 @@ export const DIFFICULTIES: Record<Difficulty, DifficultyProfile> = {
     relaxed: {
         label: '여유 비행', en: 'RELAXED', description: '넓은 반응 여유와 완만한 고도 변화. 충돌과 보상은 그대로.',
         descriptionEn: 'More reaction room and gentler altitude changes. Collisions and rewards remain active.',
-        xAmplitude: 26, altitudeDelta: 7, spacing: 242, initialLead: 600, lead: 190, speedMultiplier: .88,
+        xAmplitude: 26, altitudeDelta: 7, spacing: 242, initialLead: 600, lead: 190, speedMultiplier: .88/1.15,
+    },
+    rookie: {
+        label: '초보자', en: 'ROOKIE', description: '종전 표준 항로와 입문용 순항 속도.',
+        descriptionEn: 'The original standard course and entry cruise speed.',
+        xAmplitude: 36, altitudeDelta: 12, spacing: 185, initialLead: 420, lead: 125, speedMultiplier: 1/1.15,
     },
     standard: {
-        label: '정밀 비행', en: 'STANDARD', description: '첫 구간부터 좌우·상하를 연결하는 기본 도전.',
+        label: '보통', en: 'NORMAL', description: '첫 구간부터 좌우·상하를 연결하는 기본 도전.',
         descriptionEn: 'Link lateral and vertical decisions from the very first section.',
-        xAmplitude: 36, altitudeDelta: 12, spacing: 185, initialLead: 420, lead: 125, speedMultiplier: 1,
+        xAmplitude: 39, altitudeDelta: 15, spacing: 166, initialLead: 365, lead: 111, speedMultiplier: 1,
     },
     expert: {
         label: '극한 비행', en: 'EXPERT', description: '짧은 판단 간격과 큰 경로 변화. 정확한 감속·회피가 필요합니다.',
         descriptionEn: 'Shorter decision gaps and stronger route changes. Brake and dodge precisely.',
-        xAmplitude: 40, altitudeDelta: 16, spacing: 160, initialLead: 360, lead: 105, speedMultiplier: 1.15,
+        xAmplitude: 41, altitudeDelta: 17, spacing: 151, initialLead: 335, lead: 104, speedMultiplier: 1.15,
     },
 };
 
@@ -124,7 +129,9 @@ export function proceduralPattern(theme: ThemeId, variant: number, seed: number,
     const verticalAction = VERTICAL.has(first) ? first : second;
     const third = choose(vocabulary.filter(action => action !== first && action !== second
         && (!CLIMB.has(verticalAction) || !CLIMB.has(action)) && (!DESCEND.has(verticalAction) || !DESCEND.has(action))));
-    const actionCount = counter === 0 ? 3 : 2 + Math.floor(random() * 4);
+    const technical = difficulty === 'standard' || difficulty === 'expert';
+    const inland = technical && theme !== 'coast' && counter > 0;
+    const actionCount = inland ? 4 + Math.floor(random()*2) : counter === 0 ? 3 : 2 + Math.floor(random() * 4);
     const actions = [first, second, third].slice(0, actionCount);
     while (actions.length < actionCount) actions.push(choose(vocabulary.filter(action => !actions.includes(action))));
     const direction = random() < .5 ? -1 : 1;
@@ -136,6 +143,19 @@ export function proceduralPattern(theme: ThemeId, variant: number, seed: number,
         const reverse = counter === 0 && i === 2 && signs[1] === direction || random() < turnBias;
         signs.push(reverse ? -signs[i - 1] : signs[i - 1]);
         turnBias = reverse ? .20 + random() * .45 : Math.min(.92, turnBias + .23);
+    }
+    // A local feature shapes the chapter: descend under a river crossing,
+    // climb a village roof, or switch sides between towers.
+    if (inland && random()<.62) {
+        const signatures: Partial<Record<ThemeId,Action[]>> = {village:['roof','spire'],city:['under','slalom'],ice:['tunnel','over'],desert:['arch','spire'],forest:['over','slalom'],farm:['roof','mover'],korea:['arch','slalom'],river:['under','cross'],landmark:['arch','over'],aurora:['tunnel','spire'],volcano:['over','arch'],waterfall:['bridge','cross']};
+        const pair = signatures[theme]!;
+        const index = Math.floor(random()*(actions.length-1));
+        actions[index]=pair[0]; actions[index+1]=pair[1];
+        for (let i=0;i<actions.length;i++) {
+            if (i===index || i===index+1) continue;
+            if (pair.includes(actions[i])) actions[i]=choose(vocabulary.filter(action=>!actions.includes(action)));
+        }
+        signs[index+1]=-signs[index];
     }
     const amplitude = profile.xAmplitude * (1 + intensity * .08);
     const vertical = profile.altitudeDelta * (1 + intensity * .2);
@@ -150,7 +170,7 @@ export function proceduralPattern(theme: ThemeId, variant: number, seed: number,
         previousY = clamp(y, 14, 46);
         return [action, x, Math.round(previousY * 10) / 10];
     });
-    const spacing = Math.round(Math.max(150, profile.spacing * (1 - intensity * .16) * (.94 + random() * .12)));
+    const spacing = Math.round(Math.max(difficulty==='expert' ? 133 : difficulty==='standard' ? 142 : 150, profile.spacing * (inland ? .89 : 1) * (1 - intensity * .16) * (.94 + random() * .12)));
     const lead = Math.round((counter === 0 ? profile.initialLead : profile.lead * (1 - intensity * .12)) * (.84 + random() * .36));
     const district = 1 + Math.floor(random() * 12);
     const labels = actions.map(action => THEME_LABELS[theme]?.[action] ?? LABELS[action]);
@@ -160,7 +180,7 @@ export function proceduralPattern(theme: ThemeId, variant: number, seed: number,
         name: `${themeInfo.name} · ${labels.map(label => label[0]).join(' → ')}`,
         en: `${themeInfo.en} · ${labels.map(label => label[1]).join(' → ')}`,
         steps, spacing,
-        generation: { procedural: true, difficulty, intensity, lead, spacing,
+        generation: { procedural: true, difficulty, intensity, lead, spacing, minimumSpacing: technical ? (inland ? 136 : 145) : 150,
             beats: actions.slice(1).map(() => .73 + random() ** 1.45 * .95) },
     };
 }

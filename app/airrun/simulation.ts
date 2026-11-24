@@ -3,6 +3,8 @@ import { journeyTheme, journeyThemes, JOURNEY_MARKS } from './journey';
 import { FormationFlight, type FormationEvent } from './formation';
 import { RushDrive } from './rush';
 import { buildEncounter, validateReachability } from './patterns';
+import { FlightSchool } from './flight-school';
+import { systemSpec } from './airframe-systems';
 import { proceduralPattern, DIFFICULTIES, type Difficulty } from './encounter-director';
 import { populateThemeCollection, themeCollection } from './model-collection';
 import { AIRSPACE } from './graphics';
@@ -32,6 +34,7 @@ export interface RunConfig {
     settings: Settings;
     catalog: Map<string, AssetMeta>;
     proxies: Map<string, ProxyData>;
+    coach?: boolean;
     onEvent?: (kind: string, position?: Vec) => void;
     isObstacleVisible?: (obstacle: Obstacle) => boolean;
 }
@@ -124,11 +127,22 @@ export class FlightSimulation {
     private lessonRings = new Map<number, { x: number; y: number }>();
     private choices = new Map<string, RouteChoice>();
     private choiceRetryAt = 0;
+    coach?: FlightSchool;
+    module: ReturnType<typeof systemSpec>;
+    private moduleUntil = 0;
+    private repairPasses = 0;
+    private relayChain = 0;
+    private relayClears = 0;
+    private relayPerfect = 0;
+    private relayUntil = 0;
+    private relayAward = 0;
     latestModel = '';
     surveyMilestones = new Map<ThemeId, number>();
     constructor(config: RunConfig) { this.config = config; this.sortie = config.mode === 'sortie' ? new SortieDirector() : undefined; this.difficulty = config.mode === 'daily' ? 'standard' : config.settings.difficulty ?? 'standard'; this.plane = AIRCRAFT.find(p => p.id === config.plane) ?? AIRCRAFT[0]; this.performance = stats(this.plane, config.level); this.performance.speed *= DIFFICULTIES[this.difficulty].speedMultiplier; this.hp = this.maxHp = this.performance.hp; this.speed = baseSpeed(0) * this.performance.speed; this.theme = config.practice?.theme ?? 'coast'; this.variant = config.practice?.variant ?? 0; this.discoveredModels.add(this.plane.model); if (!config.practice && (config.mode ?? 'endless') === 'endless') {
             this.formation = new FormationFlight(config.seed, this.difficulty);
         }
+        this.module = systemSpec(this.plane);
+        if (config.coach && !this.sortie && !config.practice && config.mode!=='daily') this.coach=new FlightSchool();
         this.generate(); this.adventure = new FlightAdventure(config.seed, award => this.adventureAward(award), points => Math.floor(points * (this.effects.has('multiplier') ? 2 : 1))); this.adventure.advance(this.adventureFrame({ x: 0, y: 0, boost: false, brake: false, gear: 3 }, false)); if (this.sortie) this.contract = new FlightContract(config.contractId ?? 'precision', baseSpeed(0) * this.performance.speed, this.difficulty); this.recorder.record(0, this, this.roll); }
     private adventureAward(award: AdventureAward) {
         const before = this.bonus;
@@ -164,6 +178,48 @@ export class FlightSimulation {
         const themes = journeyThemes(this.config.seed), index = Math.max(0, themes.indexOf(this.theme));
         const clock = courseClock(this.z, this.performance.speed), start = JOURNEY_MARKS[index], end = JOURNEY_MARKS[index + 1] ?? 180;
         return { themes, index, progress: clamp((clock - start) / (end - start), 0, 1), arrival: this.time - this.sectorEnteredAt < 3.2 };
+    }
+    // District plots are authored per encounter. Navigation interpolates continuously
+    // between gate centres, including the approach on either side of a chunk seam.
+    private clearFlightLine(encounter: Encounter) {
+        const previous = this.encounters.at(-1);
+        const tail = previous?.route.at(-1);
+        const start = tail ? { ...tail, z: tail.z + 60 } : { ...this.lastRequired, z: encounter.start };
+        const samples: Vec[] = [start];
+        for (const gate of encounter.route) {
+            const from = samples[samples.length - 1], approachZ = gate.z - 60;
+            for (let i = 1; i <= 6; i++) {
+                const t = i / 6, curve = smooth(t);
+                samples.push({ x: mix(from.x, gate.x, curve), y: mix(from.y, gate.y, curve), z: mix(from.z, approachZ, t) });
+            }
+            samples.push({ x: gate.x, y: gate.y, z: gate.z + 60 });
+        }
+        const clearance = { x: this.plane.span * .34 + 3.5, y: 3.5, z: this.plane.length * .25 + 2 };
+        const removed = new Set<string>();
+        const key = (model: string, at: Vec) => [model, at.x, at.y, at.z].join('/');
+        for (const sector of previous ? [previous, encounter] : [encounter]) {
+            const plots = new Set<string>();
+            const blocked = new Set<typeof sector.placements[number]>();
+            for (const p of sector.placements) {
+                if (p.course || !p.collision) continue;
+                const meta = this.config.catalog.get(p.model)!;
+                const bounds = meta.motionBounds ?? meta.bounds;
+                const center = bounds.min.map((v, i) => (v + bounds.max[i]) / 2);
+                const box = transformBox(center, bounds.size, p, { x: p.sx, y: p.sy, z: p.sz }, p.yaw);
+                if (p.move) { box.min[p.move.axis] -= p.move.amplitude; box.max[p.move.axis] += p.move.amplitude; }
+                if (box.max.z < start.z - clearance.z || box.min.z > samples[samples.length - 1].z + clearance.z) continue;
+                if (samples.some((b, i) => i > 0 && sweepAABB(samples[i - 1], b, box, clearance))) {
+                    blocked.add(p);
+                    if (p.group) plots.add(p.group);
+                }
+            }
+            sector.placements = sector.placements.filter(p => {
+                if (!blocked.has(p) && !(p.group && plots.has(p.group))) return true;
+                if (sector === previous && p.collision) removed.add(key(p.model, p));
+                return false;
+            });
+        }
+        if (removed.size) this.obstacles = this.obstacles.filter(o => !removed.has(key(o.model, o.home ?? o.position)));
     }
     generate(required = 0) {
         const ahead = Math.max(1050, this.speed * 8, required);
@@ -277,6 +333,7 @@ export class FlightSimulation {
             const cycle = this.modelCycle.get(e.theme) ?? new Set<string>();
             this.modelCycle.set(e.theme, cycle);
             populateThemeCollection(e, this.config.catalog, this.config.seed, cycle, this.plane.span);
+            this.clearFlightLine(e);
             this.encounters.push(e);
             this.formation?.addRoute(e.route);
             const last = e.route[e.route.length - 1];
@@ -337,7 +394,8 @@ export class FlightSimulation {
         this.boostHeat = damp(this.boostHeat, this.boosting ? 1 : 0, this.boosting ? .36 : 1.5, dt);
         const activeE = this.eRemaining > 0;
         const modifier = activeE ? 1.2 : control * Math.max(this.effects.has('turbo') ? 1.25 : 1, rushing && control >= 1 ? 1.18 : 1) * slow;
-        const target = baseline * modifier;
+        const slipstream = this.module?.id==='turbine' && !activeE && this.time<this.moduleUntil ? 1+this.module.strength/100 : 1;
+        const target = baseline * modifier * slipstream;
         const speedK = activeE ? 4 : (target < this.speed ? 4.2 : 2.2) * this.performance.accel;
         this.speed = damp(this.speed, target, speedK, dt);
         this.z += this.speed * dt;
@@ -489,6 +547,7 @@ export class FlightSimulation {
                 }
             }
         }
+        if (!activeE) this.coach?.advance(dt,input,control,Math.hypot(this.x-old.x,this.y-old.y));
         for (const p of this.pickups) {
             const reach = p.kind === 'ring' ? 0 : radius.z;
             if (p.collected || p.z < old.z - reach || p.z > this.z + reach)
@@ -509,6 +568,11 @@ export class FlightSimulation {
             const central = p.kind === 'ring' && offset <= p.radius * .30;
             this.collect(p.kind, `pickup:${p.id}`, central);
             if (p.kind === 'ring') {
+                this.coach?.pass();
+                if (central && this.module?.id==='capacitor') {
+                    this.rushCredit('capacitor:'+p.id,this.module.strength);
+                    this.moduleUntil=this.time+1.4;
+                }
                 this.ringStreak = central ? this.ringStreak + 1 : 0;
                 this.bestRingStreak = Math.max(this.bestRingStreak, this.ringStreak);
                 const award = central && this.ringStreak % 3 === 0 ? 300 : 0;
@@ -530,8 +594,11 @@ export class FlightSimulation {
                     const dx = Math.abs(crossingX - r.x), dy = Math.abs(crossingY - r.y);
                     const lessonRing = this.lessonRings.get(r.z);
                     this.lessonRings.delete(r.z);
-                    if (dx > r.width / 2 || dy > r.height / 2)
+                    if (dx > r.width / 2 || dy > r.height / 2) {
+                        if (r.role !== 'orientation') this.relayChain=this.relayPerfect=0;
                         continue;
+                    }
+                    this.coach?.pass();
                     const candidate = this.choices.get(`${e.start}:${i}`);
                     if (candidate && choiceCrossing(candidate, old, { x: this.x, y: this.y, z: this.z }) === 'risk') {
                         if (this.adventure.routeChoice(candidate.id, ROUTE_CHOICE_BONUS))
@@ -566,6 +633,7 @@ export class FlightSimulation {
                         this.metrics.bridgePass++;
                     if (r.role === 'roof' && this.theme === 'village')
                         this.metrics.roofPass++;
+                    if (r.role!=='orientation') this.structuralPass(dx<r.width*.18 && dy<r.height*.22);
                     if (this.theme === 'city')
                         this.metrics.cityPass++;
                     if (['desert', 'waterfall'].includes(this.theme))
@@ -594,7 +662,7 @@ export class FlightSimulation {
             this.lightningWarn = 0;
             this.lightningDone = false;
         }
-        if (this.formation && !this.failed) {
+        if (this.formation && !this.training && !this.failed) {
             const event = this.formation.advance(dt, this, activeE, !!input.transmit);
             if (event) this.formationEvent(event);
         }
@@ -646,10 +714,28 @@ export class FlightSimulation {
             this.config.onEvent?.('formation-' + event.radio);
         }
     }
+    get training() {return !!this.coach && this.coach.lesson!=='complete';}
+    private structuralPass(precise:boolean) {
+        if (this.module?.id==='repair' && ++this.repairPasses>=2) {
+            this.repairPasses=0;
+            const recovered=Math.min(this.maxHp-this.hp,Math.ceil(this.maxHp*this.module.strength/100));
+            this.hp+=recovered; this.metrics.repair+=recovered;
+            if (recovered) this.moduleUntil=this.time+1.5;
+        }
+        if (this.difficulty!=='standard' && this.difficulty!=='expert') return;
+        this.relayChain++;
+        if (precise) this.relayPerfect++;
+        if (this.relayChain<3) return;
+        this.relayAward=this.relayPerfect===3 ? 750 : 450;
+        this.bonus+=this.relayAward; this.metrics.bonus=this.bonus; this.relayClears++;
+        this.relayChain=this.relayPerfect=0; this.relayUntil=this.time+2;
+        this.notify('항로 릴레이 완주 +'+this.relayAward,'RELAY CLEARED +'+this.relayAward,'relay');
+    }
     addBonus(base: number, combo = true) { const factor = (combo ? 1 + .15 * Math.min(Math.max(0, this.combo - 1), 10) : 1) * (this.effects.has('multiplier') ? 2 : 1); const score = Math.floor(base * factor); this.bonus += score; this.metrics.bonus = this.bonus; }
     risk(base: number, kind: 'near' | 'narrow', source?: string) {
         this.combo = this.time <= this.comboUntil ? this.combo + 1 : 1;
         this.comboUntil = this.time + 7;
+        if (this.module?.id==='turbine') this.moduleUntil=this.time+3;
         this.metrics.maxCombo = Math.max(this.metrics.maxCombo, this.combo);
         this.metrics[kind]++;
         const high = this.speed >= baseSpeed(this.z) * this.performance.speed * 1.12;
@@ -717,6 +803,7 @@ export class FlightSimulation {
         this.hp -= amount;
         this.metrics.damage += amount;
         this.damageCount++;
+        this.relayChain=this.relayPerfect=0;
         this.adventure.damage(); this.rush.damage(); this.formation?.interrupt();
         this.snowCleanDistance = 0;
         this.lastDamageZ = this.z;
@@ -785,6 +872,7 @@ export class FlightSimulation {
             this.notify('안전 공간에서 다시 발동하세요', 'ACTIVATE IN CLEAR AIRSPACE', 'warning');
             return false;
         }
+        this.relayChain=this.relayPerfect=0;
         this.eUsed = true;
         this.formation?.interrupt();
         this.adventure.hyperStart();
@@ -823,6 +911,6 @@ export class FlightSimulation {
         this.pitch = damp(this.pitch, 0, 6, dt);
         this.yaw = damp(this.yaw, 0, 6, dt);
     }
-    hud(input: Input): HUD { const ghost = this.config.rival ? replayPose(this.config.rival.replay, this.time) : null; const choice = this.upcomingChoice(); const next = this.encounters.flatMap(e => e.route).find(point => point.z > this.z + 5); return { attitude: { bank:this.roll+this.trickRoll, pitch:this.pitch+this.trickPitch, climb:this.eRemaining ? (sampleTrickPath(this.ePath, Math.min(15,this.eTime+.2),this.z).y-this.y)/.2 : this.vy }, ringPass: this.ringJudgement && this.time < this.ringJudgement.until ? { offset: this.ringJudgement.offset, award: this.ringJudgement.award, speedBonus: this.ringJudgement.speedBonus, streak: this.ringStreak } : undefined, recordLine: this.recordLine, formationIncoming: this.eRemaining ? undefined : this.formation?.approachIn, formation: this.formation?.hud(), rush: this.rush.hud(), journey: this.journeyHUD(), difficulty: this.difficulty, contract: this.contract?.result(), ghost: ghost && !this.eUsed ? { delta: this.z - ghost.z, score: this.config.rival!.score } : undefined, sortie: this.sortie?.hud(), choice: choice ? choiceHUD(choice, { x: this.x, y: this.y, z: this.z }, ROUTE_CHOICE_BONUS * (this.effects.has('multiplier') ? 2 : 1)) : undefined, adventure: this.adventure.hud(), collection: { found: themeCollection(this.theme, this.config.catalog).filter(meta => this.discoveredModels.has(meta.id)).length, total: themeCollection(this.theme, this.config.catalog).length, latest: this.latestModel }, navigation: next ? { distance: next.z - this.z, dx: next.x - this.x, dy: next.y - this.y, role: next.role } : undefined, distance: this.z, score: Math.floor(this.z) + this.bonus, bonus: this.bonus, coins: this.coins, combo: this.combo, maxCombo: this.metrics.maxCombo, speed: this.speed * 3.6, hp: Math.max(0, this.hp), maxHp: this.maxHp, altitude: this.y - groundAt(this.x, this.z, this.theme, this.config.seed, this.variant), time: this.time, theme: this.theme, variant: this.variant, weather: this.weather, gear: input.gear, boost: this.boost, heat: this.boostHeat, eUsed: this.eUsed, eRemaining: this.eRemaining, effects: [...this.effects].map(([kind, remaining]) => ({ kind, remaining })), message: this.message, messageEn: this.messageEn, messageUntil: this.messageUntil, route: this.encounters.find(e => e.start + e.length > this.z)?.title ?? '', routeEn: this.encounters.find(e => e.start + e.length > this.z)?.en ?? '', fps: 0, draws: 0, triangles: 0, metrics: { ...this.metrics } }; }
-    result(interrupted = false, settleVault = false): RunResult { const secure = settleVault && !this.failed, extra = secure ? this.adventure.hud()?.vault?.pending ?? 0 : 0; const distance = Math.floor(this.z), bonus = this.bonus + extra, practice = !!this.config.practice; return { bestRingStreak: this.bestRingStreak, ...(this.formation ? { formation: this.formation.result() } : {}), rush: { ...this.rush.result(), distance: Math.min(distance, this.rush.result().distance) }, courseEdition: COURSE_EDITION, difficulty: this.difficulty, ...(this.sortie ? { seed: this.config.seed >>> 0, level: this.config.level, contract: this.contract?.result(), ...(this.completed && !this.eUsed && !interrupted ? { replay: this.recorder.result() } : {}) } : {}), ...(this.sortie ? { sortie: { ...this.sortie.result(), operations: this.adventure.debrief().operationsCompleted, perfectPasses: this.adventure.debrief().perfectPasses } } : {}), mode: this.config.mode ?? 'endless', ...(this.config.dailyKey ? { dailyKey: this.config.dailyKey } : {}), debrief: this.adventure.debrief(secure), id: this.config.id, date: new Date().toISOString(), planeId: this.plane.id, distance, bonus, score: distance + bonus, coins: this.coins, reward: practice ? 0 : Math.floor(distance / 30) + Math.floor(bonus / 180) + this.coins, maxCombo: this.metrics.maxCombo, eUsed: this.eUsed, practice, interrupted, reason: this.reason || '비행 종료', reasonEn: this.reasonEn || 'FLIGHT ENDED', metrics: structuredClone({ ...this.metrics, distance, bonus }), discoveryImages: { ...this.discoveryImages }, discoveredModels: [...this.discoveredModels] }; }
+    hud(input: Input): HUD { const ghost = this.config.rival ? replayPose(this.config.rival.replay, this.time) : null; const choice = this.upcomingChoice(); const next = this.encounters.flatMap(e => e.route).find(point => point.z > this.z + 5); return { regionEntry: !this.sortie && this.sectorEnteredAt>0 && this.time-this.sectorEnteredAt<2.5, coach:this.coach?.hud(), module:this.module ? { id:this.module.id, name:this.module.name,en:this.module.en,strength:this.module.strength,active:this.time<this.moduleUntil,progress:this.module.id==='repair' ? this.repairPasses/2 : 0 } : undefined, relay:this.difficulty==='standard'||this.difficulty==='expert' ? {chain:this.relayChain,clears:this.relayClears,lastAward:this.relayAward,reveal:this.time<this.relayUntil} : undefined, attitude: { bank:this.roll+this.trickRoll, pitch:this.pitch+this.trickPitch, climb:this.eRemaining ? (sampleTrickPath(this.ePath, Math.min(15,this.eTime+.2),this.z).y-this.y)/.2 : this.vy }, ringPass: this.ringJudgement && this.time < this.ringJudgement.until ? { offset: this.ringJudgement.offset, award: this.ringJudgement.award, speedBonus: this.ringJudgement.speedBonus, streak: this.ringStreak } : undefined, recordLine: this.recordLine, formationIncoming: this.eRemaining || this.training ? undefined : this.formation?.approachIn, formation: this.formation?.hud(), rush: this.rush.hud(), journey: this.journeyHUD(), difficulty: this.difficulty, contract: this.contract?.result(), ghost: ghost && !this.eUsed ? { delta: this.z - ghost.z, score: this.config.rival!.score } : undefined, sortie: this.sortie?.hud(), choice: choice ? choiceHUD(choice, { x: this.x, y: this.y, z: this.z }, ROUTE_CHOICE_BONUS * (this.effects.has('multiplier') ? 2 : 1)) : undefined, adventure: this.adventure.hud(), collection: { found: themeCollection(this.theme, this.config.catalog).filter(meta => this.discoveredModels.has(meta.id)).length, total: themeCollection(this.theme, this.config.catalog).length, latest: this.latestModel }, navigation: next ? { distance: next.z - this.z, dx: next.x - this.x, dy: next.y - this.y, role: next.role } : undefined, distance: this.z, score: Math.floor(this.z) + this.bonus, bonus: this.bonus, coins: this.coins, combo: this.combo, maxCombo: this.metrics.maxCombo, speed: this.speed * 3.6, hp: Math.max(0, this.hp), maxHp: this.maxHp, altitude: this.y - groundAt(this.x, this.z, this.theme, this.config.seed, this.variant), time: this.time, theme: this.theme, variant: this.variant, weather: this.weather, gear: input.gear, boost: this.boost, heat: this.boostHeat, eUsed: this.eUsed, eRemaining: this.eRemaining, effects: [...this.effects].map(([kind, remaining]) => ({ kind, remaining })), message: this.message, messageEn: this.messageEn, messageUntil: this.messageUntil, route: this.encounters.find(e => e.start + e.length > this.z)?.title ?? '', routeEn: this.encounters.find(e => e.start + e.length > this.z)?.en ?? '', fps: 0, draws: 0, triangles: 0, metrics: { ...this.metrics } }; }
+    result(interrupted = false, settleVault = false): RunResult { const secure = settleVault && !this.failed, extra = secure ? this.adventure.hud()?.vault?.pending ?? 0 : 0; const distance = Math.floor(this.z), bonus = this.bonus + extra, practice = !!this.config.practice; return { relayClears:this.relayClears, bestRingStreak: this.bestRingStreak, ...(this.formation ? { formation: this.formation.result() } : {}), rush: { ...this.rush.result(), distance: Math.min(distance, this.rush.result().distance) }, courseEdition: COURSE_EDITION, difficulty: this.difficulty, ...(this.sortie ? { seed: this.config.seed >>> 0, level: this.config.level, contract: this.contract?.result(), ...(this.completed && !this.eUsed && !interrupted ? { replay: this.recorder.result() } : {}) } : {}), ...(this.sortie ? { sortie: { ...this.sortie.result(), operations: this.adventure.debrief().operationsCompleted, perfectPasses: this.adventure.debrief().perfectPasses } } : {}), mode: this.config.mode ?? 'endless', ...(this.config.dailyKey ? { dailyKey: this.config.dailyKey } : {}), debrief: this.adventure.debrief(secure), id: this.config.id, date: new Date().toISOString(), planeId: this.plane.id, distance, bonus, score: distance + bonus, coins: this.coins, reward: practice ? 0 : Math.floor(distance / 30) + Math.floor(bonus / 180) + this.coins, maxCombo: this.metrics.maxCombo, eUsed: this.eUsed, practice, interrupted, reason: this.reason || '비행 종료', reasonEn: this.reasonEn || 'FLIGHT ENDED', metrics: structuredClone({ ...this.metrics, distance, bonus }), discoveryImages: { ...this.discoveryImages }, discoveredModels: [...this.discoveredModels] }; }
 }

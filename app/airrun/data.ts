@@ -1,7 +1,7 @@
 import type { Aircraft, Theme, Settings, PracticeConfig, Metrics, Save, ThemeId, WeatherKind } from './types';
-export const VERSION = '12.0.0';
-export const COURSE_EDITION = 6;
-export const WORLD_IMAGE_REVISION = 'v12-airshow';
+export const VERSION = '13.0.0';
+export const COURSE_EDITION = 7;
+export const WORLD_IMAGE_REVISION = 'v13-relay';
 export const AIRCRAFT: Aircraft[] = [
     {
         "id": "skyhawk",
@@ -409,7 +409,16 @@ export const mix = (a: number, b: number, t: number) => a + (b - a) * t;
 export const smooth = (t: number) => { t = clamp(t, 0, 1); return t * t * (3 - 2 * t); };
 export const damp = (a: number, b: number, k: number, dt: number) => mix(a, b, 1 - Math.exp(-k * dt));
 export function baseSpeed(d: number) { d = Math.max(0, d); return 40 + 12 * Math.log1p(d / 600) + .0006 * d; }
-export function stats(p: Aircraft, l: number) { const t = clamp(l, 1, 20) - 1; return { speed: p.speed * (1 + .015 * t), accel: p.accel * (1 + .045 * t), handling: p.handling * (1 + .04 * t), hp: Math.round(p.hp * (1 + .06 * t)) }; }
+export function stats(p: Aircraft, level: number) {
+    const steps = clamp(level, 1, 20) - 1;
+    const grade = { C: 0, B: 1, A: 2, S: 3 }[p.grade];
+    return {
+        speed: 1.15 * (p.speed + grade*.035) * (1+.031*steps),
+        accel: (p.accel + grade*.09) * (1+.075*steps),
+        handling: (p.handling + grade*.055) * (1+.055*steps),
+        hp: Math.round(p.hp * (1+.085*steps)),
+    };
+}
 export function upgradeCost(p: Aircraft, l: number) { return 5 * Math.round(({ C: 45, B: 70, A: 110, S: 160 }[p.grade]) * l * (1 + .04 * (l - 1)) / 5); }
 export function hash(n: number) { n = Math.imul(n ^ (n >>> 16), 0x45d9f3b); n = Math.imul(n ^ (n >>> 16), 0x45d9f3b); return ((n ^ (n >>> 16)) >>> 0) / 4294967296; }
 export function rng(seed: number) { let n = seed >>> 0; return () => { n += 0x6d2b79f5; let t = n; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
@@ -456,7 +465,7 @@ export function themeAt(seed: number, slot: number): {
     return result;
 }
 export function emptyMetrics(): Metrics { return { minorHits: 0, recoveryDistance: 0, highRisk: 0, cleanDistance: 0, distance: 0, bonus: 0, coins: 0, rings: 0, crystals: 0, near: 0, narrow: 0, low: 0, boost: 0, maxCombo: 0, damage: 0, repair: 0, shieldBlocks: 0, brakePass: 0, directionPass: 0, riskPaths: 0, safePaths: 0, nightRings: 0, multRings: 0, slowPass: 0, turboNear: 0, bridgePass: 0, roofPass: 0, cityPass: 0, canyonPass: 0, forestNear: 0, coastLow: 0, postShield: 0, postRepair: 0, postE: 0, rainDistance: 0, snowSafe: 0, fogPass: 0, stormNear: 0, dayDistance: 0, nightDistance: 0, weatherCoins: {}, effects: [], weathers: [], themes: [], landmarks: [], themeTime: {}, time: 0 }; }
-export function freshSave(): Save { return { schema: 3, nickname: '', coins: 0, owned: ['skyhawk'], levels: { skyhawk: 1 }, selected: 'skyhawk', skins: {}, skinSelected: {}, settings: { ...DEFAULT_SETTINGS }, quests: [], questSerial: 1, tickets: 0, career: 0, careerProgress: 0, careerDetail: {}, achievements: [], legacyPaid: [], landmarks: {}, discoveries: {}, totals: {}, bests: {}, runs: [], settled: [], checkpoint: null, upgraded: {}, validFlights: {}, planeDistance: {} }; }
+export function freshSave(): Save { return { schema: 3, balanceEdition: 7, nickname: '', coins: 0, owned: ['skyhawk'], levels: { skyhawk: 1 }, selected: 'skyhawk', skins: {}, skinSelected: {}, settings: { ...DEFAULT_SETTINGS }, quests: [], questSerial: 1, tickets: 0, career: 0, careerProgress: 0, careerDetail: {}, achievements: [], legacyPaid: [], landmarks: {}, discoveries: {}, totals: {}, bests: {}, runs: [], settled: [], checkpoint: null, upgraded: {}, validFlights: {}, planeDistance: {} }; }
 export const fmt = (n: number) => Math.floor(n).toLocaleString('en-US');
 export const distance = (d: number) => d < 1000 ? `${Math.floor(d)} m` : `${(d / 1000).toFixed(2)} km`;
 export const duration = (s: number) => `${Math.floor(s / 60).toString().padStart(2, '0')}:${Math.floor(s % 60).toString().padStart(2, '0')}`;

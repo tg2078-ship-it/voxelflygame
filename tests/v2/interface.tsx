@@ -36,7 +36,7 @@ for (const panel of ['hangar','challenges','atlas','collection','livery','record
         const dailyHtml = renderToStaticMarkup(<Game/>);
         check(dailyHtml.includes('오늘의 항로 출격') && dailyHtml.includes('같은 날에는 같은 생성 시드'), 'daily mode changes the actual departure action and explains seed consistency');
         const difficulty = dailyHtml.split('class="ops-difficulty-selector"')[1]?.split('</div>')[0] ?? '';
-        check((difficulty.match(/disabled=""/g) ?? []).length === 3 && difficulty.includes('aria-pressed="true" disabled="" class="selected">표준'), 'daily uses locked standard controls even with expert endless preference');
+        check((difficulty.match(/disabled=""/g) ?? []).length === 4 && difficulty.includes('aria-pressed="true" disabled="" class="selected">보통'), 'daily uses locked standard controls even with expert endless preference');
 
     }
     if (panel === 'challenges') { check(html.includes('미션 변경권') && html.includes('500m'), 'mission change explanation'); check(html.includes('YOUR PILOT JOURNEY') && html.includes('ops-progress-cards'), 'challenge centre has saved career, contract, and achievement overview'); }

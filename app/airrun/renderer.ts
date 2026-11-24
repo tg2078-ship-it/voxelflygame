@@ -150,6 +150,7 @@ export class AirrunRenderer {
         this.renderer.shadowMap.enabled = true;
         this.renderer.shadowMap.type = T.PCFShadowMap;
         this.renderer.info.autoReset = false;
+        this.scene.background = new T.Color('#b1cbd2');
         this.scene.fog = new T.FogExp2('#b1cbd2', .0008);
         this.scene.add(this.sky.mesh, this.water.mesh, this.clouds.mesh, this.planeRoot);
         const pmrem = new T.PMREMGenerator(this.renderer), room = new RoomEnvironment();
@@ -477,7 +478,7 @@ export class AirrunRenderer {
         const rival = s.flightMode === 'sortie' ? personalRival(s.save.runs, { seed: s.seed, plane, level, difficulty: s.save.settings.difficulty ?? 'standard', contractId: s.contractId }) : undefined;
         this.sim = new FlightSimulation({
             personalDistances: { manual: s.save.bests.all?.distance ?? 0, hyper: s.save.bests.allE?.distance ?? 0 },
-            id: s.runId, seed: s.seed, mode: s.flightMode, dailyKey: s.dailyKey ?? undefined, plane, level, contractId: s.contractId, rival: rival?.replay ? { replay: rival.replay, score: rival.score } : undefined, practice: null, settings: s.save.settings, catalog: this.library.byId, proxies: this.library.proxies, onEvent: (kind, p) => {
+            coach:s.flightMode==='endless' && (s.save.settings.flightCoach==='on' || (s.save.settings.flightCoach===undefined && s.save.runs.length===0)), id: s.runId, seed: s.seed, mode: s.flightMode, dailyKey: s.dailyKey ?? undefined, plane, level, contractId: s.contractId, rival: rival?.replay ? { replay: rival.replay, score: rival.score } : undefined, practice: null, settings: s.save.settings, catalog: this.library.byId, proxies: this.library.proxies, onEvent: (kind, p) => {
                 if (kind === 'e-end') {
                     this.held.clear();
                     releaseInput();
@@ -1013,13 +1014,17 @@ export class AirrunRenderer {
         const cameraPoint = { x: this.camera.position.x, y: this.camera.position.y, z: pose.z - this.camera.position.z + flightOffset };
         let safe = 1;
         for (const o of sim.obstacles) {
-            if (this.world && !this.world.canCollide(o)) continue;
+            if (this.world && !this.world.canObstructCamera(o)) continue;
             const meta = this.library.byId.get(o.model)!, b = meta.motionBounds ?? meta.bounds;
             const radius = Math.hypot(...b.size.map((size, axis) => size * [o.scale.x, o.scale.y, o.scale.z][axis])) + 2;
             if (o.position.z + radius < Math.min(sim.z, cameraPoint.z) || o.position.z - radius > Math.max(sim.z, cameraPoint.z) || Math.abs(o.position.x - sim.x) > radius + Math.abs(cameraPoint.x - sim.x)) continue;
             const hit = obstacleContact(o, this.library.byId.get(o.model)!, this.library.proxies.get(o.model), { x: sim.x, y: sim.y, z: sim.z }, cameraPoint, { x: .7, y: .7, z: .7 }, undefined, sim.motionTime);
-            if (hit && hit.t > 0)
-                safe = Math.min(safe, Math.max(.08, hit.t - .025));
+            if (hit && hit.t > 0) {
+                // A grazing wall must not push the camera inside the aircraft's opaque fuselage.
+                const chaseLength=this.camera.position.distanceTo(this.planeRoot.position);
+                const airframeClearance=Math.min(.8,(sim.plane.length*.55+1.5)/Math.max(1,chaseLength));
+                safe = Math.min(safe, Math.max(airframeClearance, hit.t - .04));
+            }
         }
         if (safe < 1) {
             this.camera.position.set(mix(sim.x, cameraPoint.x, safe), mix(sim.y, cameraPoint.y, safe), mix(flightOffset, this.camera.position.z, safe));
@@ -1035,8 +1040,8 @@ export class AirrunRenderer {
         if (!reduced && !sim.eRemaining) this.camera.rotateZ(pose.roll * .055);
         const targetFov = 60 + Math.min(12, (sim.speed - 40) * .09) + (sim.eRemaining > 0 ? 4 : 0) + sim.boost * 6;
         this.camera.fov = damp(this.camera.fov, targetFov, 3, dt);
-        this.camera.updateProjectionMatrix();
         this.camera.far = Math.min(GRAPHICS[sim.config.settings.quality].viewDistance + 1000, Math.max(1600, sim.speed * 9 + 500));
+        this.camera.updateProjectionMatrix();
         this.sky.mesh.scale.setScalar(this.camera.far / 2000);
     }
     environment(sim: FlightSimulation | null, time: number) {
@@ -1058,6 +1063,7 @@ export class AirrunRenderer {
         u.uSun.value.set(-Math.cos(solar) * .78, .08 + Math.sin(solar) * .88, -.35).normalize();
         const fog = this.scene.fog as T.FogExp2;
         fog.color.copy(skyHorizonColor(w.night, w.cloud, warm, dawn));
+        if (this.scene.background instanceof T.Color) this.scene.background.copy(fog.color);
         const viewDistance = GRAPHICS[useAirrun.getState().save.settings.quality].viewDistance;
         fog.density = Math.max(.00042 + w.fog * .0007, sim && sim.speed * 8 >= viewDistance ? 1.8 / viewDistance : 0);
         this.scene.background = fog.color;
@@ -1105,6 +1111,7 @@ export class AirrunRenderer {
         this.clouds.drift(displayTime, displayDistance);
         if (sim)
             this.clouds.mesh.position.z += this.flightOffset;
+        this.library.flightLensClearance.value = sim ? 3.8 : 0;
         this.library.environment(w.wet, w.night);
         this.renderer.toneMappingExposure = sim ? mix(.96, 1.05, w.night) : .98;
         this.grade.uniforms.uSpeed.value = sim ? Math.min(1, (sim.speed - 40) / 140) : 0;
