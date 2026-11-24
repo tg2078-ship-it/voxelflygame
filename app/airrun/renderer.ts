@@ -205,7 +205,7 @@ export class AirrunRenderer {
             if (this.disposed)
                 return;
             this.airport = new AirportView(this.scene, this.library);
-            await Promise.all([this.airport.init(), this.selectPlane('skyhawk')]);
+            await Promise.all([this.airport.init(), this.selectPlane(useAirrun.getState().save.selected)]);
             if (this.disposed)
                 return;
             this.studio = new ThumbnailStudio(this.renderer, this.library, this.pmrem.texture, outcome => {
@@ -803,7 +803,7 @@ export class AirrunRenderer {
         if (sim && s.phase === 'flying')
             this.renderPose = interpolateFlightPose(this.previousPose ?? readFlightPose(sim), readFlightPose(sim), this.accumulator * 60);
         const pose = this.renderPose;
-        this.planeRoot.visible = true;
+        this.planeRoot.visible = s.phase !== 'hangar' || this.planeId.startsWith(s.save.selected + ':');
         if (this.airport) {
             this.airport.root.visible = airportVisible(s.phase, this.streamResume, sim?.z ?? 0, s.pausedPhase);
             this.airport.root.position.z = running && sim ? (pose?.z ?? sim.z) : 0;

@@ -1,3 +1,4 @@
+import {assetUrl} from '../../app/airrun/asset-url';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {gunzipSync} from 'node:zlib';
@@ -11,6 +12,7 @@ assert(!(AIRCRAFT[0].model in fleet));
 for(const plane of AIRCRAFT.slice(1)){
     const refit=fleet[plane.model as keyof typeof fleet];
     for(const path of new Set(Object.values(refit.exports))){
+        assert.equal(assetUrl(path, '/voxelflygame/'), '/voxelflygame'+path);
         const bytes=gunzipSync(fs.readFileSync('public'+path));
         const gltf=await new GLTFLoader().parseAsync(bytes.buffer.slice(bytes.byteOffset,bytes.byteOffset+bytes.length),'');
         assert.deepEqual(gltf.animations.map(c=>c.name),refit.animations.map(c=>c.name));
