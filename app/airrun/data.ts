@@ -1,7 +1,7 @@
 import type { Aircraft, Theme, Settings, PracticeConfig, Metrics, Save, ThemeId, WeatherKind } from './types';
 export const VERSION = '13.0.0';
 export const COURSE_EDITION = 7;
-export const WORLD_IMAGE_REVISION = 'v13-relay';
+export const WORLD_IMAGE_REVISION = 'v13-flightworks';
 export const AIRCRAFT: Aircraft[] = [
     {
         "id": "skyhawk",

@@ -665,8 +665,15 @@ export class AirrunRenderer {
             if (!mats.some(isPaintMaterial))
                 return;
             const color = n.geometry.getAttribute('color');
-            if (!color)
+            if (!color) {
+                for (const material of mats) {
+                    if (!(material instanceof T.MeshStandardMaterial) || !isPaintMaterial(material)) continue;
+                    material.userData.stockColor ??= material.color.getHex();
+                    if (id === 'default') material.color.setHex(material.userData.stockColor);
+                    else material.color.copy(material.name === 'paint_stripe' ? accent : body);
+                }
                 return;
+            }
             let original = n.geometry.userData.paintOriginal as Float32Array | undefined;
             if (!original) {
                 original = new Float32Array(color.count * 3);

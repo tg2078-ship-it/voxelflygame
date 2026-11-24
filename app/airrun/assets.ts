@@ -1,3 +1,4 @@
+import fleet from './fleet-manifest.json';
 import { assetUrl } from './asset-url';
 import * as THREE from 'three';
 import { GLTFLoader, type GLTF } from 'three/addons/loaders/GLTFLoader.js';
@@ -103,8 +104,16 @@ export class ModelLibrary {
         cat.assets.push(...(await traffic.json() as {
             assets: AssetMeta[];
         }).assets);
-        for (const a of cat.assets)
-            this.byId.set(a.id, a);
+        const flightModels: Record<string, Pick<AssetMeta, 'exports' | 'animations'>> = fleet;
+        for (const a of cat.assets) {
+            const refit = flightModels[a.id];
+            this.byId.set(a.id, refit ? {
+                ...a, ...refit, authoringVersion: 'Airrun Flight Works 1', groundRotationX: 0,
+                lodBounds: undefined, sourceLods: undefined, animationsByLod: undefined, renderCosts: undefined,
+                motionBounds: undefined, textureHashes: undefined, textureHashesByLod: undefined,
+                moving: refit.animations.some(clip => clip.autoplay),
+            } : a);
+        }
         // Registration and the hangar need the aircraft and native airport props.
         // Coastal structures are loaded by FlightStream.prepare before takeoff.
         const initial = ['cessna_skyhawk', 'airport_control_tower', 'airport_windsock_gimbal'].filter(id => this.byId.has(id));
