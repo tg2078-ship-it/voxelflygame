@@ -52,7 +52,7 @@ export class AirrunRenderer {
     scene = new T.Scene();
     camera = new T.PerspectiveCamera(55, 1, .25, 2000);
     library = new ModelLibrary();
-    audio = new GameAudio();
+    audio = new GameAudio(audioFailures => useAirrun.setState({ audioFailures }));
     composer: EffectComposer;
     ao: GTAOPass;
     bloom: UnrealBloomPass;
@@ -236,7 +236,9 @@ export class AirrunRenderer {
                 s.pause();
         };
         const clear = () => { this.held.clear(); this.dragPoints.clear(); this.pinch = 0; this.orbit.yawVelocity = this.orbit.pitchVelocity = 0; releaseInput(); if (useAirrun.getState().phase === 'preflight')
-            this.pauseAfterPreparation = true; useAirrun.getState().pause(); };
+            this.pauseAfterPreparation = true;
+            if (useAirrun.getState().phase === 'paused') useAirrun.setState({resumeCountdown: 0});
+            else useAirrun.getState().pause(); };
         const visibility = () => {
             this.lastFrame = 0; this.accumulator = 0; this.presentationElapsed = 0;
             if (document.hidden) { clear(); this.studio?.cancelPending('Page hidden'); this.audio.update(useAirrun.getState().save.settings, this.sim, true); }
@@ -247,7 +249,7 @@ export class AirrunRenderer {
             if ((e.target as HTMLElement)?.matches('input,select,textarea'))
                 return;
             const code = e.code, s = useAirrun.getState();
-            if ((e.target as HTMLElement)?.closest('button') && ['Space', 'Enter'].includes(code)) return;
+            if ((e.target as HTMLElement)?.closest('button') && (code === 'Enter' || code === 'Space' && s.phase !== 'flying')) return;
             if (['flying', 'takeoff', 'crashing'].includes(s.phase) && ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space', 'ShiftLeft', 'ShiftRight', 'KeyW', 'KeyA', 'KeyS', 'KeyD', 'KeyE', 'Escape'].includes(code))
                 e.preventDefault();
             if (code === 'Escape') {
@@ -294,7 +296,7 @@ export class AirrunRenderer {
         window.addEventListener('keydown', keydown, { passive: false });
         window.addEventListener('keyup', keyup);
         this.cleanupListeners.push(() => { window.removeEventListener('resize', resize); window.removeEventListener('blur', clear); document.removeEventListener('visibilitychange', visibility); window.removeEventListener('keydown', keydown); window.removeEventListener('keyup', keyup); });
-        const contextLost = (e: Event) => { e.preventDefault(); clear(); useAirrun.setState({ renderError: '그래픽 연결이 중단되었습니다. 다시 불러오면 기록은 유지됩니다.' }); };
+        const contextLost = (e: Event) => { e.preventDefault(); clear(); useAirrun.setState({ renderError: useAirrun.getState().save.settings.language === 'ko' ? '그래픽 연결이 중단되었습니다. 페이지를 다시 불러와 주세요.' : 'Graphics connection lost. Reload the page to resume.' }); };
         const stageAt = (target: EventTarget | null) => target instanceof Element && !!target.closest('[data-hangar-stage]') && !target.closest('button');
         const pointerDown = (e: PointerEvent) => {
             this.previewQuietUntil = performance.now() + 220;
@@ -995,7 +997,7 @@ export class AirrunRenderer {
         if (sim.eRemaining > 0 && !reduced) {
             const t = sim.eTime;
             const entry = smooth((t - .7) / 1.5), exit = 1 - smooth((t - 12.5) / 2.4), side = entry * exit;
-            const turn = sim.ePath[65]?.x >= sim.eStart.x ? 1 : -1;
+            const turn = sim.trickDirection;
             offset.x = turn * Math.sin(t * .36 - .55) * frame.orbitWidth * side;
             offset.z = mix(frame.distance, frame.orbitDistance, side);
             offset.y += side * (1.7 - Math.cos(t * .65) * 2.7);

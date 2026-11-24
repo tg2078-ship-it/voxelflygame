@@ -7,8 +7,8 @@ import { ensureQuests } from '../../app/airrun/progression';
 import { parseSave, persistSave, useAirrun } from '../../app/airrun/state';
 import type { RunResult } from '../../app/airrun/types';
 const memory = new Map<string, string>();
-(globalThis as any).localStorage = { getItem: (k: string) => memory.get(k) ?? null, setItem: (k: string, v: string) => memory.set(k, v), removeItem: (k: string) => memory.delete(k) };
-(globalThis as any).matchMedia = () => ({ matches: false });
+Object.defineProperty(globalThis, 'localStorage', { configurable:true, writable:true, value: { getItem: (k: string) => memory.get(k) ?? null, setItem: (k: string, v: string) => memory.set(k, v), removeItem: (k: string) => memory.delete(k) } });
+Object.defineProperty(globalThis, 'matchMedia', { configurable:true, writable:true, value: () => ({ matches: false }) });
 let checks = 0;
 const check = (value: unknown, message: string) => { assert(value, message); checks++; };
 const old = oldSave();
@@ -88,7 +88,26 @@ await new Promise<void>((resolve, reject) => { const tx = db.transaction('pilot'
 await useAirrun.getState().load();
 check(useAirrun.getState().recoveryData !== null, 'invalid original retained for export');
 await persistSave(ensureQuests(freshSave()));
-const recovered = await new Promise<any>((resolve, reject) => { const r = db.transaction('pilot', 'readonly').objectStore('pilot').get('save-v3-recovery'); r.onsuccess = () => resolve(r.result); r.onerror = () => reject(r.error); });
+const recovered = await new Promise<{original?:string} | undefined>((resolve, reject) => { const r = db.transaction('pilot', 'readonly').objectStore('pilot').get('save-v3-recovery'); r.onsuccess = () => resolve(r.result); r.onerror = () => reject(r.error); });
 check(recovered?.original === 'KEEP ME', 'invalid original persisted before overwrite');
+// Recovery and auto-save must archive the unmodified payload before a repaired
+// pilot replaces it. Reading it on the next launch keeps the export usable.
+for (let serial = 1; serial <= 4; serial++) {
+    const damaged = { ...ensureQuests(freshSave()), serial, nickname: 'PILOT', coins: 1300 + serial, tickets: -7 };
+    await new Promise<void>((resolve,reject) => {
+        const transaction = db.transaction('pilot','readwrite');
+        transaction.objectStore('pilot').put(damaged,'save-v3');
+        transaction.oncomplete=()=>resolve(); transaction.onerror=()=>reject(transaction.error);
+    });
+    await useAirrun.getState().load();
+    check(useAirrun.getState().save.coins === damaged.coins,'repair retains currency');
+}
+for (const [key, expected] of [['save-v3-recovery',4],['save-v3-recovery-2',3],['save-v3-recovery-3',2]] as const) {
+    const original = await new Promise<{serial:number;tickets:number}>(resolve => {
+        const request = db.transaction('pilot').objectStore('pilot').get(key);
+        request.onsuccess=()=>resolve(request.result);
+    });
+    check(original.serial===expected && original.tickets===-7,'three rotating payloads retain the original damaged fields');
+}
 db.close();
 console.log(JSON.stringify({ storageChecks: checks, legacyPlanes: AIRCRAFT.length, checkpointRewardOnce: true, invalidOriginalPreserved: true, status: 'passed' }));

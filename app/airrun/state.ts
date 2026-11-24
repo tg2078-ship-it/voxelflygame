@@ -40,15 +40,24 @@ function readFallback() {
         return { save: value.save, revision: value.revision };
     return { save: value, revision: 0 };
 }
+let archivedPilot: unknown = null;
 async function readStored() {
     let fallback: ReturnType<typeof readFallback> | null = null;
-    try { fallback = readFallback(); } catch { /* IndexedDB can remain available when Web Storage is disabled. */ }
+    try {
+        fallback = readFallback();
+        const previous = localStorage.getItem('airrun-save-v3-recovery');
+        if (previous !== null) archivedPilot = JSON.parse(previous);
+    } catch { /* IndexedDB can remain available when Web Storage is disabled. */ }
     try {
         const db = await database();
         const stored = await new Promise<{ save: unknown; revision: number }>((resolve, reject) => {
             const tx = db.transaction('pilot', 'readonly'), store = tx.objectStore('pilot');
             const r = store.get('save-v3'), old = store.get('save'), revision = store.get('save-v3-revision');
-            tx.oncomplete = () => resolve({ save: r.result ?? old.result ?? null, revision: Number.isSafeInteger(revision.result) ? revision.result : 0 });
+            const original = store.get('save-v3-recovery');
+            tx.oncomplete = () => {
+                archivedPilot = original.result ?? archivedPilot;
+                resolve({ save: r.result ?? old.result ?? null, revision: Number.isSafeInteger(revision.result) ? revision.result : 0 });
+            };
             tx.onerror = () => reject(tx.error);
             tx.onabort = () => reject(tx.error);
         });
@@ -65,6 +74,15 @@ async function readStored() {
 }
 let writeQueue = Promise.resolve();
 let recoveryOriginal: unknown = null;
+export function storageMessage(language: Settings['language'], kind: 'write' | 'access' | 'raw' | 'repaired') {
+    const messages = {
+        write: ['기록 저장에 실패했습니다. 설정에서 백업을 내보내 주세요.', 'Could not save progress. Export a backup in Settings.'],
+        access: ['브라우저 저장소를 사용할 수 없습니다. 설정에서 백업을 내보낼 수 있습니다.', 'Browser storage is unavailable. You can export a backup in Settings.'],
+        raw: ['이전 저장 원본을 보관했습니다. 설정에서 내보낼 수 있습니다.', 'The original save is available to export in Settings.'],
+        repaired: ['손상된 항목을 복구했습니다. 설정에서 원본도 내보낼 수 있습니다.', 'Damaged fields were recovered. You can export the original in Settings.'],
+    };
+    return messages[kind][language === 'en' ? 1 : 0];
+}
 export function persistSave(s: Save) {
     const snapshot = structuredClone(s);
     const revision = lastStorageRevision = Math.max(Date.now(), lastStorageRevision + 1);
@@ -74,8 +92,12 @@ export function persistSave(s: Save) {
             await new Promise<void>((resolve, reject) => {
                 const tx = db.transaction('pilot', 'readwrite');
                 const store = tx.objectStore('pilot');
-                if (recoveryOriginal) {
-                    store.put(recoveryOriginal, 'save-v3-recovery');
+                if (recoveryOriginal !== null) {
+                    const raw = recoveryOriginal;
+                    const first = store.get('save-v3-recovery'), second = store.get('save-v3-recovery-2');
+                    first.onsuccess = () => { if (first.result !== undefined) store.put(first.result, 'save-v3-recovery-2'); };
+                    second.onsuccess = () => { if (second.result !== undefined) store.put(second.result, 'save-v3-recovery-3'); };
+                    store.put(raw, 'save-v3-recovery');
                 }
                 store.put(snapshot, 'save-v3');
                 store.put(revision, 'save-v3-revision');
@@ -89,7 +111,11 @@ export function persistSave(s: Save) {
             } catch { /* A successful IndexedDB commit does not depend on Web Storage. */ }
         }
         catch {
-            if (recoveryOriginal) {
+            if (recoveryOriginal !== null) {
+                const latest = localStorage.getItem('airrun-save-v3-recovery');
+                const older = localStorage.getItem('airrun-save-v3-recovery-2');
+                if (older !== null) localStorage.setItem('airrun-save-v3-recovery-3', older);
+                if (latest !== null) localStorage.setItem('airrun-save-v3-recovery-2', latest);
                 localStorage.setItem('airrun-save-v3-recovery', JSON.stringify(recoveryOriginal));
                 recoveryOriginal = null;
             }
@@ -211,6 +237,69 @@ export function parseSave(value: unknown): Save | null {
     }
     return structuredClone({ ...input, balanceEdition: 7, settings: se });
 }
+/** Strict parsing still guards complete imports and score records. Recovery runs
+ * only for a recognizable pilot and validates fields against the same schema. */
+const recoveryNames: Record<string,string> = {
+    nickname:'조종사 이름', quests:'도전 과제', owned:'보유 기체', levels:'강화 단계', selected:'선택 기체',
+    settings:'설정', runs:'비행 기록', bests:'최고 기록', skins:'보유 도장', skinSelected:'선택 도장',
+    discoveries:'탐사 기록', landmarks:'랜드마크', dailyRecords:'일일 기록', tickets:'미션 변경권',
+    coins:'코인', achievements:'업적', settled:'정산 기록', totals:'누적 기록', checkpoint:'비행 체크포인트',
+};
+export function recoveredFields(fields: string[], language: Settings['language']) {
+    return fields.map(field => language === 'ko' ? recoveryNames[field] ?? field : field).join(', ');
+}
+export function recoverPilot(raw: unknown): {save: Save; fields: string[]} | null {
+    if (!isObject(raw) || raw.schema !== 3 || !Array.isArray(raw.owned) && !isObject(raw.levels)) return null;
+    const base = ensureQuests(freshSave());
+    if (raw.balanceEdition === undefined) delete base.balanceEdition;
+    const known = new Set(AIRCRAFT.map(plane => plane.id));
+    const owned = Array.isArray(raw.owned) ? raw.owned.filter((id): id is string => typeof id === 'string' && known.has(id)) : [];
+    const levels = isObject(raw.levels) ? raw.levels : {};
+    base.owned = [...new Set(['skyhawk', ...owned, ...Object.keys(levels).filter(id => known.has(id) && Number.isInteger(levels[id]) && Number(levels[id]) > 0)])];
+    base.levels = Object.fromEntries(base.owned.map(id => [id, Number.isInteger(levels[id]) ? Math.max(1, Math.min(20, Number(levels[id]))) : 1]));
+    base.selected = typeof raw.selected === 'string' && base.owned.includes(raw.selected) ? raw.selected : 'skyhawk';
+    base.nickname = typeof raw.nickname === 'string' ? raw.nickname.slice(0,16) : '';
+    base.coins = Number.isSafeInteger(raw.coins) && Number(raw.coins) >= 0 ? Number(raw.coins) : 0;
+    const candidate = base as unknown as Record<string, unknown>;
+    const changed = new Set<string>();
+    for (const key of ['coins','owned','levels','selected','nickname']) {
+        if (JSON.stringify(candidate[key]) !== JSON.stringify(raw[key])) changed.add(key);
+    }
+    const keep = (key: string, value: unknown) => {
+        if (!parseSave({ ...candidate, [key]: value })) return false;
+        candidate[key] = value;
+        return true;
+    };
+    for (const key of [...Object.keys(base), 'modelDiscoveries', 'dailyRecords']) {
+        if (['schema','balanceEdition','owned','levels','selected','nickname','coins'].includes(key) || raw[key] === undefined) continue;
+        const value = raw[key];
+        if (keep(key, value)) continue;
+        changed.add(key);
+        if (key === 'quests' && Array.isArray(value)) {
+            const slots = [...base.quests];
+            value.slice(0,slots.length).forEach((quest, i) => {
+                const next = [...slots]; next[i] = quest;
+                if (keep(key,next)) slots[i] = quest;
+            });
+        } else if (Array.isArray(value)) {
+            let entries: unknown[] = [];
+            for (const item of value) if (keep(key,[...entries,item])) entries = [...entries,item];
+        } else if (isObject(value)) {
+            const accepted = { ...(isObject(candidate[key]) ? candidate[key] : {}) };
+            for (const [id, item] of Object.entries(value)) {
+                if (['__proto__','constructor','prototype'].includes(id)) continue;
+                if (keep(key,{...accepted,[id]:item})) accepted[id]=item;
+                else if (key==='skins' && Array.isArray(item)) {
+                    const skins = item.filter(s => SKINS.some(skin => skin.id === s));
+                    if (keep(key,{...accepted,[id]:skins})) accepted[id]=skins;
+                }
+            }
+        }
+    }
+    const save = parseSave(candidate);
+    return save ? {save,fields:[...changed]} : null;
+}
+
 interface GameState {
     phase: Phase;
     panel: Panel;
@@ -218,6 +307,7 @@ interface GameState {
     progress: number;
     loadingLabel: string;
     notice: string;
+    audioFailures: string[];
     saveError: string;
     renderError: string;
     modelBusy: boolean;
@@ -279,17 +369,22 @@ function tagRun(result: RunResult, state: Pick<GameState, 'runId' | 'flightMode'
     if (result.mode !== undefined || result.id !== state.runId || result.practice) return result;
     return { ...result, mode: state.flightMode, ...(state.flightMode === 'daily' && state.dailyKey ? { dailyKey: state.dailyKey } : {}) };
 }
-function mutate(fn: (s: Save) => Save) { const s = fn(structuredClone(useAirrun.getState().save)); useAirrun.setState({ save: s }); void persistSave(s).catch(() => useAirrun.setState({ saveError: '기록 저장에 실패했습니다. 백업을 내보내 주세요.' })); }
-export const useAirrun = create<GameState>((set, get) => ({ phase: 'loading', panel: 'hangar', save: ensureQuests(freshSave()), progress: 0, loadingLabel: '격납고 준비 중', notice: '', saveError: '', renderError: '', modelBusy: false, modelError: '', celebration: null, ready: false, assetsReady: false, runId: '', seed: 1, runLevel: null, contractId: 'precision', flightMode: 'endless', dailyKey: null, practice: null, comparisonLevel: null, hud: { ...EMPTY_HUD }, result: null, resumeCountdown: 0, pausedPhase: 'flying', eRequest: 0, bankRequest: 0, maintenanceAt: 0, tracked: 'career', skinPreview: null, backupPreview: null, recoveryData: null, previewImages: {},
+function mutate(fn: (s: Save) => Save) { const s = fn(structuredClone(useAirrun.getState().save)); useAirrun.setState({ save: s }); void persistSave(s).catch(() => useAirrun.setState({ saveError: storageMessage(useAirrun.getState().save.settings.language, 'write') })); }
+export const useAirrun = create<GameState>((set, get) => ({ phase: 'loading', panel: 'hangar', save: ensureQuests(freshSave()), progress: 0, loadingLabel: '격납고 준비 중', notice: '', audioFailures: [], saveError: '', renderError: '', modelBusy: false, modelError: '', celebration: null, ready: false, assetsReady: false, runId: '', seed: 1, runLevel: null, contractId: 'precision', flightMode: 'endless', dailyKey: null, practice: null, comparisonLevel: null, hud: { ...EMPTY_HUD }, result: null, resumeCountdown: 0, pausedPhase: 'flying', eRequest: 0, bankRequest: 0, maintenanceAt: 0, tracked: 'career', skinPreview: null, backupPreview: null, recoveryData: null, previewImages: {},
     load: async () => {
         try {
-            const raw = await readStored(), hasRaw = raw !== null && raw !== undefined, s = hasRaw ? parseSave(raw) : null;
-            if (hasRaw && !s) {
+            const raw = await readStored(), hasRaw = raw !== null && raw !== undefined;
+            if (archivedPilot !== null) set({ recoveryData: archivedPilot });
+            const valid = hasRaw ? parseSave(raw) : null;
+            const restored = hasRaw && !valid ? recoverPilot(raw) : null;
+            const s = valid ?? restored?.save;
+            if (hasRaw && !valid) {
                 recoveryOriginal = raw;
-                set({ recoveryData: raw, saveError: '이전 저장을 읽지 못해 원본을 보관했습니다. 설정에서 원본 백업을 내보낼 수 있습니다.' });
+                set({ recoveryData: raw, saveError: storageMessage(s?.settings.language ?? get().save.settings.language, restored ? 'repaired' : 'raw') + (restored?.fields.length ? ' (' + recoveredFields(restored.fields, restored.save.settings.language) + ')' : '') });
             }
             if (s) {
                 set({ save: s });
+                if (restored) await persistSave(s);
                 if (s.checkpoint && !s.settled.includes(s.checkpoint.id) && !s.checkpoint.practice)
                     get().settle({ ...s.checkpoint, interrupted: true, reason: '중단된 비행' });
                 else if (s.checkpoint)
@@ -301,7 +396,7 @@ export const useAirrun = create<GameState>((set, get) => ({ phase: 'loading', pa
             set({ ready: true });
         }
         catch {
-            set({ ready: true, saveError: '브라우저 저장소를 사용할 수 없습니다. 백업으로 기록을 보관할 수 있습니다.' });
+            set({ ready: true, saveError: storageMessage(get().save.settings.language, 'access') });
         }
     },
     profile: name => { mutate(s => ({ ...s, nickname: name.trim().slice(0, 16) || 'PILOT' })); set({ phase: 'hangar', panel: 'hangar' }); },
@@ -404,11 +499,6 @@ export const useAirrun = create<GameState>((set, get) => ({ phase: 'loading', pa
             set({ bankRequest: state.bankRequest + 1 });
     },
     pause: () => {
-        if (get().phase === 'paused') {
-            releaseInput();
-            set({ resumeCountdown: 0 });
-            return;
-        }
         if (['flying', 'takeoff'].includes(get().phase)) {
             const pausedPhase = get().phase as 'flying' | 'takeoff';
             releaseInput();
@@ -416,7 +506,7 @@ export const useAirrun = create<GameState>((set, get) => ({ phase: 'loading', pa
         }
     },
     resume: () => {
-        if (get().phase === 'paused' && !get().modelError && !get().renderError && !(typeof document !== 'undefined' && document.hidden)) {
+        if (get().phase === 'paused' && !get().resumeCountdown && !get().modelError && !get().renderError && !(typeof document !== 'undefined' && document.hidden)) {
             releaseInput();
             set({ resumeCountdown: 3 });
         }
@@ -483,7 +573,7 @@ export const useAirrun = create<GameState>((set, get) => ({ phase: 'loading', pa
         mutate(s => ({ ...s, coins: s.coins + a.reward, achievements: [...s.achievements, id] }));
         set({ celebration: { id: crypto.randomUUID(), kind: 'achievement', title: a.label, titleEn: a.en, coins: a.reward, tier: Math.min(4, +id.split('-').pop()! || 1) } });
     },
-    persist: () => { void persistSave(get().save).catch(() => set({ saveError: '기록 저장에 실패했습니다. 백업을 내보내 주세요.' })); },
+    persist: () => { void persistSave(get().save).catch(() => set({ saveError: storageMessage(useAirrun.getState().save.settings.language, 'write') })); },
     importBackup: () => {
         if (!inLobby() || !get().backupPreview)
             return;
@@ -491,7 +581,7 @@ export const useAirrun = create<GameState>((set, get) => ({ phase: 'loading', pa
         a.href = url;
         a.download = 'airrun-before-import.json';
         a.click();
-        URL.revokeObjectURL(url);
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
         mutate(() => get().backupPreview!);
         set({ backupPreview: null, notice: '백업 복원 완료 / BACKUP RESTORED' });
     }

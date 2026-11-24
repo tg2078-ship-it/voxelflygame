@@ -1,4 +1,5 @@
 'use client';
+import { useShallow } from 'zustand/react/shallow';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Image from './model-image';
 import { Plane, ArrowUpRight, ArrowRight, Coins, Trophy, Compass, Palette, Map, Menu, Settings2, Play, RotateCcw, Download, Upload, Check, Lock, Wind, Shield, Zap, Target, Flag, Award, Navigation, Move, Keyboard, X, Maximize, LoaderCircle, CheckCircle2, AlertTriangle } from 'lucide-react';
@@ -13,7 +14,7 @@ import { LiveryStudio } from './livery-studio';
 import { ModelArchive } from './model-archive';
 import { PointerOwner } from './pointer-owner';
 import { setTouchSpeed } from './touch-input';
-import { useAirrun, input, releaseInput, parseSave } from './state';
+import { useAirrun, input, releaseInput, parseSave, recoverPilot, recoveredFields, EMPTY_HUD } from './state';
 import { AIRCRAFT, THEMES, THEME_DETAILS_EN, VERSION, WORLD_IMAGE_REVISION, fmt, distance, duration, WEATHER_NAMES, KOREA_VARIANTS, KOREA_VARIANTS_EN } from './data';
 import { QUESTS, rerollCandidates, CAREER, CHAPTERS, ACHIEVEMENTS, QUEST_REWARDS, achievementValue, questProgress, metricValue } from './progression';
 import type { AirrunRenderer } from './renderer';
@@ -46,7 +47,7 @@ function WorldImage({ save, id, name }: {
     return <div className="world-photo">{image ? <Image width={480} height={270} unoptimized className="world-image" src={image} alt={name + (actual || !preview ? ' · 실제 비행 캡처' : ' · 게임 렌더 미리보기')}/> : <div className="world-image photo-pending"><LoaderCircle size={20} className="spin"/><span>{ko ? '게임 장면 준비 중' : 'PREPARING GAME SCENE'}</span></div>}<span className="photo-source">{image ? actual || !preview ? (ko ? '실제 비행 캡처' : 'IN-FLIGHT CAPTURE') : (ko ? '게임 렌더 미리보기' : 'GAME RENDER PREVIEW') : 'AIRRUN / WORLD ATLAS'}</span></div>;
 }
 export default function Game() {
-    const state = useAirrun(), canvas = useRef<HTMLCanvasElement>(null), engine = useRef<AirrunRenderer | null>(null), [mobileMenu, setMobileMenu] = useState(false), [launching, setLaunching] = useState(false), [worldPreview, setWorldPreview] = useState(false), [koreaPage, setKoreaPage] = useState(0), [pauseSettings, setPauseSettings] = useState(false), [atlas, setAtlas] = useState<ThemeId>('coast'), [challengeTab, setChallengeTab] = useState('active'), [questFamily, setQuestFamily] = useState('all'), [backupError, setBackupError] = useState(''), [modelCatalog, setModelCatalog] = useState<Map<string, AssetMeta>>(), [modelLibrary, setModelLibrary] = useState<AirrunRenderer['library']>();
+    const state = useAirrun(useShallow(s => ({ ...s, hud: s.phase === 'paused' ? s.hud : EMPTY_HUD }))), canvas = useRef<HTMLCanvasElement>(null), engine = useRef<AirrunRenderer | null>(null), [mobileMenu, setMobileMenu] = useState(false), [launching, setLaunching] = useState(false), [worldPreview, setWorldPreview] = useState(false), [koreaPage, setKoreaPage] = useState(0), [pauseSettings, setPauseSettings] = useState(false), [atlas, setAtlas] = useState<ThemeId>('coast'), [challengeTab, setChallengeTab] = useState('active'), [questFamily, setQuestFamily] = useState('all'), [backupError, setBackupError] = useState(''), [modelCatalog, setModelCatalog] = useState<Map<string, AssetMeta>>(), [modelLibrary, setModelLibrary] = useState<AirrunRenderer['library']>();
     const ko = state.save.settings.language === 'ko', t = (a: string, b: string) => ko ? a : b, p = AIRCRAFT.find(p => p.id === state.save.selected)!;
     useEffect(() => { if (state.phase === 'hangar') document.querySelector('.aircraft-selector > button.selected')?.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: state.save.settings.reducedMotion ? 'instant' : 'smooth' }); }, [p.id, state.phase, state.save.settings.reducedMotion]);
     useEffect(() => {
@@ -76,10 +77,6 @@ export default function Game() {
             return;
         void engine.current?.audio.unlock().then(() => { engine.current?.audio.update(useAirrun.getState().save.settings, null, false); engine.current?.audio.event(state.celebration!.kind === 'upgrade' ? 'upgrade' : 'reward'); });
     }, [state.celebration]);
-    const coachLesson = state.hud.coach?.lesson;
-    useEffect(() => {
-        if (coachLesson==='complete' && useAirrun.getState().save.settings.flightCoach!=='done') useAirrun.getState().settings({flightCoach:'done'});
-    },[coachLesson]);
     const inspectModel = useCallback((active: boolean) => { if (engine.current) engine.current.inspectorActive = active; }, []);
     const previewModel = useCallback((id: string) => { void engine.current?.studio?.requestModel(id); }, []);
     const unlock = () => { void engine.current?.audio.unlock(); };
@@ -106,7 +103,7 @@ export default function Game() {
         setMobileMenu(false);
         unlock();
     };
-    const exportBackup = () => { const blob = new Blob([JSON.stringify(state.save, null, 2)], { type: 'application/json' }), url = URL.createObjectURL(blob), a = document.createElement('a'); a.href = url; a.download = 'airrun-pilot-backup.json'; a.click(); URL.revokeObjectURL(url); };
+    const exportBackup = () => { const blob = new Blob([JSON.stringify(state.save, null, 2)], { type: 'application/json' }), url = URL.createObjectURL(blob), a = document.createElement('a'); a.href = url; a.download = 'airrun-pilot-backup.json'; a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000); };
     const importBackup = async (file: File | undefined) => {
         setBackupError('');
         if (!file)
@@ -116,7 +113,10 @@ export default function Game() {
             return;
         }
         try {
-            const save = parseSave(JSON.parse(await file.text()));
+            const raw = JSON.parse(await file.text());
+            const valid = parseSave(raw), repaired = valid ? null : recoverPilot(raw);
+            const save = valid ?? repaired?.save;
+            if (repaired) setBackupError(t('복원 시 다음 항목을 복구합니다', 'Restoring this file will repair') + ' · ' + recoveredFields(repaired.fields, ko ? 'ko' : 'en'));
             if (!save)
                 throw new Error('invalid');
             useAirrun.setState({ backupPreview: save });
@@ -171,26 +171,13 @@ export default function Game() {
                         }}/></label><button className="secondary pilot-reissue" onClick={() => useAirrun.setState({ phase: 'registration' })}><Award size={17}/>{t('조종사 카드 재발급', 'REISSUE PILOT CARD')}</button><button className="secondary fullscreen-button" onClick={() => { if (document.fullscreenElement)
                         void document.exitFullscreen().catch(() => { });
                     else
-                        void document.documentElement.requestFullscreen().catch(() => useAirrun.setState({ notice: t('이 브라우저에서 전체 화면을 사용할 수 없습니다.', 'Fullscreen is unavailable in this browser.') })); }}><Maximize size={17}/>{t('전체 화면 전환', 'TOGGLE FULLSCREEN')}</button><div className="backup-actions"><button className="secondary" onClick={exportBackup}><Download size={16}/>{t('백업 내보내기', 'EXPORT BACKUP')}</button><label className="secondary file-button"><Upload size={16}/>{t('백업 가져오기', 'IMPORT BACKUP')}<input type="file" accept=".json,application/json" onChange={e => void importBackup(e.target.files?.[0])}/></label></div>{state.recoveryData != null && <button className="secondary" onClick={() => { const blob = new Blob([JSON.stringify(state.recoveryData, null, 2)], { type: 'application/json' }), url = URL.createObjectURL(blob), a = document.createElement('a'); a.href = url; a.download = 'airrun-original-recovery.json'; a.click(); URL.revokeObjectURL(url); }}><Download size={16}/>{t('이전 저장 원본 내보내기', 'EXPORT ORIGINAL SAVE')}</button>}{backupError && <p className="error-text">{backupError}</p>}{state.backupPreview && <div className="backup-preview"><h3>{t('복원할 기록 확인', 'REVIEW BACKUP')}</h3><p>{state.backupPreview.nickname} · {fmt(state.backupPreview.coins)} {t('코인', 'COINS')} · {state.backupPreview.owned.length} {t('기체', 'AIRCRAFT')}</p><p>{t('가져오기 전에 현재 기록의 백업을 다운로드합니다.', 'Your current backup downloads before import.')}</p><button className="primary compact" onClick={() => state.importBackup()}>{t('이 기록으로 복원', 'RESTORE THIS BACKUP')}</button><button className="text-button" onClick={() => useAirrun.setState({ backupPreview: null })}>{t('취소', 'CANCEL')}</button></div>}</div></div>}
+                        void document.documentElement.requestFullscreen().catch(() => useAirrun.setState({ notice: t('이 브라우저에서 전체 화면을 사용할 수 없습니다.', 'Fullscreen is unavailable in this browser.') })); }}><Maximize size={17}/>{t('전체 화면 전환', 'TOGGLE FULLSCREEN')}</button>{state.audioFailures.length > 0 && <p role="status">{t('재생할 수 없는 오디오', 'Unavailable audio')} · {state.audioFailures.join(', ')}</p>}<div className="backup-actions"><button className="secondary" onClick={exportBackup}><Download size={16}/>{t('백업 내보내기', 'EXPORT BACKUP')}</button><label className="secondary file-button"><Upload size={16}/>{t('백업 가져오기', 'IMPORT BACKUP')}<input type="file" accept=".json,application/json" onChange={e => { const file = e.currentTarget.files?.[0]; e.currentTarget.value = ''; void importBackup(file); }}/></label></div>{state.recoveryData != null && <button className="secondary" onClick={() => { const blob = new Blob([JSON.stringify(state.recoveryData, null, 2)], { type: 'application/json' }), url = URL.createObjectURL(blob), a = document.createElement('a'); a.href = url; a.download = 'airrun-original-recovery.json'; a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000); }}><Download size={16}/>{t('이전 저장 원본 내보내기', 'EXPORT ORIGINAL SAVE')}</button>}{backupError && <p className="error-text">{backupError}</p>}{state.backupPreview && <div className="backup-preview"><h3>{t('복원할 기록 확인', 'REVIEW BACKUP')}</h3><p>{state.backupPreview.nickname} · {fmt(state.backupPreview.coins)} {t('코인', 'COINS')} · {state.backupPreview.owned.length} {t('기체', 'AIRCRAFT')}</p><p>{t('가져오기 전에 현재 기록의 백업을 다운로드합니다.', 'Your current backup downloads before import.')}</p><button className="primary compact" onClick={() => state.importBackup()}>{t('이 기록으로 복원', 'RESTORE THIS BACKUP')}</button><button className="text-button" onClick={() => useAirrun.setState({ backupPreview: null })}>{t('취소', 'CANCEL')}</button></div>}</div></div>}
      {state.panel === 'controls' && <div className="controls-layout"><div><h2>{t('당신이 고르는 비행 경로.', 'Choose your own line.')}</h2><p>{t('기체는 자동으로 전진합니다. 넓은 안전 경로와 좁은 고득점 경로를 읽고, 감속으로 회피 시간을 확보하세요.', 'Your aircraft moves forward automatically. Read the safe line and the risk line. Brake for more time to turn.')}</p><div className="keyboard-controls">{[['W / ↑', '상승', 'CLIMB'], ['S / ↓', '하강', 'DESCEND'], ['A / ←', '왼쪽', 'LEFT'], ['D / →', '오른쪽', 'RIGHT'], ['Shift', state.save.settings.control === 'gear' ? '기어 올리기' : '가속 · 무제한', state.save.settings.control === 'gear' ? 'GEAR UP' : 'BOOST · UNLIMITED'], ['Space', state.save.settings.control === 'gear' ? '기어 내리기' : '감속', state.save.settings.control === 'gear' ? 'GEAR DOWN' : 'BRAKE'], ['R', '편대 송신 · 비행운 안에서 4초 또는 8초', 'FORMATION · TRANSMIT AFTER 4 OR 8s IN THE TRAILS'], ['Q', '러시 · 충전 후 5초 가속 + 코인 자석', 'RUSH · EARN 5s BOOST + COIN MAGNET'], ['F', '플로우 확정 · 배율 다시 시작', 'BANK FLOW · RESET MULTIPLIER'], ['E', '하이퍼 트릭 · 15초 · 한 판 1회', 'HYPER TRICK · 15s · ONCE PER RUN'], ['Esc', '일시정지', 'PAUSE']].map(([key, a, b]) => <div key={key}><kbd>{key}</kbd><span>{t(a, b)}</span></div>)}</div></div><div className="control-tips"><article><Move /><h3>{t('모바일은 가로로', 'LANDSCAPE ON MOBILE')}</h3><p>{t('가상 조이스틱으로 상승·하강·좌우를 조종하고 가감속을 동시에 누를 수 있습니다.', 'Steer with the virtual joystick while holding boost or brake.')}</p></article><article><Zap /><h3>{t('기체 엠블럼 탭하기', 'TAP THE AIRCRAFT EMBLEM')}</h3><p>{t('엠블럼을 한 번 탭하여 E를 발동합니다. 15초 동안 직접 경로를 따라가는 트릭과 무적 비행이 이어집니다.', 'Tap once to activate Hyper Trick and 15 seconds of immunity.')}</p></article><article><Target /><h3>{t('위험을 연결하면 콤보', 'LINK YOUR RISK MOVES')}</h3><p>{t('근접·좁은 통과를 7초 안에 연결하세요. 링과 저공 비행은 별도의 점수를 줍니다.', 'Link near misses and narrow passes within 7 seconds. Rings and low flight add bonus points.')}</p></article></div></div>}
     </section>}
    </>}
   </>}
   {state.phase === 'takeoff' && <div className="takeoff-overlay"><span className="eyebrow">CLEARED FOR TAKEOFF</span><h2>{t('새로운 기록을 향해.', 'Your next record awaits.')}</h2><button className="secondary" onClick={() => state.skipTakeoff()}>{t('이륙 건너뛰기', 'SKIP TAKEOFF')}<ArrowRight size={16}/></button></div>}
-  {['flying', 'paused', 'crashing'].includes(state.phase) && <>
-   <FlightDeck gearControl={state.save.settings.control==='gear'} onCloseCoach={()=>{
-       if (engine.current?.sim) engine.current.sim.coach=undefined;
-       state.settings({flightCoach:coachLesson==='complete'?'done':'off'});
-       useAirrun.setState({hud:{...useAirrun.getState().hud,coach:undefined}});
-   }} onTransmit={() => { if (state.phase === 'flying') input.transmit = true; }} hud={hud} ko={ko} hyper={<HyperButton state={state} ko={ko}/>} onRush={() => { if (state.phase === 'flying') input.rush = true; }} onBank={() => state.bankFlow()} onPause={() => state.pause()}/>
-   <div className="hud-effects">{hud.effects.map(e => <div key={e.kind} className={'effect ' + e.kind}><Shield size={14}/><span>{effectLabels[e.kind]?.[ko ? 0 : 1]} <b>{e.remaining.toFixed(1)}s</b></span></div>)}</div>
-   <div className="flight-bottom"><div className="world-label"><span className="live-dot"/><div><b>{ko ? THEMES.find(t => t.id === hud.theme)!.name : THEMES.find(t => t.id === hud.theme)!.en}</b><small>{hud.theme === 'korea' ? (ko ? KOREA_VARIANTS[hud.variant] : KOREA_VARIANTS_EN[hud.variant]) + ' · ' : ''}{hud.weather.snow && hud.weather.rain > .1 ? t('눈', 'SNOW') : WEATHER_NAMES[hud.weather.kind][ko ? 0 : 1]} · {lightAt(hud.time).phase === 'dawn' ? t('일출', 'DAWN') : lightAt(hud.time).phase === 'sunset' ? t('노을', 'SUNSET') : hud.weather.night > .5 ? t('밤', 'NIGHT') : t('낮', 'DAY')} · {duration(hud.time)}</small></div></div><TrackedQuest state={state} ko={ko}/><FlightRoute hud={hud} ko={ko}/></div>
-   {hud.time < hud.messageUntil && <div className="flight-message" key={hud.messageUntil}>{ko ? hud.message : hud.messageEn}</div>}
-   {hud.eRemaining > 0 && <div className="hyper-caption"><span>{hud.eRemaining > 11.7 ? (ko ? '점화 · 상승 진입' : 'IGNITION · CLIMB') : hud.eRemaining > 4 ? (ko ? '항로 추종 · 곡예 비행' : 'DISPLAY · ON COURSE') : (ko ? '수평 복귀 · 조종 인계' : 'RECOVERY · HANDOVER')}</span><b>{hud.eRemaining.toFixed(1)} <small>SECONDS</small></b><Progress value={hud.eRemaining} target={15}/></div>}
-   {hud.ePreparing && <div className="hyper-charge" role="status"><div className="hyper-charge-orbit"/><span>HYPER ENGAGE</span><b>{t('비행 공간 분석 중', 'MAPPING CLEAR AIRSPACE')}</b><small>{t('경로 준비 후 15초 비행 시작', '15 SECONDS BEGIN WHEN THE ROUTE IS READY')}</small></div>}
-   {state.phase === 'flying' && hud.eRemaining <= 0 && !hud.ePreparing && <TouchControls key={state.save.settings.control} leftHanded={state.save.settings.leftHanded} control={state.save.settings.control} ko={ko}/>}
-   {state.phase === 'crashing' && <div className="crash-vignette"/>}
-  </>}
+  {['flying', 'paused', 'crashing'].includes(state.phase) && <LiveCockpit onDismiss={() => { if (engine.current?.sim) engine.current.sim.coach = undefined; }} ko={ko}/>}
   {state.phase === 'paused' && <div className="pause-backdrop"><div className="pause-panel"><span className="eyebrow">FLIGHT ON HOLD</span><h1>{state.resumeCountdown > 0 ? state.resumeCountdown : t('잠시 숨 고르기.', 'Take a breath.')}</h1><p>{distance(hud.distance)} · {duration(hud.time)}</p>{state.modelError && <div className="pause-model-error"><p>{t('다음 구간을 준비하지 못했습니다.', 'The next flight sector could not load.')}</p><details><summary>{t('오류 정보', 'DETAILS')}</summary>{state.modelError}</details><button className="secondary" onClick={() => engine.current?.retryFlight()}>{t('구간 다시 준비', 'RETRY FLIGHT SECTOR')}</button></div>}<button className="secondary" onClick={() => setPauseSettings(!pauseSettings)}><Settings2 size={16}/>{t('비행 설정', 'FLIGHT SETTINGS')}</button>{pauseSettings && <PauseSettings settings={state.save.settings} ko={ko} onChange={patch => state.settings(patch)}/>}<button className="primary" disabled={state.resumeCountdown > 0 || !!state.modelError} onClick={() => { unlock(); state.resume(); }}><Play size={18}/>{t('비행 재개', 'RESUME FLIGHT')}</button><button className="secondary" onClick={() => {
                 if (engine.current?.sim)
                     state.settle(engine.current.sim.result(true, true));
@@ -205,8 +192,30 @@ export default function Game() {
   {isFlight && <div className="orientation-screen"><Maximize size={48}/><h2>{t('가로 화면으로 회전해 주세요.', 'Rotate to landscape.')}</h2><p>{t('비행은 일시정지되어 있습니다.', 'Your flight is paused.')}</p></div>}
  </main>;
 }
+function LiveCockpit({onDismiss,ko}: {onDismiss: () => void; ko: boolean}) {
+    const state = useAirrun(useShallow(s => ({hud:s.hud,phase:s.phase,save:s.save,practice:s.practice,runId:s.runId,tracked:s.tracked,settings:s.settings,bankFlow:s.bankFlow,pause:s.pause,hyper:s.hyper})));
+    const hud = state.hud, t = (k:string,e:string) => ko ? k : e;
+    const coachLesson = state.hud.coach?.lesson;
+    useEffect(() => {
+        if (coachLesson==='complete' && useAirrun.getState().save.settings.flightCoach!=='done') useAirrun.getState().settings({flightCoach:'done'});
+    },[coachLesson]);
+    return <>
+   <FlightDeck gearControl={state.save.settings.control==='gear'} onCloseCoach={()=>{
+       onDismiss();
+       state.settings({flightCoach:coachLesson==='complete'?'done':'off'});
+       useAirrun.setState({hud:{...useAirrun.getState().hud,coach:undefined}});
+   }} onTransmit={() => { if (state.phase === 'flying') input.transmit = true; }} hud={hud} ko={ko} hyper={<HyperButton state={state} ko={ko}/>} onRush={() => { if (state.phase === 'flying') input.rush = true; }} onBank={() => state.bankFlow()} onPause={() => state.pause()}/>
+   <div className="hud-effects">{hud.effects.map(e => <div key={e.kind} className={'effect ' + e.kind}><Shield size={14}/><span>{effectLabels[e.kind]?.[ko ? 0 : 1]} <b>{e.remaining.toFixed(1)}s</b></span></div>)}</div>
+   <div className="flight-bottom"><div className="world-label"><span className="live-dot"/><div><b>{ko ? THEMES.find(t => t.id === hud.theme)!.name : THEMES.find(t => t.id === hud.theme)!.en}</b><small>{hud.theme === 'korea' ? (ko ? KOREA_VARIANTS[hud.variant] : KOREA_VARIANTS_EN[hud.variant]) + ' · ' : ''}{hud.weather.snow && hud.weather.rain > .1 ? t('눈', 'SNOW') : WEATHER_NAMES[hud.weather.kind][ko ? 0 : 1]} · {lightAt(hud.time).phase === 'dawn' ? t('일출', 'DAWN') : lightAt(hud.time).phase === 'sunset' ? t('노을', 'SUNSET') : hud.weather.night > .5 ? t('밤', 'NIGHT') : t('낮', 'DAY')} · {duration(hud.time)}</small></div></div><TrackedQuest state={state} ko={ko}/><FlightRoute hud={hud} ko={ko}/></div>
+   {hud.time < hud.messageUntil && <div className="flight-message" key={hud.messageUntil}>{ko ? hud.message : hud.messageEn}</div>}
+   {hud.eRemaining > 0 && <div className="hyper-caption"><span>{hud.eRemaining > 11.7 ? (ko ? '점화 · 상승 진입' : 'IGNITION · CLIMB') : hud.eRemaining > 4 ? (ko ? '항로 추종 · 곡예 비행' : 'DISPLAY · ON COURSE') : (ko ? '수평 복귀 · 조종 인계' : 'RECOVERY · HANDOVER')}</span><b>{hud.eRemaining.toFixed(1)} <small>SECONDS</small></b><Progress value={hud.eRemaining} target={15}/></div>}
+   {hud.ePreparing && <div className="hyper-charge" role="status"><div className="hyper-charge-orbit"/><span>HYPER ENGAGE</span><b>{t('비행 공간 분석 중', 'MAPPING CLEAR AIRSPACE')}</b><small>{t('경로 준비 후 15초 비행 시작', '15 SECONDS BEGIN WHEN THE ROUTE IS READY')}</small></div>}
+   {state.phase === 'flying' && hud.eRemaining <= 0 && !hud.ePreparing && <TouchControls key={state.save.settings.control} leftHanded={state.save.settings.leftHanded} control={state.save.settings.control} ko={ko}/>}
+   {state.phase === 'crashing' && <div className="crash-vignette"/>}
+  </>;
+}
 function HyperButton({ state, ko }: {
-    state: ReturnType<typeof useAirrun.getState>;
+    state: Pick<ReturnType<typeof useAirrun.getState>, 'hud' | 'phase' | 'hyper'>;
     ko: boolean;
 }) {
     const available = state.phase === 'flying' && !state.hud.eUsed && !state.hud.ePreparing;
@@ -253,7 +262,7 @@ function TouchControls({ leftHanded, control, ko }: {
 }
 
 function TrackedQuest({ state, ko }: {
-    state: ReturnType<typeof useAirrun.getState>;
+    state: Pick<ReturnType<typeof useAirrun.getState>, 'hud' | 'save' | 'runId' | 'practice' | 'tracked'>;
     ko: boolean;
 }) {
     const m = state.hud.metrics, result: RunResult = { id: state.runId, date: new Date().toISOString(), planeId: state.practice?.plane ?? state.save.selected, distance: m.distance, bonus: m.bonus, score: Math.floor(m.distance) + m.bonus, coins: m.coins, reward: 0, maxCombo: m.maxCombo, eUsed: state.hud.eUsed, practice: !!state.practice, interrupted: false, reason: '', metrics: m };

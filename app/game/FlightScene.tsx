@@ -1,6 +1,6 @@
 "use client";
 import {Canvas,useFrame,useThree} from "@react-three/fiber";
-import {useEffect,useRef,useState} from "react";
+import {useEffect,useRef,useSyncExternalStore} from "react";
 import * as THREE from "three";
 import {EffectComposer} from "three/examples/jsm/postprocessing/EffectComposer.js";
 import {RenderPass} from "three/examples/jsm/postprocessing/RenderPass.js";
@@ -9,15 +9,18 @@ import {OutputPass} from "three/examples/jsm/postprocessing/OutputPass.js";
 import {RoomEnvironment} from "three/examples/jsm/environments/RoomEnvironment.js";
 import {FlightEngine,physicsReady} from "./engine";
 import {useGame} from "./store";
+function installEnvironment(scene: THREE.Scene, gl: THREE.WebGLRenderer) {
+ const generator=new THREE.PMREMGenerator(gl), room=new RoomEnvironment(), map=generator.fromScene(room,.04);
+ const previous=scene.environment, intensity=scene.environmentIntensity;
+ scene.environment=map.texture;scene.environmentIntensity=.32;generator.dispose();room.dispose();
+ return ()=>{scene.environment=previous;scene.environmentIntensity=intensity;map.dispose();};
+}
+const subscribeHydration = () => () => {};
 function Scene(){
  const {scene,camera,gl,size}=useThree();const engine=useRef<FlightEngine|null>(null),composer=useRef<EffectComposer|null>(null);
  const quality=useGame(s=>s.save.settings.quality),targetFPS=useGame(s=>s.save.settings.targetFPS),adaptive=useGame(s=>s.save.settings.adaptiveResolution);
  const renderTime=useRef(0),qualityClock=useRef({seconds:0,frames:0,stable:0}),dprRef=useRef(1.5);
- useEffect(()=>{
-  const generator=new THREE.PMREMGenerator(gl),room=new RoomEnvironment(),environment=generator.fromScene(room,.04);
-  scene.environment=environment.texture;scene.environmentIntensity=.32;generator.dispose();room.dispose();
-  return ()=>{scene.environment=null;environment.dispose();};
- },[scene,gl]);
+ useEffect(()=>installEnvironment(scene,gl),[scene,gl]);
  useEffect(()=>{
   if(quality==="balanced")return;
   const c=new EffectComposer(gl),bloom=new UnrealBloomPass(new THREE.Vector2(size.width,size.height),.19,.42,1.18),render=new RenderPass(scene,camera),output=new OutputPass();
@@ -67,8 +70,7 @@ function UIOnlyPreview(){
  return <div style={{position:"absolute",inset:0,background:"#1e414c"}} aria-label="개발용 UI 검사 화면"/>;
 }
 export default function FlightScene(){
- const [mounted,setMounted]=useState(false);
- useEffect(()=>setMounted(true),[]);
+ const mounted=useSyncExternalStore(subscribeHydration,()=>true,()=>false);
  const quality=useGame(s=>s.save.settings.quality);const isMobile=typeof window!=="undefined"&&window.matchMedia("(pointer: coarse)").matches;
  if(!mounted)return null;
  if(import.meta.env.DEV&&typeof window!=="undefined"&&new URLSearchParams(window.location.search).has("ui-test"))return <UIOnlyPreview/>;

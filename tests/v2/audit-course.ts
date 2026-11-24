@@ -2,7 +2,7 @@ import { catalog, proxies, createSim, controls } from './fixtures';
 import { PATTERNS, buildEncounter } from '../../app/airrun/patterns';
 import { obstacleContact } from '../../app/airrun/collision';
 import type { Obstacle } from '../../app/airrun/types';
-const errors: any[] = [];
+const errors = [];
 for (const p of PATTERNS) {
     const e = buildEncounter(p, 0, 42, { byId: catalog }, 11, 1);
     const obs: Obstacle[] = e.placements.filter(p => p.collision).map((p, i) => ({ id: i, model: p.model, position: { x: p.x, y: p.y, z: p.z }, scale: { x: p.sx, y: p.sy, z: p.sz }, yaw: p.yaw, size: { x: catalog.get(p.model)!.bounds.size[0] * p.sx, y: catalog.get(p.model)!.bounds.size[1] * p.sy, z: catalog.get(p.model)!.bounds.size[2] * p.sz }, small: !!p.small, role: p.role, hit: false, scored: false }));

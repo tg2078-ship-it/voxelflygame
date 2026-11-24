@@ -17,7 +17,7 @@ import { FlightWake } from '../../app/airrun/flight-wake';
 import { FlightGuidance } from '../../app/airrun/flight-guidance';
 import { projectGuidance } from '../../app/airrun/guidance-projection';
 
-globalThis.fetch = async (url: any) => {
+globalThis.fetch = async (url) => {
     if (/^(blob:|data:)/.test(String(url))) return nativeFetch(url);
     try { return new Response(await fs.readFile(path.join('public', String(url).split('?')[0]))); }
     catch { return new Response(null, { status: 404 }); }

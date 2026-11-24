@@ -9,11 +9,11 @@ import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 import { ModelLibrary } from '../../app/airrun/assets';
 import { normalizeModelSurfaces, smoothAuditedStoneBasePalette, AUDITED_STONE_BASE_MODELS } from '../../app/airrun/model-surface';
 import { catalog } from './fixtures';
-globalThis.fetch = async (url: any) => { if (/^(blob:|data:)/.test(String(url))) return nativeFetch(url); try { return new Response(await fs.readFile(path.join('public', String(url).split('?')[0]))); } catch { return new Response(null, { status: 404 }); } };
+globalThis.fetch = async (url) => { if (/^(blob:|data:)/.test(String(url))) return nativeFetch(url); try { return new Response(await fs.readFile(path.join('public', String(url).split('?')[0]))); } catch { return new Response(null, { status: 404 }); } };
 const library = new ModelLibrary(); library.byId = new Map(catalog);
 const loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
 let tested = 0, signalCount = 0, upperVertices = 0;
-const contrastReports: any[] = [];
+const contrastReports = [];
 const contrast = (numbers: number[]) => { const values = numbers.sort((a,b)=>a-b); return values[Math.floor(values.length * .9)] / values[Math.floor(values.length * .1)]; };
 const isStone = (mesh: T.Mesh) => (Array.isArray(mesh.material) ? mesh.material : [mesh.material]).every(material => ['AF_stone', 'V8_rock', 'V8_slate'].includes(material.name));
 for (const id of AUDITED_STONE_BASE_MODELS) for (const lod of [1,2] as const) {

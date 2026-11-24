@@ -10,7 +10,7 @@ import {ModelCompiler} from '../../app/airrun/model-compiler';
 import {packModelCompile,packModelCompileAsync,unpackCompiled} from '../../app/airrun/model-compile-protocol';
 import {ModelWorkerAdapter} from './model-worker-adapter';
 import {compatibleModelLOD} from '../../app/airrun/graphics';
-globalThis.fetch=async(url:any)=>{if(/^(blob:|data:)/.test(String(url)))return nativeFetch(url);try{return new Response(await fs.readFile(path.join('public',String(url).split('?')[0])));}catch{return new Response(null,{status:404});}};
+globalThis.fetch=async(url)=>{if(/^(blob:|data:)/.test(String(url)))return nativeFetch(url);try{return new Response(await fs.readFile(path.join('public',String(url).split('?')[0])));}catch{return new Response(null,{status:404});}};
 const library=new ModelLibrary();library.byId=catalog;const world=new WorldView(new T.Scene(),library),compiler=new ModelCompiler(()=>new ModelWorkerAdapter() as unknown as Worker,true);
 let checks=0,values=0,maxAttributeError=0;const check=(value:unknown,label:string)=>{assert(value,label);checks++;};
 for(const [id,lod]of [['coastal_bridge',0],['cloudpeak_balloon',0],['large_dam',0],['airport_flipdot_arrivals',2]] as const){

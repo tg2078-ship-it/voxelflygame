@@ -31,17 +31,17 @@ const migrated = parseSave(legacy)!;
 check(migrated?.settings.quality === 'high' && migrated.settings.resolutionScale === 1.25 && !migrated.settings.adaptiveResolution, 'old automatic low-quality settings migrate once');
 check(migrated.coins === legacy.coins && migrated.levels.skyhawk === 7 && migrated.bests.all.score === 15400 && migrated.nickname === legacy.nickname, 'display migration preserves records, currency and upgrades');
 check(legacy.settings.quality === 'balanced' && legacy.settings.adaptiveResolution, 'import validation does not mutate the input backup');
-const invalidLegacy = structuredClone(legacy); (invalidLegacy.settings as any).adaptiveResolution = 'broken';
+const invalidLegacy = structuredClone(legacy); Object.assign(invalidLegacy.settings, {adaptiveResolution:'broken'});
 check(parseSave(invalidLegacy) === null, 'migration does not conceal corrupt legacy fields');
 const explicit = ensureQuests(freshSave()); explicit.settings.quality = 'balanced'; explicit.settings.resolutionScale = 1;
 check(parseSave(explicit)?.settings.quality === 'balanced' && parseSave(explicit)?.settings.resolutionScale === 1, 'subsequent explicit performance choices survive loading');
 for (const invalid of [0, .8, 1.1, 2, '1.5', null, NaN]) {
-    const save = structuredClone(explicit); (save.settings as any).resolutionScale = invalid;
+    const save = structuredClone(explicit); Object.assign(save.settings, {resolutionScale:invalid});
     check(parseSave(save) === null, 'invalid resolution rejected: ' + invalid);
 }
 useAirrun.setState({ save: explicit }); useAirrun.getState().settings({ resolutionScale: 1.5 });
 check(useAirrun.getState().save.settings.resolutionScale === 1.5, 'live settings apply a valid display selection');
-useAirrun.getState().settings({ resolutionScale: .5 } as any);
+useAirrun.getState().settings({ resolutionScale: .5 } as unknown as Partial<Settings>);
 check(useAirrun.getState().save.settings.resolutionScale === 1.5, 'live settings reject an invalid resolution');
 for (const quality of ['balanced', 'high', 'ultra'] as const) for (const dpr of [.8, 1, 1.25, 2, 3]) {
     const values = ([1, 1.25, 1.5] as const).map(resolutionScale => renderPixelRatio({ ...DEFAULT_SETTINGS, quality, resolutionScale }, dpr));
@@ -90,8 +90,9 @@ targets.forEach(target => target.dispose());
 // UI handlers and SSR accessibility are checked separately from browser layout.
 let patch: Partial<Settings> = {};
 const element = DisplayQualityControls({ settings: DEFAULT_SETTINGS, ko: true, onChange: value => patch = value });
-const buttons: any[] = [];
-function walk(node: React.ReactNode) { React.Children.forEach(node, child => { if (!React.isValidElement(child)) return; const props = child.props as any; if (child.type === 'button') buttons.push(child); walk(props.children); }); }
+type ButtonProps = { children?: React.ReactNode; onClick: () => void };
+const buttons: React.ReactElement<ButtonProps>[] = [];
+function walk(node: React.ReactNode) { React.Children.forEach(node, child => { if (!React.isValidElement<ButtonProps>(child)) return; const props = child.props; if (child.type === 'button') buttons.push(child); walk(props.children); }); }
 walk(element);
 buttons[2].props.onClick(); check(patch.resolutionScale === 1.5 && patch.adaptiveResolution === false, '150% selection immediately disables adaptive downscaling');
 buttons[3].props.onClick(); check(patch.quality === 'ultra' && patch.resolutionScale === 1.25 && patch.adaptiveResolution === false, 'quality preset updates all three display controls');

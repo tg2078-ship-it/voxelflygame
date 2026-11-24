@@ -44,8 +44,8 @@ check(started[3] === ids[5] && started.indexOf(ids[5]) < started.indexOf(ids[3])
 // Exercise the real frame control flow without a GPU. LOD0 never arrives, and
 // every obstacle starts without rendered geometry. The old frame() re-entered
 // preflight and stopped here even though this was an ordinary running flight.
-(globalThis as any).requestAnimationFrame = () => 1;
-(globalThis as any).matchMedia = () => ({ matches: false });
+Object.defineProperty(globalThis, 'requestAnimationFrame', { configurable:true, writable:true, value: () => 1 });
+Object.defineProperty(globalThis, 'matchMedia', { configurable:true, writable:true, value: () => ({ matches: false }) });
 const frameLibrary = new ModelLibrary(); frameLibrary.byId = catalog;
 const flight = createSim({ isObstacleVisible: () => false }); flight.lastCheckpoint = Infinity;
 const save = freshSave(); save.settings.targetFPS = 30;
@@ -70,7 +70,7 @@ check(maxX <= AIRSPACE.halfWidth && maxY <= AIRSPACE.ceiling, 'keyboard movement
 
 // Real source GLBs: keep hero download unresolved and prove that its coarse
 // native geometry is actually committed to the CPU scene in the meantime.
-globalThis.fetch = async (url: any) => { if (/^(blob:|data:)/.test(String(url))) return nativeFetch(url); try { return new Response(await fs.readFile(path.join('public', String(url).split('?')[0]))); } catch { return new Response(null, { status: 404 }); } };
+globalThis.fetch = async (url) => { if (/^(blob:|data:)/.test(String(url))) return nativeFetch(url); try { return new Response(await fs.readFile(path.join('public', String(url).split('?')[0]))); } catch { return new Response(null, { status: 404 }); } };
 const real = new ModelLibrary(); real.byId = catalog; real.proxies = new Map(proxies);
 const actual = createSim(); actual.z = 100; actual.speed = 40;
 const p: Placement = { model: 'rocky_arch', x: 0, y: 0, z: 180, sx: 1, sy: 1, sz: 1, yaw: 0, collision: true, course: true, role: 'arch' };

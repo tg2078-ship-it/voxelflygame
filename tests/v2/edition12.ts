@@ -11,7 +11,7 @@ import { catalog, suppliedAssets, proxies } from './fixtures';
 import { rigPose } from '../../app/airrun/rig-motion';
 let checks = 0, skins = 0, morphs = 0, sampled = 0, maximumPoseError = 0;
 const check = (value: unknown, message: string) => { assert(value, message); checks++; };
-globalThis.fetch = async (url: any) => { if (/^(blob:|data:)/.test(String(url))) return nativeFetch(url); try { return new Response(fs.readFileSync(path.join('public', String(url).split('?')[0]))); } catch { return new Response(null, { status: 404 }); } };
+globalThis.fetch = async (url) => { if (/^(blob:|data:)/.test(String(url))) return nativeFetch(url); try { return new Response(fs.readFileSync(path.join('public', String(url).split('?')[0]))); } catch { return new Response(null, { status: 404 }); } };
 const library = new ModelLibrary(); library.byId = new Map(catalog);
 check(suppliedAssets.length === 403 && suppliedAssets.every(m => m.edition === 12 && m.exports.lod3), 'all supplied models have four Edition12 LODs');
 check(suppliedAssets.filter(m => m.moving).length === 271 && suppliedAssets.reduce((n, m) => n + m.animations.length, 0) === 891, 'complete upgraded motion inventory');

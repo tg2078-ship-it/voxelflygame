@@ -2,6 +2,13 @@ import { assetUrl } from './asset-url';
 import type { Settings } from './types';
 import type { FlightSimulation } from './simulation';
 export class GameAudio {
+    private failures = new Set<string>();
+    constructor(private readonly onFailure?: (files: string[]) => void) {}
+    private missing(name: string) {
+        if (this.disposed || this.failures.has(name)) return;
+        this.failures.add(name);
+        this.onFailure?.([...this.failures]);
+    }
     context: AudioContext | null = null;
     master: GainNode | null = null;
     music: GainNode | null = null;
@@ -45,6 +52,7 @@ export class GameAudio {
             this.sfx.gain.value = 0;
             for (const name of ['horizon', 'velocity']) {
                 const element = new Audio(assetUrl('/audio/' + name + '.mp3'));
+                element.addEventListener('error', () => this.missing(name), { once: true });
                 element.loop = true;
                 element.preload = 'auto';
                 const source = c.createMediaElementSource(element), gain = c.createGain();
@@ -71,10 +79,10 @@ export class GameAudio {
         await Promise.all(['rain', 'wind', 'propeller', 'jet', 'waves', 'city', 'forest'].map(async (name) => {
             try {
                 const r = await fetch(assetUrl('/audio/' + name + '.mp3'));
-                if (r.ok)
-                    this.buffers.set(name, await c.decodeAudioData(await r.arrayBuffer()));
+                if (!r.ok) throw new Error(String(r.status));
+                this.buffers.set(name, await c.decodeAudioData(await r.arrayBuffer()));
             }
-            catch { }
+            catch { this.missing(name); }
         }));
         if (!this.disposed) {
             this.ready = true;

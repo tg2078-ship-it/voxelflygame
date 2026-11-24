@@ -15,7 +15,7 @@ import type { Obstacle, AssetMeta } from '../../app/airrun/types';
 import type { GLTF } from 'three/addons/loaders/GLTFLoader.js';
 let checks = 0, matrices = 0, maxError = 0;
 const check = (value: unknown, label: string) => { assert(value, label); checks++; };
-globalThis.fetch = async (url: any) => { if (/^(blob:|data:)/.test(String(url))) return nativeFetch(url); try { return new Response(await fs.readFile(path.join('public', String(url).split('?')[0]))); } catch { return new Response(null, { status: 404 }); } };
+globalThis.fetch = async (url) => { if (/^(blob:|data:)/.test(String(url))) return nativeFetch(url); try { return new Response(await fs.readFile(path.join('public', String(url).split('?')[0]))); } catch { return new Response(null, { status: 404 }); } };
 check(suppliedAssets.length === 403 && suppliedAssets.every(m => m.exports.lod0), '403 Hero models');
 check(suppliedAssets.filter(m => m.moving).length === 271 && suppliedAssets.reduce((n, m) => n + m.animations.length, 0) === 891, 'all native motion retained');
 check(AIRCRAFT.length === 22 && AIRCRAFT.every(plane => catalog.has(plane.model)), '22 real selectable aircraft');

@@ -2,7 +2,7 @@ import { createSim, controls, catalog, proxies } from './fixtures';
 import { THEMES, AIRCRAFT } from '../../app/airrun/data';
 import { obstacleContact } from '../../app/airrun/collision';
 import { checkTrickHandoff } from './trick-checks';
-const reports: any[] = [];
+const reports = [];
 const started = performance.now();
 for (const theme of THEMES)
     for (let variant = 0; variant < (theme.id === 'korea' ? 4 : 1); variant++)

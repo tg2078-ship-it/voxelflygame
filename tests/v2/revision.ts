@@ -20,8 +20,8 @@ import { createSim, controls, catalog } from './fixtures';
 
 let checks = 0;
 const check = (value: unknown, label: string) => { assert.ok(value, label); checks++; };
-globalThis.fetch = async (url: any) => { if (/^(blob:|data:)/.test(String(url))) return nativeFetch(url); try { return new Response(await fs.readFile(path.join('public', String(url).split('?')[0]))); } catch { return new Response(null, { status: 404 }); } };
-(globalThis as any).document = { createElement: () => createCanvas(1024, 256) };
+globalThis.fetch = async (url) => { if (/^(blob:|data:)/.test(String(url))) return nativeFetch(url); try { return new Response(await fs.readFile(path.join('public', String(url).split('?')[0]))); } catch { return new Response(null, { status: 404 }); } };
+Object.defineProperty(globalThis, 'document', { configurable:true, writable:true, value: { createElement: () => createCanvas(1024, 256) } });
 const library = new ModelLibrary(); await library.init(() => {});
 const scene = new T.Scene(), airport = new AirportView(scene, library);
 const floor = new T.Box3().setFromObject(airport.root);
@@ -110,7 +110,7 @@ Object.assign(preparation, { sim: createSim(), preparing: false, warmGeneration:
 useAirrun.setState({ phase: 'preflight' }); const outstanding = preparation.prepareFlight(); await Promise.resolve(); useAirrun.getState().airport(); release(); await outstanding;
 check(useAirrun.getState().phase === 'hangar' && !preparation.preparing, 'late preflight completion cannot restart a cancelled run');
 const originalFetch = globalThis.fetch; let failedRequests = 0;
-globalThis.fetch = async (url: any) => { if (/^(blob:|data:)/.test(String(url))) return nativeFetch(url); if (String(url).includes('cargo_drone')) { failedRequests++; return new Response(null, { status: 503 }); } return originalFetch(url); };
+globalThis.fetch = async (url) => { if (/^(blob:|data:)/.test(String(url))) return nativeFetch(url); if (String(url).includes('cargo_drone')) { failedRequests++; return new Response(null, { status: 503 }); } return originalFetch(url); };
 await assert.rejects(library.load('cargo_drone', 1), /503/); await assert.rejects(library.load('cargo_drone', 1), /503/);
 check(failedRequests === 1 && !library.canRequest('cargo_drone', 1), 'failed downloads have a bounded retry window');
 globalThis.fetch = originalFetch; library.retry('cargo_drone'); await library.load('cargo_drone', 1); check(!library.failures.has('cargo_drone:1'), 'manual retry recovers a failed model');

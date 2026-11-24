@@ -4,7 +4,7 @@ import { AIRCRAFT, clamp } from '../../app/airrun/data';
 import assert from 'node:assert/strict';
 import { obstacleContact } from '../../app/airrun/collision';
 import { proxies, catalog } from './fixtures';
-const results: any[] = [];
+const results = [];
 for (const plane of AIRCRAFT)
     for (const level of [1, 10, 20]) {
         const sim = createSim({ plane: plane.id, level, seed: 731 });

@@ -5,7 +5,7 @@ import {Dialog,DialogContent,DialogHeader,DialogTitle,DialogDescription} from "@
 import {Select,SelectTrigger,SelectValue,SelectContent,SelectItem} from "@/components/ui/select";
 import {Tabs,TabsList,TabsTrigger,TabsContent} from "@/components/ui/tabs";
 import {Progress} from "@/components/ui/progress";
-import {AIRCRAFT,THEMES,THEME_DETAILS,SKINS,KOREA_VARIANTS,DEFAULT_PRACTICE,formatDistance,type PracticeConfig,type SkinId} from "./data";
+import {AIRCRAFT,THEMES,THEME_DETAILS,SKINS,KOREA_VARIANTS,formatDistance,type PracticeConfig,type SkinId} from "./data";
 import {useGame} from "./store";
 import {ACHIEVEMENTS,achievementProgress,discoveryCount} from "./progression";
 import {flightAudio} from "./audio";
@@ -13,9 +13,12 @@ export const EffectIcon={shield:Shield,multiplier:Diamond,slow:Timer,turbo:Zap,r
 function Choice({label,value,options,onChange}:{label:string;value:string;options:{value:string;label:string}[];onChange:(value:string)=>void}){
  return <label className="practice-choice"><span>{label}</span><Select value={value} onValueChange={onChange}><SelectTrigger aria-label={label}><SelectValue/></SelectTrigger><SelectContent className="game-select" position="popper">{options.map(o=><SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectContent></Select></label>;
 }
-export function PracticeDialog(){
- const open=useGame(s=>s.dialog==="practice"),save=useGame(s=>s.save);const [config,setConfig]=useState<PracticeConfig>({...DEFAULT_PRACTICE});
- useEffect(()=>{if(open)setConfig({...useGame.getState().practice,planeId:AIRCRAFT[useGame.getState().save.selected].id});},[open]);
+export function PracticeDialog() {
+ const open=useGame(s=>s.dialog==="practice");
+ return open ? <PracticeEditor/> : null;
+}
+function PracticeEditor(){
+ const open=useGame(s=>s.dialog==="practice"),save=useGame(s=>s.save);const [config,setConfig]=useState<PracticeConfig>(()=>({...useGame.getState().practice,planeId:AIRCRAFT[save.selected].id}));
  const theme=THEMES.find(t=>t.id===config.theme)!,p=AIRCRAFT.find(p=>p.id===config.planeId)!;
  return <Dialog open={open} onOpenChange={v=>{if(!v)useGame.getState().setDialog(null);}}><DialogContent className="game-dialog practice-dialog"><DialogHeader><div className="eyebrow">PRACTICE FLIGHT</div><DialogTitle>나만의 비행 환경</DialogTitle><DialogDescription>모든 기체와 테마를 자유롭게 체험합니다. 코인 보상·퀘스트·최고 기록은 무한 비행에서 획득합니다.</DialogDescription></DialogHeader><div className="practice-grid">
  <Choice label="기체" value={config.planeId} options={AIRCRAFT.map(p=>({value:p.id,label:p.name+" · "+p.grade}))} onChange={v=>setConfig(c=>({...c,planeId:v}))}/>
@@ -35,8 +38,12 @@ export function AtlasDialog(){
  const discovered=Object.entries(save.discoveries).filter(([k])=>k===selected||k.startsWith(selected+":")),first=discovered.map(([,d])=>d.date).sort()[0],count=discovered.reduce((sum,[,d])=>sum+d.flights,0);
  return <Dialog open={open} onOpenChange={v=>{if(!v)useGame.getState().setDialog(null);}}><DialogContent className="game-dialog atlas-dialog"><DialogHeader><div className="eyebrow">WORLD FIELD GUIDE</div><DialogTitle>테마 사전 <span className="atlas-count">{discoveryCount(save)} / 13</span></DialogTitle><DialogDescription>무한 비행에서 같은 풍경을 20초 이상 비행하면 발견으로 등록됩니다.</DialogDescription></DialogHeader><div className="atlas-layout"><div className="atlas-grid">{THEMES.map((t,i)=>{const found=Object.keys(save.discoveries).some(k=>k===t.id||k.startsWith(t.id+":"));return <button key={t.id} className={selected===t.id?"selected":""} aria-pressed={selected===t.id} onClick={()=>setSelected(t.id)}><span className="atlas-swatch" style={{background:t.color}}>{String(i+1).padStart(2,"0")}</span><strong>{t.name}</strong>{found?<Check size={15}/>:<Compass size={15}/>}</button>;})}</div><article className="atlas-detail"><div className="atlas-detail-head" style={{borderLeftColor:theme.color}}><Mountain size={29}/><div><small>{theme.en}</small><h2>{theme.name}</h2></div></div><p>{detail.description}</p><dl><dt>대표 풍경</dt><dd>{detail.landmark}</dd><dt>장애물</dt><dd>{detail.obstacles}</dd><dt>발견 기록</dt><dd>{first?new Date(first).toLocaleDateString("ko-KR")+" · "+count+"회 비행":"아직 발견하지 않은 풍경"}</dd></dl>{selected==="korea"&&<div className="korea-variants">{KOREA_VARIANTS.map((v,i)=><div key={v}>{save.discoveries["korea:"+i]?<Check size={15}/>:<Compass size={15}/>}<span>{v}</span></div>)}</div>}<button className="secondary-button" onClick={()=>{useGame.setState({practice:{...useGame.getState().practice,theme:selected},dialog:"practice"});}}><Plane size={17}/>이 풍경에서 연습</button></article></div></DialogContent></Dialog>;
 }
-export function SkinsDialog(){
- const open=useGame(s=>s.dialog==="skins"),save=useGame(s=>s.save);const [candidate,setCandidate]=useState<SkinId>("default");const p=AIRCRAFT[save.selected],skin=SKINS.find(s=>s.id===candidate)!,owned=save.owned.includes(p.id),unlocked=candidate==="default"||save.skins[p.id]?.includes(candidate);
- useEffect(()=>{if(open){const id=useGame.getState().save.skinSelected[p.id]??"default";setCandidate(id);useGame.setState({skinPreview:id});}},[open,p.id]);
+export function SkinsDialog() {
+ const open=useGame(s=>s.dialog==="skins"), selected=useGame(s=>s.save.selected);
+ return open ? <SkinEditor key={selected}/> : null;
+}
+function SkinEditor(){
+ const open=useGame(s=>s.dialog==="skins"),save=useGame(s=>s.save);const [candidate,setCandidate]=useState<SkinId>(()=>save.skinSelected[AIRCRAFT[save.selected].id]??"default");const p=AIRCRAFT[save.selected],skin=SKINS.find(s=>s.id===candidate)!,owned=save.owned.includes(p.id),unlocked=candidate==="default"||save.skins[p.id]?.includes(candidate);
+ useEffect(()=>{if(open){const id=useGame.getState().save.skinSelected[p.id]??"default";useGame.setState({skinPreview:id});}},[open,p.id]);
  return <Dialog open={open} onOpenChange={v=>{if(!v)useGame.getState().setDialog(null);}}><DialogContent className="game-dialog skins-dialog"><DialogHeader><div className="eyebrow">AIRCRAFT LIVERY</div><DialogTitle>{p.name} 도장</DialogTitle><DialogDescription>기체별로 해금합니다. 도장은 성능에 영향을 주지 않습니다.</DialogDescription></DialogHeader><div className="skin-grid">{SKINS.map(s=><button key={s.id} aria-pressed={candidate===s.id} className={candidate===s.id?"selected":""} onClick={()=>{setCandidate(s.id);useGame.setState({skinPreview:s.id});}}><span className="skin-swatch" style={{background:s.id==="default"?p.color:s.color,borderColor:s.id==="default"?p.accent:s.accent}}/><strong>{s.name}</strong><small>{s.id==="default"||save.skins[p.id]?.includes(s.id)?"보유 중":s.price+" 코인"}</small></button>)}</div><button className="primary-button" disabled={!owned||(!unlocked&&save.coins<skin.price)} onClick={()=>void useGame.getState().skin(candidate)}><Palette size={18}/>{!owned?"기체 해금이 필요합니다":unlocked?skin.name+" 적용":skin.price+" 코인으로 해금·적용"}</button><button className="text-button" onClick={()=>useGame.getState().setDialog(null)}>격납고에서 확인</button></DialogContent></Dialog>;
 }

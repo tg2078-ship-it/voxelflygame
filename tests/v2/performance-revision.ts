@@ -13,7 +13,7 @@ import { collisionBounds, obstacleContact } from '../../app/airrun/collision';
 import { PointerOwner } from '../../app/airrun/pointer-owner';
 import { PATTERNS, buildEncounter } from '../../app/airrun/patterns';
 import type { Obstacle, Placement } from '../../app/airrun/types';
-globalThis.fetch = async (url: any) => { if (/^(blob:|data:)/.test(String(url))) return nativeFetch(url); try { return new Response(await fs.readFile(path.join('public', String(url).split('?')[0]))); } catch { return new Response(null, { status: 404 }); } };
+globalThis.fetch = async (url) => { if (/^(blob:|data:)/.test(String(url))) return nativeFetch(url); try { return new Response(await fs.readFile(path.join('public', String(url).split('?')[0]))); } catch { return new Response(null, { status: 404 }); } };
 let checks = 0; const check = (value: unknown, label: string) => { assert(value, label); checks++; };
 const owners = [new PointerOwner(), new PointerOwner(), new PointerOwner()];
 owners.forEach((owner, i) => check(owner.claim(i + 10), 'three fingers may steer/boost/brake independently'));

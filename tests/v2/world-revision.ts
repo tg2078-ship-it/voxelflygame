@@ -76,7 +76,7 @@ for (const theme of ['coast', 'village', 'city'] as const) {
 }
 
 // Raycast the actual exported GLB surface. Its bounding-box top is a railing, not the floor.
-globalThis.fetch = async (url: any) => { if (/^(blob:|data:)/.test(String(url))) return nativeFetch(url); try { return new Response(await fs.readFile(path.join('public', String(url).split('?')[0]))); } catch { return new Response(null, { status: 404 }); } };
+globalThis.fetch = async (url) => { if (/^(blob:|data:)/.test(String(url))) return nativeFetch(url); try { return new Response(await fs.readFile(path.join('public', String(url).split('?')[0]))); } catch { return new Response(null, { status: 404 }); } };
 const deckLibrary = new ModelLibrary(); deckLibrary.byId = new Map(catalog);
 const nativeDeck = await deckLibrary.instance('modular_pier_deck', 1);
 const harbor = buildEncounter(PATTERNS[0], 0, 42, { byId: catalog }, 11, 1);
@@ -130,7 +130,7 @@ for (let i = 0; i <= 20; i++) {
 
 // Exercise the renderer's real phase branch with inert rendering, not a separate mock policy.
 globalThis.requestAnimationFrame = () => 1;
-(globalThis as any).matchMedia = () => ({ matches: false });
+Object.defineProperty(globalThis, 'matchMedia', { configurable:true, writable:true, value: () => ({ matches: false }) });
 const renderer = Object.create(AirrunRenderer.prototype) as AirrunRenderer;
 let selected = 0, cameraMoves = 0, environmentSim: unknown = null;
 Object.assign(renderer, {

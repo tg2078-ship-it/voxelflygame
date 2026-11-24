@@ -159,7 +159,7 @@ export function makeChunk(index:number,theme:Theme,seed:number,quality:string,ti
  const forests=["forest","village","farm","river","waterfall","korea","ice","aurora"].includes(theme.id);
  if(forests||theme.id==="coast"){
   const count=quality==="balanced"?14:25;for(let i=0;i<count;i++){
-   const sign=rng()<.5?-1:1;let x=sign*(45+rng()*210),z=rng()*CHUNK;const y=heightAt(x,z+baseZ);if(y<=0)continue;
+   const sign=rng()<.5?-1:1;const x=sign*(45+rng()*210),z=rng()*CHUNK;const y=heightAt(x,z+baseZ);if(y<=0)continue;
    tree(b,x,y,z,.8+rng()*.8,rng,theme);
    if(Math.abs(x)<90)addHit(x,y+5.5,z,1.4,11,1.4,"large");
   }

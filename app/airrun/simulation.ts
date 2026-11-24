@@ -1,3 +1,4 @@
+import { LIGHTNING } from './tuning';
 import { COURSE_EDITION, AIRCRAFT, baseSpeed, stats, themeAt, THEMES, damp, clamp, smooth, mix, GEAR_RATIOS, hash, emptyMetrics } from './data';
 import { journeyTheme, journeyThemes, JOURNEY_MARKS } from './journey';
 import { FormationFlight, type FormationEvent } from './formation';
@@ -641,20 +642,20 @@ export class FlightSimulation {
                 }
         if (this.combo && this.time > this.comboUntil)
             this.combo = 0;
-        if (w.kind === 'storm' && this.time >= 540 && !this.lightningDone && hash(this.config.seed + Math.floor(this.time / 80)) < .15) {
+        if (w.kind === 'storm' && this.time >= LIGHTNING.firstPossibleSecond && !this.lightningDone && hash(this.config.seed + Math.floor(this.time / LIGHTNING.seedWindowSeconds)) < LIGHTNING.chancePerWindow) {
             if (!this.lightningWarn) {
-                this.lightningWarn = this.time + 1.5;
-                this.notify('번개 접근 · 회피하세요', 'LIGHTNING APPROACHING · MOVE', 'warning');
+                this.lightningWarn = this.time + LIGHTNING.warningSeconds;
+                this.notify(`번개 접근 · 좌우로 초속 ${LIGHTNING.lateralEscapeSpeed}m 이상 회피`, `LIGHTNING · MOVE SIDEWAYS AT LEAST ${LIGHTNING.lateralEscapeSpeed} m/s`, 'warning');
             }
             else if (this.time > this.lightningWarn) {
                 this.lightningDone = true;
-                if (!activeE && Math.abs(this.vx) < 2) {
+                if (!activeE && Math.abs(this.vx) < LIGHTNING.lateralEscapeSpeed) {
                     if (this.effects.has('shield')) {
                         this.effects.delete('shield');
                         this.metrics.shieldBlocks++;
                     }
                     else
-                        this.damage(35);
+                        this.damage(LIGHTNING.damage);
                 }
             }
         }
@@ -695,6 +696,10 @@ export class FlightSimulation {
                 if (stage.id !== before) this.notify(stage.label, stage.en, 'sortie-stage');
             }
         }
+    }
+    get trickDirection() {
+        const middle = this.ePath.find(knot => knot.t >= (this.ePath.at(-1)?.t ?? 0) * .4);
+        return (middle?.x ?? this.eStart.x) >= this.eStart.x ? 1 : -1;
     }
     get recordLine(): number | undefined {
         const records = this.config.personalDistances;
@@ -898,7 +903,7 @@ export class FlightSimulation {
         this.trickYaw = 0;
         if (!reduced && this.trickVariant > 0) {
             const lead = sampleTrickPath(this.ePath, Math.min(15,t+.32), this.z);
-            const direction = this.ePath[65].x >= this.eStart.x ? 1 : -1;
+            const direction = this.trickDirection;
             const bank = Math.atan2(lead.x-p.x, Math.max(3,this.speed*.32));
             const climb = Math.atan2(lead.y-p.y, Math.max(3,this.speed*.32));
             const envelope = smooth(clamp(t/1.5,0,1)) * smooth(clamp((15-t)/2,0,1));

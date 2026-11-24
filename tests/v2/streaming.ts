@@ -9,7 +9,7 @@ const authored = PATTERNS.flatMap(p => [1, 2, 3].map(serial => buildEncounter(p,
 const shortest = Math.min(...authored.map(e => e.length));
 const mostObstacles = Math.max(...authored.map(e => e.placements.filter(p => p.collision).length));
 const mostPickups = Math.max(...authored.map(e => e.pickups.length));
-const summary: any[] = [];
+const summary = [];
 let checks = 0;
 for (const speed of [40, 60, 90, 120, 180, 250, 400, 600]) {
     const sim = createSim({ seed: 74011, plane: speed >= 180 ? 'falcon' : 'skyhawk', level: speed >= 180 ? 20 : 1 });

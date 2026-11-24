@@ -9,7 +9,7 @@ import { WorldView } from '../../app/airrun/world-view';
 import { FlightFX } from '../../app/airrun/fx';
 import { GRAPHICS } from '../../app/airrun/graphics';
 import { createSim } from './fixtures';
-globalThis.fetch = async (url: any) => { if (/^(blob:|data:)/.test(String(url))) return nativeFetch(url);
+globalThis.fetch = async (url) => { if (/^(blob:|data:)/.test(String(url))) return nativeFetch(url);
     try {
         const b = await fs.readFile(path.join('public', String(url).split('?')[0]));
         return new Response(b);

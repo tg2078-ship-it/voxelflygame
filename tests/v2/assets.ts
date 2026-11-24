@@ -10,7 +10,7 @@ import { fitCompactScenery } from '../../app/airrun/compact-scenery';
 import { catalog, suppliedAssets } from './fixtures';
 const loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
 const assetRoot = process.env.AIRRUN_ASSET_ROOT ?? 'public';
-globalThis.fetch = async (url: any) => {
+globalThis.fetch = async (url) => {
     if (/^(blob:|data:)/.test(String(url))) return nativeFetch(url);
     try { return new Response(fs.readFileSync(path.join(assetRoot, String(url).split('?')[0]))); }
     catch { return new Response(null, { status: 404 }); }

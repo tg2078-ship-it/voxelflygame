@@ -2,7 +2,7 @@ import { createSim, controls, catalog, proxies } from './fixtures';
 import { THEMES, AIRCRAFT } from '../../app/airrun/data';
 import { pointClear, obstacleContact } from '../../app/airrun/collision';
 import { checkTrickHandoff } from './trick-checks';
-const report: any[] = [];
+const report = [];
 let rejected = 0, startsInsideGeometry = 0;
 for (const speed of [40, 90, 180, 250, 400, 600])
     for (const plane of [AIRCRAFT[0], AIRCRAFT[1], AIRCRAFT[7]])

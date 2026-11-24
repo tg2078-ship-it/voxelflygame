@@ -11,7 +11,7 @@ const root = process.env.AIRRUN_ASSET_ROOT ?? 'public';
 const assets: AssetMeta[] = JSON.parse(fs.readFileSync(path.join(root, 'models/catalog.json'), 'utf8')).assets;
 const original = assets.find(a => a.id === 'windmill')!;
 let downloads = 0, failDownload = false;
-globalThis.fetch = async (url: any) => {
+globalThis.fetch = async (url) => {
     const address = String(url);
     if (/^(blob:|data:)/.test(address)) return nativeFetch(url);
     if (address.includes('.glb.gz')) {

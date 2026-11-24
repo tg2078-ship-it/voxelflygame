@@ -8,7 +8,7 @@ import { WorldView } from '../../app/airrun/world-view';
 import { catalog, proxies, createSim } from './fixtures';
 import { TerrainWorkerAdapter } from './terrain-worker-adapter';
 import { ModelWorkerAdapter } from './model-worker-adapter';
-globalThis.fetch = async (url: any) => {
+globalThis.fetch = async (url) => {
     if (/^(blob:|data:)/.test(String(url))) return nativeFetch(url);
     try { return new Response(await fs.readFile(path.join('public', String(url).split('?')[0]))); }
     catch { return new Response(null, { status: 404 }); }
@@ -25,7 +25,7 @@ for (const theme of ['coast', 'city', 'forest'] as const) {
     for (let pass = 0; pass < 6; pass++) { world.dirty = true; world.update(sim, 0, 'high'); await Promise.allSettled([...library.pending.values()]); await new Promise(resolve => setTimeout(resolve, 0)); }
     await world.prepare(sim, 'high');
     const operations: Record<string, {calls:number,totalMs:number,maxMs:number}> = {};
-    for (const method of ['makeChunk','compile','rebuild'] as const) { const original = world[method].bind(world); (world as any)[method] = (...args:any[]) => { const start=performance.now(); const result=(original as any)(...args); const elapsed=performance.now()-start; const record=operations[method]??={calls:0,totalMs:0,maxMs:0}; record.calls++;record.totalMs+=elapsed;if(elapsed>record.maxMs) (record as any).maxArgs=args.slice(0,3).map(arg=>typeof arg==='object'?'simulation':arg);record.maxMs=Math.max(record.maxMs,elapsed); return result; }; }
+    for (const method of ['makeChunk','compile','rebuild'] as const) { const original = world[method].bind(world); Object.defineProperty(world, method, {value: (...args: unknown[]) => { const start=performance.now(); const result=Reflect.apply(original, world, args); const elapsed=performance.now()-start; const record=operations[method]??={calls:0,totalMs:0,maxMs:0}; record.calls++;record.totalMs+=elapsed;if(elapsed>record.maxMs) Object.assign(record,{maxArgs:args.slice(0,3).map(arg=>typeof arg==='object'?'simulation':arg)});record.maxMs=Math.max(record.maxMs,elapsed); return result; }}); }
     const times = [];
     for (let frame = 0; frame < 360; frame++) {
         sim.time = sim.motionTime = frame / 60; sim.z = frame * sim.speed / 60;
