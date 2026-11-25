@@ -203,3 +203,10 @@
 @keyframes sector-sweep {from{transform:translateX(-110%)}to{transform:translateX(110%)}}
 @keyframes sector-approach {0%,32%{border-color:var(--sector-color);box-shadow:0 3px 18px color-mix(in srgb,var(--sector-color) 25%,transparent)}}
 .reduced-motion .f6-topbar .region-entry,.reduced-motion .f6-topbar .region-entry::after{animation:none}
+.maneuver-strip{position:absolute;left:2.8%;bottom:clamp(125px,19vh,230px);width:136px;padding:7px 10px;color:#e5f4e9;background:linear-gradient(110deg,#102a35ee,#142f3ad4);border-left:2px solid #80d8c4;border-radius:2px 6px 6px 2px;font:600 11px/1.4 sans-serif;pointer-events:none;font-variant-numeric:tabular-nums}
+.maneuver-strip>div{display:flex;align-items:center;gap:5px}.maneuver-strip>div>b{margin-left:auto}.maneuver-strip>i{display:block;height:3px;margin:3px 0 5px;background:#697e814d}.maneuver-strip>i>b{display:block;height:100%;background:#ffc773}.maneuver-strip kbd{color:#9ae1d0}.maneuver-strip strong{display:block;color:#ffcc82}.maneuver-strip.locked,.maneuver-strip.warning{border-color:#ff947a}
+@media(pointer:coarse) and (orientation:landscape){.maneuver-strip{left:50%;top:auto;bottom:4px;transform:translateX(-50%);display:flex;align-items:center;width:auto;gap:8px;padding:4px 8px;font-size:10px}.maneuver-strip>i{display:none}.maneuver-strip strong{max-width:95px}}
+.flight-deck .maneuver-strip {width:150px;white-space:nowrap}
+.flight-deck .maneuver-strip kbd {display:inline-grid;place-items:center;min-width:18px;width:18px;height:16px;padding:0;border:1px solid #84b4bc7a;border-radius:3px;font:600 10px/1 monospace}
+.maneuver-strip.warning strong,.maneuver-strip.locked strong {white-space:normal}
+@media(pointer:coarse) and (orientation:landscape){.flight-deck .maneuver-strip{width:auto}}

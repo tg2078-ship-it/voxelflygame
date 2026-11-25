@@ -29,6 +29,7 @@ function pickup(id: number, kind: Pickup['kind']): Pickup {
 }
 
 const lethal = flight();
+lethal.rescueUsed = true;
 lethal.hp = 1;
 lethal.obstacles = [obstacle(1)];
 lethal.pickups = [pickup(1, 'repair'), pickup(2, 'coin'), pickup(3, 'ring')];
@@ -60,7 +61,7 @@ check(!obstacleContact(cleanObstacle, fixtureMeta, undefined, { x: 0, y: 24, z: 
 check(!!obstacleContact(cleanObstacle, fixtureMeta, undefined, { x: 0, y: 24, z: 100 }, { x: 0, y: 24, z: 101 }, { ...radius, x: radius.x + 1.8, y: radius.y + 1.8 }), 'Positive control crosses the close-call envelope');
 clean.step(1 / 60, controls());
 equal(clean.metrics.near, 1, 'A genuinely clear close call still pays');
-equal(clean.bonus, 120, 'A genuinely clear close call retains its base reward');
+equal(clean.bonus, 240, 'A genuinely clear close call retains its base reward');
 clean.step(1 / 60, controls());
 equal(clean.metrics.near, 1, 'The same physical close call pays only once');
 
@@ -76,13 +77,14 @@ for (const shield of [false, true]) for (const reverse of [false, true]) {
     const second = obstacleContact(minor, fixtureMeta, undefined, a, b, r);
     check(first && second && first.t < second.t, 'Swept contacts establish a real earlier fatal impact');
     sim.obstacles = reverse ? [major, minor] : [minor, major];
+    sim.rescueUsed = true;
     if (shield) sim.effects.set('shield', 10);
     sim.step(1 / 60, controls());
-    check(sim.failed, 'The earlier major contact ends the flight');
+    equal(sim.failed, !shield, 'First major contact consumes a shield or ends a spent-rescue run');
     equal(sim.metrics.damage, 0, 'A later minor contact cannot apply damage before an earlier major impact');
     equal(sim.metrics.minorHits, 0, 'A later minor contact cannot count after the earlier fatal impact');
-    equal(sim.metrics.shieldBlocks, 0, 'A later contact cannot spend shield protection after a fatal impact');
-    equal(sim.effects.has('shield'), shield, 'Structure collision retains the existing shield policy regardless of obstacle array order');
+    equal(sim.metrics.shieldBlocks, Number(shield), 'Only the earlier structure can consume shield protection');
+    equal(sim.effects.has('shield'), false, 'Structure protection resolves regardless of obstacle array order');
     check(Math.abs(sim.impact.z - 100.1) < .0001, 'Reported crash location is the first actual swept contact');
 }
 

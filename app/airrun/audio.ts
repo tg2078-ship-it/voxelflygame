@@ -143,6 +143,7 @@ export class GameAudio {
         if (kind === 'coin')
             this.lastCoin = now;
         const pitches: Record<string, number[]> = {
+            overheat:[330,196,110], 'perfect-roll':[523,784,1175,1568], dodge:[262,392], rescue:[165,220,440], 'terrain-warning':[698,698],
             'record-pass': [523, 659, 784, 1046], 'formation-contact': [440, 554, 740], 'formation-lock': [740, 988],
             'formation-sent': [554, 740, 988, 1109], 'formation-ace': [554, 740, 880, 1109, 1480],
             'formation-lost': [554, 415], 'rush-ready': [659, 988, 1318], rush: [196, 392, 784, 1568], coin: [1046, 1568], crystal: [1318, 1975], ring: [784, 1175, 1568], repair: [523, 659, 784], shield: [440, 880], risk: [330, 660], theme: [523, 784, 1046], discover: [659, 880, 1318], 'sortie-complete': [392, 523, 659, 784, 1046, 1318, 1568], 'sortie-stage': [523, 784, 1046], choice: [784, 1175, 1568], 'operation-complete': [392, 587, 784, 988, 1175, 1568], precision: [1175, 1568, 2349], 'flow-bank': [659, 988, 1318, 1975], 'e-start': [110, 220, 440, 880], 'e-end': [880, 659, 523], damage: [80, 51], crash: [47, 32], pass: [587], ui: [740, 988], approval: [523, 659, 784, 1046], reward: [523, 659, 784, 1046, 1318, 1568], upgrade: [392, 523, 659, 784, 1046], notice: [] };

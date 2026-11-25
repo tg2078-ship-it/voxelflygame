@@ -64,13 +64,27 @@ export type ReplaySample = [time: number, x: number, y: number, z: number, roll:
 export interface FlightReplay { version: 1; samples: ReplaySample[] }
 export class ReplayRecorder {
     private samples: ReplaySample[] = [];
+    private interval=.5;
     record(time: number, position: Vec, roll: number) {
-        if (this.samples.length >= 400 || ![time, position.x, position.y, position.z, roll].every(Number.isFinite)) return;
+        if (![time, position.x, position.y, position.z, roll].every(Number.isFinite)) return;
         const previous = this.samples.at(-1);
-        if (previous && (time - previous[0] < .499 || position.z < previous[3])) return;
+        if (previous && (time - previous[0] < this.interval-.001 || position.z < previous[3])) return;
+        if (this.samples.length===400) {
+            this.samples=this.samples.filter((_, i)=>i%2===0);
+            this.interval*=2;
+        }
         this.samples.push([time, position.x, position.y, position.z, roll].map(n => Math.round(n * 100) / 100) as ReplaySample);
     }
-    result(): FlightReplay { return { version: 1, samples: this.samples.map(s => [...s]) }; }
+    result(time?: number, position?: Vec, roll = 0): FlightReplay {
+        const samples: ReplaySample[] = this.samples.map(s => [...s]);
+        const last = samples.at(-1);
+        if (time !== undefined && position && last && time > last[0] + .005 && position.z >= last[3]) {
+            // Keep the finish line even after long recordings increase the sampling interval.
+            if (samples.length === 400) samples.pop();
+            samples.push([time, position.x, position.y, position.z, roll].map(n => Math.round(n * 100) / 100) as ReplaySample);
+        }
+        return { version: 1, samples };
+    }
 }
 export function validReplay(value: unknown, duration: number, distance: number): value is FlightReplay {
     if (!value || typeof value !== 'object') return false;

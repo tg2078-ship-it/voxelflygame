@@ -20,7 +20,7 @@ eq(QUESTS.length, 64, '64 quest conditions');
 eq(CAREER.length, 20, '20 career missions');
 eq(ACHIEVEMENTS.length, 40, '40 achievement tiers');
 eq(baseSpeed(0)*stats(AIRCRAFT[0],1).speed, 46, 'standard starter cruise');
-check(baseSpeed(100000) > baseSpeed(50000), 'unbounded base speed');
+check(baseSpeed(100000) > baseSpeed(50000), 'long-range cruise approaches its asymptote monotonically');
 const max = stats(AIRCRAFT[0], 20);
 eq(max.hp, 262, 'level20 durability');
 check(Math.abs(max.handling - 2.045) < 1e-10, 'level20 handling +104.5%');

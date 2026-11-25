@@ -119,6 +119,7 @@ export interface Metrics {
     time: number;
 }
 export interface RunResult {
+    trace?: import('./rematch').FlightTrace;
     relayClears?: number;
     bestRingStreak?: number;
     formation?: import('./formation').FormationLog;
@@ -184,6 +185,7 @@ export interface Best {
     combo: number;
 }
 export interface Save {
+    personalFlights?: Partial<Record<FlightMode, import('./rematch').FlightTrace>>;
     dailyRecords?: Record<string, DailyRouteRecord>;
     schema: 3;
     balanceEdition?: number;
@@ -219,6 +221,8 @@ export interface Save {
     planeDistance: Record<string, number>;
 }
 export interface Input {
+    bank?: boolean;
+    dodge?: boolean;
     x: number;
     y: number;
     boost: boolean;
@@ -240,6 +244,7 @@ export interface Weather {
     snow: boolean;
 }
 export interface HUD {
+    handling?: {heat:number;lock:number;dodge:number;warning:boolean;rescue:boolean};
     ringPass?: { offset: number; award: number; streak: number; speedBonus?: number };
     coach?: import('./flight-school').CoachHUD;
     module?: import('./airframe-systems').ModuleHUD;

@@ -54,7 +54,7 @@ for (const ko of [true, false]) {
     check(briefing.includes('role="dialog"') && briefing.includes('aria-modal="true"'), 'Optional tutorial has an accessible modal identity');
     check(briefing.includes('W A S D') && briefing.includes('Shift') && briefing.includes('Space') && briefing.includes('<kbd>F</kbd>'), 'The guide uses actual steering, speed and banking controls');
     check(!briefing.includes('Control') && !briefing.includes('Ctrl'), 'The tutorial cannot teach an unsupported brake binding');
-    check(briefing.includes(ko ? '내구도·방패로 버틸 수 없습니다' : 'cannot absorb large-structure impacts'), 'The guide warns about lethal large structures before flight');
+    check(briefing.includes(ko ? '방패가 없으면 한 번만' : 'can save one lethal hit'), 'The guide warns about lethal large structures before flight');
     check(briefing.includes(ko ? '전체 조작법' : 'ALL CONTROLS') && briefing.includes(ko ? '준비됐어요 · 출격' : 'READY. TAKE FLIGHT.'), 'Guide buttons have real close/controls/departure purposes');
 }
 const gearBriefing = renderToStaticMarkup(<PilotBriefing ko control="gear" onClose={() => {}} onControls={() => {}} onLaunch={() => {}} launchDisabled/>);

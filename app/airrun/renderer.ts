@@ -1,3 +1,5 @@
+import {sameFlight} from './rematch';
+import {DODGE} from './tuning';
 import { CourseBeacons } from './course-beacons';
 import { personalRival } from './mastery';
 import { projectGuidance, projectRingSight } from './guidance-projection';
@@ -264,6 +266,8 @@ export class AirrunRenderer {
                 input.transmit = true;
                 return;
             }
+            if (code === 'KeyC' && !e.repeat && s.phase === 'flying') { e.preventDefault(); input.dodge = true; return; }
+            if (code === 'KeyR' && !e.repeat && s.phase === 'results') { e.preventDefault(); void this.begin(true); return; }
             if (code === 'KeyQ' && !e.repeat && s.phase === 'flying' && !this.sim?.eRemaining) { e.preventDefault(); input.rush = true; return; }
             if (code === 'KeyF' && !e.repeat && s.phase === 'flying') {
                 e.preventDefault(); s.bankFlow(); return;
@@ -477,10 +481,15 @@ export class AirrunRenderer {
         this.takeoffCamera.copy(this.camera.position);
         this.camera.clearViewOffset();
         const plane = s.save.selected, level = s.runLevel ?? s.save.levels[plane] ?? 1;
+        const best = s.save.personalFlights?.[s.flightMode];
+        const rematch = s.runLevel !== null && best && sameFlight(best,{mode:s.flightMode,seed:s.seed,plane,level,difficulty:s.flightMode==='daily'?'standard':s.save.settings.difficulty ?? 'standard'}) ? best : undefined;
         const rival = s.flightMode === 'sortie' ? personalRival(s.save.runs, { seed: s.seed, plane, level, difficulty: s.save.settings.difficulty ?? 'standard', contractId: s.contractId }) : undefined;
+        const previous = this.sim?.config;
+        const reuseWorld = s.runLevel !== null && previous?.seed === s.seed && previous.mode === s.flightMode
+            && previous.plane === plane && previous.level === level && previous.settings.quality === s.save.settings.quality;
         this.sim = new FlightSimulation({
             personalDistances: { manual: s.save.bests.all?.distance ?? 0, hyper: s.save.bests.allE?.distance ?? 0 },
-            coach:s.flightMode==='endless' && (s.save.settings.flightCoach==='on' || (s.save.settings.flightCoach===undefined && s.save.runs.length===0)), id: s.runId, seed: s.seed, mode: s.flightMode, dailyKey: s.dailyKey ?? undefined, plane, level, contractId: s.contractId, rival: rival?.replay ? { replay: rival.replay, score: rival.score } : undefined, practice: null, settings: s.save.settings, catalog: this.library.byId, proxies: this.library.proxies, onEvent: (kind, p) => {
+            coach:s.flightMode==='endless' && (s.save.settings.flightCoach==='on' || (s.save.settings.flightCoach===undefined && s.save.runs.length===0)), id: s.runId, seed: s.seed, mode: s.flightMode, dailyKey: s.dailyKey ?? undefined, plane, level, contractId: s.contractId, rival: rematch ? {replay:rematch.replay,score:rematch.score} : rival?.replay ? { replay: rival.replay, score: rival.score } : undefined, practice: null, settings: s.save.settings, catalog: this.library.byId, proxies: this.library.proxies, onEvent: (kind, p) => {
                 if (kind === 'e-end') {
                     this.held.clear();
                     releaseInput();
@@ -492,9 +501,12 @@ export class AirrunRenderer {
         this.previousPose = this.renderPose = readFlightPose(this.sim);
         this.flightCameraReady = false;
         this.flightOffset = -takeoffDistance(DEPARTURE.duration, this.sim.speed);
-        this.world?.dispose();
+        if (reuseWorld && this.world) this.world.rewind();
+        else {
+            this.world?.dispose();
+            this.world = new WorldView(this.scene, this.library);
+        }
         this.fx?.dispose();
-        this.world = new WorldView(this.scene, this.library);
         this.sim.config.isObstacleVisible = obstacle => this.world?.canCollide(obstacle) ?? false;
         this.fx = new FlightFX(this.scene, this.library.byId);
         this.world.update(this.sim, 0, s.save.settings.quality);
@@ -502,7 +514,7 @@ export class AirrunRenderer {
         this.lastScreenshotKey = '';
         this.photoTimer = 0;
         useAirrun.setState({ hud: this.sim.hud(input) });
-        void this.prepareFlight(false);
+        void this.prepareFlight(false, reuseWorld);
     }
     cancelHyper() {
         this.hyperGeneration++; this.hyperPreparing = false; this.trickPlanner?.cancel();
@@ -524,7 +536,7 @@ export class AirrunRenderer {
         catch { if (!this.disposed && generation === this.hyperGeneration && this.sim === sim) sim.notify('하이퍼 준비 실패 · E로 다시 시도', 'HYPER PREPARATION FAILED · PRESS E TO RETRY', 'warning'); }
         finally { if (generation === this.hyperGeneration) { this.trickPlanner.cancel(); this.hyperPreparing = false; useAirrun.setState({ hud: { ...sim.hud(input), ePreparing: false } }); } }
     }
-    async prepareFlight(resume = false) {
+    async prepareFlight(resume = false, reuseWorld = false) {
         if (!this.sim || this.preparing)
             return;
         const generation = ++this.warmGeneration, sim = this.sim;
@@ -557,11 +569,11 @@ export class AirrunRenderer {
             if (this.disposed || generation !== this.warmGeneration || this.sim !== sim || useAirrun.getState().phase !== 'preflight')
                 return;
             useAirrun.setState({ progress: .78, loadingLabel: useAirrun.getState().save.settings.language === 'ko' ? '풍경과 비행 경로 정리' : 'Preparing the horizon' });
-            await this.world?.prepare(sim, useAirrun.getState().save.settings.quality);
-            await this.warmFlightGPU(generation);
+            await this.world?.prepare(sim, useAirrun.getState().save.settings.quality, reuseWorld);
+            if (!reuseWorld) await this.warmFlightGPU(generation);
             if (this.disposed || generation !== this.warmGeneration || this.sim !== sim || useAirrun.getState().phase !== 'preflight') return;
             this.accumulator = 0;
-            const readyPhase = resume || useAirrun.getState().save.settings.skipTakeoff ? 'flying' : 'takeoff';
+            const readyPhase = resume || useAirrun.getState().runLevel !== null || useAirrun.getState().save.settings.skipTakeoff ? 'flying' : 'takeoff';
             useAirrun.setState({ phase: document.hidden || this.pauseAfterPreparation ? 'paused' : readyPhase, pausedPhase: readyPhase, progress: 1, modelError: '' });
         }
         catch (error) {
@@ -756,7 +768,7 @@ export class AirrunRenderer {
         const live = ['flying', 'takeoff', 'crashing'].includes(s.phase), sim = this.sim;
         if (sim && (s.bankRequest ?? 0) !== (this.lastBankRequest ?? 0)) {
             this.lastBankRequest = s.bankRequest;
-            if (s.phase === 'flying') sim.bankFlow();
+            if (s.phase === 'flying') input.bank=true;
         }
         if (sim && s.eRequest !== this.lastERequest) {
             this.lastERequest = s.eRequest;
@@ -771,7 +783,7 @@ export class AirrunRenderer {
         if (sim)
             sim.config.settings = s.save.settings;
         if (sim && s.phase === 'flying' && !this.hyperPreparing) {
-            this.accumulator += dt;
+            this.accumulator += dt * (!s.save.settings.reducedMotion && sim.time < sim.slowUntil ? DODGE.timeScale : 1);
             while (this.accumulator >= 1 / 60) {
                 this.previousPose = readFlightPose(sim);
                 sim.step(1 / 60, input);
@@ -990,7 +1002,7 @@ export class AirrunRenderer {
     flightCamera(sim: FlightSimulation, dt: number, phase: Phase) {
         const flightOffset = this.flightOffset, pose = this.renderPose ?? readFlightPose(sim);
         this.planeRoot.position.set(pose.x, pose.y, flightOffset);
-        this.planeRoot.rotation.set(pose.pitch + pose.trickPitch, pose.yaw + pose.trickYaw, pose.roll + pose.trickRoll, 'YXZ');
+        this.planeRoot.rotation.set(pose.pitch + pose.trickPitch, pose.yaw + pose.trickYaw, pose.roll + pose.trickRoll + (sim.config.settings.reducedMotion ? 0 : sim.rollOffset), 'YXZ');
         const frame = flightFraming(sim.plane.span, sim.plane.length);
         const offset = new T.Vector3(0, frame.height, frame.distance + sim.boost * 1.3), look = new T.Vector3(pose.x + sim.vx * .14, pose.y - 1.2 + sim.vy * .12, -29 + flightOffset);
         const reduced = useAirrun.getState().save.settings.reducedMotion;

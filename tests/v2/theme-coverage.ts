@@ -1,3 +1,4 @@
+import { POINTS } from '../../app/airrun/tuning';
 import assert from 'node:assert/strict';
 import * as T from 'three';
 import { catalog, createSim } from './fixtures';
@@ -92,8 +93,8 @@ await Promise.all(stream.pending.values()); stream.dispose();
 assert(held.size === 0, 'curated streaming releases every retained model'); checks++;
 const rewards = createSim(), deck = themeCollection('coast', catalog);
 for (const meta of deck.slice(0, 8)) rewards.observeModel(meta.id);
-assert(rewards.bonus === 600 && rewards.metrics.bonus === 600, 'eight new visible theme models grant a real survey score reward'); checks++;
+assert(rewards.bonus === POINTS.survey && rewards.metrics.bonus === POINTS.survey, 'eight new visible theme models grant a real survey score reward'); checks++;
 for (const meta of deck.slice(0, 8)) rewards.observeModel(meta.id);
-assert.equal(rewards.bonus, 600, 're-observing a model cannot farm the survey reward'); checks++;
+assert.equal(rewards.bonus, POINTS.survey, 're-observing a model cannot farm the survey reward'); checks++;
 assert(AIRCRAFT.every(plane => plane.span * .34 < AIRSPACE.softEdge), 'all source aircraft retain room to steer'); checks++;
 console.log(JSON.stringify({ checks, cases, method: 'CPU generation, source bounds and chase-camera frustum; no GPU visibility or human enjoyment claim', gpuVerified: false, status: 'passed' }));

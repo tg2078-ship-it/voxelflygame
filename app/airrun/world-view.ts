@@ -516,12 +516,27 @@ export class WorldView {
         }
         this.syncPresented(sim);
     }
-    async prepare(sim: FlightSimulation, quality: Settings['quality']) {
+    rewind() {
+        // The same seed can reuse geometry. Visibility, flight clocks and approach clearance belong to the new run.
+        this.generation++;
+        this.wanted.clear();
+        this.pending.clear();
+        this.presented.clear();
+        this.collisionApproach.clear();
+        this.advertSlots.clear();
+        this.lastUsed.clear();
+        this.lastTrim = 0;
+        this.stream.lastUpdate = this.lastBuild = this.lastBuildClock = -Infinity;
+        this.dirty = true;
+    }
+    async prepare(sim: FlightSimulation, quality: Settings['quality'], warm = false) {
         // Downloads are not readiness: settle native clones and static batches before flight.
         this.preparingScene = true;
         for (let pass = 0; pass < 5 && !this.disposed; pass++) {
             this.dirty = true; this.lastBuildClock = -Infinity; this.update(sim, 0, quality);
-            await Promise.allSettled([...this.catalog.pending.values(), ...this.catalog.animationPending.values(), ...this.catalog.proxyPending.values(), ...this.terrainPending, ...this.compilePending.values()]);
+            const pending = [...this.catalog.pending.values(), ...this.catalog.animationPending.values(), ...this.catalog.proxyPending.values(), ...this.terrainPending, ...this.compilePending.values()];
+            if (warm && !pending.length && !this.pending.size && !this.deferredCompile) break;
+            await Promise.allSettled(pending);
             await new Promise(resolve => setTimeout(resolve, 0));
         }
         if (!this.disposed) { this.lastBuildClock = -Infinity; this.dirty = true; this.update(sim, 0, quality); }

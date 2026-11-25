@@ -1,3 +1,5 @@
+import {validTrace} from './rematch';
+import { flightReward } from './tuning';
 import { create } from 'zustand';
 import { CONTRACTS, contractTargets, validContract, validReplay, type ContractId } from './mastery';
 import { AIRCRAFT, DEFAULT_SETTINGS, freshSave, emptyMetrics, stats, baseSpeed, upgradeCost, SKINS, THEMES } from './data';
@@ -12,7 +14,7 @@ import { validDebrief } from './adventure';
 import { DIFFICULTIES } from './encounter-director';
 import { sortieBestKey, validSortieResult } from './sortie';
 export const input: Input = { x: 0, y: 0, boost: false, brake: false, gear: 3 };
-export function releaseInput() { input.x = 0; input.y = 0; input.boost = false; input.brake = false; input.gear = 3; input.pendingGear = 0; delete input.rush; delete input.transmit; }
+export function releaseInput() { input.x = 0; input.y = 0; input.boost = false; input.brake = false; input.gear = 3; input.pendingGear = 0; delete input.bank; delete input.dodge; delete input.rush; delete input.transmit; }
 export const EMPTY_HUD: HUD = { distance: 0, score: 0, bonus: 0, coins: 0, combo: 0, maxCombo: 0, speed: 144, hp: 100, maxHp: 100, altitude: 23, time: 0, theme: 'coast', variant: 0, weather: { kind: 'clear', cloud: .15, rain: 0, fog: 0, wind: 0, wet: 0, night: 0, lightning: 0, snow: false }, gear: 3, boost: 0, heat: 0, eUsed: false, eRemaining: 0, effects: [], message: '', messageEn: '', messageUntil: 0, route: '', routeEn: '', fps: 0, draws: 0, triangles: 0, metrics: emptyMetrics() };
 let connection: Promise<IDBDatabase> | null = null;
 function database() {
@@ -135,7 +137,7 @@ export function validateResult(value: unknown): value is RunResult {
     const v = value as unknown as RunResult;
     if (typeof v.id !== 'string' || !v.id.length || v.id.length > 120 || typeof v.date !== 'string' || !Number.isFinite(Date.parse(v.date)) || !AIRCRAFT.some(p => p.id === v.planeId) || !['distance', 'bonus', 'score', 'coins', 'reward', 'maxCombo'].every(k => nonnegative(value[k]) && Number.isInteger(value[k])) || v.score !== v.distance + v.bonus || typeof v.eUsed !== 'boolean' || typeof v.practice !== 'boolean' || typeof v.interrupted !== 'boolean' || typeof v.reason !== 'string' || v.reason.length > 200 || !isObject(v.metrics))
         return false;
-    const expected = v.practice ? 0 : Math.floor(v.distance / (v.legacyReward ? 40 : 30)) + Math.floor(v.bonus / (v.legacyReward ? 150 : 180)) + v.coins;
+    const expected = v.practice ? 0 : (v.courseEdition ?? 0)>=8 ? flightReward(v.distance,v.bonus,v.coins) : Math.floor(v.distance / (v.legacyReward ? 40 : 30)) + Math.floor(v.bonus / (v.legacyReward ? 150 : 180)) + v.coins;
     if (v.reward !== expected)
         return false;
     const m = v.metrics as unknown as Record<string, unknown>;
@@ -146,6 +148,7 @@ export function validateResult(value: unknown): value is RunResult {
         return false;
     if (v.formation !== undefined && (v.mode !== 'endless' || v.practice || !validFormation(v.formation, v.debrief?.manualSeconds ?? 0) ||
         v.formation.points + (v.debrief?.operationBonus ?? 0) + (v.debrief?.precisionBonus ?? 0) + (v.debrief?.flowBonus ?? 0) > v.bonus)) return false;
+    if(v.trace!==undefined && (!validTrace(v.trace) || v.trace.score!==v.score || v.trace.seed!==v.seed || v.trace.distance!==v.distance || v.trace.plane!==v.planeId || v.trace.mode!==v.mode || v.trace.level!==v.level || v.trace.difficulty!==v.difficulty)) return false;
     if (v.bestRingStreak !== undefined && (!Number.isSafeInteger(v.bestRingStreak) || v.bestRingStreak < 0 || v.bestRingStreak > (v.metrics?.rings ?? 0))) return false;
     if (v.rush !== undefined && (!isObject(v.rush) || !Number.isSafeInteger(v.rush.uses) || v.rush.uses < 0 || v.rush.uses > 100000 || !Number.isSafeInteger(v.rush.distance) || v.rush.distance < 0 || v.rush.distance > v.distance)) return false;
     if (v.relayClears !== undefined && (!Number.isSafeInteger(v.relayClears) || v.relayClears < 0 || v.relayClears*3>v.metrics.directionPass || v.relayClears*450>v.bonus)) return false;
@@ -220,6 +223,7 @@ export function parseSave(value: unknown): Save | null {
         if (!isObject(value[key]))
             return null;
     if (input.modelDiscoveries !== undefined && (!Array.isArray(input.modelDiscoveries) || input.modelDiscoveries.length > 1000 || !input.modelDiscoveries.every(id => typeof id === 'string' && /^[a-z0-9_]{1,120}$/.test(id)))) return null;
+    if(input.personalFlights !== undefined && (!isObject(input.personalFlights) || !Object.entries(input.personalFlights).every(([key,t])=>validTrace(t) && key===t.mode && AIRCRAFT.some(p=>p.id===t.plane)))) return null;
     if (input.dailyRecords !== undefined && !validDailyRecords(input.dailyRecords)) return null;
     if (!Object.entries(input.landmarks).every(([key, v]) => /^(real|fiction):[a-z0-9_]+$/.test(key) && isObject(v) && typeof v.date === 'string' && Number.isFinite(Date.parse(v.date)) && Number.isInteger(v.visits) && v.visits >= 1))
         return null;
@@ -270,7 +274,7 @@ export function recoverPilot(raw: unknown): {save: Save; fields: string[]} | nul
         candidate[key] = value;
         return true;
     };
-    for (const key of [...Object.keys(base), 'modelDiscoveries', 'dailyRecords']) {
+    for (const key of [...Object.keys(base), 'modelDiscoveries', 'dailyRecords', 'personalFlights']) {
         if (['schema','balanceEdition','owned','levels','selected','nickname','coins'].includes(key) || raw[key] === undefined) continue;
         const value = raw[key];
         if (keep(key, value)) continue;
@@ -467,12 +471,12 @@ export const useAirrun = create<GameState>((set, get) => ({ phase: 'loading', pa
     setContractId: id => { if (inLobby() && Object.hasOwn(CONTRACTS, id)) set({ contractId: id }); },
     retryRoute: () => {
         const state = get(), r = state.result;
-        if (state.phase !== 'results' || r?.mode !== 'sortie' || r.seed === undefined || r.level === undefined
+        if (state.phase !== 'results' || !r?.mode || r.seed === undefined || r.level === undefined
             || !state.save.owned.includes(r.planeId) || (state.save.levels[r.planeId] ?? 1) < r.level) return;
         mutate(s => ({ ...s, selected: r.planeId, settings: { ...s.settings, difficulty: r.difficulty ?? 'standard' } }));
-        set({ flightMode: 'sortie', contractId: r.contract?.id ?? 'precision' });
+        set({ flightMode: r.mode, contractId: r.contract?.id ?? 'precision', celebration:null });
         get().start();
-        set({ seed: r.seed, runLevel: r.level });
+        set({ seed: r.seed, runLevel: r.level, dailyKey:r.dailyKey ?? null });
     },
     start: () => {
         if (!inLobby())

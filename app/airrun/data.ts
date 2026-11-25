@@ -1,6 +1,7 @@
+import { FLIGHT } from './tuning';
 import type { Aircraft, Theme, Settings, PracticeConfig, Metrics, Save, ThemeId, WeatherKind } from './types';
-export const VERSION = '13.0.0';
-export const COURSE_EDITION = 7;
+export const VERSION = '14.0.0';
+export const COURSE_EDITION = 8;
 export const WORLD_IMAGE_REVISION = 'v13-flightworks';
 export const AIRCRAFT: Aircraft[] = [
     {
@@ -408,7 +409,12 @@ export const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b
 export const mix = (a: number, b: number, t: number) => a + (b - a) * t;
 export const smooth = (t: number) => { t = clamp(t, 0, 1); return t * t * (3 - 2 * t); };
 export const damp = (a: number, b: number, k: number, dt: number) => mix(a, b, 1 - Math.exp(-k * dt));
-export function baseSpeed(d: number) { d = Math.max(0, d); return 40 + 12 * Math.log1p(d / 600) + .0006 * d; }
+export function baseSpeed(distance: number) {
+    const d = Math.max(0, distance);
+    const gain = FLIGHT.growth * Math.log1p(d / FLIGHT.growthDistance) + FLIGHT.distanceGrowth * d;
+    const headroom = FLIGHT.baseLimit - FLIGHT.start;
+    return FLIGHT.start + headroom * Math.tanh(gain / headroom);
+}
 export function stats(p: Aircraft, level: number) {
     const steps = clamp(level, 1, 20) - 1;
     const grade = { C: 0, B: 1, A: 2, S: 3 }[p.grade];

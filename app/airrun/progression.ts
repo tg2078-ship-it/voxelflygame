@@ -1,3 +1,4 @@
+import {sameFlight} from './rematch';
 import { AIRCRAFT, WORLD_IMAGE_REVISION, hash } from './data';
 import type { QuestSpec, Quest, Save, Metrics, RunResult } from './types';
 import { recordDailyRun } from './daily-route';
@@ -124,6 +125,13 @@ export function applyRun(s: Save, r: RunResult): Save {
     if (r.practice || s.settled.includes(r.id))
         return s.checkpoint?.id === r.id ? { ...s, checkpoint: null } : s;
     const next = structuredClone(s);
+    if(r.trace) {
+        const trace=r.trace, old=next.personalFlights?.[trace.mode];
+        if(!old || !sameFlight(old,trace) || trace.score>old.score) next.personalFlights={...next.personalFlights,[trace.mode]:trace};
+        r = { ...r };
+        delete r.trace;
+        delete r.replay;
+    }
     if (r.mode === 'endless' && r.formation && r.formation.transmissions[2] > 0) {
         const finishes = next.skins[r.planeId] ?? [];
         if (!finishes.includes('courier')) next.skins[r.planeId] = [...finishes, 'courier'];

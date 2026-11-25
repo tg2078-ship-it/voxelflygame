@@ -119,7 +119,7 @@ const atRenderRate = (fps: number) => {
     equal(sim.adventure.hud(), beforePause, 'pause and presentation reads cannot advance goals or payouts');
     const result = sim.result();
     check(validateResult(result), 'real scored result remains a valid backwards-compatible save record');
-    check(result.score === result.distance + result.bonus && result.reward === Math.floor(result.distance / 30) + Math.floor(result.bonus / 180) + result.coins, 'existing score and currency formulas remain exact');
+    check(result.score === result.distance + result.bonus && result.reward === Math.floor(result.distance / 36) + Math.floor(result.bonus / 115) + result.coins, 'existing score and currency formulas remain exact');
     return { hud: sim.adventure.hud(), debrief: result.debrief, distance: result.distance, score: result.score, reward: result.reward };
 };
 const sixty = atRenderRate(60);

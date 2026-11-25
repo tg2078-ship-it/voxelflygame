@@ -74,13 +74,13 @@ cloud.drift(116, 20); check(Math.abs(cloud.mesh.position.z - 12) < .0001, 'cloud
 const terrainCounts = Object.values(GRAPHICS).map(profile => { const g = terrainGeometry(0, 'coast', 1, 0, profile.terrainCell); const count = g.getAttribute('position').count; g.dispose(); return count; });
 check(terrainCounts[0] < terrainCounts[1] && terrainCounts[1] < terrainCounts[2], 'graphics settings change terrain density');
 
-const sim = createSim(); sim.obstacles = []; sim.encounters = []; sim.pickups = []; sim.nextStart = 1e9;
+const sim = createSim({mode: 'daily'}); sim.obstacles = []; sim.encounters = []; sim.pickups = []; sim.nextStart = 1e9;
 const control = controls(); control.boost = true;
-for (let frame = 0; frame < 1800; frame++) sim.step(1 / 60, control);
-check(sim.boost > .99 && sim.boostHeat > .99 && sim.hp === sim.maxHp && !sim.failed, 'boost has sustained presentation heat without a cooldown or damage');
+for (let frame = 0; frame < 300; frame++) sim.step(1 / 60, control);
+check(sim.boost > .99 && sim.boostHeat > .7 && sim.hp === sim.maxHp && !sim.failed, 'sustained boost builds heat and exhaust without hull damage before lockout');
 const fx = new FlightFX(scene); fx.update(sim, .1, new T.Group(), [], 'balanced');
 check(fx.exhaust.visible && fx.vapourHistory.length > 0 && fx.rainGeometry.drawRange.count === GRAPHICS.balanced.rainDrops, 'blue boost and quality particle budgets');
-control.boost = false; for (let frame = 0; frame < 300; frame++) sim.step(1 / 60, control);
+control.boost = false; for (let frame = 0; frame < 660; frame++) sim.step(1 / 60, control);
 check(sim.boost < .01 && sim.boostHeat < .01, 'released boost fades to normal output'); fx.dispose();
 for (const sensitivity of [.5, 1, 1.5]) {
     const test = createSim({ settings: { ...DEFAULT_SETTINGS, sensitivity } }); test.obstacles = []; test.encounters = []; test.pickups = []; test.nextStart = 1e9;
@@ -115,4 +115,4 @@ await assert.rejects(library.load('cargo_drone', 1), /503/); await assert.reject
 check(failedRequests === 1 && !library.canRequest('cargo_drone', 1), 'failed downloads have a bounded retry window');
 globalThis.fetch = originalFetch; library.retry('cargo_drone'); await library.load('cargo_drone', 1); check(!library.failures.has('cargo_drone:1'), 'manual retry recovers a failed model');
 check([...library.references.values()].every(n => n === 0), 'inspected models release cache pins'); library.dispose();
-console.log(JSON.stringify({ revisionChecks: checks, aircraftOrbitCases: fitCases, maxRadius, unlimitedBoost: true, settingsValidated: true, gpuVerified: false, status: 'passed' }));
+console.log(JSON.stringify({ revisionChecks: checks, aircraftOrbitCases: fitCases, maxRadius, sustainedBoostEffects: true, settingsValidated: true, gpuVerified: false, status: 'passed' }));

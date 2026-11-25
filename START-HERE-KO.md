@@ -1,4 +1,8 @@
-# VOXEL AIRRUN 8.0.1 — 실행과 GitHub 업로드
+# VOXEL AIRRUN 실행 안내
+
+현재 버전은 GitHub Pages에서 바로 플레이할 수 있습니다. 격납고 하단의 **무한 비행 출격**을 누르세요. Shift는 가속, Space는 감속, C는 회피 롤입니다. [게임 열기](https://tg2078-ship-it.github.io/voxelflygame/) · [14.0 조작과 재도전 안내](docs/validation/risk-flight.ko.md)
+
+## 8.0.1 보관본의 실행과 GitHub 업로드
 
 이 프로젝트는 사용자가 Google Drive로 제공한 `VOXEL-AIRRUN-5.0.1-GitHub-Max.zip`의 소스를 바탕으로 개선한 8.0.1 버전입니다. 원본 사이트는 HTTP 401 응답으로 소스를 확인할 수 없어 제공된 ZIP을 기준으로 작업했습니다. 기준 5.0.1 / 배포 버전 14의 소스 커밋은 `16058542f76d0d1f9b9af277e14db6e5a71ef5a6`입니다. 기존 사이트 연결용 프로젝트 ID는 제거했습니다.
 

@@ -21,7 +21,7 @@ export function FlightDeck({ hud, ko, hyper, onPause, onBank, onRush, onTransmit
     return <div className={'flight-deck flightdeck-six ' + (details ? 'deck-detail ' : 'deck-clean ') + (hud.eRemaining > 0 ? 'hyper-active ' : '') + (sortie ? 'sortie-active ' : '') + (hud.rush?.remaining ? 'rush-active' : '')} style={{ '--sector-color': theme.color, '--engine': hud.boost, '--integrity': integrity } as CSSProperties}>
         <button className="deck-detail-toggle" type="button" aria-pressed={details} onClick={() => setDetails(!details)}>{details ? t('간단히', 'LESS') : t('상세 계기판', 'DETAILS')}</button>
         <FlightGuidance hud={hud} ko={ko}/>{hud.journey && <JourneyRibbon journey={hud.journey} ko={ko}/>}
-        {hud.rush && <RushControl rush={hud.rush} ko={ko} disabled={hud.eRemaining > 0} onActivate={onRush}/>}
+        {hud.rush && <RushControl rush={hud.rush} ko={ko} disabled={hud.eRemaining > 0 || !!hud.handling?.lock} onActivate={onRush}/>}
         <header className="f6-topbar">
             <div className="f6-brand"><button type="button" onClick={onPause} aria-label={t('일시정지', 'Pause')}><Pause size={16}/></button><Plane size={22}/><span>AIRRUN<small>{sortie ? 'SORTIE / 03:00' : `EXPEDITION / ${String(Math.floor(hud.time / 180) + 1).padStart(2, '0')}`} · {(hud.difficulty ?? 'standard').toUpperCase()}</small></span></div>
             {sortie ? <section className={'sortie-flight-progress stage-' + sortie.stage.id + (hud.eRemaining > 0 ? ' clock-held' : '')} aria-label={t('출격 진행', 'Sortie progress')}>
@@ -39,6 +39,12 @@ export function FlightDeck({ hud, ko, hyper, onPause, onBank, onRush, onTransmit
         </div>}
         {hud.formationIncoming !== undefined && <aside className="formation-call"><Plane size={15}/><span>{t('선도기 합류 · 비행운을 따라가세요','LEAD AIRCRAFT INBOUND · FOLLOW ITS TRAIL')}</span><b>{Math.ceil(hud.formationIncoming)}s</b></aside>}
         {hud.relay && !hud.coach && <div title={t('구조물 통로 3연속 +450점 · 모두 정중앙이면 +750점','Clear 3 passages for 450 points, or centre all three for 750')} className={'sector-relay '+(hud.relay.reveal?'won':'')}><span>{hud.relay.reveal?t('릴레이 완주','RELAY CLEAR'):t('항로 릴레이','ROUTE RELAY')}</span><div>{[0,1,2].map(i=><i key={i} className={hud.relay!.reveal || i<hud.relay!.chain?'lit':''}/>)}</div><b>{hud.relay.reveal?'+'+hud.relay.lastAward: hud.relay.chain+'/3'}</b></div>}
+        {hud.handling && <div className={'maneuver-strip '+(hud.handling.lock?'locked':hud.handling.warning?'warning':'')} aria-label={t('엔진 열과 회피 롤','Engine heat and dodge roll')}>
+            <div><Flame size={12}/><span>{hud.handling.lock?t('과열','OVERHEAT'):t('엔진 열','HEAT')}</span><b>{hud.handling.lock?hud.handling.lock.toFixed(1)+'s':Math.round(hud.handling.heat*100)+'%'}</b></div>
+            <i><b style={{width:hud.handling.heat*100+'%'}}/></i>
+            <div><kbd>C</kbd><span>{t('회피 롤','ROLL')}</span><b>{hud.handling.dodge?hud.handling.dodge.toFixed(1)+'s':t('준비','READY')}</b></div>
+            {(hud.handling.rescue || hud.handling.warning) && <strong>{hud.handling.rescue?t('비상 복구 · 회피','RECOVERY · PULL CLEAR'):t('충돌 접근 · 회피','TERRAIN · PULL CLEAR')}</strong>}
+        </div>}
         {hud.ringPass && <aside className="dispatch-ring-pass" role="status">
             <b>{hud.ringPass.streak ? t('정중앙 통과', 'BULLSEYE') : t('링 통과', 'RING CLEAR')}</b>
             <span>{t('중심 오차', 'OFF CENTRE')} {hud.ringPass.offset.toFixed(1)} m</span>
