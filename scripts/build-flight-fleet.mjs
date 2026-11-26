@@ -1,238 +1,283 @@
-// Original low-poly airframes. Coordinates are metres with the nose facing -Z.
-// Static parts are baked per material. Propellers, rotors and flight controls retain pivots.
+// Build purpose-specific equipment and surface-following paint for each playable
+// aircraft. All dimensions are in metres in the native skeleton's rest space.
 import * as T from 'three';
 import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { gzipSync } from 'node:zlib';
+import { fitShell } from './airframe-surface.mjs';
+import { makeRotor } from './airframe-blades.mjs';
 
-const catalog = JSON.parse(await readFile('public/models/catalog.json', 'utf8')).assets;
-const fleet = [
-    // model, configuration, fuselage finish, field markings, half-wing sweep, root chord, tip chord
-    ['dhc2_beaver','float','#eee2b9','#ab352b',.02,.23,.15],
-    ['stearman_model_75','open-biplane','#e6ae2d','#306f96',.01,.22,.17],
-    ['pitts_s2c','racing-biplane','#b92b39','#ffedd0',.08,.24,.15],
-    ['extra_330lx','aerobat','#153e65','#f18836',.11,.25,.10],
-    ['p51d_mustang','warbird','#9caeaa','#9b3726',.07,.27,.11],
-    ['l39_albatros','trainer','#3a6875','#e59a57',.13,.26,.105],
-    ['f16_fighting_falcon','interceptor','#52657c','#d7aa69',.24,.34,.075],
-    ['bush_stol_tundra','bush','#365e4e','#e6b654',.015,.26,.17],
-    ['amphibious_twin_float','twinfloat','#c9dadd','#227e89',.06,.24,.11],
-    ['canard_pusher_scout','canard','#ede3bd','#416a86',.21,.26,.12],
-    ['twin_boom_cargo_scout','twinboom','#566551','#df8c42',.04,.23,.115],
-    ['twin_engine_commuter','commuter','#e2dfce','#345786',.095,.26,.10],
-    ['firefighting_flying_boat','waterbomber','#ebb33c','#bb4936',.05,.23,.12],
-    ['delta_interceptor_jet','delta','#20394c','#8bd6ce',.40,.50,.025],
-    ['forward_swept_test_jet','forward','#ece9dc','#bc4035',-.22,.29,.09],
-    ['autogyro_patrol','gyro','#dfbc50','#343f51',.01,.18,.12],
-    ['coaxial_utility_helicopter','coax','#3d6477','#ffb052',.03,.22,.12],
-    ['rescue_helicopter','rescue','#e76736','#f1db9d',.03,.22,.12],
-    ['sailplane','glider','#e9e9dc','#24747b',.055,.19,.052],
-    ['heavy_transport','transport','#6d776b','#dbbf73',.13,.28,.12],
-    ['tiltrotor_rescue_vtol','tiltrotor','#d5d6c8','#c45932',.025,.24,.14],
+const catalog=JSON.parse(await readFile('public/models/catalog.json','utf8')).assets;
+const designs=[
+    // Hull paint, squadron colour, keyline, pattern, number, half-beam fitting limit, equipment.
+    ['dhc2_beaver','#eee5c9','#ad392d','#312e2d','expedition','27',.092,['mooring','portage','boarding']],
+    ['stearman_model_75','#f7bf39','#204e77','#fbebc7','heritage','75',.105,['radial','sight','bracing']],
+    ['pitts_s2c','#b62739','#fdf1d9','#283947','checker','26',.13,['racing','bracing','sight']],
+    ['extra_330lx','#f3eee1','#245d9c','#eb6734','flash','33',.13,['racing','louvers','fence']],
+    ['p51d_mustang','#b9c3c6','#a63930','#232d38','heritage','51',.11,['stacks','radiator','mirror']],
+    ['l39_albatros','#f0e3c6','#bb5635','#31526a','trainer','39',.135,['scoops','mirror','avionics']],
+    ['f16_fighting_falcon','#708395','#283c52','#f2a94d','sweep','16',.123,['petals','duct','mirror']],
+    ['bush_stol_tundra','#e4dfb8','#346653','#c67433','expedition','08',.105,['portage','boarding','baffles']],
+    ['amphibious_twin_float','#e5e7dc','#247d89','#e69a53','tide','42',.082,['mooring','boarding','radome']],
+    ['canard_pusher_scout','#faf1d9','#276877','#dd7143','flash','09',.092,['camera','avionics','fence']],
+    ['twin_boom_cargo_scout','#bac2a9','#466455','#eca246','freight','24',.103,['freight','boarding','louvers']],
+    ['twin_engine_commuter','#e9e7da','#355b80','#be7850','tide','62',.088,['stairs','radome','avionics']],
+    ['firefighting_flying_boat','#f3c346','#b9382e','#333c45','rescue','28',.079,['waterdoors','intakes','mooring']],
+    ['delta_interceptor_jet','#37505d','#a5d7ce','#ed9f48','sweep','07',.115,['doublejet','scoops','spine']],
+    ['forward_swept_test_jet','#e9ebe1','#a92e3c','#394d63','flash','29',.127,['doublejet','spine','mirror']],
+    ['autogyro_patrol','#f3cb60','#38545b','#c65635','expedition','12',.13,['camera','hoop','boarding']],
+    ['coaxial_utility_helicopter','#e3e4d1','#366b7b','#e2a342','freight','48',.112,['winch','intakes','steprail']],
+    ['rescue_helicopter','#e56635','#ece8ce','#314c5b','rescue','06',.093,['searchlight','winch','steprail']],
+    ['sailplane','#f2f1e8','#247f86','#d7573b','sweep','73',.054,['winglet','probe','avionics']],
+    ['heavy_transport','#b3baab','#52665b','#dfa853','freight','84',.076,['sponsons','freight','baffles']],
+    ['tiltrotor_rescue_vtol','#ece6cb','#c35236','#415865','rescue','52',.089,['searchlight','sponsons','intakes']],
 ];
-globalThis.FileReader = class {
-    readAsArrayBuffer(blob) { blob.arrayBuffer().then(value => { this.result=value; this.onloadend?.(); }); }
-};
-const out = 'public/flight-fleet';
-await mkdir(out,{recursive:true});
-const manifest = {};
-const vector = (x,y,z) => new T.Vector3(x,y,z);
-function makeAirframe(spec, detail, meta) {
-    const [id,kind,base,accent,sweep,chord,tip] = spec;
-    const jet = ['trainer','interceptor','delta','forward'].includes(kind);
-    const rotor = ['gyro','coax','rescue'].includes(kind);
-    const wide = ['transport','commuter','waterbomber','coax','rescue','tiltrotor'].includes(kind);
-    const twin = ['twinboom','commuter','waterbomber','twinfloat','transport','tiltrotor'].includes(kind);
-    const biplane = kind.endsWith('biplane');
-    const root = new T.Group(), rig = new T.Group(), clips = [], animations = [];
-    root.add(rig); rig.name='Airframe';
-    const palette = {};
-    for (const [name,color,metalness,roughness] of [
-        ['paint_main',base,.24,.44],['paint_stripe',accent,.2,.39],['aluminium','#b6c0bf',.62,.38],
-        ['structure','#343f46',.42,.5],['canopy_glass','#49798e',.66,.17],['tyre','#25303a',.08,.86],
-        ['port_light','#f96551',.05,.32],['starboard_light','#8edaaf',.05,.32]
-    ]) palette[name]=new T.MeshStandardMaterial({name,color,metalness,roughness,flatShading:true});
-    function shape(geometry, material, x=0,y=0,z=0, parent=rig) {
-        const mesh=new T.Mesh(geometry,palette[material]);mesh.position.set(x,y,z);
-        parent.add(mesh);return mesh;
-    }
-    function box(x,y,z,w,h,d,material='paint_main',parent=rig) {
-        return shape(new T.BoxGeometry(w,h,d),material,x,y,z,parent);
-    }
-    function strut(a,b,r,material='aluminium') {
-        const v=b.clone().sub(a);
-        const mesh=shape(new T.CylinderGeometry(r,r,v.length(),4),material);
-        mesh.position.copy(a).lerp(b,.5);mesh.quaternion.setFromUnitVectors(vector(0,1,0),v.normalize());
-    }
-    function loft(stations,material,dx=0,dy=0,dz=0) {
-        const pos=[],rings=stations.map(([z,w,h,y])=>Array.from({length:8},(_,i)=>{
-            const angle=(i+.5)*Math.PI/4;
-            return [dx+w*Math.cos(angle),dy+y+h*Math.sin(angle),dz+z];
-        }));
-        const tri=(a,b,c)=>pos.push(...a,...b,...c);
-        for(let j=1;j<rings.length;j++) for(let i=0;i<8;i++){
-            const k=(i+1)%8,a=rings[j-1],b=rings[j];
-            tri(a[i],a[k],b[i]);tri(a[k],b[k],b[i]);
+const glyphs=['111101101101111','010110010010111','111001111100111','111001111001111','101101111001001','111100111001111','111100111101111','111001010010010','111101111101111','111101111001111'];
+const vector=(x,y,z)=>new T.Vector3(x,y,z);
+globalThis.FileReader=class { readAsArrayBuffer(blob){blob.arrayBuffer().then(data=>{this.result=data;this.onloadend?.()});} };
+
+function buildParts(design,surface,fine){
+    const [id,base,accent,keyline,,number,,equipment]=design;
+    const {min,max,size}=surface, [span,height,length]=size;
+    const u=Math.min(1.55,Math.max(.65,length/10)), root=new T.Group();
+    const groups={enamel:[],metal:[],glass:[],ink:[]};
+    const hardware='#58656a', alloy='#b7c0bb', rubber='#28343a';
+    const mat=(name,props)=>new T.MeshStandardMaterial({name,vertexColors:true,...props});
+    const materials={enamel:mat('Equipment enamel',{roughness:.52,metalness:.14}),metal:mat('Machined fittings',{roughness:.43,metalness:.52}),
+        glass:mat('Optical lens',{roughness:.15,metalness:.45}),ink:mat('Aircraft registration',{roughness:.56,metalness:.12,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-2,side:T.DoubleSide})};
+    function add(geometry,color,group,position,rotation){
+        const g=geometry.index?geometry.toNonIndexed():geometry;
+        if(rotation)g.applyQuaternion(rotation);
+        if(position)g.translate(position.x,position.y,position.z);
+        const p=g.getAttribute('position'), rgb=new T.Color(color), values=new Uint8Array(p.count*3);
+        for(let i=0;i<p.count;i++){
+            // All fittings stay within the certified exterior envelope.
+            p.setXYZ(i,T.MathUtils.clamp(p.getX(i),min[0]+.002,max[0]-.002),T.MathUtils.clamp(p.getY(i),min[1]+.002,max[1]-.002),T.MathUtils.clamp(p.getZ(i),min[2]+.002,max[2]-.002));
+            values.set([Math.round(rgb.r*255),Math.round(rgb.g*255),Math.round(rgb.b*255)],i*3);
         }
-        for(let i=1;i<7;i++){tri(rings[0][0],rings[0][i+1],rings[0][i]);const e=rings.at(-1);tri(e[0],e[i],e[i+1]);}
-        const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(pos,3));g.computeVertexNormals();shape(g,material);
+        g.deleteAttribute('uv');g.setAttribute('color',new T.Uint8BufferAttribute(values,3,true));groups[group].push(g);
     }
-    // Constant-thickness, bevelled polygon sections give each wing a distinct planform.
-    function panel(points, y, thick, material) {
-        const outline=new T.Shape(points.map(([x,z])=>new T.Vector2(x,-z)));
-        const g=new T.ExtrudeGeometry(outline,{depth:thick,bevelEnabled:true,bevelSegments:1,steps:1,bevelSize:thick*.22,bevelThickness:thick*.18});
-        g.rotateX(-Math.PI/2);
-        return shape(g,material,0,y,0);
+    function box(p,w,h,d,col,group='metal'){add(new T.BoxGeometry(w*u,h*u,d*u),col,group,p);}
+    function rod(a,b,r,col=alloy,group='metal',r2=r){
+        const axis=b.clone().sub(a);
+        add(new T.CylinderGeometry(r2*u,r*u,axis.length(),fine?10:6),col,group,a.clone().lerp(b,.5),new T.Quaternion().setFromUnitVectors(vector(0,1,0),axis.normalize()));
     }
-    function motion(pivot,name,axis,angle,autoplay,duration=1) {
-        const times=autoplay?[0,duration/4,duration/2,duration*.75,duration]:[0,duration/2,duration];
-        const values=times.flatMap(t=>new T.Quaternion().setFromAxisAngle(axis,autoplay?angle*t/duration:angle*(2*t/duration-1)).toArray());
-        clips.push(new T.AnimationClip(name,duration,[new T.QuaternionKeyframeTrack(pivot.name+'.quaternion',times,values)]));
-        animations.push({name,duration,autoplay,targets:[pivot.name]});
+    const shift=(p,x,y,z)=>vector(p.x+x*u,p.y+y*u,p.z+z*u);
+    function mount(t,frac,sign){
+        const h=surface.hull(t), y=T.MathUtils.lerp(h.bottom,h.top,frac);
+        const x=surface.side.sample(h.z,y) ?? h.width;
+        return vector(sign*x,y,h.z);
     }
-    function pivot(x,y,z,name){const group=new T.Group();group.name=name;group.position.set(x,y,z);rig.add(group);return group;}
-    const w=wide?.122:jet?.085:kind==='glider'?.06:.088;
-    const body=rotor?.32:wide?.29:.21, nose=jet?-.58:-.51;
-    loft([[nose,.013,.014,-.004],[-.40,w*.70,.066,0],[-.25,w,.099,.006],[.04,w,.103,.004],[body,w*.73,.078,0],[.45,w*.30,.040,.026],[.53,.014,.022,.033]],'paint_main');
-    const canopy=wide?.14:jet?.17:.115;
-    loft([[-.35,.016,.015,.064],[-.27,w*.83,.059,.080],[-.17,w*.91,.086,.084],[canopy-.09,w*.8,.067,.079],[canopy,.026,.018,.072]],'canopy_glass');
-    if(detail) {
-        for (const [z,width,top] of [[-.265,.77,.135],[-.165,.86,.160],[canopy-.084,.75,.137]]) {
-            for (const side of [-1,1]) {
-                strut(vector(side*w*width,.099,z),vector(side*w*.36,top,z+.005),.006,'structure');
-                strut(vector(side*w*.36,top,z+.005),vector(0,top+.004,z+.005),.0055,'aluminium');
-            }
+    function hullPod(t,frac,sign,stations,col,group='enamel'){
+        // Cross-sections have a flat inboard flange with stepped outboard shoulders.
+        const p=mount(t,frac,sign), coords=[], rings=[];
+        for(const [dz,rise,radius] of stations){
+            const ring=[];
+            for(let i=0;i<10;i++){const a=2*Math.PI*i/10;ring.push(shift(p,sign*(radius*.52+radius*Math.cos(a)),rise+radius*.84*Math.sin(a),dz));}
+            rings.push(ring);
         }
-        // Cowl vents, inset service panels and wing walks are distinct from the paint masks.
-        for (const side of [-1,1]) {
-            for(let i=0;i<4;i++) box(side*w*.84,.011,-.323+i*.016,.009,.008,.009,'structure');
-            box(side*w*.98,.014,-.05,.007,.007,.042,'aluminium');
-        }
-        for(const side of [-1,1]){
-            box(side*w*.947,-.006,-.07,.007,.019,.49,'paint_stripe');
-            if(wide)for(let i=0;i<(kind==='transport'?9:5);i++)box(side*w*.935,.048,-.12+i*.033,.01,.025,.022,'canopy_glass');
-        }
+        const tri=(a,b,c)=>{for(const v of sign>0?[a,b,c]:[a,c,b])coords.push(...v.toArray());};
+        for(let k=1;k<rings.length;k++)for(let j=0;j<10;j++){const n=(j+1)%10,A=rings[k-1],B=rings[k];tri(A[j],A[n],B[j]);tri(A[n],B[n],B[j]);}
+        for(let i=1;i<9;i++){tri(rings[0][0],rings[0][i+1],rings[0][i]);const end=rings.at(-1);tri(end[0],end[i],end[i+1]);}
+        const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(coords,3));g.computeVertexNormals();add(g,col,group);return p;
     }
-    function wing(side,y,span,rootZ,rootChord,tipChord,wingSweep,mark=true){
-        const rootX=w*.48, make=(frac,front)=>{
-            const x=rootX+frac*(span-rootX), z=rootZ+wingSweep*frac+(front?0:rootChord+(tipChord-rootChord)*frac);
-            return [side*x,z];
-        };
-        panel([make(0,true),make(.68,true),make(1,true),make(1,false),make(0,false)],y,.014,'paint_main');
-        if(mark) {
-            if(detail) {
-                const inner=.24, outer=.31;
-                panel([make(inner,true),make(outer,true),make(outer,false),make(inner,false)],y+.016,.002,'structure');
-                for(let j=0;j<4;j++)box(side*(rootX+inner*(span-rootX)+.012),y+.019,rootZ+wingSweep*inner+.035+j*.028,.018,.002,.004,'aluminium');
-            }
-            panel([make(.78,true),make(.91,true),make(.91,false),make(.78,false)],y+.016,.003,'paint_stripe');
-            if(detail) panel([make(.72,true),make(.74,true),make(.74,false),make(.72,false)],y+.016,.003,'aluminium');
-            box(side*span,y+.014,rootZ+wingSweep+tipChord*.28,.009,.012,.02,side<0?'port_light':'starboard_light');
-            const x=.66*span,z=rootZ+wingSweep*.66+rootChord*.34+tipChord*.66;
-            const flap=pivot(side*x,y+.006,z,'Aileron_'+(side<0?'L':'R'));
-            box(0,0,.012,span*.38,.010,.032,'paint_stripe',flap);
-            motion(flap,'main_wing_aileron_'+(side<0?'left':'right')+'_deflect',vector(1,0,0),.38,false);
-        }
+    function ladder(sign,steps){
+        const p=mount(.43,.22,sign), lower=shift(p,sign*.25,-.32,0);
+        for(const dz of [-.38,.38])rod(shift(p,-sign*.06,.09,dz),shift(lower,0,0,dz),.028);
+        rod(shift(lower,0,0,-.45),shift(lower,0,0,.45),.041,hardware);
+        if(fine)for(let i=0;i<steps;i++)box(shift(lower,0,.022,(i/(steps-1)-.5)*.73),.09,.036,.045,keyline);
     }
-    function fin(x,y,z,size) {
-        const points=[[0,0],[size*.50,size],[size*.91,size*.99],[size*.83,0]];
-        const g=new T.ExtrudeGeometry(new T.Shape(points.map(([u,v])=>new T.Vector2(-u,v))),{depth:.014,bevelEnabled:false});
-        g.rotateY(Math.PI/2);shape(g,'paint_stripe',x,y,z);
-    }
-    const wingY=wide||['float','bush','twinfloat'].includes(kind)?.07:-.026;
-    if(!rotor)for(const side of [-1,1]){
-        wing(side,wingY,.52,jet?-.18:-.15,chord,tip,sweep);
-        if(biplane){wing(side,.195,.56,-.18,chord,tip,sweep,false);for(const x of [.21,.4]){strut(vector(side*x,.0,-.09),vector(side*(x+.028),.19,.018),.008);strut(vector(side*x,.0,.066),vector(side*(x+.028),.19,-.104),.008);}}
-        if(kind==='canard'||kind==='forward') wing(side,.035,.24,-.38,.105,.045,.06,false);
-        if(kind!=='canard')wing(side,kind==='glider'?.16:.05,.205,.315,.133,.065,.07,false);
-    }
-    if(kind==='twinboom')for(const s of [-1,1]){box(s*.215,.022,.22,.054,.06,.54);fin(s*.215,.045,.34,.18);}
-    else if(kind==='delta'||kind==='tiltrotor'){for(const s of [-1,1])fin(s*.106,.054,.30,.18);}
-    else fin(0,.038,.29,kind==='glider'?.22:.19);
-    if (!rotor) {
-        const elevator=pivot(0,kind==='glider'?.16:.056,kind==='canard'?-.285:.455,'Elevator');
-        box(0,0,.011,kind==='canard'?.25:.31,.011,.037,'paint_stripe',elevator);
-        motion(elevator,'elevator_deflect',vector(1,0,0),.43,false);
-    }
-    function rotorHub(x,y,z,r,vertical,count,name) {
-        const hub=pivot(x,y,z,name);
+    function gills(t,sign,count){
+        const p=mount(t,.56,sign);
+        box(shift(p,sign*.025,0,0),.11,.29,.60,rubber);
         for(let i=0;i<count;i++){
-            const angle=i*2*Math.PI/count;
-            const blade=box(Math.cos(angle)*r*.5,vertical?0:Math.sin(angle)*r*.5,vertical?Math.sin(angle)*r*.5:0,r,.013,.028,'structure',hub);
-            if(vertical)blade.rotation.y=-angle;else blade.rotation.z=angle;
-            const tip=box(Math.cos(angle)*r*.90,vertical?.001:Math.sin(angle)*r*.90,vertical?Math.sin(angle)*r*.90:.001,r*.16,.014,.029,'paint_stripe',hub);
-            if(vertical)tip.rotation.y=-angle;else tip.rotation.z=angle;
+            const a=shift(p,sign*.09,-.105,(i/(count-1)-.5)*.48);
+            rod(a,shift(a,0,.21,.047),.019,alloy);
         }
-        motion(hub,name+'_spin',vertical?vector(0,1,0):vector(0,0,1),Math.PI*2,true,vertical?.64:.4);
     }
-    if(jet){
-        for(const side of [-1,1]){
-            loft([[-.23,.035,.031,-.029],[-.13,.061,.058,-.028],[.25,.048,.042,-.02],[.38,.034,.034,-.02]],'structure',side*w*.94);
-            box(side*w*1.44,-.025,-.222,.047,.058,.015,'aluminium');
+    function light(sign,big){
+        const p=mount(.275,.18,sign), tip=shift(p,sign*.23,-.29,-.12),r=big?.205:.14;
+        rod(shift(p,-sign*.09,.08,0),tip,.054,hardware);
+        rod(shift(tip,0,0,.11),shift(tip,0,-.045,-.13),r,hardware,'metal',r*.86);
+        rod(shift(tip,0,-.045,-.13),shift(tip,0,-.052,-.156),r*.78,big?'#fff0ad':'#75b4bf','glass');
+        if(fine)rod(shift(tip,0,-.052,-.156),shift(tip,0,-.054,-.168),r*.37,'#dbf2eb','glass');
+    }
+    function fairing(t,sign,big){
+        hullPod(t,.28,sign,[[-.92,.01,.028],[-.58,.015,.21],[.28,.008,big?.32:.225],[.65,0,.18],[.89,0,.035]],base);
+        const p=mount(t,.28,sign);
+        if(fine)for(const z of [-.42,.12,.44])box(shift(p,sign*.28,.12,z),.055,.05,.065,keyline);
+    }
+    function crown(t){
+        const h=surface.hull(t);return vector(0,surface.top.sample(0,h.z) ?? h.top,h.z);
+    }
+    function antenna(t,slant){
+        const p=crown(t);
+        box(p,.13,.06,.25,hardware);
+        rod(p,shift(p,0,.32,slant),.052,base,'enamel',.022);
+    }
+    function exhaust(sign,multiple){
+        const count=multiple?6:3;
+        for(let i=0;i<count;i++){
+            const p=mount(.215+i*.012,.54,sign), end=shift(p,sign*.17,-.048,.08);
+            rod(shift(p,-sign*.055,0,0),end,.068,'#8c6f59');rod(end,shift(end,sign*.012,-.005,.01),.044,rubber);
         }
-        loft([[.285,.061,.052,0],[.46,.051,.046,.014],[.5,.040,.041,.014]],'structure');
-    }else if(rotor){
-        box(0,.19,-.045,.036,.11,.04,'aluminium');
-        rotorHub(0,.245,-.045,.55,true,kind==='gyro'?2:4,'RotorUpper');
-        if(kind==='coax')rotorHub(0,.207,-.045,.49,true,4,'RotorLower');
-        else if(kind==='rescue'){const tail=pivot(.019,.128,.46,'TailFan');for(let i=0;i<3;i++){const blade=box(0,0,0,.014,.012,.14,'structure',tail);blade.rotation.x=i*Math.PI/3;}motion(tail,'tail_rotor_spin',vector(1,0,0),2*Math.PI,true,.4);}
-        else rotorHub(0,.07,.155,.12,false,3,'Pusher');
-    }else if(twin){
-        for(const s of [-1,1])for(const x of kind==='transport'?[.17,.345]:[kind==='tiltrotor'?.49:.205]){
-            loft([[-.235,.034,.035,wingY],[-.18,.05,.049,wingY],[.07,.038,.033,wingY],[.13,.016,.021,wingY]],'paint_main',s*x);
-            rotorHub(s*x,wingY+(kind==='tiltrotor'?.09:0),-.24,kind==='tiltrotor'?.22:.115,kind==='tiltrotor',kind==='transport'?4:3,'Engine'+(s<0?'L':'R')+Math.round(x*100));
+    }
+    function tailCone(twin){
+        let h;
+        for(let t=.97;t>.63;t-=.012){
+            h=surface.hull(t,true);
+            if(h && h.width>span*.025)break;
         }
-    }else if(kind!=='glider')rotorHub(0,0,kind==='canard'?.30:-.485,.145,false,kind==='warbird'?4:2,'Propeller');
-    if(['float','twinfloat','waterbomber'].includes(kind)){
-        for(const s of [-1,1]){
-            const x=s*(kind==='waterbomber'?.37:.17);
-            loft([[-.39,.007,.013,-.165],[-.28,.040,.039,-.175],[.16,.042,.034,-.175],[.35,.014,.020,-.163]],'aluminium',x);
-            for(const z of [-.19,.12])strut(vector(x*.65,-.04,z+.03),vector(x,-.16,z),.009,'structure');
-        }
-    }else if(rotor&&kind!=='gyro'){
-        for(const s of [-1,1]){box(s*.112,-.147,-.035,.022,.022,.43,'structure');for(const z of [-.14,.105])strut(vector(s*.055,-.055,z),vector(s*.112,-.144,z),.009);}
-    }else {
-        for(const [x,z] of [[-.109,.005],[.109,.005],[0,jet||wide?-.28:.40]]){
-            const r=kind==='bush'?.062:.038;
-            const start=rig.children.length;
-            strut(vector(x*.54,-.055,z),vector(x,-.126,z+.018),.009);
-            const wheel=shape(new T.CylinderGeometry(r,r,.023,detail?12:6),'tyre',x,-.136,z+.019);wheel.rotation.z=Math.PI/2;
-            if(detail){const hub=shape(new T.CylinderGeometry(r*.43,r*.43,.024,8),'aluminium',x,-.136,z+.019);hub.rotation.z=Math.PI/2;}
-            if(jet || kind==='transport' || kind==='warbird' || kind==='commuter') {
-                const parts=rig.children.slice(start), name='Gear'+(x<0?'L':x>0?'R':'N');
-                const leg=pivot(0,0,0,name);
-                for(const part of parts) leg.add(part);
-                const duration=1, track=new T.VectorKeyframeTrack(name+'.scale',[0,duration],[1,1,1,1,.08,1]);
-                clips.push(new T.AnimationClip(name+'_gear_retract',duration,[track]));
-                animations.push({name:name+'_gear_retract',duration,autoplay:false,targets:[name]});
+        if(!h)throw Error('Missing exhaust station on '+id);
+        const y=(h.top+h.bottom)*.5;
+        for(const sign of twin?[-1,1]:[0]){
+            const r=Math.min(height*.1,h.width*(twin?.42:.81)), x=sign*r*.9, end=Math.min(max[2]-.09,h.z+.36*u);
+            const center=vector(x,y,end);
+            rod(vector(x,y,h.z-.45*u),center,r/u*1.05,hardware,'metal',r/u);
+            rod(center,shift(center,0,0,.018),r/u*.75,rubber);
+            const n=fine?16:8;
+            for(let i=0;i<n;i++){
+                const a=i*Math.PI*2/n,p=vector(x+Math.cos(a)*r,y+Math.sin(a)*r,end);
+                rod(vector(x+Math.cos(a)*r*1.08,y+Math.sin(a)*r*1.08,h.z-.20*u),p,.018,alloy);
             }
         }
     }
-    // Combine parts sharing a pivot without baking the animation itself.
-    for(const node of [rig,...rig.children.filter(n=>n.isGroup)]){
-        for(const mat of Object.values(palette)){
-            const meshes=node.children.filter(n=>n.isMesh&&n.material===mat);
-            if(!meshes.length)continue;
-            const pieces=meshes.map(m=>{m.updateMatrix();const g=m.geometry.index?m.geometry.toNonIndexed():m.geometry.clone();g.applyMatrix4(m.matrix);g.deleteAttribute('uv');return g;});
-            const combined=mergeGeometries(pieces,false);node.remove(...meshes);node.add(new T.Mesh(combined,mat));
+    function equipmentKit(code){
+        for(const sign of [-1,1]){
+            const p=mount(.46,.37,sign);
+            switch(code){
+            case 'boarding': case 'stairs': case 'steprail': ladder(sign,code==='stairs'?8:4);break;
+            case 'freight': case 'portage': {
+                const large=code==='freight', t=large?.54:.48;
+                const pc=hullPod(t,.26,sign,[[-.81,0,.045],[-.63,0,.19],[.48,0,.19],[.7,0,.10],[.79,0,.035]],large?base:'#82664c');
+                for(const z of [-.43,.34])box(shift(pc,sign*.235,.015,z),.08,.27,.065,large?hardware:'#4d4336');
+                if(fine)for(const z of [-.40,.37])box(shift(pc,sign*.284,.012,z),.026,.08,.075,alloy);break; }
+            case 'waterdoors':case 'sponsons':fairing(code==='waterdoors'?.55:.47,sign,true);break;
+            case 'baffles':case 'louvers':case 'intakes':gills(code==='intakes'?.5:.26,sign,fine?7:3);break;
+            case 'scoops':case 'duct':case 'radiator':{
+                const pc=hullPod(code==='radiator'?.50:.395,.37,sign,[[-.55,0,.15],[-.40,0,.215],[.20,.01,.16],[.49,0,.03]],accent);
+                rod(shift(pc,sign*.092,0,-.55),shift(pc,sign*.092,0,-.566),.105,rubber);break;}
+            case 'stacks':case 'radial':exhaust(sign,code==='stacks');break;
+            case 'bracing':{
+                const chord=wingLine(.55);if(!chord)break;
+                const top=vector(sign*span*.275,chord.y-.07*u,chord.z), foot=shift(p,0,-.1,.05);
+                rod(foot,top,.019,hardware);if(fine)rod(shift(foot,0,0,.34),shift(top,0,0,-.26),.012,alloy);break;}
+            case 'mooring':{
+                const pc=mount(.34,.20,sign);for(let k=0;k<(fine?5:2);k++){
+                    const center=shift(pc,sign*.035,.0,(k-2)*.049);
+                    const g=new T.TorusGeometry(.132*u,.022*u,5,14);g.rotateY(Math.PI/2);add(g,'#ad8553','enamel',center);
+                }break;}
+            case 'winglet':case 'fence':{
+                const edge=wingLine(code==='winglet'?.94:.78);if(!edge)break;
+                const pt=vector(sign*edge.x,edge.y,edge.z);
+                rod(shift(pt,0,-.02,0),shift(pt,sign*.10,code==='winglet'?.38:.14,.12),.07,accent,'enamel',.025);break;}
+            case 'racing':{const pc=mount(.43,.42,sign);for(let i=0;i<3;i++)box(shift(pc,sign*.04,0,i*.11),.07,.17,.055,keyline);break;}
+            case 'radome':if(sign===1)light(sign,false);break;
+            case 'camera':case 'searchlight':if(sign===-1)light(sign,code==='searchlight');break;
+            case 'winch':if(sign===1){
+                const pc=mount(.44,.73,sign), tip=shift(pc,.34,.015,.08);
+                rod(shift(pc,-.08,0,-.22),tip,.05);rod(shift(pc,-.08,0,.26),tip,.05);
+                rod(shift(tip,0,0,-.17),shift(tip,0,0,.17),.145,accent,'enamel');
+                for(const z of [-.17,.17])rod(shift(tip,0,0,z-.02),shift(tip,0,0,z+.02),.17,hardware);
+                rod(tip,shift(tip,0,-.31,0),.016);box(shift(tip,0,-.32,0),.07,.085,.05,alloy);
+            }break;
+            case 'spine':case 'avionics':case 'probe':case 'hoop':case 'sight':case 'mirror':case 'petals':case 'doublejet':break;
+            default:throw Error('Unknown equipment '+code);
+            }
+        }
+        if(code==='spine'){
+            for(let i=0;i<8;i++){const p=crown(.49+i*.025);box(p,.32-.024*i,.18-i*.014,.38,base,'enamel');}
+        }else if(code==='hoop'||code==='sight'||code==='mirror'){
+            const p=crown(.30),rise=code==='hoop'?.21:.085;
+            for(const s of [-1,1])rod(shift(p,s*.10,0,0),shift(p,s*.065,rise,0),.017,hardware);
+            box(shift(p,0,rise,0),.17,.052,.04,code==='mirror'?alloy:keyline);
+        }else if(code==='avionics'||code==='probe')antenna(code==='probe'?.38:.55,code==='probe'?-.12:.16);
+        else if(code==='petals'||code==='doublejet')tailCone(code==='doublejet');
+    }
+    function wingLine(fraction){
+        const x=span*fraction*.5;
+        let best=[],line=[];
+        for(let i=8;i<=82;i++){
+            const z=min[2]+length*i/100,y=surface.top.sample(x,z);
+            if(y!==undefined)line.push({z,y});else{if(line.length>best.length)best=line;line=[];}
+        }
+        if(line.length>best.length)best=line;
+        if(best.length<4)return null;
+        const mid=best[Math.floor(best.length*.48)];
+        return {x,...mid,chord:best.at(-1).z-best[0].z};
+    }
+    function cockpitWindows() {
+        const eye=surface.eye;
+        if(!eye)return;
+        const cabinWidth=surface.hull(.26).width;
+        const sample=(x,y)=>{
+            const depth=surface.front.sample(x,y);
+            return depth===undefined ? null : vector(x,y,-depth-.038*u);
+        };
+        const low=eye.y-.27*u, high=eye.y+.17*u;
+        for(const sign of [-1,1]){
+            const pane=(s,t)=>{
+                const width=cabinWidth*(.73-.14*t),x=sign*(.035*u+width*s);
+                return sample(x,low+(high-low)*t+s*.065*u);
+            };
+            const pts=[], cols=fine?8:4, rows=fine?5:3;
+            for(let ix=0;ix<cols;ix++)for(let iy=0;iy<rows;iy++){
+                const a=pane(ix/cols,iy/rows), b=pane(ix/cols,(iy+1)/rows);
+                const c=pane((ix+1)/cols,(iy+1)/rows), d=pane((ix+1)/cols,iy/rows);
+                if(!a||!b||!c||!d || Math.max(a.z,b.z,c.z,d.z)-Math.min(a.z,b.z,c.z,d.z)>.6*u)continue;
+                for(const v of sign>0?[a,b,c,a,c,d]:[a,c,b,a,d,c])pts.push(...v.toArray());
+            }
+            if(!pts.length)continue;
+            const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(pts,3));g.computeVertexNormals();
+            add(g,'#284e61','glass');
+            // The rubber seals and wiper follow the same fitted shell as the glass.
+            for(let edge=0;edge<4;edge++)for(let k=0;k<6;k++){
+                const at=f=>edge<2?pane(edge,f):pane(f,edge-2);
+                const a=at(k/6),b=at((k+1)/6);
+                if(a&&b&&a.distanceTo(b)<.65*u)rod(a,b,.022,hardware);
+            }
+            if(fine){const a=pane(.70,.10),b=pane(.24,.48);if(a&&b)rod(shift(a,0,0,-.025),shift(b,0,0,-.025),.016,rubber);}
         }
     }
-    const bounds=new T.Box3().setFromObject(root), size=bounds.getSize(new T.Vector3());
-    rig.scale.set(...meta.bounds.size.map((v,i)=>v/size.toArray()[i]));
-    rig.position.fromArray(meta.bounds.min).sub(bounds.min.multiply(rig.scale));root.updateMatrixWorld(true);
-    return {root,clips,animations};
-}
-for(const spec of fleet){
-    const meta=catalog.find(m=>m.id===spec[0]), id=spec[0],exports={};
-    for(const detail of [true,false]){
-        const {root,clips,animations}=makeAirframe(spec,detail,meta);
-        const file=id+(detail?'':'-far')+'.glb.gz';
-        const glb=await new GLTFExporter().parseAsync(root,{binary:true,animations:clips});
-        await writeFile(out+'/'+file,gzipSync(Buffer.from(glb),{level:9}));
-        if(detail){exports.lod0=exports.lod1='/flight-fleet/'+file;manifest[id]={animations,exports};}
-        else exports.lod2=exports.lod3='/flight-fleet/'+file;
+    if(['rescue_helicopter','coaxial_utility_helicopter','heavy_transport','tiltrotor_rescue_vtol','firefighting_flying_boat','twin_engine_commuter'].includes(id))cockpitWindows();
+    for(const code of equipment)equipmentKit(code);
+
+    // Race numerals are individually projected onto the voxel steps. They stay
+    // on the wing when viewed from the pilot's chase camera.
+    if(!['autogyro_patrol','coaxial_utility_helicopter','rescue_helicopter'].includes(id)){
+        const line=wingLine(.58);
+        if(line){
+            const cell=Math.min(line.chord*.14,span*.022), vertices=[];
+            for(let digit=0;digit<2;digit++)for(let j=0;j<15;j++){
+                if(glyphs[Number(number[digit])][j]!=='1')continue;
+                const x=-line.x+(digit*4+j%3-3.5)*cell,z=line.z+(Math.floor(j/3)-2.5)*cell;
+                const corners=[[x,z],[x,z+cell],[x+cell,z+cell],[x+cell,z]].map(([xx,zz])=>[xx,surface.top.sample(xx,zz),zz]);
+                if(corners.some(p=>p[1]===undefined)||Math.max(...corners.map(p=>p[1]))-Math.min(...corners.map(p=>p[1]))>cell*.8)continue;
+                for(const index of [0,1,2,0,2,3]){const [xx,yy,zz]=corners[index];vertices.push(xx,yy+.011*u,zz);}
+            }
+            if(vertices.length){const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(vertices,3));g.computeVertexNormals();add(g,keyline,'ink');}
+        }
     }
+    for(const [name,parts] of Object.entries(groups)){
+        if(!parts.length)continue;
+        const geometry=mergeGeometries(parts,false), mesh=new T.Mesh(geometry,materials[name]);
+        mesh.name=id+'_'+name;root.add(mesh);
+    }
+    for(const hub of surface.hubs)root.add(makeRotor(hub,id,accent,fine));
+    return root;
 }
-await writeFile('app/airrun/fleet-manifest.json',JSON.stringify(manifest,null,1)+'\n');
-console.log('Built 21 original airframes at two detail levels.');
+
+const directory='public/flight-fleet';await mkdir(directory,{recursive:true});const manifest={};
+for(const spec of designs){
+    const [id,body,accent,trim,pattern,number,beam,kits]=spec;
+    const meta=catalog.find(m=>m.id===id), surface=await fitShell(meta,beam);
+    for(const fine of [true,false]){
+        const scene=buildParts(spec,surface,fine);
+        const glb=await new GLTFExporter().parseAsync(scene,{binary:true});
+        await writeFile(directory+'/'+id+(fine?'':'-far')+'.glb.gz',gzipSync(Buffer.from(glb),{level:9}));
+    }
+    manifest[id]={body,accent,trim,pattern,number,kits};
+    console.log(id,kits.join(', '));
+}
+await writeFile('app/airrun/fleet-manifest.json',JSON.stringify(manifest,null,2)+'\n');

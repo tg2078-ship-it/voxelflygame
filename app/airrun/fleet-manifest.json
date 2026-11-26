@@ -1,1028 +1,254 @@
 {
- "dhc2_beaver": {
-  "animations": [
-   {
-    "name": "main_wing_aileron_left_deflect",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "Aileron_L"
+  "dhc2_beaver": {
+    "body": "#eee5c9",
+    "accent": "#ad392d",
+    "trim": "#312e2d",
+    "pattern": "expedition",
+    "number": "27",
+    "kits": [
+      "mooring",
+      "portage",
+      "boarding"
     ]
-   },
-   {
-    "name": "main_wing_aileron_right_deflect",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "Aileron_R"
+  },
+  "stearman_model_75": {
+    "body": "#f7bf39",
+    "accent": "#204e77",
+    "trim": "#fbebc7",
+    "pattern": "heritage",
+    "number": "75",
+    "kits": [
+      "radial",
+      "sight",
+      "bracing"
     ]
-   },
-   {
-    "name": "elevator_deflect",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "Elevator"
+  },
+  "pitts_s2c": {
+    "body": "#b62739",
+    "accent": "#fdf1d9",
+    "trim": "#283947",
+    "pattern": "checker",
+    "number": "26",
+    "kits": [
+      "racing",
+      "bracing",
+      "sight"
     ]
-   },
-   {
-    "name": "Propeller_spin",
-    "duration": 0.4,
-    "autoplay": true,
-    "targets": [
-     "Propeller"
+  },
+  "extra_330lx": {
+    "body": "#f3eee1",
+    "accent": "#245d9c",
+    "trim": "#eb6734",
+    "pattern": "flash",
+    "number": "33",
+    "kits": [
+      "racing",
+      "louvers",
+      "fence"
     ]
-   }
-  ],
-  "exports": {
-   "lod1": "/flight-fleet/dhc2_beaver.glb.gz",
-   "lod0": "/flight-fleet/dhc2_beaver.glb.gz",
-   "lod3": "/flight-fleet/dhc2_beaver-far.glb.gz",
-   "lod2": "/flight-fleet/dhc2_beaver-far.glb.gz"
+  },
+  "p51d_mustang": {
+    "body": "#b9c3c6",
+    "accent": "#a63930",
+    "trim": "#232d38",
+    "pattern": "heritage",
+    "number": "51",
+    "kits": [
+      "stacks",
+      "radiator",
+      "mirror"
+    ]
+  },
+  "l39_albatros": {
+    "body": "#f0e3c6",
+    "accent": "#bb5635",
+    "trim": "#31526a",
+    "pattern": "trainer",
+    "number": "39",
+    "kits": [
+      "scoops",
+      "mirror",
+      "avionics"
+    ]
+  },
+  "f16_fighting_falcon": {
+    "body": "#708395",
+    "accent": "#283c52",
+    "trim": "#f2a94d",
+    "pattern": "sweep",
+    "number": "16",
+    "kits": [
+      "petals",
+      "duct",
+      "mirror"
+    ]
+  },
+  "bush_stol_tundra": {
+    "body": "#e4dfb8",
+    "accent": "#346653",
+    "trim": "#c67433",
+    "pattern": "expedition",
+    "number": "08",
+    "kits": [
+      "portage",
+      "boarding",
+      "baffles"
+    ]
+  },
+  "amphibious_twin_float": {
+    "body": "#e5e7dc",
+    "accent": "#247d89",
+    "trim": "#e69a53",
+    "pattern": "tide",
+    "number": "42",
+    "kits": [
+      "mooring",
+      "boarding",
+      "radome"
+    ]
+  },
+  "canard_pusher_scout": {
+    "body": "#faf1d9",
+    "accent": "#276877",
+    "trim": "#dd7143",
+    "pattern": "flash",
+    "number": "09",
+    "kits": [
+      "camera",
+      "avionics",
+      "fence"
+    ]
+  },
+  "twin_boom_cargo_scout": {
+    "body": "#bac2a9",
+    "accent": "#466455",
+    "trim": "#eca246",
+    "pattern": "freight",
+    "number": "24",
+    "kits": [
+      "freight",
+      "boarding",
+      "louvers"
+    ]
+  },
+  "twin_engine_commuter": {
+    "body": "#e9e7da",
+    "accent": "#355b80",
+    "trim": "#be7850",
+    "pattern": "tide",
+    "number": "62",
+    "kits": [
+      "stairs",
+      "radome",
+      "avionics"
+    ]
+  },
+  "firefighting_flying_boat": {
+    "body": "#f3c346",
+    "accent": "#b9382e",
+    "trim": "#333c45",
+    "pattern": "rescue",
+    "number": "28",
+    "kits": [
+      "waterdoors",
+      "intakes",
+      "mooring"
+    ]
+  },
+  "delta_interceptor_jet": {
+    "body": "#37505d",
+    "accent": "#a5d7ce",
+    "trim": "#ed9f48",
+    "pattern": "sweep",
+    "number": "07",
+    "kits": [
+      "doublejet",
+      "scoops",
+      "spine"
+    ]
+  },
+  "forward_swept_test_jet": {
+    "body": "#e9ebe1",
+    "accent": "#a92e3c",
+    "trim": "#394d63",
+    "pattern": "flash",
+    "number": "29",
+    "kits": [
+      "doublejet",
+      "spine",
+      "mirror"
+    ]
+  },
+  "autogyro_patrol": {
+    "body": "#f3cb60",
+    "accent": "#38545b",
+    "trim": "#c65635",
+    "pattern": "expedition",
+    "number": "12",
+    "kits": [
+      "camera",
+      "hoop",
+      "boarding"
+    ]
+  },
+  "coaxial_utility_helicopter": {
+    "body": "#e3e4d1",
+    "accent": "#366b7b",
+    "trim": "#e2a342",
+    "pattern": "freight",
+    "number": "48",
+    "kits": [
+      "winch",
+      "intakes",
+      "steprail"
+    ]
+  },
+  "rescue_helicopter": {
+    "body": "#e56635",
+    "accent": "#ece8ce",
+    "trim": "#314c5b",
+    "pattern": "rescue",
+    "number": "06",
+    "kits": [
+      "searchlight",
+      "winch",
+      "steprail"
+    ]
+  },
+  "sailplane": {
+    "body": "#f2f1e8",
+    "accent": "#247f86",
+    "trim": "#d7573b",
+    "pattern": "sweep",
+    "number": "73",
+    "kits": [
+      "winglet",
+      "probe",
+      "avionics"
+    ]
+  },
+  "heavy_transport": {
+    "body": "#b3baab",
+    "accent": "#52665b",
+    "trim": "#dfa853",
+    "pattern": "freight",
+    "number": "84",
+    "kits": [
+      "sponsons",
+      "freight",
+      "baffles"
+    ]
+  },
+  "tiltrotor_rescue_vtol": {
+    "body": "#ece6cb",
+    "accent": "#c35236",
+    "trim": "#415865",
+    "pattern": "rescue",
+    "number": "52",
+    "kits": [
+      "searchlight",
+      "sponsons",
+      "intakes"
+    ]
   }
- },
- "stearman_model_75": {
-  "animations": [
-   {
-    "name": "main_wing_aileron_left_deflect",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "Aileron_L"
-    ]
-   },
-   {
-    "name": "main_wing_aileron_right_deflect",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "Aileron_R"
-    ]
-   },
-   {
-    "name": "elevator_deflect",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "Elevator"
-    ]
-   },
-   {
-    "name": "Propeller_spin",
-    "duration": 0.4,
-    "autoplay": true,
-    "targets": [
-     "Propeller"
-    ]
-   }
-  ],
-  "exports": {
-   "lod1": "/flight-fleet/stearman_model_75.glb.gz",
-   "lod0": "/flight-fleet/stearman_model_75.glb.gz",
-   "lod3": "/flight-fleet/stearman_model_75-far.glb.gz",
-   "lod2": "/flight-fleet/stearman_model_75-far.glb.gz"
-  }
- },
- "pitts_s2c": {
-  "animations": [
-   {
-    "name": "main_wing_aileron_left_deflect",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "Aileron_L"
-    ]
-   },
-   {
-    "name": "main_wing_aileron_right_deflect",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "Aileron_R"
-    ]
-   },
-   {
-    "name": "elevator_deflect",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "Elevator"
-    ]
-   },
-   {
-    "name": "Propeller_spin",
-    "duration": 0.4,
-    "autoplay": true,
-    "targets": [
-     "Propeller"
-    ]
-   }
-  ],
-  "exports": {
-   "lod1": "/flight-fleet/pitts_s2c.glb.gz",
-   "lod0": "/flight-fleet/pitts_s2c.glb.gz",
-   "lod3": "/flight-fleet/pitts_s2c-far.glb.gz",
-   "lod2": "/flight-fleet/pitts_s2c-far.glb.gz"
-  }
- },
- "extra_330lx": {
-  "animations": [
-   {
-    "name": "main_wing_aileron_left_deflect",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "Aileron_L"
-    ]
-   },
-   {
-    "name": "main_wing_aileron_right_deflect",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "Aileron_R"
-    ]
-   },
-   {
-    "name": "elevator_deflect",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "Elevator"
-    ]
-   },
-   {
-    "name": "Propeller_spin",
-    "duration": 0.4,
-    "autoplay": true,
-    "targets": [
-     "Propeller"
-    ]
-   }
-  ],
-  "exports": {
-   "lod1": "/flight-fleet/extra_330lx.glb.gz",
-   "lod0": "/flight-fleet/extra_330lx.glb.gz",
-   "lod3": "/flight-fleet/extra_330lx-far.glb.gz",
-   "lod2": "/flight-fleet/extra_330lx-far.glb.gz"
-  }
- },
- "p51d_mustang": {
-  "animations": [
-   {
-    "name": "main_wing_aileron_left_deflect",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "Aileron_L"
-    ]
-   },
-   {
-    "name": "main_wing_aileron_right_deflect",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "Aileron_R"
-    ]
-   },
-   {
-    "name": "elevator_deflect",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "Elevator"
-    ]
-   },
-   {
-    "name": "Propeller_spin",
-    "duration": 0.4,
-    "autoplay": true,
-    "targets": [
-     "Propeller"
-    ]
-   },
-   {
-    "name": "GearL_gear_retract",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "GearL"
-    ]
-   },
-   {
-    "name": "GearR_gear_retract",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "GearR"
-    ]
-   },
-   {
-    "name": "GearN_gear_retract",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "GearN"
-    ]
-   }
-  ],
-  "exports": {
-   "lod1": "/flight-fleet/p51d_mustang.glb.gz",
-   "lod0": "/flight-fleet/p51d_mustang.glb.gz",
-   "lod3": "/flight-fleet/p51d_mustang-far.glb.gz",
-   "lod2": "/flight-fleet/p51d_mustang-far.glb.gz"
-  }
- },
- "l39_albatros": {
-  "animations": [
-   {
-    "name": "main_wing_aileron_left_deflect",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "Aileron_L"
-    ]
-   },
-   {
-    "name": "main_wing_aileron_right_deflect",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "Aileron_R"
-    ]
-   },
-   {
-    "name": "elevator_deflect",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "Elevator"
-    ]
-   },
-   {
-    "name": "GearL_gear_retract",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "GearL"
-    ]
-   },
-   {
-    "name": "GearR_gear_retract",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "GearR"
-    ]
-   },
-   {
-    "name": "GearN_gear_retract",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "GearN"
-    ]
-   }
-  ],
-  "exports": {
-   "lod1": "/flight-fleet/l39_albatros.glb.gz",
-   "lod0": "/flight-fleet/l39_albatros.glb.gz",
-   "lod3": "/flight-fleet/l39_albatros-far.glb.gz",
-   "lod2": "/flight-fleet/l39_albatros-far.glb.gz"
-  }
- },
- "f16_fighting_falcon": {
-  "animations": [
-   {
-    "name": "main_wing_aileron_left_deflect",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "Aileron_L"
-    ]
-   },
-   {
-    "name": "main_wing_aileron_right_deflect",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "Aileron_R"
-    ]
-   },
-   {
-    "name": "elevator_deflect",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "Elevator"
-    ]
-   },
-   {
-    "name": "GearL_gear_retract",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "GearL"
-    ]
-   },
-   {
-    "name": "GearR_gear_retract",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "GearR"
-    ]
-   },
-   {
-    "name": "GearN_gear_retract",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "GearN"
-    ]
-   }
-  ],
-  "exports": {
-   "lod1": "/flight-fleet/f16_fighting_falcon.glb.gz",
-   "lod0": "/flight-fleet/f16_fighting_falcon.glb.gz",
-   "lod3": "/flight-fleet/f16_fighting_falcon-far.glb.gz",
-   "lod2": "/flight-fleet/f16_fighting_falcon-far.glb.gz"
-  }
- },
- "bush_stol_tundra": {
-  "animations": [
-   {
-    "name": "main_wing_aileron_left_deflect",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "Aileron_L"
-    ]
-   },
-   {
-    "name": "main_wing_aileron_right_deflect",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "Aileron_R"
-    ]
-   },
-   {
-    "name": "elevator_deflect",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "Elevator"
-    ]
-   },
-   {
-    "name": "Propeller_spin",
-    "duration": 0.4,
-    "autoplay": true,
-    "targets": [
-     "Propeller"
-    ]
-   }
-  ],
-  "exports": {
-   "lod1": "/flight-fleet/bush_stol_tundra.glb.gz",
-   "lod0": "/flight-fleet/bush_stol_tundra.glb.gz",
-   "lod3": "/flight-fleet/bush_stol_tundra-far.glb.gz",
-   "lod2": "/flight-fleet/bush_stol_tundra-far.glb.gz"
-  }
- },
- "amphibious_twin_float": {
-  "animations": [
-   {
-    "name": "main_wing_aileron_left_deflect",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "Aileron_L"
-    ]
-   },
-   {
-    "name": "main_wing_aileron_right_deflect",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "Aileron_R"
-    ]
-   },
-   {
-    "name": "elevator_deflect",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "Elevator"
-    ]
-   },
-   {
-    "name": "EngineL21_spin",
-    "duration": 0.4,
-    "autoplay": true,
-    "targets": [
-     "EngineL21"
-    ]
-   },
-   {
-    "name": "EngineR21_spin",
-    "duration": 0.4,
-    "autoplay": true,
-    "targets": [
-     "EngineR21"
-    ]
-   }
-  ],
-  "exports": {
-   "lod1": "/flight-fleet/amphibious_twin_float.glb.gz",
-   "lod0": "/flight-fleet/amphibious_twin_float.glb.gz",
-   "lod3": "/flight-fleet/amphibious_twin_float-far.glb.gz",
-   "lod2": "/flight-fleet/amphibious_twin_float-far.glb.gz"
-  }
- },
- "canard_pusher_scout": {
-  "animations": [
-   {
-    "name": "main_wing_aileron_left_deflect",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "Aileron_L"
-    ]
-   },
-   {
-    "name": "main_wing_aileron_right_deflect",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "Aileron_R"
-    ]
-   },
-   {
-    "name": "elevator_deflect",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "Elevator"
-    ]
-   },
-   {
-    "name": "Propeller_spin",
-    "duration": 0.4,
-    "autoplay": true,
-    "targets": [
-     "Propeller"
-    ]
-   }
-  ],
-  "exports": {
-   "lod1": "/flight-fleet/canard_pusher_scout.glb.gz",
-   "lod0": "/flight-fleet/canard_pusher_scout.glb.gz",
-   "lod3": "/flight-fleet/canard_pusher_scout-far.glb.gz",
-   "lod2": "/flight-fleet/canard_pusher_scout-far.glb.gz"
-  }
- },
- "twin_boom_cargo_scout": {
-  "animations": [
-   {
-    "name": "main_wing_aileron_left_deflect",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "Aileron_L"
-    ]
-   },
-   {
-    "name": "main_wing_aileron_right_deflect",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "Aileron_R"
-    ]
-   },
-   {
-    "name": "elevator_deflect",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "Elevator"
-    ]
-   },
-   {
-    "name": "EngineL21_spin",
-    "duration": 0.4,
-    "autoplay": true,
-    "targets": [
-     "EngineL21"
-    ]
-   },
-   {
-    "name": "EngineR21_spin",
-    "duration": 0.4,
-    "autoplay": true,
-    "targets": [
-     "EngineR21"
-    ]
-   }
-  ],
-  "exports": {
-   "lod1": "/flight-fleet/twin_boom_cargo_scout.glb.gz",
-   "lod0": "/flight-fleet/twin_boom_cargo_scout.glb.gz",
-   "lod3": "/flight-fleet/twin_boom_cargo_scout-far.glb.gz",
-   "lod2": "/flight-fleet/twin_boom_cargo_scout-far.glb.gz"
-  }
- },
- "twin_engine_commuter": {
-  "animations": [
-   {
-    "name": "main_wing_aileron_left_deflect",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "Aileron_L"
-    ]
-   },
-   {
-    "name": "main_wing_aileron_right_deflect",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "Aileron_R"
-    ]
-   },
-   {
-    "name": "elevator_deflect",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "Elevator"
-    ]
-   },
-   {
-    "name": "EngineL21_spin",
-    "duration": 0.4,
-    "autoplay": true,
-    "targets": [
-     "EngineL21"
-    ]
-   },
-   {
-    "name": "EngineR21_spin",
-    "duration": 0.4,
-    "autoplay": true,
-    "targets": [
-     "EngineR21"
-    ]
-   },
-   {
-    "name": "GearL_gear_retract",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "GearL"
-    ]
-   },
-   {
-    "name": "GearR_gear_retract",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "GearR"
-    ]
-   },
-   {
-    "name": "GearN_gear_retract",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "GearN"
-    ]
-   }
-  ],
-  "exports": {
-   "lod1": "/flight-fleet/twin_engine_commuter.glb.gz",
-   "lod0": "/flight-fleet/twin_engine_commuter.glb.gz",
-   "lod3": "/flight-fleet/twin_engine_commuter-far.glb.gz",
-   "lod2": "/flight-fleet/twin_engine_commuter-far.glb.gz"
-  }
- },
- "firefighting_flying_boat": {
-  "animations": [
-   {
-    "name": "main_wing_aileron_left_deflect",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "Aileron_L"
-    ]
-   },
-   {
-    "name": "main_wing_aileron_right_deflect",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "Aileron_R"
-    ]
-   },
-   {
-    "name": "elevator_deflect",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "Elevator"
-    ]
-   },
-   {
-    "name": "EngineL21_spin",
-    "duration": 0.4,
-    "autoplay": true,
-    "targets": [
-     "EngineL21"
-    ]
-   },
-   {
-    "name": "EngineR21_spin",
-    "duration": 0.4,
-    "autoplay": true,
-    "targets": [
-     "EngineR21"
-    ]
-   }
-  ],
-  "exports": {
-   "lod1": "/flight-fleet/firefighting_flying_boat.glb.gz",
-   "lod0": "/flight-fleet/firefighting_flying_boat.glb.gz",
-   "lod3": "/flight-fleet/firefighting_flying_boat-far.glb.gz",
-   "lod2": "/flight-fleet/firefighting_flying_boat-far.glb.gz"
-  }
- },
- "delta_interceptor_jet": {
-  "animations": [
-   {
-    "name": "main_wing_aileron_left_deflect",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "Aileron_L"
-    ]
-   },
-   {
-    "name": "main_wing_aileron_right_deflect",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "Aileron_R"
-    ]
-   },
-   {
-    "name": "elevator_deflect",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "Elevator"
-    ]
-   },
-   {
-    "name": "GearL_gear_retract",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "GearL"
-    ]
-   },
-   {
-    "name": "GearR_gear_retract",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "GearR"
-    ]
-   },
-   {
-    "name": "GearN_gear_retract",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "GearN"
-    ]
-   }
-  ],
-  "exports": {
-   "lod1": "/flight-fleet/delta_interceptor_jet.glb.gz",
-   "lod0": "/flight-fleet/delta_interceptor_jet.glb.gz",
-   "lod3": "/flight-fleet/delta_interceptor_jet-far.glb.gz",
-   "lod2": "/flight-fleet/delta_interceptor_jet-far.glb.gz"
-  }
- },
- "forward_swept_test_jet": {
-  "animations": [
-   {
-    "name": "main_wing_aileron_left_deflect",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "Aileron_L"
-    ]
-   },
-   {
-    "name": "main_wing_aileron_right_deflect",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "Aileron_R"
-    ]
-   },
-   {
-    "name": "elevator_deflect",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "Elevator"
-    ]
-   },
-   {
-    "name": "GearL_gear_retract",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "GearL"
-    ]
-   },
-   {
-    "name": "GearR_gear_retract",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "GearR"
-    ]
-   },
-   {
-    "name": "GearN_gear_retract",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "GearN"
-    ]
-   }
-  ],
-  "exports": {
-   "lod1": "/flight-fleet/forward_swept_test_jet.glb.gz",
-   "lod0": "/flight-fleet/forward_swept_test_jet.glb.gz",
-   "lod3": "/flight-fleet/forward_swept_test_jet-far.glb.gz",
-   "lod2": "/flight-fleet/forward_swept_test_jet-far.glb.gz"
-  }
- },
- "autogyro_patrol": {
-  "animations": [
-   {
-    "name": "RotorUpper_spin",
-    "duration": 0.64,
-    "autoplay": true,
-    "targets": [
-     "RotorUpper"
-    ]
-   },
-   {
-    "name": "Pusher_spin",
-    "duration": 0.4,
-    "autoplay": true,
-    "targets": [
-     "Pusher"
-    ]
-   }
-  ],
-  "exports": {
-   "lod1": "/flight-fleet/autogyro_patrol.glb.gz",
-   "lod0": "/flight-fleet/autogyro_patrol.glb.gz",
-   "lod3": "/flight-fleet/autogyro_patrol-far.glb.gz",
-   "lod2": "/flight-fleet/autogyro_patrol-far.glb.gz"
-  }
- },
- "coaxial_utility_helicopter": {
-  "animations": [
-   {
-    "name": "RotorUpper_spin",
-    "duration": 0.64,
-    "autoplay": true,
-    "targets": [
-     "RotorUpper"
-    ]
-   },
-   {
-    "name": "RotorLower_spin",
-    "duration": 0.64,
-    "autoplay": true,
-    "targets": [
-     "RotorLower"
-    ]
-   }
-  ],
-  "exports": {
-   "lod1": "/flight-fleet/coaxial_utility_helicopter.glb.gz",
-   "lod0": "/flight-fleet/coaxial_utility_helicopter.glb.gz",
-   "lod3": "/flight-fleet/coaxial_utility_helicopter-far.glb.gz",
-   "lod2": "/flight-fleet/coaxial_utility_helicopter-far.glb.gz"
-  }
- },
- "rescue_helicopter": {
-  "animations": [
-   {
-    "name": "RotorUpper_spin",
-    "duration": 0.64,
-    "autoplay": true,
-    "targets": [
-     "RotorUpper"
-    ]
-   },
-   {
-    "name": "tail_rotor_spin",
-    "duration": 0.4,
-    "autoplay": true,
-    "targets": [
-     "TailFan"
-    ]
-   }
-  ],
-  "exports": {
-   "lod1": "/flight-fleet/rescue_helicopter.glb.gz",
-   "lod0": "/flight-fleet/rescue_helicopter.glb.gz",
-   "lod3": "/flight-fleet/rescue_helicopter-far.glb.gz",
-   "lod2": "/flight-fleet/rescue_helicopter-far.glb.gz"
-  }
- },
- "sailplane": {
-  "animations": [
-   {
-    "name": "main_wing_aileron_left_deflect",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "Aileron_L"
-    ]
-   },
-   {
-    "name": "main_wing_aileron_right_deflect",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "Aileron_R"
-    ]
-   },
-   {
-    "name": "elevator_deflect",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "Elevator"
-    ]
-   }
-  ],
-  "exports": {
-   "lod1": "/flight-fleet/sailplane.glb.gz",
-   "lod0": "/flight-fleet/sailplane.glb.gz",
-   "lod3": "/flight-fleet/sailplane-far.glb.gz",
-   "lod2": "/flight-fleet/sailplane-far.glb.gz"
-  }
- },
- "heavy_transport": {
-  "animations": [
-   {
-    "name": "main_wing_aileron_left_deflect",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "Aileron_L"
-    ]
-   },
-   {
-    "name": "main_wing_aileron_right_deflect",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "Aileron_R"
-    ]
-   },
-   {
-    "name": "elevator_deflect",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "Elevator"
-    ]
-   },
-   {
-    "name": "EngineL17_spin",
-    "duration": 0.4,
-    "autoplay": true,
-    "targets": [
-     "EngineL17"
-    ]
-   },
-   {
-    "name": "EngineL35_spin",
-    "duration": 0.4,
-    "autoplay": true,
-    "targets": [
-     "EngineL35"
-    ]
-   },
-   {
-    "name": "EngineR17_spin",
-    "duration": 0.4,
-    "autoplay": true,
-    "targets": [
-     "EngineR17"
-    ]
-   },
-   {
-    "name": "EngineR35_spin",
-    "duration": 0.4,
-    "autoplay": true,
-    "targets": [
-     "EngineR35"
-    ]
-   },
-   {
-    "name": "GearL_gear_retract",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "GearL"
-    ]
-   },
-   {
-    "name": "GearR_gear_retract",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "GearR"
-    ]
-   },
-   {
-    "name": "GearN_gear_retract",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "GearN"
-    ]
-   }
-  ],
-  "exports": {
-   "lod1": "/flight-fleet/heavy_transport.glb.gz",
-   "lod0": "/flight-fleet/heavy_transport.glb.gz",
-   "lod3": "/flight-fleet/heavy_transport-far.glb.gz",
-   "lod2": "/flight-fleet/heavy_transport-far.glb.gz"
-  }
- },
- "tiltrotor_rescue_vtol": {
-  "animations": [
-   {
-    "name": "main_wing_aileron_left_deflect",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "Aileron_L"
-    ]
-   },
-   {
-    "name": "main_wing_aileron_right_deflect",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "Aileron_R"
-    ]
-   },
-   {
-    "name": "elevator_deflect",
-    "duration": 1,
-    "autoplay": false,
-    "targets": [
-     "Elevator"
-    ]
-   },
-   {
-    "name": "EngineL49_spin",
-    "duration": 0.64,
-    "autoplay": true,
-    "targets": [
-     "EngineL49"
-    ]
-   },
-   {
-    "name": "EngineR49_spin",
-    "duration": 0.64,
-    "autoplay": true,
-    "targets": [
-     "EngineR49"
-    ]
-   }
-  ],
-  "exports": {
-   "lod1": "/flight-fleet/tiltrotor_rescue_vtol.glb.gz",
-   "lod0": "/flight-fleet/tiltrotor_rescue_vtol.glb.gz",
-   "lod3": "/flight-fleet/tiltrotor_rescue_vtol-far.glb.gz",
-   "lod2": "/flight-fleet/tiltrotor_rescue_vtol-far.glb.gz"
-  }
- }
 }

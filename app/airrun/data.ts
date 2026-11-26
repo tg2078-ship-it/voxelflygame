@@ -1,6 +1,7 @@
 import { FLIGHT } from './tuning';
 import type { Aircraft, Theme, Settings, PracticeConfig, Metrics, Save, ThemeId, WeatherKind } from './types';
-export const VERSION = '14.0.0';
+export const VERSION = '14.1.0';
+export const AIRFRAME_REVISION = 'atelier-2';
 export const COURSE_EDITION = 8;
 export const WORLD_IMAGE_REVISION = 'v13-flightworks';
 export const AIRCRAFT: Aircraft[] = [

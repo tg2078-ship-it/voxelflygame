@@ -36,7 +36,14 @@ stream.dispose(); check([...library.references.values()].every(n => n === 0), 's
 // A busy cosmetic queue must not starve the required base deck.
 const priority = new ModelLibrary(); priority.byId = catalog; priority.loader.parseAsync = async () => fakeGLTF();
 const ids = [...catalog.keys()].slice(0, 6), started: string[] = [], gates: (() => void)[] = [];
-priority.download = async (_path, id) => { started.push(id); if (started.length <= 4) await new Promise<void>(resolve => gates.push(resolve)); return new Uint8Array([0]); };
+priority.download = async (_path, id) => {
+    // A single queued aircraft job can fetch its hull and fittings together.
+    if (!started.includes(id)) {
+        started.push(id);
+        if (started.length <= 4) await new Promise<void>(resolve => gates.push(resolve));
+    }
+    return new Uint8Array([0]);
+};
 const requests = ids.slice(0, 5).map(id => priority.load(id, 2, 2)); requests.push(priority.load(ids[5], 2, 0));
 gates.forEach(resolve => resolve()); await Promise.all(requests);
 check(started[3] === ids[5] && started.indexOf(ids[5]) < started.indexOf(ids[3]) && started.indexOf(ids[5]) < started.indexOf(ids[4]), 'required geometry overtakes queued decorative requests'); priority.dispose();

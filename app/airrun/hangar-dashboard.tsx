@@ -6,7 +6,7 @@ import { assetUrl } from './asset-url';
 import { useAirrun } from './state';
 import { systemSpec } from './airframe-systems';
 import { DIFFICULTIES } from './encounter-director';
-import { AIRCRAFT, baseSpeed, clamp, distance, fmt, stats, upgradeCost } from './data';
+import { AIRCRAFT, AIRFRAME_REVISION, baseSpeed, clamp, distance, fmt, stats, upgradeCost } from './data';
 import { CAREER, CHAPTERS, QUESTS } from './progression';
 import { dailyBest, dailyRoute } from './daily-route';
 import { PilotBriefing } from './interface';
@@ -19,7 +19,7 @@ type State = ReturnType<typeof useAirrun.getState>;
 type View = 'front' | 'side' | 'rear' | 'top' | 'reset';
 function AircraftPhoto({ id, name }: { id: string; name: string }) {
     const image = useAirrun(s => s.previewImages['aircraft:' + id]);
-    return <Image className="aircraft-photo" unoptimized width={480} height={270} src={image ?? assetUrl('/dispatch/fleet/' + id + '.jpg')} alt={name}/>;
+    return <Image className="aircraft-photo" unoptimized width={480} height={270} src={image ?? assetUrl('/dispatch/fleet/' + id + '.jpg') + (id === 'skyhawk' ? '' : '?v=' + AIRFRAME_REVISION)} alt={name}/>;
 }
 export function HangarDashboard({ state, ko, launching, onLaunch, onPanel, onView, onZoom }: {
     state: State; ko: boolean; launching: boolean; onLaunch: () => void;

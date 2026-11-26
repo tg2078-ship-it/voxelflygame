@@ -1,4 +1,4 @@
-import fleet from './fleet-manifest.json';
+import { bindAirframeFinish, equipmentPath, finishAirframe, installEquipment } from './airframe-finish';
 import { assetUrl } from './asset-url';
 import * as THREE from 'three';
 import { GLTFLoader, type GLTF } from 'three/addons/loaders/GLTFLoader.js';
@@ -104,16 +104,7 @@ export class ModelLibrary {
         cat.assets.push(...(await traffic.json() as {
             assets: AssetMeta[];
         }).assets);
-        const flightModels: Record<string, Pick<AssetMeta, 'exports' | 'animations'>> = fleet;
-        for (const a of cat.assets) {
-            const refit = flightModels[a.id];
-            this.byId.set(a.id, refit ? {
-                ...a, ...refit, authoringVersion: 'Airrun Flight Works 1', groundRotationX: 0,
-                lodBounds: undefined, sourceLods: undefined, animationsByLod: undefined, renderCosts: undefined,
-                motionBounds: undefined, textureHashes: undefined, textureHashesByLod: undefined,
-                moving: refit.animations.some(clip => clip.autoplay),
-            } : a);
-        }
+        for (const asset of cat.assets) this.byId.set(asset.id, asset);
         // Registration and the hangar need the aircraft and native airport props.
         // Coastal structures are loaded by FlightStream.prepare before takeoff.
         const initial = ['cessna_skyhawk', 'airport_control_tower', 'airport_windsock_gimbal'].filter(id => this.byId.has(id));
@@ -188,10 +179,15 @@ export class ModelLibrary {
                 try {
                     if (this.disposed)
                         throw new Error('Model library has been disposed');
-                    let bytes = await this.download(path, id);
-                    if (bytes[0] === 31 && bytes[1] === 139)
-                        bytes = gunzipSync(bytes);
-                    const gltf = await this.loader.parseAsync(bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength) as ArrayBuffer, '');
+                    const fittings = equipmentPath(id, lod);
+                    // If optional exterior hardware is unavailable, the complete native
+                    // aircraft can still fly with its own animated blades and livery.
+                    const [gltf, kit] = await Promise.all([
+                        this.readModel(path, id),
+                        fittings ? this.readModel(fittings, id).catch(() => undefined) : undefined,
+                    ]);
+                    if (fittings) finishAirframe(gltf.scene, meta);
+                    if (kit) installEquipment(gltf.scene, kit.scene);
                     this.textures.adopt(gltf, meta.textureHashesByLod?.[('lod' + lod) as 'lod0' | 'lod1' | 'lod2' | 'lod3'] ?? meta.textureHashes);
                     this.setTextureAnisotropy(this.textureAnisotropy);
                     normalizeModelSurfaces(gltf.scene);
@@ -292,6 +288,11 @@ export class ModelLibrary {
         else
             this.failed.clear();
     }
+    private async readModel(path: string, id: string) {
+        let bytes = await this.download(path, id);
+        if (bytes[0] === 31 && bytes[1] === 139) bytes = gunzipSync(bytes);
+        return this.loader.parseAsync(bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength) as ArrayBuffer, '');
+    }
     async download(path: string, id: string) {
         const controller = new AbortController(), abort = () => controller.abort();
         this.abortController.signal.addEventListener('abort', abort, { once: true });
@@ -349,7 +350,8 @@ export class ModelLibrary {
         root.add(model);
         model.traverse(node => {
             if (node instanceof THREE.Mesh) {
-                if (uniqueMaterials && ((Array.isArray(node.material) ? node.material : [node.material]).some(m => (/paint/i.test(m.name) || m.name === 'E12_SHARED_SURFACE')))) {
+                const sourceMaterials = Array.isArray(node.material) ? node.material : [node.material];
+                if (uniqueMaterials && sourceMaterials.some(m => /paint/i.test(m.name) || (m.name === 'E12_SHARED_SURFACE' && !m.userData.airframeDesign))) {
                     node.geometry = node.geometry.clone();
                     ownedGeometry.push(node.geometry);
                 }
@@ -360,6 +362,7 @@ export class ModelLibrary {
                     if (m instanceof THREE.MeshStandardMaterial) {
                         materials.push(m);
                         if (uniqueMaterials) {
+                            bindAirframeFinish(m);
                             this.allMaterials.add(m);
                             this.applyEnvironment(m);
                         }

@@ -1,5 +1,5 @@
 import * as T from 'three';
-import { AIRCRAFT, DEFAULT_SETTINGS, THEMES, WORLD_IMAGE_REVISION } from './data';
+import { AIRCRAFT, AIRFRAME_REVISION, DEFAULT_SETTINGS, THEMES, WORLD_IMAGE_REVISION } from './data';
 import { inspectionPoints, inspectionRadius } from './inspection';
 import { ModelLibrary, parkAircraft, type ModelInstance } from './assets';
 import { FlightSimulation } from './simulation';
@@ -11,6 +11,8 @@ import type { ThemeId } from './types';
 export const PREVIEW_CACHE_PREFIX = 'preview:' + WORLD_IMAGE_REVISION + ':';
 const PREVIEW_VERSION = WORLD_IMAGE_REVISION;
 const MAX_JPEG_BYTES = 240000;
+const REBUILT_PREVIEWS = new Set(AIRCRAFT.filter(plane => plane.id !== 'skyhawk')
+    .flatMap(plane => ['aircraft:' + plane.id, 'model:' + plane.model]));
 const THEME_IDS = new Set(THEMES.map(theme => theme.id));
 const HEROES: Record<ThemeId, string> = {
     coast: 'lighthouse', village: 'windmill', city: 'skyscraper', ice: 'ice_arch',
@@ -44,7 +46,7 @@ function validPreviewId(id: string) {
 export function previewCacheKey(id: string) {
     if (!validPreviewId(id))
         throw new Error('Invalid preview identifier');
-    return PREVIEW_CACHE_PREFIX + id;
+    return PREVIEW_CACHE_PREFIX + (REBUILT_PREVIEWS.has(id) ? AIRFRAME_REVISION + ':' : '') + id;
 }
 /** Parse actual JPEG frame dimensions, not merely a data-URL prefix. */
 export function jpegPreviewDimensions(image: unknown): {

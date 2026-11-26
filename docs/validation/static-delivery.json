@@ -1,10 +1,10 @@
 {
-  "version": "14.0.0",
+  "version": "14.1.0",
   "type": "standalone-static",
   "requiresServer": false,
   "basePath": "/voxelflygame/",
   "files": 1852,
-  "bytes": 255073451,
+  "bytes": 256148797,
   "largestFileBytes": 15127210,
   "models": 403,
   "aircraft": 22,

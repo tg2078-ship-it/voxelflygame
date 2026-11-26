@@ -1,10 +1,10 @@
-# VOXEL AIRRUN 14.0.0
+# VOXEL AIRRUN 14.1.0
 
 [브라우저에서 플레이](https://tg2078-ship-it.github.io/voxelflygame/)
 
 무한 비행에서 Shift로 가속하고 작은 장애물을 스치거나 링 중심을 통과해 엔진을 식히세요. C는 소형 장애물 회피 롤입니다. 충돌 직전의 완벽한 롤은 550점과 냉각 보너스를 줍니다. 추락한 뒤 R을 누르면 같은 기체와 항로로 돌아가 자신의 비행 기록에 다시 도전합니다.
 
-Skyhawk 외 21대를 새로 모델링했습니다. 격납고와 도장실에서 선택한 기체로 바로 출격할 수 있습니다. [기체 사진](docs/validation/flight-works.jpg) · [조작·밸런스 표와 플레이테스트](docs/validation/risk-flight.ko.md)
+기본 Skyhawk의 복셀 표면과 디테일을 기준으로 나머지 21대의 외형을 다시 제작했습니다. 제공된 기종별 동체와 가동 관절에 새 외장과 도장을 맞췄습니다. Pitts의 체크무늬와 복엽 지지대, Beaver의 수상 착륙 장비, Rescue One의 구조 윈치와 탐조등을 격납고에서 돌려 보세요. 같은 기체로 바로 출격할 수 있습니다. [기존·새 기체 비교](docs/validation/airframe-comparison.jpg) · [21대 전체 사진](docs/validation/flight-works.jpg) · [조작·밸런스 표](docs/validation/risk-flight.ko.md)
 
 ## 이전 버전
 

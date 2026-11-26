@@ -1,3 +1,4 @@
+import {setAirframeFinish} from './airframe-finish';
 import {sameFlight} from './rematch';
 import {DODGE} from './tuning';
 import { CourseBeacons } from './course-beacons';
@@ -678,6 +679,7 @@ export class AirrunRenderer {
             const mats = Array.isArray(n.material) ? n.material : [n.material];
             if (!mats.some(isPaintMaterial))
                 return;
+            if (mats.every(m => setAirframeFinish(m,id==='default'?undefined:body,id==='default'?undefined:accent))) return;
             const color = n.geometry.getAttribute('color');
             if (!color) {
                 for (const material of mats) {
@@ -689,6 +691,7 @@ export class AirrunRenderer {
                 return;
             }
             let original = n.geometry.userData.paintOriginal as Float32Array | undefined;
+            if (!original && id === 'default') return;
             if (!original) {
                 original = new Float32Array(color.count * 3);
                 for (let i = 0; i < color.count; i++) {
