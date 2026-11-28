@@ -1,3 +1,5 @@
+import { hangarEntryPhase } from './flight-presentation';
+import { validRally } from './passage-rally';
 import {validTrace} from './rematch';
 import { flightReward } from './tuning';
 import { create } from 'zustand';
@@ -148,10 +150,12 @@ export function validateResult(value: unknown): value is RunResult {
         return false;
     if (v.formation !== undefined && (v.mode !== 'endless' || v.practice || !validFormation(v.formation, v.debrief?.manualSeconds ?? 0) ||
         v.formation.points + (v.debrief?.operationBonus ?? 0) + (v.debrief?.precisionBonus ?? 0) + (v.debrief?.flowBonus ?? 0) > v.bonus)) return false;
-    if(v.trace!==undefined && (!validTrace(v.trace) || v.trace.score!==v.score || v.trace.seed!==v.seed || v.trace.distance!==v.distance || v.trace.plane!==v.planeId || v.trace.mode!==v.mode || v.trace.level!==v.level || v.trace.difficulty!==v.difficulty)) return false;
+    if(v.trace!==undefined && (!validTrace(v.trace) || v.trace.edition!==v.courseEdition || v.trace.score!==v.score || v.trace.seed!==v.seed || v.trace.distance!==v.distance || v.trace.plane!==v.planeId || v.trace.mode!==v.mode || v.trace.level!==v.level || v.trace.difficulty!==v.difficulty)) return false;
     if (v.bestRingStreak !== undefined && (!Number.isSafeInteger(v.bestRingStreak) || v.bestRingStreak < 0 || v.bestRingStreak > (v.metrics?.rings ?? 0))) return false;
     if (v.rush !== undefined && (!isObject(v.rush) || !Number.isSafeInteger(v.rush.uses) || v.rush.uses < 0 || v.rush.uses > 100000 || !Number.isSafeInteger(v.rush.distance) || v.rush.distance < 0 || v.rush.distance > v.distance)) return false;
     if (v.relayClears !== undefined && (!Number.isSafeInteger(v.relayClears) || v.relayClears < 0 || v.relayClears*3>v.metrics.directionPass || v.relayClears*450>v.bonus)) return false;
+    if (v.rally !== undefined && !validRally(v.rally, v.relayClears ?? 0, v.bonus, v.metrics.time)) return false;
+    if (v.bankExits !== undefined && (!Number.isSafeInteger(v.bankExits) || v.bankExits < 0 || v.bankExits > v.metrics.directionPass)) return false;
     if (v.courseEdition !== undefined && (!Number.isSafeInteger(v.courseEdition) || v.courseEdition < 1 || v.courseEdition > 10000)) return false;
     if (v.seed !== undefined && (!Number.isInteger(v.seed) || v.seed < 0 || v.seed > 0xffffffff)) return false;
     if (v.level !== undefined && (!Number.isInteger(v.level) || v.level < 1 || v.level > 20)) return false;
@@ -403,10 +407,12 @@ export const useAirrun = create<GameState>((set, get) => ({ phase: 'loading', pa
             set({ ready: true, saveError: storageMessage(get().save.settings.language, 'access') });
         }
     },
-    profile: name => { mutate(s => ({ ...s, nickname: name.trim().slice(0, 16) || 'PILOT' })); set({ phase: 'hangar', panel: 'hangar' }); },
+    profile: name => { mutate(s => ({ ...s, nickname: name.trim().slice(0, 16) || 'PILOT' })); set({ phase: hangarEntryPhase(get().save.settings.reducedMotion), panel: 'hangar' }); },
     openHangar: () => {
-        if (get().phase === 'airport')
-            set({ phase: 'hangar' });
+        const {phase, panel, save} = get();
+        if (phase === 'opening') set({phase:'hangar'});
+        else if (phase === 'airport' || (phase === 'hangar' && panel === 'hangar'))
+            set({phase:hangarEntryPhase(save.settings.reducedMotion)});
     }, setPanel: panel => {
         if (inLobby())
             set({ panel, skinPreview: null });

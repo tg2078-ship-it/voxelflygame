@@ -121,6 +121,8 @@ export interface Metrics {
 export interface RunResult {
     trace?: import('./rematch').FlightTrace;
     relayClears?: number;
+    rally?: import('./passage-rally').RallyResult;
+    bankExits?: number;
     bestRingStreak?: number;
     formation?: import('./formation').FormationLog;
     rush?: import('./rush').RushResult;
@@ -244,12 +246,12 @@ export interface Weather {
     snow: boolean;
 }
 export interface HUD {
-    handling?: {heat:number;lock:number;dodge:number;warning:boolean;rescue:boolean};
+    handling?: {corner?:'ready'|'exit';heat:number;lock:number;dodge:number;warning:boolean;rescue:boolean};
     ringPass?: { offset: number; award: number; streak: number; speedBonus?: number };
     coach?: import('./flight-school').CoachHUD;
     module?: import('./airframe-systems').ModuleHUD;
     regionEntry?: boolean;
-    relay?: {chain:number; clears:number; lastAward:number; reveal:boolean};
+    relay?: import('./passage-rally').RelayHUD;
     formationIncoming?: number;
     attitude?: {bank:number; pitch:number; climb:number};
     ringSight?: { x: number; y: number; angle: number; edge: boolean; distance: number; speedGate: boolean };

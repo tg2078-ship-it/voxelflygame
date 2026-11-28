@@ -2,7 +2,7 @@ import type { ReactNode, CSSProperties } from 'react';
 import { CockpitCoach } from './cockpit-coach';
 import { FormationPanel } from './formation-panel';
 import { useState } from 'react';
-import { Pause, Plane, Coins, Wind, CloudRain, ShieldCheck, Zap, Target, Check, Timer, Flame, ScanLine, Navigation } from 'lucide-react';
+import { Pause, Plane, Coins, Wind, CloudRain, ShieldCheck, Zap, Target, Check, Timer, Flag, Flame, ScanLine, Navigation } from 'lucide-react';
 import { THEMES, distance, fmt, clamp } from './data';
 import type { HUD } from './types';
 import { ContractHUD } from './mastery-ui';
@@ -23,7 +23,9 @@ export function FlightDeck({ hud, ko, hyper, onPause, onBank, onRush, onTransmit
         <FlightGuidance hud={hud} ko={ko}/>{hud.journey && <JourneyRibbon journey={hud.journey} ko={ko}/>}
         {hud.rush && <RushControl rush={hud.rush} ko={ko} disabled={hud.eRemaining > 0 || !!hud.handling?.lock} onActivate={onRush}/>}
         <header className="f6-topbar">
-            <div className="f6-brand"><button type="button" onClick={onPause} aria-label={t('일시정지', 'Pause')}><Pause size={16}/></button><Plane size={22}/><span>AIRRUN<small>{sortie ? 'SORTIE / 03:00' : `EXPEDITION / ${String(Math.floor(hud.time / 180) + 1).padStart(2, '0')}`} · {(hud.difficulty ?? 'standard').toUpperCase()}</small></span></div>
+            <div className="f6-brand"><button type="button" onClick={onPause} aria-label={t('일시정지', 'Pause')}><Pause size={16}/></button><Plane size={22}/><span>AIRRUN<small>{sortie ? 'SORTIE / 03:00' : `EXPEDITION / ${String(Math.floor(hud.time / 180) + 1).padStart(2, '0')}`} · {(hud.difficulty ?? 'standard').toUpperCase()}</small></span>
+                {hud.relay && !hud.coach && hud.eRemaining <= 0 && <RallyClock relay={hud.relay} ko={ko}/>}
+            </div>
             {sortie ? <section className={'sortie-flight-progress stage-' + sortie.stage.id + (hud.eRemaining > 0 ? ' clock-held' : '')} aria-label={t('출격 진행', 'Sortie progress')}>
                 <header><span>{String(sortie.stage.index + 1).padStart(2, '0')} / 05 · {ko ? sortie.stage.label : sortie.stage.en}</span><b><Timer size={12}/>{sortieClock}</b></header>
                 <div className="sortie-stage-meter" role="progressbar" aria-label={t('출격 완주', 'Sortie completion')} aria-valuenow={Math.floor(sortie.elapsed)} aria-valuemin={0} aria-valuemax={sortie.duration}>{SORTIE_STAGES.map(stage => <i key={stage.id} className={sortie.elapsed >= stage.end ? 'cleared' : stage.id === sortie.stage.id ? 'current' : ''} style={{ flex: stage.end - stage.start }}><b style={{ width: `${clamp((sortie.elapsed - stage.start) / (stage.end - stage.start), 0, 1) * 100}%` }}/></i>)}</div>
@@ -38,11 +40,11 @@ export function FlightDeck({ hud, ko, hyper, onPause, onBank, onRush, onTransmit
             <i aria-hidden="true"/><span>{hud.ringSight.speedGate ? t('가속 게이트','SPEED GATE') : t('링','RING')} <b>{Math.ceil(hud.ringSight.distance)} m</b></span>
         </div>}
         {hud.formationIncoming !== undefined && <aside className="formation-call"><Plane size={15}/><span>{t('선도기 합류 · 비행운을 따라가세요','LEAD AIRCRAFT INBOUND · FOLLOW ITS TRAIL')}</span><b>{Math.ceil(hud.formationIncoming)}s</b></aside>}
-        {hud.relay && !hud.coach && <div title={t('구조물 통로 3연속 +450점 · 모두 정중앙이면 +750점','Clear 3 passages for 450 points, or centre all three for 750')} className={'sector-relay '+(hud.relay.reveal?'won':'')}><span>{hud.relay.reveal?t('릴레이 완주','RELAY CLEAR'):t('항로 릴레이','ROUTE RELAY')}</span><div>{[0,1,2].map(i=><i key={i} className={hud.relay!.reveal || i<hud.relay!.chain?'lit':''}/>)}</div><b>{hud.relay.reveal?'+'+hud.relay.lastAward: hud.relay.chain+'/3'}</b></div>}
         {hud.handling && <div className={'maneuver-strip '+(hud.handling.lock?'locked':hud.handling.warning?'warning':'')} aria-label={t('엔진 열과 회피 롤','Engine heat and dodge roll')}>
             <div><Flame size={12}/><span>{hud.handling.lock?t('과열','OVERHEAT'):t('엔진 열','HEAT')}</span><b>{hud.handling.lock?hud.handling.lock.toFixed(1)+'s':Math.round(hud.handling.heat*100)+'%'}</b></div>
             <i><b style={{width:hud.handling.heat*100+'%'}}/></i>
             <div><kbd>C</kbd><span>{t('회피 롤','ROLL')}</span><b>{hud.handling.dodge?hud.handling.dodge.toFixed(1)+'s':t('준비','READY')}</b></div>
+            {hud.handling.corner && !(hud.handling.rescue || hud.handling.warning) && <strong className="apex-indicator">{hud.handling.corner === 'ready' ? (gearControl ? t('3단 이상으로 변속', 'SHIFT TO GEAR 3+') : t('감속 해제 → 재가속', 'RELEASE BRAKE')) : t('코너 탈출 가속', 'CORNER EXIT BOOST')}</strong>}
             {(hud.handling.rescue || hud.handling.warning) && <strong>{hud.handling.rescue?t('비상 복구 · 회피','RECOVERY · PULL CLEAR'):t('충돌 접근 · 회피','TERRAIN · PULL CLEAR')}</strong>}
         </div>}
         {hud.ringPass && <aside className="dispatch-ring-pass" role="status">
@@ -66,4 +68,18 @@ export function FlightDeck({ hud, ko, hyper, onPause, onBank, onRush, onTransmit
         <section className={'f6-instruments ' + (hud.boost > .1 ? 'boosting' : '')}>{hud.attitude && <div className="bank-instrument"><div className="bank-dial" aria-hidden="true"><i style={{transform:`rotate(${-hud.attitude.bank}rad) translateY(${clamp(hud.attitude.pitch*16,-8,8)}px)`}}/><b/></div><div><span>{t('승강률','VERTICAL SPEED')}</span><strong>{hud.attitude.climb>0?'+':''}{hud.attitude.climb.toFixed(1)}<small>M/S</small></strong></div></div>}<div><span>AIRSPEED</span><strong>{Math.round(hud.speed)}<small>KM/H</small></strong></div><i/><div><span>{t('지면 고도', 'TERRAIN ALT')}</span><strong>{Math.max(0, Math.round(hud.altitude))}<small>M AGL</small></strong></div><i/><div className="f6-throttle"><span>{hud.boost > .1 ? <><Zap size={10}/>HYPER BOOST</> : hud.gear === 3 ? 'AUTO CRUISE' : t('선택 기어', 'SELECTED GEAR')}</span><strong>{hud.boost > .1 ? Math.round(hud.heat * 100) : hud.gear}<small>{hud.boost > .1 ? t('열 반응', 'ENGINE HEAT') : '/ 5'}</small></strong><div><b style={{ width: (hud.boost > .1 ? 30 + hud.heat * 70 : hud.gear * 20) + '%' }}/></div></div></section>
         {hud.combo > 1 && <div className="f6-risk"><Navigation size={12}/><b>{hud.combo}</b><span>RISK COMBO</span></div>}
     </div>;
+}
+
+function RallyClock({ relay, ko }: { relay: NonNullable<HUD['relay']>; ko: boolean }) {
+    const {chain, split, reveal} = relay;
+    const delta = split ? split.elapsedMs - split.targetMs : 0;
+    const labels = ko ? ['출발선', '중간 게이트', '결승선'] : ['START', 'SPLIT', 'FINISH'];
+    return <section className={'sector-relay rally-clock ' + (reveal ? 'won' : '')} aria-label={ko ? '에어 랠리 계측' : 'Air rally timing'}>
+        <Flag size={16} aria-hidden="true"/>
+        <div className="rally-readout"><span>{ko ? '에어 랠리' : 'AIR RALLY'} <b>{reveal ? (ko ? '완주' : 'CLEAR') : labels[chain]}</b></span>
+            <div className="rally-line">{[0,1,2].map(i => <i key={i} className={reveal || i < chain ? 'lit' : ''}/>)}</div>
+        </div>
+        <div className="rally-split">{split ? <><b>{(split.elapsedMs / 1000).toFixed(1)} s</b><small data-ahead={delta <= 0}>{delta > 0 ? '+' : '−'}{(Math.abs(delta) / 1000).toFixed(2)} s</small></> : <b>{chain}/3</b>}</div>
+        {reveal && <strong>+{relay.lastAward}</strong>}
+    </section>;
 }

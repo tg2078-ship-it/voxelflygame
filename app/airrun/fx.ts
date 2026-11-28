@@ -298,7 +298,7 @@ export class FlightFX {
         const q = plane.quaternion;
         const origin = this.emitterOrigin.set(emitter.x, emitter.y, 0);
         const left = this.wingLeft.set(-sim.plane.span * .46, .8, 1.4).applyQuaternion(q).add(origin), right = this.wingRight.set(sim.plane.span * .46, .8, 1.4).applyQuaternion(q).add(origin);
-        this.trailHistory = this.wake.update(left, right, emitter.z, this.time, sim.boost > .12 || sim.eRemaining > 0);
+        this.trailHistory = this.wake.update(left, right, emitter.z, this.time, sim.boost > .12 || sim.eRemaining > 0 || sim.corner.active(sim.time));
         for (let side = 0; side < 2; side++) {
             const mesh = this.trails[side], pos = mesh.geometry.getAttribute('position'), uv = mesh.geometry.getAttribute('uv'), count = this.trailHistory.length;
             for (let i = 0; i < count; i++) {

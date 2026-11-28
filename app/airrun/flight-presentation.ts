@@ -1,6 +1,11 @@
 import { mix, clamp } from './data';
 import type { Phase } from './types';
 
+export const HANGAR_ENTRY_SECONDS = 3.6;
+export function hangarEntryPhase(reducedMotion: boolean): Phase {
+    return reducedMotion ? 'hangar' : 'opening';
+}
+
 export const DEPARTURE = { flightOffset: -80, runwayStart: -38, runwayEnd: -154, retirementDistance: 230, duration: 4 } as const;
 export function takeoffDistance(time: number, flightSpeed: number) {
     const t = clamp(time, 0, DEPARTURE.duration);

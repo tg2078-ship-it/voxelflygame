@@ -174,6 +174,28 @@ export function proceduralPattern(theme: ThemeId, variant: number, seed: number,
     const lead = Math.round((counter === 0 ? profile.initialLead : profile.lead * (1 - intensity * .12)) * (.84 + random() * .36));
     const district = 1 + Math.floor(random() * 12);
     const labels = actions.map(action => THEME_LABELS[theme]?.[action] ?? LABELS[action]);
+    const beats = actions.slice(1).map(() => .73 + random() ** 1.45 * .95);
+    if (counter > 0) {
+        // Shape a sequence as one manoeuvre. Keep the world builder's aircraft
+        // clearance checks and minimum reaction interval on every individual leg.
+        const rhythm = rng((seed >>> 0) ^ salt(theme + ':turns') ^ Math.imul(counter, 7919));
+        const style = Math.floor(rhythm() * 3), bend = rhythm() < .5 ? -1 : 1;
+        const apex = Math.max(1, Math.floor(steps.length / 2));
+        for (let i = 0; i < steps.length; i++) {
+            const u = i / (steps.length - 1);
+            if (style === 0) {
+                // Long bank with a tightening apex, then an opposite-side exit.
+                steps[i][1] = Math.round(10 * amplitude * bend * .87 * Math.sin(u * Math.PI * 1.4 + .22)) / 10;
+            } else if (style === 1) {
+                // Staggered chicane: an offset entry followed by a wider return.
+                steps[i][1] = Math.round(10 * amplitude * bend * (i % 2 ? -1 : 1) * (.45 + .46 * u)) / 10;
+            } else if (!CLIMB.has(actions[i]) && !DESCEND.has(actions[i])) {
+                // Step down through the valley and climb back towards the exit.
+                steps[i][2] = Math.round(clamp(31 + vertical * (.64 - 1.55 * Math.sin(u * Math.PI)), 14, 46));
+            }
+            if (i > 0) beats[i - 1] = (i === apex ? 1.38 : i === apex + 1 ? .85 : 1.03) + rhythm() * .27;
+        }
+    }
     return {
         id: `proc:${seed >>> 0}:${counter}:${retry}:${district}`,
         theme, variant: resolvedVariant,
@@ -181,6 +203,6 @@ export function proceduralPattern(theme: ThemeId, variant: number, seed: number,
         en: `${themeInfo.en} · ${labels.map(label => label[1]).join(' → ')}`,
         steps, spacing,
         generation: { procedural: true, difficulty, intensity, lead, spacing, minimumSpacing: technical ? (inland ? 136 : 145) : 150,
-            beats: actions.slice(1).map(() => .73 + random() ** 1.45 * .95) },
+            beats },
     };
 }

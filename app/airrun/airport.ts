@@ -1,12 +1,13 @@
 import * as T from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { ModelLibrary, type ModelInstance } from './assets';
-import { DEPARTURE } from './flight-presentation';
+import { DEPARTURE, HANGAR_ENTRY_SECONDS } from './flight-presentation';
 /** A solid maintenance hangar, independent of all flight water and terrain. */
 export class AirportView {
     root = new T.Group();
-    private doorTime = 2.8;
-    get entryReveal() { return 1 - T.MathUtils.smoothstep(this.doorTime,.24,2.8); }
+    private doorTime = HANGAR_ENTRY_SECONDS;
+    private thresholdSignal: T.MeshStandardMaterial;
+    get entryProgress() { return this.doorTime / HANGAR_ENTRY_SECONDS; }
     readonly doorLeaves: T.Mesh[] = [];
     lights: T.Light[] = [];
     instances: ModelInstance[] = [];
@@ -118,6 +119,12 @@ export class AirportView {
                 box(x, .45, z, .2, .25, .5, led);
         // Folded door panels park under a fixed rail at either side of the aperture.
         box(0, 20.9, -34.3, 83, .55, 1.1, rib);
+        this.thresholdSignal = make('#a4efd9', .3, .25, '#50d6a4');
+        for (const side of [-1, 1]) {
+            box(side * 18, 20.7, -35.1, 2.4, .76, .48, steel);
+            box(side * 18, 20.7, -35.39, 1.76, .31, .18, this.thresholdSignal);
+            for (let i = 0; i < 4; i++) box(side * 12, .51, -34 - i * 4, .30, .07, 1.25, this.thresholdSignal);
+        }
         const glazing = make('#9cb8b5', .28, .28, '#434f49');
         for (const side of [-1, 1]) {
             for (let leaf = 0; leaf < 3; leaf++) {
@@ -130,6 +137,22 @@ export class AirportView {
                     const fitting = new T.Mesh(geometry, [gold,rib,glazing][i]);
                     fitting.position.set(i === 0 ? -side*6.48 : 0, [0,-3,4.3][i], .20);
                     panel.add(fitting);
+                }
+                // Exterior rail ribs and latch markings are fixed to each sliding leaf.
+                const ribs: T.BufferGeometry[] = [];
+                for (let y = -8; y <= 8; y += 4) ribs.push(new T.BoxGeometry(12.9,.16,.20).translate(0,y,-.23));
+                const ribGeometry = mergeGeometries(ribs);
+                for (const part of ribs) part.dispose();
+                this.geometry.add(ribGeometry);
+                panel.add(new T.Mesh(ribGeometry, rib));
+                const latch = new T.BoxGeometry(.28,18.8,.17).translate(-side*6.18,0,-.24);
+                this.geometry.add(latch);
+                panel.add(new T.Mesh(latch, gold));
+                if (leaf === 0) {
+                    const stencil = this.sign(side > 0 ? 'BAY' : '01', 512, 176, 8.4, true);
+                    stencil.rotation.y = Math.PI;
+                    stencil.position.set(-side * .8, 2, -.35);
+                    panel.add(stencil);
                 }
                 panel.castShadow = true;
                 this.geometry.add(panelGeometry);
@@ -211,25 +234,27 @@ export class AirportView {
         texture.repeat.set(16, 14); texture.colorSpace = T.SRGBColorSpace;
         material.map = texture; this.textures.add(texture);
     }
-    private sign(text: string, width: number, height: number, worldWidth: number) {
+    private sign(text: string, width: number, height: number, worldWidth: number, stencil = false) {
         const canvas = document.createElement('canvas');
         canvas.width = width;
         canvas.height = height;
         const ctx = canvas.getContext('2d')!;
-        ctx.fillStyle = '#1c2a33';
-        ctx.fillRect(0, 0, width, height);
-        ctx.strokeStyle = '#5a727d';
-        ctx.lineWidth = 3;
-        ctx.strokeRect(8, 8, width - 16, height - 16);
-        ctx.font = '600 ' + height * .31 + 'px Arial';
-        ctx.fillStyle = '#ded4b4';
+        if (!stencil) {
+            ctx.fillStyle = '#1c2a33';
+            ctx.fillRect(0, 0, width, height);
+            ctx.strokeStyle = '#5a727d';
+            ctx.lineWidth = 3;
+            ctx.strokeRect(8, 8, width - 16, height - 16);
+        }
+        ctx.font = stencil ? 'bold 145px monospace' : '600 ' + height * .31 + 'px Arial';
+        ctx.fillStyle = stencil ? '#c4c7b6' : '#ded4b4';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(text, width / 2, height / 2);
         const map = new T.CanvasTexture(canvas);
         map.colorSpace = T.SRGBColorSpace;
         this.textures.add(map);
-        const geometry = new T.PlaneGeometry(worldWidth, worldWidth * height / width), material = new T.MeshBasicMaterial({ map, toneMapped: false });
+        const geometry = new T.PlaneGeometry(worldWidth, worldWidth * height / width), material = new T.MeshBasicMaterial({ map, toneMapped: false, transparent: stencil, depthWrite: !stencil, opacity: stencil ? .80 : 1 });
         this.geometry.add(geometry);
         this.materials.add(material);
         return new T.Mesh(geometry, material);
@@ -259,19 +284,26 @@ export class AirportView {
         }));
     }
     openBay(reducedMotion: boolean) {
-        this.doorTime = reducedMotion ? 2.8 : 0;
+        this.doorTime = reducedMotion ? HANGAR_ENTRY_SECONDS : 0;
         this.positionDoors();
     }
     private positionDoors() {
         this.doorLeaves.forEach((panel, index) => {
             const leaf = index % 3, side = index < 3 ? -1 : 1;
-            const phase = T.MathUtils.smoothstep(this.doorTime, .09 * (2 - leaf), 1.85 + leaf * .09);
+            const phase = T.MathUtils.smootherstep(this.doorTime, .24 + leaf * .09, 2.45 + leaf * .10);
             panel.position.x = side * T.MathUtils.lerp(6.66 + leaf * 13.32, 39.6 + leaf * .85, phase);
         });
+        const clear = this.doorTime >= 2.1;
+        this.thresholdSignal.color.setHex(clear ? 0x9ff0cf : 0xffba70);
+        this.thresholdSignal.emissive.setHex(clear ? 0x50d6a4 : 0xf58b39);
+        this.thresholdSignal.emissiveIntensity = clear ? 2.2 : 1.7 + .6 * Math.cos(this.doorTime * 9);
+        const reveal = T.MathUtils.smootherstep(this.doorTime, .42, 2.75);
+        for (const light of this.lights)
+            light.intensity = light instanceof T.SpotLight ? 85 + 105 * reveal : 11 + 19 * reveal;
     }
     update(dt: number) {
-        if (this.doorTime < 2.8) {
-            this.doorTime = Math.min(2.8, this.doorTime + dt);
+        if (this.doorTime < HANGAR_ENTRY_SECONDS) {
+            this.doorTime = Math.min(HANGAR_ENTRY_SECONDS, this.doorTime + dt);
             this.positionDoors();
         }
         for (const instance of this.instances) instance.mixer.update(dt);

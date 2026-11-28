@@ -16,7 +16,7 @@ export function FlightDebrief({ result, ko }: { result: RunResult; ko: boolean }
     const coach = FLIGHT_COACH[insight.coach];
     const breakdown = [
         [t('비행 거리', 'DISTANCE'), result.distance],
-        [t('수집 · 통과 · 탐사', 'PICKUPS · PASSAGES · EXPLORATION'), Math.max(0, insight.otherBonus - (result.formation?.points ?? 0) - (result.sortie?.bonus ?? 0) - (result.contract?.bonus ?? 0))],
+        [t('수집 · 통과 · 탐사', 'PICKUPS · PASSAGES · EXPLORATION'), Math.max(0, insight.otherBonus - (result.rally?.paceBonus ?? 0) - (result.formation?.points ?? 0) - (result.sortie?.bonus ?? 0) - (result.contract?.bonus ?? 0))],
         [t('작전 완수', 'OPERATIONS'), d.operationBonus],
         [t('정밀 통과', 'PRECISION'), d.precisionBonus],
         [t('확정한 플로우', 'SECURED FLOW'), d.flowBonus],
@@ -34,10 +34,12 @@ export function FlightDebrief({ result, ko }: { result: RunResult; ko: boolean }
             </li>)}</ul>}
         </div>
         {!!result.relayClears && <div className="relay-log"><Flag size={15}/>{t('항로 릴레이 완주','Route relays completed')} <b>×{result.relayClears}</b></div>}
+        {result.rally && <div className="relay-log"><Timer size={15}/><span>{t('기준 시간 달성', 'ON-PACE FINISHES')} {result.rally.wins}/{result.rally.timed} · {t('최고 구간', 'BEST RELATIVE SPLIT')}</span><b>{(result.rally.best.elapsedMs/1000).toFixed(2)} s / {(result.rally.best.targetMs/1000).toFixed(2)} s</b></div>}
+        {!!result.bankExits && <div className="relay-log"><TrendingUp size={15}/>{t('코너 탈출 가속', 'CORNER EXITS')} <b>×{result.bankExits}</b></div>}
         <details className="debrief-analysis">
             <summary><Lightbulb size={15}/><span>{coach[ko ? 0 : 1]}<small>{t('점수 분석과 다음 비행의 힌트', 'SCORE BREAKDOWN & YOUR NEXT MOVE')}</small></span><ChevronDown size={16}/></summary>
             <div className="debrief-analysis-body"><p>{coach[ko ? 2 : 3]}</p>
-                <dl className="debrief-breakdown">{breakdown.map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{fmt(value)}</dd></div>)}{result.formation && result.formation.points > 0 && <div><dt>{t('편대 송신', 'FORMATION TRANSMISSIONS')}</dt><dd>{fmt(result.formation.points)}</dd></div>}{result.sortie && <div><dt>{t('출격 완주', 'SORTIE COMPLETION')}</dt><dd>{fmt(result.sortie.bonus)}</dd></div>}{result.contract && <div><dt>{t('선택한 비행 목표', 'FLIGHT CONTRACT')}</dt><dd>{fmt(result.contract.bonus)}</dd></div>}<div className="total"><dt>{t('실제 총 점수', 'ACTUAL TOTAL SCORE')}</dt><dd>{fmt(result.score)}</dd></div></dl>
+                <dl className="debrief-breakdown">{breakdown.map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{fmt(value)}</dd></div>)}{!!result.rally?.paceBonus && <div><dt>{t('랠리 시간 보너스', 'RALLY PACE BONUS')}</dt><dd>{fmt(result.rally.paceBonus)}</dd></div>}{result.formation && result.formation.points > 0 && <div><dt>{t('편대 송신', 'FORMATION TRANSMISSIONS')}</dt><dd>{fmt(result.formation.points)}</dd></div>}{result.sortie && <div><dt>{t('출격 완주', 'SORTIE COMPLETION')}</dt><dd>{fmt(result.sortie.bonus)}</dd></div>}{result.contract && <div><dt>{t('선택한 비행 목표', 'FLIGHT CONTRACT')}</dt><dd>{fmt(result.contract.bonus)}</dd></div>}<div className="total"><dt>{t('실제 총 점수', 'ACTUAL TOTAL SCORE')}</dt><dd>{fmt(result.score)}</dd></div></dl>
                 {insight.vault && <div className="debrief-vault"><LockKeyhole size={15}/><div><b>{t('플로우 확정', 'FLOW BANKS')} {insight.vault.banks}{t('회', '')}</b><span>{t('잃은 미정산 보너스', 'UNSECURED BONUS LOST')} <strong>{fmt(insight.vault.lost)}</strong></span>{insight.vault.pending > 0 && <small>{t('아직 총점에 포함되지 않은 플로우', 'PENDING FLOW NOT INCLUDED IN TOTAL')} {fmt(insight.vault.pending)}</small>}</div></div>}
                 <small className="debrief-rating-note">{t('훈장은 거리 점수와 별도로, 수동 비행 시간·작전·정밀 통과·연속 행동·무피격 거리로 평가합니다. E 연출 시간은 제외합니다.', 'Medals use manual flight time, operations, precision, chains and clean distance, separately from your score. Hyper Trick time is excluded.')}{insight.manualSeconds === null && ' ' + t('이전 기록에는 수동 비행 시간이 남아 있지 않습니다.', 'This older record does not contain manual flight time.')}</small>
             </div>

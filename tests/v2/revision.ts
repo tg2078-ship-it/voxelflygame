@@ -32,6 +32,16 @@ check(airport.doorLeaves.length === 6 && airport.doorLeaves.every(leaf => {
     const b = new T.Box3().setFromObject(leaf);
     return b.max.x < -32 || b.min.x > 32;
 }), 'parked door panels leave a 64-metre runway opening');
+airport.openBay(false);
+check(airport.entryProgress === 0 && Math.abs(airport.doorLeaves[3].position.x - 6.66) < .01, 'entry starts with both leaves meeting at the centre');
+const lampAtLatch = airport.lights[0].intensity;
+airport.update(1.4);
+check(airport.doorLeaves[3].position.x > 8 && airport.doorLeaves[3].position.x < 38, 'leaves travel sideways before the camera crosses the threshold');
+check(airport.doorLeaves[3].position.x === -airport.doorLeaves[0].position.x && airport.lights[0].intensity > lampAtLatch, 'panels mirror their tracks as the bay lights come up');
+airport.update(3.6);
+check(airport.entryProgress === 1, 'the sequence stops at the inspection view');
+airport.openBay(false); airport.openBay(true);
+check(airport.entryProgress === 1 && airport.doorLeaves[3].position.x > 39, 'skipping an entry parks the doors immediately');
 airport.dispose(); check(airport.root.parent === null, 'airport disposal releases scene');
 
 const viewports = [

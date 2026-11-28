@@ -203,6 +203,9 @@ export function buildEncounter(p: Pattern, start: number, seed: number, catalog:
             void m;
         }
     };
+    // On technical routes, put an occasional visible divider on the outside
+    // of the widest turn. The marked opening retains clearance for this span.
+    const widestTurn = p.steps.reduce((best, step, i) => Math.abs(step[1]) > Math.abs(p.steps[best][1]) ? i : best, 0);
     let previous = from;
     for (let j = 0; j < p.steps.length; j++) {
         const stepFamily = j === 0 ? family : encounterFamily(k, variant, serial + j, catalog.byId, patternIndex + Math.floor(hash(seed + (serial * 31 + j) * 479) * 12));
@@ -265,7 +268,7 @@ export function buildEncounter(p: Pattern, start: number, seed: number, catalog:
                 hero(stepFamily.wall, -x * .65, z + 80, 18, 54, 19, 'course flank');
             }
         }
-        if (j === 0 && serial === 1) {
+        if ((j === 0 && serial === 1) || (technical && serial > 1 && j === widestTurn && hash(seed + serial * 247) < .62)) {
             // A legible centre divider makes choosing a side matter, even when a
             // small solid arch is flown over. One decision per encounter, not a wall of props.
             const dividerWidth = Math.min(20, Math.abs(x) * 2 - span * .68 - 6);

@@ -11,6 +11,8 @@ export class CourseBeacons {
     private dummy = new T.Object3D();
     private mint = new T.Color('#96ffe1');
     private gold = new T.Color('#ffd17b');
+    private flags = [new T.Color('#65ffda'), new T.Color('#ffb35c'), new T.Color('#f3f9ff')];
+    private dark = new T.Color('#192834');
     private ghostMaterial = new T.MeshBasicMaterial({ color: '#87d9ff', transparent: true, opacity: .22, depthWrite: false, wireframe: true, toneMapped: false });
     private ghost = new T.Group();
     private disposed = false;
@@ -40,12 +42,34 @@ export class CourseBeacons {
                 segment(x+side*rx,y+vertical*(ry-.35),z,.12,.7,.16,color);
             }
         };
-        const routes = sim.encounters.flatMap(e=>e.route).filter(r=>r.z>sim.z+8 && r.z<sim.z+Math.max(480,sim.speed*8)).slice(0,2);
         const choice = sim.hudChoice();
-        for (const route of routes) {
-            gate(route.x,route.y,route.z,Math.max(3,Math.min(6,route.width/4)),Math.max(2,Math.min(4,route.height/3)),mint);
-            if (choice && Math.abs(choice.z-route.z)<.01) gate(choice.risk.x,choice.risk.y,route.z,choice.risk.radiusX,choice.risk.radiusY,gold);
-            for (let n=1;n<=4;n++) segment(route.x,route.y-2,route.z-n*12,.18,.1,3,mint);
+        let shown = 0, gateIndex = sim.rally?.chain ?? 0;
+        const horizon = sim.z + Math.max(480, sim.speed * 8);
+        for (const encounter of sim.encounters) {
+            for (const route of encounter.route) {
+                if (route.z <= sim.z || route.z > horizon || shown >= 2) continue;
+                const race = !!sim.rally && !sim.training && route.role !== 'orientation';
+                const stage = gateIndex % 3;
+                if (race) gateIndex++;
+                const colour = race ? this.flags[stage] : mint;
+                const rx = Math.max(3,Math.min(6,route.width/4)), ry = Math.max(2,Math.min(4,route.height/3));
+                gate(route.x,route.y,route.z,rx,ry,colour);
+                if (race) {
+                    // Twin flags stay outside the marked centre and share the same draw call.
+                    for (const side of [-1, 1]) {
+                        const x = route.x + side * (rx + 1.2);
+                        segment(x,route.y + ry - .45,route.z,.24,2.8,.24,colour);
+                        for (let row = 0; row < 2; row++) for (let col = 0; col < 3; col++) {
+                            const ink = stage === 2 && (row + col) % 2 ? this.dark : colour;
+                            segment(x + side * (.43 + .82 * col),route.y + ry + .69 - .44 * row,route.z,.82,.44,.15,ink);
+                        }
+                    }
+                }
+                if (choice && Math.abs(choice.z-route.z)<.01) gate(choice.risk.x,choice.risk.y,route.z,choice.risk.radiusX,choice.risk.radiusY,gold);
+                for (let n=1;n<=4;n++) segment(route.x,route.y-2,route.z-n*12,.18,.1,3,colour);
+                shown++;
+            }
+            if (shown >= 2) break;
         }
         this.marks.count=index; this.marks.instanceMatrix.needsUpdate=true;
         if (this.marks.instanceColor) this.marks.instanceColor.needsUpdate=true;

@@ -92,6 +92,9 @@ check(!projectGuidance(camera, { x: 0, y: 24, z: 20 }, 0, -80, 60).visible, 'nea
 check(!projectGuidance(camera, { x: 0, y: 24, z: 1200 }, 0, -80, 60).visible, 'distant passage stays unobtrusive');
 const hud = createSim().hud({ x: 0, y: 0, boost: false, brake: false, gear: 3 });
 hud.navigation = { distance: 200, dx: 16, dy: 6, role: 'arch', screen: projection };
+check(renderToStaticMarkup(<FlightGuidance hud={hud} ko/>).includes('랠리 출발'), 'Korean timed gate');
+check(renderToStaticMarkup(<FlightGuidance hud={hud} ko={false}/>).includes('RALLY START'), 'English timed gate');
+hud.relay = undefined;
 check(renderToStaticMarkup(<FlightGuidance hud={hud} ko/>).includes('다음 경로'), 'Korean guidance');
 check(renderToStaticMarkup(<FlightGuidance hud={hud} ko={false}/>).includes('NEXT PASSAGE'), 'English guidance');
 hud.eRemaining = 14; check(renderToStaticMarkup(<FlightGuidance hud={hud} ko/>) === '', 'marker hidden during hyper manoeuvre');

@@ -19,7 +19,7 @@ export interface FlightTrace {
     inputStream: string;
     replay: FlightReplay;
 }
-type FlightIdentity = Pick<FlightTrace, 'mode' | 'seed' | 'plane' | 'level' | 'difficulty'>;
+type FlightIdentity = Pick<FlightTrace, 'mode' | 'seed' | 'plane' | 'level' | 'difficulty'> & { edition?: number };
 const MAX_BYTES = 64 * 1024;
 const SPAN_BYTES = 5;
 const FLAGS = { boost: 1, brake: 2, rush: 4, dodge: 8, transmit: 16, bank: 32 };
@@ -92,7 +92,7 @@ export function* readControls(stream: string): Generator<Input> {
 export function validTrace(value: unknown): value is FlightTrace {
     if (!value || typeof value !== 'object') return false;
     const t = value as FlightTrace;
-    if (t.edition !== COURSE_EDITION || !['endless', 'sortie', 'daily'].includes(t.mode)
+    if ((t.edition !== 8 && t.edition !== COURSE_EDITION) || !['endless', 'sortie', 'daily'].includes(t.mode)
         || !Number.isInteger(t.seed) || t.seed < 0 || t.seed > 0xffffffff || typeof t.plane !== 'string'
         || !Number.isInteger(t.level) || t.level < 1 || t.level > 20
         || !['relaxed', 'rookie', 'standard', 'expert'].includes(t.difficulty)
@@ -112,6 +112,6 @@ export function validTrace(value: unknown): value is FlightTrace {
 }
 
 export function sameFlight(a: FlightIdentity, b: FlightIdentity) {
-    return a.mode === b.mode && a.seed === b.seed && a.plane === b.plane
+    return (a.edition ?? COURSE_EDITION) === (b.edition ?? COURSE_EDITION) && a.mode === b.mode && a.seed === b.seed && a.plane === b.plane
         && a.level === b.level && a.difficulty === b.difficulty;
 }

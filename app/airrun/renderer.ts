@@ -47,7 +47,7 @@ function previewVisible(element: HTMLElement) {
     }
     return previewIntersects(rect, clip);
 }
-import { DEPARTURE, takeoffDistance, readFlightPose, interpolateFlightPose, presentsFlight, airportVisible, type FlightPose } from './flight-presentation';
+import { DEPARTURE, hangarEntryPhase, takeoffDistance, readFlightPose, interpolateFlightPose, presentsFlight, airportVisible, type FlightPose } from './flight-presentation';
 import type { Phase } from './types';
 export class AirrunRenderer {
     insignia: ChapterInsignia | null = null;
@@ -110,6 +110,7 @@ export class AirrunRenderer {
     cleanupListeners: (() => void)[] = [];
     pmrem: T.WebGLRenderTarget;
     lastSkin = '';
+    private entryFrameAt = 0;
     lobbyFit: { key: string; fit: ReturnType<typeof inspectionFit> } | null = null;
     lastScreenshotKey = '';
     scrubSaving = false;
@@ -229,7 +230,7 @@ export class AirrunRenderer {
     completeLoading() {
         const s = useAirrun.getState();
         if (this.initialized && s.ready && s.phase === 'loading')
-            useAirrun.setState({ phase: s.save.nickname ? 'hangar' : 'registration' });
+            useAirrun.setState({ phase: s.save.nickname ? hangarEntryPhase(s.save.settings.reducedMotion) : 'registration' });
     }
     bind() {
         const resize = () => {
@@ -249,10 +250,11 @@ export class AirrunRenderer {
         const keydown = (e: KeyboardEvent) => {
             this.previewQuietUntil = performance.now() + 220;
             if (e.ctrlKey || e.metaKey || e.altKey) return;
-            if ((e.target as HTMLElement)?.matches('input,select,textarea'))
+            const target = e.target as Element | null;
+            if (target?.matches?.('input,select,textarea'))
                 return;
             const code = e.code, s = useAirrun.getState();
-            if ((e.target as HTMLElement)?.closest('button') && (code === 'Enter' || code === 'Space' && s.phase !== 'flying')) return;
+            if (target?.closest?.('button') && (code === 'Enter' || code === 'Space' && s.phase !== 'flying')) return;
             if (['flying', 'takeoff', 'crashing'].includes(s.phase) && ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space', 'ShiftLeft', 'ShiftRight', 'KeyW', 'KeyA', 'KeyS', 'KeyD', 'KeyE', 'Escape'].includes(code))
                 e.preventDefault();
             if (code === 'Escape') {
@@ -740,7 +742,12 @@ export class AirrunRenderer {
         }
         if (s.phase !== this.lastPhase) {
             if (s.phase === 'flying' && this.lastPhase === 'paused' && document.activeElement instanceof HTMLElement) document.activeElement.blur();
-            if (s.phase === 'hangar') this.airport?.openBay(s.save.settings.reducedMotion);
+            if (s.phase === 'opening') {
+                this.entryFrameAt = ms;
+                this.airport?.openBay(false);
+                this.audio?.event('hangar-door');
+            }
+            if (s.phase === 'hangar') this.airport?.openBay(true);
             if (s.phase === 'preflight' || s.phase === 'takeoff') this.airport?.openBay(true);
             if (s.phase === 'paused') {
                 this.held.clear();
@@ -867,7 +874,13 @@ export class AirrunRenderer {
         }
         else {
             void this.selectPlane(sim && s.phase === 'takeoff' ? sim.plane.id : s.save.selected);
-            this.airport?.update(s.phase === 'paused' ? 0 : dt);
+            if (s.phase === 'opening' && this.airport) {
+                // Give each door pose a frame, even when the first shader compilation stalls.
+                const elapsed = Math.min(.30, Math.max(0, (ms - this.entryFrameAt) / 1000));
+                this.entryFrameAt = ms;
+                this.airport.update(elapsed);
+                if (this.airport.entryProgress >= 1 || s.save.settings.reducedMotion) s.openHangar();
+            } else this.airport?.update(s.phase === 'paused' ? 0 : dt);
             if (s.phase !== 'paused')
                 this.hangarCamera(dt, s.phase);
             this.livery();
@@ -960,7 +973,7 @@ export class AirrunRenderer {
             this.camera.updateProjectionMatrix();
             return;
         }
-        const stage = document.querySelector<HTMLElement>('[data-hangar-stage]'), rect = phase === 'hangar' ? stage?.getBoundingClientRect() : null;
+        const stage = document.querySelector<HTMLElement>('[data-hangar-stage]'), rect = phase === 'hangar' || phase === 'opening' ? stage?.getBoundingClientRect() : null;
         if (!rect || rect.width < 10 || rect.height < 10) {
             this.lobbyFit = null;
             this.camera.clearViewOffset();
@@ -988,18 +1001,21 @@ export class AirrunRenderer {
             this.lobbyFit = { key: fitKey, fit: inspectionFit(this.silhouette, center, direction, width / height, rect.height / height * .80, rect.width / width * .88, baseY, this.orbit.zoom) };
         }
         const { target, center: worldCenter, fov } = this.lobbyFit.fit;
-        this.camera.setViewOffset(width, height, width / 2 - rect.x - rect.width / 2, height / 2 - rect.y - rect.height / 2, width, height);
-        const reveal = this.airport?.entryReveal ?? 0;
-        let view = target;
-        if (reveal > 0) {
-            const offset = target.clone().sub(worldCenter);
-            const radius = Math.hypot(offset.x,offset.z)*(1+.13*reveal);
-            const bearing = Math.atan2(offset.x,offset.z)-1.55*reveal;
-            view = new T.Vector3(worldCenter.x+radius*Math.sin(bearing),target.y+1.6*reveal,worldCenter.z+radius*Math.cos(bearing));
+        const progress = phase === 'opening' ? this.airport?.entryProgress ?? 1 : 1;
+        const settle = T.MathUtils.smootherstep(progress,.65,1);
+        this.camera.setViewOffset(width, height, (width / 2 - rect.x - rect.width / 2) * settle,
+            (height / 2 - rect.y - rect.height / 2) * settle, width, height);
+        if (progress < 1) {
+            const travel = T.MathUtils.smootherstep(progress,.12,.82);
+            this.camera.position.set(mix(3,1.5,travel),mix(5.3,3.4,travel),mix(-64,-19,travel)).lerp(target,settle);
+            const focus = this.flightLook.set(0,7.6,-33).lerp(worldCenter,T.MathUtils.smootherstep(progress,.08,.72));
+            this.camera.lookAt(focus);
+            this.camera.fov = mix(54,fov,settle);
+        } else {
+            this.camera.position.lerp(target, firstView ? 1 : 1 - Math.exp(-dt * 7));
+            this.camera.lookAt(worldCenter);
+            this.camera.fov = firstView ? fov : damp(this.camera.fov, fov, 5, dt);
         }
-        this.camera.position.lerp(view, firstView ? 1 : 1 - Math.exp(-dt * 7));
-        this.camera.lookAt(worldCenter);
-        this.camera.fov = firstView ? fov : damp(this.camera.fov, fov, 5, dt);
         this.camera.updateProjectionMatrix();
     }
     flightCamera(sim: FlightSimulation, dt: number, phase: Phase) {
@@ -1062,7 +1078,7 @@ export class AirrunRenderer {
         }
         this.camera.lookAt(this.flightLook);
         if (!reduced && !sim.eRemaining) this.camera.rotateZ(pose.roll * .055);
-        const targetFov = 60 + Math.min(12, (sim.speed - 40) * .09) + (sim.eRemaining > 0 ? 4 : 0) + sim.boost * 6;
+        const targetFov = 60 + Math.min(12, (sim.speed - 40) * .09) + (sim.eRemaining > 0 ? 4 : 0) + sim.boost * 6 + (!reduced && sim.corner.active(sim.time) ? 3 : 0);
         this.camera.fov = damp(this.camera.fov, targetFov, 3, dt);
         this.camera.far = Math.min(GRAPHICS[sim.config.settings.quality].viewDistance + 1000, Math.max(1600, sim.speed * 9 + 500));
         this.camera.updateProjectionMatrix();

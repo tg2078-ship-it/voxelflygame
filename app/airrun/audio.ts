@@ -143,6 +143,8 @@ export class GameAudio {
         if (kind === 'coin')
             this.lastCoin = now;
         const pitches: Record<string, number[]> = {
+            'hangar-door':[146.83,220], 'rally-start':[392,587], 'rally-split':[494,740], relay:[587,740,880,1175],
+            apex:[784,988], 'corner-exit':[392,587,880],
             overheat:[330,196,110], 'perfect-roll':[523,784,1175,1568], dodge:[262,392], rescue:[165,220,440], 'terrain-warning':[698,698],
             'record-pass': [523, 659, 784, 1046], 'formation-contact': [440, 554, 740], 'formation-lock': [740, 988],
             'formation-sent': [554, 740, 988, 1109], 'formation-ace': [554, 740, 880, 1109, 1480],

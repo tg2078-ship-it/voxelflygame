@@ -210,3 +210,26 @@
 .flight-deck .maneuver-strip kbd {display:inline-grid;place-items:center;min-width:18px;width:18px;height:16px;padding:0;border:1px solid #84b4bc7a;border-radius:3px;font:600 10px/1 monospace}
 .maneuver-strip.warning strong,.maneuver-strip.locked strong {white-space:normal}
 @media(pointer:coarse) and (orientation:landscape){.flight-deck .maneuver-strip{width:auto}}
+
+.airrun-eleven .rally-clock {gap:8px;padding:5px 9px;border-left:2px solid #88eac6;border-radius:4px;background:linear-gradient(110deg,#0c2531f2,#17333dea);font-variant-numeric:tabular-nums}
+.rally-clock>svg {color:#b6efdc;flex:none}.rally-clock .rally-readout,.rally-clock .rally-split {display:grid;gap:3px}
+.rally-readout>span {font-size:10px;color:#c5d6db}.rally-readout>span>b {margin-left:4px;color:white}.rally-clock .rally-split {text-align:right;min-width:34px}
+.rally-split small {color:#ffba8d}.rally-split small[data-ahead=true],.maneuver-strip .apex-indicator {color:#86eac8}.rally-clock>strong {color:#ffe29a}
+@media (pointer:coarse) and (orientation:landscape) {.airrun-eleven .rally-clock {gap:4px;padding:2px 5px}.rally-clock .rally-line,.rally-clock>svg {display:none}.rally-clock .rally-split {display:flex;align-items:center}.rally-readout>span {font-size:8px}}
+
+.airrun-eleven .f6-brand .rally-clock {position:static;transform:none;margin-left:4px;line-height:1.15;font-style:normal;letter-spacing:normal}
+@media(max-width:1280px) {.f6-brand:has(.rally-clock)>span,.f6-brand:has(.rally-clock)>svg {display:none}}
+@media(max-width:850px) and (min-height:451px) and (max-height:540px) {.airrun-eleven .deck-detail .f6-distance {top:84px}.airrun-eleven .deck-detail .f6-distance>span {display:none}}
+
+.hangar-interface {display:contents}
+.phase-opening .hangar-interface {visibility:hidden;pointer-events:none}
+.classic-bay.phase-opening.panel-hangar .world-shade {background:linear-gradient(0deg,#06151da6,transparent 21%,transparent 85%,#06151d40)}
+.bay-entry {position:absolute;inset:auto 4vw 5vh;display:flex;align-items:center;justify-content:space-between;color:#eff9f4;font-size:13px;letter-spacing:.04em}
+.bay-entry button,.classic-secondary button {border:1px solid #91b4b657;border-radius:5px;background:#132c36e8;color:#e2f3ec;padding:8px 12px;cursor:pointer}
+.bay-entry button:focus-visible,.classic-secondary button:focus-visible {outline:2px solid #a2efe0;outline-offset:2px}
+.classic-secondary {display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.classic-secondary button {display:inline-flex;align-items:center;gap:5px;font-size:11px}
+@media(prefers-reduced-motion:no-preference) {
+    .classic-bay.phase-hangar:not(.reduced-motion) .classic-hangar {animation:bay-console-in .38s ease-out both}
+    @keyframes bay-console-in {from {opacity:0} to {opacity:1}}
+}

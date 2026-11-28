@@ -1,3 +1,5 @@
+import { BankExit } from './bank-exit';
+import { PassageRally } from './passage-rally';
 import { InputRecorder } from './rematch';
 import { LIGHTNING, FLIGHT, BOOST, DODGE, IMPACT, POINTS, flightReward } from './tuning';
 import { COURSE_EDITION, AIRCRAFT, baseSpeed, stats, themeAt, THEMES, damp, clamp, smooth, mix, GEAR_RATIOS, hash, emptyMetrics } from './data';
@@ -144,15 +146,15 @@ export class FlightSimulation {
     module: ReturnType<typeof systemSpec>;
     private moduleUntil = 0;
     private repairPasses = 0;
-    private relayChain = 0;
-    private relayClears = 0;
-    private relayPerfect = 0;
-    private relayUntil = 0;
-    private relayAward = 0;
+    readonly rally?: PassageRally;
+    readonly corner = new BankExit();
     latestModel = '';
     surveyMilestones = new Map<ThemeId, number>();
     constructor(config: RunConfig) { this.config = config; this.sortie = config.mode === 'sortie' ? new SortieDirector() : undefined; this.difficulty = config.mode === 'daily' ? 'standard' : config.settings.difficulty ?? 'standard'; this.plane = AIRCRAFT.find(p => p.id === config.plane) ?? AIRCRAFT[0]; this.performance = stats(this.plane, config.level); this.performance.speed *= DIFFICULTIES[this.difficulty].speedMultiplier; this.hp = this.maxHp = this.performance.hp; this.speed = baseSpeed(0) * this.performance.speed; this.theme = config.practice?.theme ?? 'coast'; this.variant = config.practice?.variant ?? 0; this.discoveredModels.add(this.plane.model); if (!config.practice && (config.mode ?? 'endless') === 'endless') {
             this.formation = new FormationFlight(config.seed, this.difficulty);
+        }
+        if (this.difficulty === 'standard' || this.difficulty === 'expert') {
+            this.rally = new PassageRally(this.performance.speed * (this.difficulty === 'expert' ? 1.12 : 1.06));
         }
         this.module = systemSpec(this.plane);
         if (config.coach && !this.sortie && !config.practice && config.mode!=='daily') this.coach=new FlightSchool();
@@ -378,6 +380,7 @@ export class FlightSimulation {
         if (input.rush && !this.eRemaining && this.time >= this.lockedUntil && this.rush.activate()) { this.boostHeat = 0; this.notify('러시 · 5초 가속 + 코인 자석', 'RUSH · 5s BOOST + COIN MAGNET', 'rush'); }
         input.rush = false;
         const old = { x: this.x, y: this.y, z: this.z };
+        const damageBefore = this.damageCount;
         this.time += dt;
         this.shake = Math.max(0, this.shake - dt * 2);
         for (const [kind, left] of this.effects) {
@@ -429,7 +432,13 @@ export class FlightSimulation {
         if (this.lockedUntil > this.time) this.boostHeat = Math.min(this.boostHeat, BOOST.restartHeat+(1-BOOST.restartHeat)*(this.lockedUntil-this.time)/BOOST.lockout);
         this.boost = damp(this.boost, this.boosting ? 1 : 0, this.boosting ? 3.5 : 5, dt);
         const activeE = this.eRemaining > 0;
-        const modifier = activeE ? 1.2 : control * (this.time < this.lockedUntil ? 1 : Math.max(this.effects.has('turbo') ? 1.25 : 1, rushing && control >= 1 ? 1.18 : 1)) * slow;
+        if (activeE || this.time < this.lockedUntil || this.time < this.graceUntil) this.corner.reset();
+        else if (!(input.boost && input.brake) && this.corner.release(this.time, control)) {
+            this.cool(.16);
+            this.notify('코너 탈출 · 재가속', 'CORNER EXIT · ACCELERATING', 'corner-exit');
+        }
+        const exitDrive = this.corner.active(this.time) && control >= 1 ? 1.22 : 1;
+        const modifier = activeE ? 1.2 : control * (this.time < this.lockedUntil ? 1 : Math.max(exitDrive, this.effects.has('turbo') ? 1.25 : 1, rushing && control >= 1 ? 1.18 : 1)) * slow;
         const slipstream = this.module?.id==='turbine' && !activeE && this.time<this.moduleUntil ? 1+this.module.strength/100 : 1;
         const target = Math.min(FLIGHT.baseLimit * this.performance.speed * FLIGHT.maxBurstFactor, baseline * modifier * slipstream);
         const speedK = activeE ? 4 : (target < this.speed ? 4.2 : 2.2) * this.performance.accel;
@@ -455,7 +464,8 @@ export class FlightSimulation {
         else {
             const sensitivity = this.config.settings.sensitivity;
             const dead = (v: number) => Math.abs(v) < .12 ? 0 : Math.sign(v) * Math.pow((Math.abs(v) - .12) / .88, 1.22 / sensitivity);
-            const tx = dead(input.x) * 18 * this.performance.handling, ty = dead(input.y) * 12 * this.performance.handling;
+            const brakingTurn = control < .95 && !(input.boost && input.brake);
+            const tx = dead(input.x) * 18 * this.performance.handling * (brakingTurn ? 1.18 : 1), ty = dead(input.y) * 12 * this.performance.handling;
             this.vx = damp(this.vx, tx, 6.5 * this.performance.handling * sensitivity, dt);
             this.vy = damp(this.vy, ty, 7.5 * this.performance.handling * sensitivity, dt);
             const wind = Math.sin(this.motionTime * .8 + this.config.seed) * w.wind * .65;
@@ -465,7 +475,8 @@ export class FlightSimulation {
             this.y = clamp(this.y, .25, AIRSPACE.ceiling);
             if (Math.abs(this.x) > AIRSPACE.softEdge)
                 this.x -= Math.sign(this.x) * (Math.abs(this.x) - AIRSPACE.softEdge) * dt * .55;
-            this.roll = damp(this.roll, -input.x * .44 - clamp(this.vx / 24, -1, 1) * .10, 8, dt);
+            this.corner.steer(this.time, this.x - old.x, input.x, brakingTurn);
+            this.roll = damp(this.roll, -input.x * (brakingTurn ? .61 : .44) - clamp(this.vx / 24, -1, 1) * .10, 8, dt);
             this.pitch = damp(this.pitch, input.y * .12 + Math.atan2(this.vy, this.speed) * .45, 8, dt);
             this.yaw = damp(this.yaw, -Math.atan2(this.vx, this.speed) * .55, 6, dt);
         }
@@ -650,7 +661,7 @@ export class FlightSimulation {
                     const lessonRing = this.lessonRings.get(r.z);
                     this.lessonRings.delete(r.z);
                     if (dx > r.width / 2 || dy > r.height / 2) {
-                        if (r.role !== 'orientation') this.relayChain=this.relayPerfect=0;
+                        if (r.role !== 'orientation') this.rally?.reset();
                         continue;
                     }
                     this.coach?.pass();
@@ -688,7 +699,12 @@ export class FlightSimulation {
                         this.metrics.bridgePass++;
                     if (r.role === 'roof' && this.theme === 'village')
                         this.metrics.roofPass++;
-                    if (r.role!=='orientation') this.structuralPass(dx<r.width*.18 && dy<r.height*.22);
+                    if (r.role !== 'orientation' && !this.failed && this.damageCount === damageBefore && this.time >= this.graceUntil) {
+                        const precise = dx < r.width * .18 && dy < r.height * .22;
+                        this.structuralPass(precise, r.z, this.time - (1 - crossing) * dt);
+                        if (precise && control < .95 && !(input.boost && input.brake) && this.time >= this.lockedUntil && this.corner.cross(this.time))
+                            this.notify('코너 포착 · 감속을 풀어 재가속', 'APEX CAUGHT · RELEASE BRAKE', 'apex');
+                    }
                     if (this.theme === 'city')
                         this.metrics.cityPass++;
                     if (['desert', 'waterfall'].includes(this.theme))
@@ -774,21 +790,19 @@ export class FlightSimulation {
         }
     }
     get training() {return !!this.coach && this.coach.lesson!=='complete';}
-    private structuralPass(precise:boolean) {
+    private structuralPass(precise: boolean, z: number, time: number) {
         if (this.module?.id==='repair' && ++this.repairPasses>=2) {
             this.repairPasses=0;
             const recovered=Math.min(this.maxHp-this.hp,Math.ceil(this.maxHp*this.module.strength/100));
             this.hp+=recovered; this.metrics.repair+=recovered;
             if (recovered) this.moduleUntil=this.time+1.5;
         }
-        if (this.difficulty!=='standard' && this.difficulty!=='expert') return;
-        this.relayChain++;
-        if (precise) this.relayPerfect++;
-        if (this.relayChain<3) return;
-        this.relayAward=this.relayPerfect===3 ? 750 : 450;
-        this.bonus+=this.relayAward; this.metrics.bonus=this.bonus; this.relayClears++;
-        this.relayChain=this.relayPerfect=0; this.relayUntil=this.time+2;
-        this.notify('항로 릴레이 완주 +'+this.relayAward,'RELAY CLEARED +'+this.relayAward,'relay');
+        const award = this.rally?.cross(z, time, precise);
+        if (award) {
+            this.bonus += award;
+            this.metrics.bonus = this.bonus;
+            this.notify('에어 랠리 완주 +' + award, 'AIR RALLY FINISH +' + award, 'relay');
+        } else if (this.rally) this.config.onEvent?.(this.rally.chain === 1 ? 'rally-start' : 'rally-split');
     }
     addBonus(base: number, combo = true) { const factor = (combo ? 1 + .15 * Math.min(Math.max(0, this.combo - 1), 10) : 1) * (this.effects.has('multiplier') ? 2 : 1); const score = Math.floor(base * factor); this.bonus += score; this.metrics.bonus = this.bonus; }
     risk(base: number, kind: 'near' | 'narrow', source?: string) {
@@ -897,7 +911,7 @@ export class FlightSimulation {
             this.adventure.damage(); this.rush.damage(); this.formation?.interrupt();
             this.lastDamageZ=this.z; this.combo=0; this.snowCleanDistance=0;
         }
-        this.relayChain=this.relayPerfect=0;
+        this.rally?.reset(); this.corner.reset();
         this.hp=1;
         this.graceUntil=this.rescueUntil=this.time+IMPACT.grace;
         this.slowUntil=this.time+IMPACT.slowTime;
@@ -912,7 +926,7 @@ export class FlightSimulation {
         this.hp -= amount;
         this.metrics.damage += amount;
         this.damageCount++;
-        this.relayChain=this.relayPerfect=0;
+        this.rally?.reset(); this.corner.reset();
         this.adventure.damage(); this.rush.damage(); this.formation?.interrupt();
         this.snowCleanDistance = 0;
         this.lastDamageZ = this.z;
@@ -981,7 +995,7 @@ export class FlightSimulation {
             this.notify('안전 공간에서 다시 발동하세요', 'ACTIVATE IN CLEAR AIRSPACE', 'warning');
             return false;
         }
-        this.relayChain=this.relayPerfect=0;
+        this.rally?.reset(); this.corner.reset();
         this.eUsed = true;
         this.formation?.interrupt();
         this.adventure.hyperStart();
@@ -1020,12 +1034,12 @@ export class FlightSimulation {
         this.pitch = damp(this.pitch, 0, 6, dt);
         this.yaw = damp(this.yaw, 0, 6, dt);
     }
-    hud(input: Input): HUD { const ghost = this.config.rival ? replayPose(this.config.rival.replay, this.time) : null; const choice = this.upcomingChoice(); const next = this.encounters.flatMap(e => e.route).find(point => point.z > this.z + 5); return { handling: { heat:this.boostHeat, lock:Math.max(0,this.lockedUntil-this.time), dodge:Math.max(0,DODGE.cooldown-(this.time-this.rollStarted)), warning:this.hazard, rescue:this.time<this.rescueUntil }, regionEntry: !this.sortie && this.sectorEnteredAt>0 && this.time-this.sectorEnteredAt<2.5, coach:this.coach?.hud(), module:this.module ? { id:this.module.id, name:this.module.name,en:this.module.en,strength:this.module.strength,active:this.time<this.moduleUntil,progress:this.module.id==='repair' ? this.repairPasses/2 : 0 } : undefined, relay:this.difficulty==='standard'||this.difficulty==='expert' ? {chain:this.relayChain,clears:this.relayClears,lastAward:this.relayAward,reveal:this.time<this.relayUntil} : undefined, attitude: { bank:this.roll+this.trickRoll, pitch:this.pitch+this.trickPitch, climb:this.eRemaining ? (sampleTrickPath(this.ePath, Math.min(15,this.eTime+.2),this.z).y-this.y)/.2 : this.vy }, ringPass: this.ringJudgement && this.time < this.ringJudgement.until ? { offset: this.ringJudgement.offset, award: this.ringJudgement.award, speedBonus: this.ringJudgement.speedBonus, streak: this.ringStreak } : undefined, recordLine: this.recordLine, formationIncoming: this.eRemaining || this.training ? undefined : this.formation?.approachIn, formation: this.formation?.hud(), rush: this.rush.hud(), journey: this.journeyHUD(), difficulty: this.difficulty, contract: this.contract?.result(), ghost: ghost && !this.eUsed ? { delta: this.z - ghost.z, score: this.config.rival!.score } : undefined, sortie: this.sortie?.hud(), choice: choice ? choiceHUD(choice, { x: this.x, y: this.y, z: this.z }, ROUTE_CHOICE_BONUS * (this.effects.has('multiplier') ? 2 : 1)) : undefined, adventure: this.adventure.hud(), collection: { found: themeCollection(this.theme, this.config.catalog).filter(meta => this.discoveredModels.has(meta.id)).length, total: themeCollection(this.theme, this.config.catalog).length, latest: this.latestModel }, navigation: next ? { distance: next.z - this.z, dx: next.x - this.x, dy: next.y - this.y, role: next.role } : undefined, distance: this.z, score: Math.floor(this.z) + this.bonus, bonus: this.bonus, coins: this.coins, combo: this.combo, maxCombo: this.metrics.maxCombo, speed: this.speed * 3.6, hp: Math.max(0, this.hp), maxHp: this.maxHp, altitude: this.y - groundAt(this.x, this.z, this.theme, this.config.seed, this.variant), time: this.time, theme: this.theme, variant: this.variant, weather: this.weather, gear: input.gear, boost: this.boost, heat: this.boostHeat, eUsed: this.eUsed, eRemaining: this.eRemaining, effects: [...this.effects].map(([kind, remaining]) => ({ kind, remaining })), message: this.message, messageEn: this.messageEn, messageUntil: this.messageUntil, route: this.encounters.find(e => e.start + e.length > this.z)?.title ?? '', routeEn: this.encounters.find(e => e.start + e.length > this.z)?.en ?? '', fps: 0, draws: 0, triangles: 0, metrics: { ...this.metrics } }; }
+    hud(input: Input): HUD { const ghost = this.config.rival ? replayPose(this.config.rival.replay, this.time) : null; const choice = this.upcomingChoice(); const next = this.encounters.flatMap(e => e.route).find(point => point.z > this.z + 5); return { handling: { corner: this.corner.active(this.time) ? 'exit' : this.corner.ready(this.time) ? 'ready' : undefined, heat:this.boostHeat, lock:Math.max(0,this.lockedUntil-this.time), dodge:Math.max(0,DODGE.cooldown-(this.time-this.rollStarted)), warning:this.hazard, rescue:this.time<this.rescueUntil }, regionEntry: !this.sortie && this.sectorEnteredAt>0 && this.time-this.sectorEnteredAt<2.5, coach:this.coach?.hud(), module:this.module ? { id:this.module.id, name:this.module.name,en:this.module.en,strength:this.module.strength,active:this.time<this.moduleUntil,progress:this.module.id==='repair' ? this.repairPasses/2 : 0 } : undefined, relay:this.rally?.hud(this.time, this.z), attitude: { bank:this.roll+this.trickRoll, pitch:this.pitch+this.trickPitch, climb:this.eRemaining ? (sampleTrickPath(this.ePath, Math.min(15,this.eTime+.2),this.z).y-this.y)/.2 : this.vy }, ringPass: this.ringJudgement && this.time < this.ringJudgement.until ? { offset: this.ringJudgement.offset, award: this.ringJudgement.award, speedBonus: this.ringJudgement.speedBonus, streak: this.ringStreak } : undefined, recordLine: this.recordLine, formationIncoming: this.eRemaining || this.training ? undefined : this.formation?.approachIn, formation: this.formation?.hud(), rush: this.rush.hud(), journey: this.journeyHUD(), difficulty: this.difficulty, contract: this.contract?.result(), ghost: ghost && !this.eUsed ? { delta: this.z - ghost.z, score: this.config.rival!.score } : undefined, sortie: this.sortie?.hud(), choice: choice ? choiceHUD(choice, { x: this.x, y: this.y, z: this.z }, ROUTE_CHOICE_BONUS * (this.effects.has('multiplier') ? 2 : 1)) : undefined, adventure: this.adventure.hud(), collection: { found: themeCollection(this.theme, this.config.catalog).filter(meta => this.discoveredModels.has(meta.id)).length, total: themeCollection(this.theme, this.config.catalog).length, latest: this.latestModel }, navigation: next ? { distance: next.z - this.z, dx: next.x - this.x, dy: next.y - this.y, role: next.role } : undefined, distance: this.z, score: Math.floor(this.z) + this.bonus, bonus: this.bonus, coins: this.coins, combo: this.combo, maxCombo: this.metrics.maxCombo, speed: this.speed * 3.6, hp: Math.max(0, this.hp), maxHp: this.maxHp, altitude: this.y - groundAt(this.x, this.z, this.theme, this.config.seed, this.variant), time: this.time, theme: this.theme, variant: this.variant, weather: this.weather, gear: input.gear, boost: this.boost, heat: this.boostHeat, eUsed: this.eUsed, eRemaining: this.eRemaining, effects: [...this.effects].map(([kind, remaining]) => ({ kind, remaining })), message: this.message, messageEn: this.messageEn, messageUntil: this.messageUntil, route: this.encounters.find(e => e.start + e.length > this.z)?.title ?? '', routeEn: this.encounters.find(e => e.start + e.length > this.z)?.en ?? '', fps: 0, draws: 0, triangles: 0, metrics: { ...this.metrics } }; }
     result(interrupted = false, settleVault = false): RunResult { const secure = settleVault && !this.failed, extra = secure ? this.adventure.hud()?.vault?.pending ?? 0 : 0; const distance = Math.floor(this.z), bonus = this.bonus + extra, practice = !!this.config.practice; const mode=this.config.mode ?? 'endless', level=this.config.level, seed=this.config.seed>>>0;
         const trace = !practice && !this.eUsed && !interrupted && (this.failed || this.completed) && this.time>=1 && this.controls.complete ? {
             edition:COURSE_EDITION, mode, level, seed, plane:this.plane.id, difficulty:this.difficulty, control:this.config.settings.control,
             sensitivity:this.config.settings.sensitivity, score:distance+bonus, distance, seconds:this.time, frames:this.controls.frames,
             inputStream:this.controls.encode(), replay:this.recorder.result(this.time,this,this.roll+this.rollOffset),
         } : undefined;
-        return { trace, seed, level, relayClears:this.relayClears, bestRingStreak: this.bestRingStreak, ...(this.formation ? { formation: this.formation.result() } : {}), rush: { ...this.rush.result(), distance: Math.min(distance, this.rush.result().distance) }, courseEdition: COURSE_EDITION, difficulty: this.difficulty, ...(this.sortie ? { seed: this.config.seed >>> 0, level: this.config.level, contract: this.contract?.result(), ...(this.completed && !this.eUsed && !interrupted ? { replay: trace?.replay ?? this.recorder.result(this.time,this,this.roll+this.rollOffset) } : {}) } : {}), ...(this.sortie ? { sortie: { ...this.sortie.result(), operations: this.adventure.debrief().operationsCompleted, perfectPasses: this.adventure.debrief().perfectPasses } } : {}), mode: this.config.mode ?? 'endless', ...(this.config.dailyKey ? { dailyKey: this.config.dailyKey } : {}), debrief: this.adventure.debrief(secure), id: this.config.id, date: new Date().toISOString(), planeId: this.plane.id, distance, bonus, score: distance + bonus, coins: this.coins, reward: practice ? 0 : flightReward(distance,bonus,this.coins), maxCombo: this.metrics.maxCombo, eUsed: this.eUsed, practice, interrupted, reason: this.reason || '비행 종료', reasonEn: this.reasonEn || 'FLIGHT ENDED', metrics: structuredClone({ ...this.metrics, distance, bonus }), discoveryImages: { ...this.discoveryImages }, discoveredModels: [...this.discoveredModels] }; }
+        return { trace, seed, level, relayClears:this.rally?.clears ?? 0, rally:this.rally?.result(), bankExits:this.corner.exits, bestRingStreak: this.bestRingStreak, ...(this.formation ? { formation: this.formation.result() } : {}), rush: { ...this.rush.result(), distance: Math.min(distance, this.rush.result().distance) }, courseEdition: COURSE_EDITION, difficulty: this.difficulty, ...(this.sortie ? { seed: this.config.seed >>> 0, level: this.config.level, contract: this.contract?.result(), ...(this.completed && !this.eUsed && !interrupted ? { replay: trace?.replay ?? this.recorder.result(this.time,this,this.roll+this.rollOffset) } : {}) } : {}), ...(this.sortie ? { sortie: { ...this.sortie.result(), operations: this.adventure.debrief().operationsCompleted, perfectPasses: this.adventure.debrief().perfectPasses } } : {}), mode: this.config.mode ?? 'endless', ...(this.config.dailyKey ? { dailyKey: this.config.dailyKey } : {}), debrief: this.adventure.debrief(secure), id: this.config.id, date: new Date().toISOString(), planeId: this.plane.id, distance, bonus, score: distance + bonus, coins: this.coins, reward: practice ? 0 : flightReward(distance,bonus,this.coins), maxCombo: this.metrics.maxCombo, eUsed: this.eUsed, practice, interrupted, reason: this.reason || '비행 종료', reasonEn: this.reasonEn || 'FLIGHT ENDED', metrics: structuredClone({ ...this.metrics, distance, bonus }), discoveryImages: { ...this.discoveryImages }, discoveredModels: [...this.discoveredModels] }; }
 }
